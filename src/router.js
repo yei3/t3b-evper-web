@@ -1,8 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+import Home from '@/views/Home.vue';
+import About from '@/views/About.vue';
+import Login from '@/views/Login.vue';
+import Header from '@/components/layout/Header.vue';
+import Sidebar from '@/components/layout/Sidebar.vue';
+import Footer from '@/components/layout/Footer.vue';
 
 Vue.use(Router);
+
 
 export default new Router({
     mode: 'history',
@@ -11,15 +17,30 @@ export default new Router({
         {
             path: '/',
             name: 'home',
-            component: Home,
+            components: {
+                default: Home,
+                Header,
+                Sidebar,
+                Footer,
+            },
+        },
+        {
+            path: '/login',
+            name: 'login',
+            components: {
+                default: Login,
+                Footer,
+            },
         },
         {
             path: '/about',
             name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+            components: {
+                default: About,
+                Header,
+                Sidebar,
+                Footer,
+            },
         },
     ],
 });
