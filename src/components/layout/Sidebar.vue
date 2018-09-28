@@ -5,11 +5,12 @@
             collapsible
             v-model="sidebarCollapsed"
             theme="light"
+            width=220
         >
             <div class="logo"> <h1>Logo</h1> </div>
             <a-menu mode="inline" :defaultSelectedKeys="['1']">
                 <a-menu-item key="1">
-                    <router-link to="/"></router-link>
+                    <router-link to="/home"></router-link>
                     <a-icon type="video-camera" />
                     <span>Home</span>
                 </a-menu-item>
