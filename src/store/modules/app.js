@@ -11,6 +11,8 @@ export default {
         },
     },
     actions: {
-
+        toggleSideBar: (context) => {
+            context.commit('toggleSideBar');
+        },
     },
 };
