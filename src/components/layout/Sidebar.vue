@@ -189,6 +189,7 @@ export default {
 
 .ant-menu-submenu-arrow,
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected,
 .ant-menu-dark .ant-menu-submenu-title:hover,
 .ant-menu-dark .ant-menu-item:hover,
 .ant-menu-vertical .ant-menu-item:hover,
