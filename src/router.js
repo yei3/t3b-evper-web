@@ -2,9 +2,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Layout from '@/components/layout/Layout.vue';
-import Home from '@/views/Home.vue';
 import About from '@/views/About.vue';
 import Login from '@/views/Login.vue';
+
+import colaboratorHome from '@/components/colaborator/home.vue';
 
 
 Vue.use(Router);
@@ -20,9 +21,9 @@ export default new Router({
             component: Layout,
             children: [
                 {
-                    path: 'home',
+                    path: '/colaborator/home',
                     name: 'home',
-                    component: Home,
+                    component: colaboratorHome,
                 },
                 {
                     path: 'about',

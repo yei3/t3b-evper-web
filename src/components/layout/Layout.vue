@@ -6,7 +6,7 @@
                 <Header/>
                 <a-layout-content
                     :style="{
-                                margin: '22px 18px',
+                                margin: '10px 8px',
                                 padding: '24px',
                                 minHeight: '280px'
                             }"
