@@ -1,22 +1,20 @@
 <template>
-    <div id="app">
-        <a-layout id="components-layout" style="min-height: 100vh">
-            <Sidebar/>
-            <a-layout>
-                <Header/>
-                <a-layout-content
-                    :style="{
-                                margin: '10px 6px',
-                                padding: '24px',
-                                minHeight: '280px'
-                            }"
-                >
-                    <router-view> </router-view>
-                </a-layout-content>
-                <Footer/>
-            </a-layout>
+    <a-layout id="components-layout" style="min-height: 100vh">
+        <Sidebar/>
+        <a-layout>
+            <Header/>
+            <a-layout-content
+                :style="{
+                            margin: '10px 6px',
+                            padding: '24px',
+                            minHeight: '280px'
+                        }"
+            >
+                <router-view> </router-view>
+            </a-layout-content>
+            <Footer/>
         </a-layout>
-    </div>
+    </a-layout>
 </template>
 
 <script>
