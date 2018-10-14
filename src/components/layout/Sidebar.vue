@@ -8,7 +8,20 @@
             width=220
         >
             <a-row
+                style="padding: 25px 0px 20px 15px; background-color: #ff0000"
+                v-show="sidebarCollapsed"
+            >
+                <a-col v-show="sidebarCollapsed">
+                    <a-avatar
+                        shape="square"
+                        :size="48"
+                        src="/favicon.ico"
+                    />
+                </a-col>
+            </a-row>
+            <a-row
                 style="padding: 35px 25px 23px 25px; background-color: #ff0000"
+                v-show="!sidebarCollapsed"
             >
                 <a-col>
                     <a-row
@@ -17,7 +30,10 @@
                         align="middle"
                     >
                         <a-col>
-                            <a-avatar shape="square" :size="48" src="https://502faa6e.ngrok.io/Images/a5.jpg" />
+                            <a-avatar
+                                shape="square"
+                                :size="48"
+                                src="@/assets/img/logo-tipografia.png"/>
                         </a-col>
                     </a-row>
                     <a-row
