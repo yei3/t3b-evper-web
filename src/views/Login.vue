@@ -7,80 +7,95 @@
                 align="middle"
                 style="min-height: 90vh"
             >
-                <a-col><a-row
-                    type="flex"
-                    justify="center"
-                    align="middle"
-                >
-                        <a-col :span="11" class="login-img">
-                        <img
-                            alt="image"
-                            src="@/assets/img/login-imagen.png"
-                            style="max-width: 80%; height: auto;"
-                        >
-                    </a-col>
-                    <a-col :span="5" class="login-form">
-                        <a-row>
-                            <a-col :span="24">
-                                <img
-                                    alt="image"
-                                    src="@/assets/img/logo-tipografia.png"
-                                    style="max-width: 100%; height: auto; padding-top: 80px;"
-                                >
-                            </a-col>
-                        </a-row>
-                        <a-row>
-                            <a-col style="text-align: center;">
-                                <label style="font-size: 16px; font-weight: 900; color: red;">
-                                    E
-                                </label>
-                                <label style="font-size: 16px; font-weight: 900; color: black;">
-                                    valuación de
-                                </label>
-                                <label style="font-size: 16px; font-weight: 900; color: red;">
-                                    D
-                                </label >
-                                <label style="font-size: 16px; font-weight: 900; color: black;">
-                                    esempeño
-                                </label>
-                            </a-col>
-                        </a-row>
-                        <a-row>
-                            <a-col>
-                                <a-form
-                                    @submit="handleSubmit"
-                                    :autoFormCreate="(form)=>{this.form = form}"
-                                >
-                                    <a-form-item>
-                                        <a-input />
-                                    </a-form-item>
-                                    <a-form-item>
-                                        <a-input />
-                                    </a-form-item>
-                                    <a-form-item
-                                        :wrapperCol="{ span: 12, offset: 5 }"
+                <a-col>
+                    <a-row
+                        type="flex"
+                        justify="center"
+                        align="middle"
+                    >
+                        <a-col :md="{ span:12 }" :lg="{ span:9 }" class="login-img">
+                            <img
+                                alt="image"
+                                src="@/assets/img/login-imagen.png"
+                                style="max-width: 80%; height: auto;"
+                            >
+                        </a-col>
+                        <a-col :md="{ span:12 }" :lg="{ span:9 }" class="login-form">
+                            <a-row>
+                                <a-col :span="24" style="text-aling: center;">
+                                    <img
+                                        alt="image"
+                                        src="@/assets/img/logo-tipografia.png"
+                                        style="max-width: 30%; height: auto; padding-top: 80px;"
                                     >
-                                        <a-button htmlType='submit' class="login-buttom">
-                                            Submit
-                                        </a-button>
-                                    </a-form-item>
-                                </a-form>
-                            </a-col>
-                        </a-row>
-                        <a-row>
-                            <a href="#">¿Olvidó su número de empleado o contraseña?</a>
-                        </a-row>
-                    </a-col>
-                </a-row>
-                <a-row
-                    type="flex"
-                    justify="center"
-                    align="middle"
-                >
-                    <a-col :span="17">
-                        <strong style="font-weight: 700;">Tiendas 3B</strong> © 2018
-                    </a-col>
-                </a-row></a-col>
+                                </a-col>
+                            </a-row>
+                            <a-row>
+                                <a-col style="text-align: center;">
+                                    <label style="font-size: 30px; font-weight: 900; color: black;">
+                                        Evaluación de Desempeño
+                                    </label>
+                                    <a-divider />
+                                </a-col>
+                            </a-row>
+                            <a-row
+                                type="flex"
+                                justify="center"
+                                align="middle"
+                            >
+                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }">
+                                    <a-form>
+                                        <a-form-item>
+                                            <a-input
+                                                class="form-input"
+                                                placeholder="Número de Empleado"
+                                            />
+                                        </a-form-item>
+                                        <a-form-item>
+                                            <a-input
+                                                class="form-input"
+                                                placeholder="Contraseña"
+                                            />
+                                        </a-form-item>
+                                        <a-form-item>
+                                            <a-button
+                                                block
+                                                htmlType='submit'
+                                                class="login-buttom"
+                                                :loading="loading"
+                                                @click="login"
+                                            >
+                                                Ingresar
+                                            </a-button>
+                                        </a-form-item>
+                                    </a-form>
+                                </a-col>
+                            </a-row>
+                            <a-row>
+                                <a-col>
+                                    <a href="#" style="color: #666; text-decoration: underline;">
+                                        ¿Olvidó su número de empleado o contraseña?
+                                    </a>
+                                </a-col>
+                            </a-row>
+                        </a-col>
+                    </a-row>
+                    <a-divider />
+                    <a-row
+                        type="flex"
+                        justify="center"
+                        align="middle"
+                    >
+                        <a-col :span="17">
+                            <small> Tiendas 3B © 2018 </small>
+                        </a-col>
+                        <a-col style="text-align: rigth;">
+                            <a href="" style="color: #666;">
+                                <small>Yei<b>3</b> Software</small>
+                            </a>
+                        </a-col>
+                    </a-row>
+                </a-col>
             </a-row>
         </a-layout-content>
     </a-layout>
@@ -95,7 +110,13 @@ export default {
     },
     data() {
         return {
+            loading: false,
         };
+    },
+    methods: {
+        login() {
+            this.loading = true;
+        }
     },
 };
 </script>
@@ -114,22 +135,57 @@ export default {
     background-position: center;
     max-width: 100%;
     height: auto;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
     padding: 10px;
 }
 
 .login-img {
     min-height: 1px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 768px) {
+  .login-img {
+    display: none;
+  }
 }
 
 .login-form {
-    text-aling: center;
+    text-align: center;
+}
+
+.form-input {
+    text-align: center;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.form-input:focus {
+    border-color: #1ab394;
+    box-shadow: 0 0 0 1px rgb(26, 179, 148);
+}
+
+.form-input:hover {
+    border-color: #1ab394;
 }
 
 .login-buttom {
-
+    text-align: center;
+    background: #1ab394;
+    color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border-color: transparent;
 }
+
+.login-buttom:hover {
+    border-color: #1ab394;
+    box-shadow: 0 0 0 1px rgb(26, 179, 148);
+}
+
 </style>
