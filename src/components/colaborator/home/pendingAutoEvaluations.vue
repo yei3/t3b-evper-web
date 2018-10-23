@@ -1,28 +1,42 @@
 <template>
-    <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Autoevaluaciones pendientes" key="1" style="
-            font-family: 'Open Sans';
-            font-weight: 600;
-            font-size: 14px;"
-        >
-            <a-table :columns="columns" :dataSource="data">
-                <span slot="status" slot-scope="status">
-                    <a-tag color="red">{{status}}</a-tag>
-                </span>
-                <span slot="evaluation" slot-scope="evaluation">
-                    <p>{{evaluation.subtitle}}</p>
-                    <p>{{evaluation.title}}</p>
-                </span>
-                <span slot="action" slot-scope="text, record">
-                    <a href="javascript:;">Delete</a>
-                    <a-divider type="vertical" />
-                    <a href="javascript:;" class="ant-dropdown-link">
-                        More actions <a-icon type="down" />
-                    </a>
-                </span>
-            </a-table>
-        </a-collapse-panel>
-    </a-collapse>
+    <div class="collapse">
+        <a-row class="collapse-title">
+            <a-col :span="12">
+                Autoevaluaciones pendientes
+            </a-col>
+            <a-col :span="12" style="text-align: right;">
+                <router-link class="collapse-tittle-link" to="/foo">Ver todas</router-link>
+                <a>
+                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                </a>
+                <a>
+                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                </a>
+            </a-col>
+        </a-row>
+        <transition name="fade">
+            <a-row class="collapse-content" v-show="!collapsed">
+                <a-table :columns="columns" :dataSource="data">
+                    <span slot="status" slot-scope="status">
+                        <a-tag color="red">{{status}}</a-tag>
+                    </span>
+                    <span slot="evaluation" slot-scope="evaluation">
+                        <p><a href="">
+                            {{evaluation.title}}
+                        </a></p>
+                        <p><small>{{evaluation.subtitle}}</small></p>
+                    </span>
+                    <span slot="action" slot-scope="text, record">
+                        <a href="javascript:;">Delete</a>
+                        <a-divider type="vertical" />
+                        <a href="javascript:;" class="ant-dropdown-link">
+                            More actions <a-icon type="down" />
+                        </a>
+                    </span>
+                </a-table>
+            </a-row>
+        </transition>
+    </div>
 </template>
 
 <script>
@@ -57,6 +71,7 @@ const columns = [
 export default {
     data() {
         return {
+            collapsed: false,
             data: [
                 {
                     key: '1',
@@ -75,17 +90,43 @@ export default {
 </script>
 
 <style scoped>
-.collapse-mod {
+
+.collapse {
+    background-color: #fff;
+    border-top: solid 2px #ddd;
+}
+
+.collapse-title, .collapse-content {
+    padding: 15px 15px 7px;
+}
+
+.collapse-title {
     font-family: 'Open Sans';
     font-weight: 600;
     font-size: 14px;
-}
-
-.collapse-mod >>> .ant-collapse-content {
-    border-top: 0;
-}
-
-.collapse-mod >>> .ant-collapse-header {
     color: #676a6c;
+    margin-bottom: 10px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-tittle-link {
+    font-family: "Open Sans";
+    font-style: normal;
+    color: #7e8082;
+    font-size: 12px;
+    text-decoration: underline;
+    margin-right: 13px;
+}
+
+.ant-tag-red {
+    color: #fff;
+    background: #ed5565;
+    border-color: #ffa39e;
+    font-family: "Open Sans";
+    font-weight: 600;
+    text-shadow: none;
+    font-size: 10px;
 }
 </style>

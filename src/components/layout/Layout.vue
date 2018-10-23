@@ -7,7 +7,8 @@
                 :style="{
                             margin: '10px 6px',
                             padding: '24px',
-                            minHeight: '280px'
+                            minHeight: '280px',
+                            'background-color': '#f4f6fa'
                         }"
             >
                 <router-view> </router-view>

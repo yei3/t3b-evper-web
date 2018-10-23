@@ -36,7 +36,7 @@ export default {
 }
 
 .collapse-mod >>> .ant-collapse-content {
-    background-color: #f0f2f5;
+    background-color: #f4f6fa;
     border-top: 0;
 }
 
