@@ -90,7 +90,7 @@
                                 <span>Home Colaborador</span>
                             </a-menu-item>
                             <a-menu-item key="2">
-                                <router-link to="/colaborator/evaluations"></router-link>
+                                <router-link to="/colaborator/assessments"></router-link>
                                 <span>Evaluaciones</span>
                             </a-menu-item>
                         </a-sub-menu>
@@ -101,7 +101,7 @@
                             </span>
                             <a-menu-item key="3">
                                 <router-link to="boss/home"></router-link>
-                                <span>Home Jefer</span>
+                                <span>Home Jefe</span>
                             </a-menu-item>
                             <a-menu-item key="4">
                                 <router-link to="/boss/evaluations"></router-link>

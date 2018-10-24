@@ -2,10 +2,9 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="12">
-                Autoevaluaciones pendientes
+                Cierre de mis evaluaciones realizadas por mi jefe
             </a-col>
             <a-col :span="12" style="text-align: right;">
-                <router-link class="collapse-tittle-link" to="/foo">Ver todas</router-link>
                 <a>
                     <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
                 </a>
@@ -53,6 +52,11 @@ const columns = [
         key: 'endDate',
     },
     {
+        title: 'Fecha de revisión',
+        key: 'reviewDate',
+        dataIndex: 'reviewDate',
+    },
+    {
         title: '',
         key: 'action',
         scopedSlots: { customRender: 'action' },
@@ -71,6 +75,7 @@ export default {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
                     },
+                    reviewDate: '13/07/2017',
                     endDate: '13/07/2017',
                 },
                 {
@@ -80,6 +85,7 @@ export default {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
                     },
+                    reviewDate: '13/07/2017',
                     endDate: '13/07/2017',
                 },
             ],

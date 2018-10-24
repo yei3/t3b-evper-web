@@ -2,10 +2,9 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="12">
-                Autoevaluaciones pendientes
+                Seguimiento a mis objectivos actuales
             </a-col>
             <a-col :span="12" style="text-align: right;">
-                <router-link class="collapse-tittle-link" to="/foo">Ver todas</router-link>
                 <a>
                     <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
                 </a>
@@ -20,14 +19,24 @@
                     <span slot="status" slot-scope="status">
                         <a-tag color="red">{{status}}</a-tag>
                     </span>
-                    <span slot="evaluation" slot-scope="evaluation">
+                    <span slot="objective" slot-scope="objective">
                         <p><a href="">
-                            {{evaluation.title}}
+                            {{objective.title}}
                         </a></p>
-                        <p><small>{{evaluation.subtitle}}</small></p>
+                        <p><small>{{objective.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a href="javascript:;">Delete</a>
+                        <a-dropdown>
+                            <a-menu slot="overlay">
+                                <a-menu-item key="1">Registrar avances</a-menu-item>
+                                <a-menu-item key="2">Ver avances</a-menu-item>
+                                <a-menu-divider />
+                                <a-menu-item key="3">Completar objectivo</a-menu-item>
+                            </a-menu>
+                            <a-button style="margin-left: 8px">
+                                ...
+                            </a-button>
+                        </a-dropdown>
                     </span>
                 </a-table>
             </a-row>
@@ -43,10 +52,10 @@ const columns = [
         key: 'status',
         scopedSlots: { customRender: 'status' },
     }, {
-        title: 'Evaluación',
-        dataIndex: 'evaluation',
-        key: 'evaluation',
-        scopedSlots: { customRender: 'evaluation' },
+        title: 'Objectivo',
+        dataIndex: 'objective',
+        key: 'objective',
+        scopedSlots: { customRender: 'objective' },
     }, {
         title: 'Fecha fin',
         dataIndex: 'endDate',
@@ -67,7 +76,7 @@ export default {
                 {
                     key: '1',
                     status: 'No iniciado',
-                    evaluation: {
+                    objective: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
                     },
@@ -76,7 +85,7 @@ export default {
                 {
                     key: '2',
                     status: 'No iniciado',
-                    evaluation: {
+                    objective: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
                     },

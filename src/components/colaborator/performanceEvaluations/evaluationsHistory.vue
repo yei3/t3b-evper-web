@@ -27,7 +27,7 @@
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a href="javascript:;">Delete</a>
+                        <a href="javascript:;">Ver</a>
                     </span>
                 </a-table>
             </a-row>
