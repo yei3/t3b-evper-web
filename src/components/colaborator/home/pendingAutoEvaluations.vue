@@ -16,7 +16,7 @@
         </a-row>
         <transition name="fade">
             <a-row class="collapse-content" v-show="!collapsed">
-                <a-table :columns="columns" :dataSource="data">
+                <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
                         <a-tag color="red">{{status}}</a-tag>
                     </span>
@@ -75,6 +75,15 @@ export default {
             data: [
                 {
                     key: '1',
+                    status: 'No iniciado',
+                    evaluation: {
+                        title: 'Período 2017-1',
+                        subtitle: 'Evaluación de Desempeño',
+                    },
+                    endDate: '13/07/2017',
+                },
+                {
+                    key: '2',
                     status: 'No iniciado',
                     evaluation: {
                         title: 'Período 2017-1',
