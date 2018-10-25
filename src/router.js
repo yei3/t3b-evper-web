@@ -22,17 +22,17 @@ export default new Router({
             component: Layout,
             children: [
                 {
-                    path: '/colaborator/home',
+                    path: 'colaborator/home',
                     name: 'colaborator-home',
                     component: colaboratorHome,
                 },
                 {
-                    path: '/colaborator/assessments',
+                    path: 'colaborator/assessments',
                     name: 'colaborator-assessments',
                     component: performanceEvaluations,
                 },
                 {
-                    path: '/boos/home',
+                    path: 'boos/home',
                     name: 'boss-home',
                     component: bossHome,
                 },

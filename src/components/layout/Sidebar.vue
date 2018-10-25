@@ -86,11 +86,11 @@
                                 <span>Colaborador</span>
                             </span>
                             <a-menu-item key="1">
-                                <router-link to="/colaborator/home"></router-link>
+                                <router-link :to="{ name: 'colaborator-home' }"></router-link>
                                 <span>Home Colaborador</span>
                             </a-menu-item>
                             <a-menu-item key="2">
-                                <router-link to="/colaborator/assessments"></router-link>
+                                <router-link :to="{ name: 'colaborator-assessments' }"></router-link>
                                 <span>Evaluaciones</span>
                             </a-menu-item>
                         </a-sub-menu>
@@ -100,19 +100,19 @@
                                 <span>Jefe</span>
                             </span>
                             <a-menu-item key="3">
-                                <router-link to="boss/home"></router-link>
+                                <router-link :to="{ name: 'boss-home' }"></router-link>
                                 <span>Home Jefe</span>
                             </a-menu-item>
                             <a-menu-item key="4">
-                                <router-link to="/boss/evaluations"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Evaluaciones</span>
                             </a-menu-item>
                             <a-menu-item key="5">
-                                <router-link to="/boss/notifications"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Avisos</span>
                             </a-menu-item>
                             <a-menu-item key="6">
-                                <router-link to="/boss/results"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Resultados</span>
                             </a-menu-item>
                         </a-sub-menu>
@@ -122,31 +122,31 @@
                                 <span>Administrador</span>
                             </span>
                             <a-menu-item key="7">
-                                <router-link to="/admin/home"></router-link>
-                                <span>Home Administrador</span>
+                                <router-link to="/"></router-link>
+                                <span>Home </span>
                             </a-menu-item>
                             <a-menu-item key="8">
-                                <router-link to="/admin/formats"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Formatos</span>
                             </a-menu-item>
                             <a-menu-item key="9">
-                                <router-link to="/admin/evaluations"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Evaluaciones</span>
                             </a-menu-item>
                             <a-menu-item key="10">
-                                <router-link to="/admin/organization-chart"></router-link>
+                                <router-link to="/-chart"></router-link>
                                 <span>Organigrama</span>
                             </a-menu-item>
                             <a-menu-item key="11">
-                                <router-link to="/admin/settins"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Configuración</span>
                             </a-menu-item>
                             <a-menu-item key="12">
-                                <router-link to="/admin/notifications"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Avisos</span>
                             </a-menu-item>
                             <a-menu-item key="13">
-                                <router-link to="/admin/results"></router-link>
+                                <router-link to="/"></router-link>
                                 <span>Resultados</span>
                             </a-menu-item>
                         </a-sub-menu>
