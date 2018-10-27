@@ -1,0 +1,44 @@
+<template>
+    <div>
+        <a-row :gutter="32">
+            <a-col :span="24">
+                <h1>Evaluaciones de Desempeño</h1>
+            </a-col>
+            <a-col :span="24">
+                <a-breadcrumb>
+                    <a-breadcrumb-item>
+                        <router-link to="/colaborator/home">Home Colaborador</router-link>
+                    </a-breadcrumb-item>
+                    <a-breadcrumb-item>
+                        <strong>Realizar auto-evaluación</strong>
+                    </a-breadcrumb-item>
+                </a-breadcrumb>
+            </a-col>
+        </a-row>
+        <a-row style="margin-top: 30px;">
+            <a-col :span="24" style="padding-bottom: 30px;">
+                <evaluations-history />
+            </a-col>
+            <a-col :span="24" style="padding-bottom: 30px;">
+
+            </a-col>
+            <a-col :span="24">
+
+            </a-col>
+        </a-row>
+    </div>
+</template>
+
+<script>
+import evaluationsHistory from '@/components/colaborator/performanceEvaluations/evaluationsHistory.vue';
+
+export default {
+    components: {
+        evaluationsHistory,
+    },
+};
+</script>
+
+<style>
+
+</style>

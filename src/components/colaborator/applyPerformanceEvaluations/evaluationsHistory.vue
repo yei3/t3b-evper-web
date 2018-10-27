@@ -5,12 +5,7 @@
                 Autoevaluaciones pendientes
             </a-col>
             <a-col :span="12" style="text-align: right;">
-                <router-link
-                    class="collapse-tittle-link"
-                    :to="{ name: 'colaborator-assessments' }"
-                >
-                    Ver todas
-                </router-link>
+                <router-link class="collapse-tittle-link" to="/foo">Ver todas</router-link>
                 <a>
                     <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
                 </a>
@@ -26,13 +21,13 @@
                         <a-tag color="red">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <router-link :to="{name: 'colaborator-assessments-apply' }">
+                        <p><a href="">
                             {{evaluation.title}}
-                        </router-link>
+                        </a></p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a href="javascript:;">Delete</a>
+                        <a href="javascript:;">Ver</a>
                     </span>
                 </a-table>
             </a-row>

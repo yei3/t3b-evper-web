@@ -4,8 +4,9 @@ import Router from 'vue-router';
 import Layout from '@/components/layout/Layout.vue';
 import Login from '@/views/Login.vue';
 
-import colaboratorHome from '@/components/colaborator/home/home.vue';
-import performanceEvaluations from '@/components/colaborator/performanceEvaluations/home.vue';
+import colaboratorHome from '@/components/colaborator/home/layout.vue';
+import performanceEvaluations from '@/components/colaborator/performanceEvaluations/layout.vue';
+import performanceEvaluations from '@/components/colaborator/performanceEvaluations/layout.vue';
 import bossHome from '@/components/boss/home/home.vue';
 
 
@@ -29,6 +30,11 @@ export default new Router({
                 {
                     path: 'colaborator/assessments',
                     name: 'colaborator-assessments',
+                    component: performanceEvaluations,
+                },
+                {
+                    path: 'colaborator/assessments/apply',
+                    name: 'colaborator-assessments-apply',
                     component: performanceEvaluations,
                 },
                 {
