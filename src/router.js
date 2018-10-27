@@ -6,7 +6,7 @@ import Login from '@/views/Login.vue';
 
 import colaboratorHome from '@/components/colaborator/home/layout.vue';
 import performanceEvaluations from '@/components/colaborator/performanceEvaluations/layout.vue';
-import performanceEvaluations from '@/components/colaborator/performanceEvaluations/layout.vue';
+import applyPerformanceEvaluations from '@/components/colaborator/applyPerformanceEvaluations/layout.vue';
 import bossHome from '@/components/boss/home/home.vue';
 
 
@@ -35,7 +35,7 @@ export default new Router({
                 {
                     path: 'colaborator/assessments/apply',
                     name: 'colaborator-assessments-apply',
-                    component: performanceEvaluations,
+                    component: applyPerformanceEvaluations,
                 },
                 {
                     path: 'boos/home',

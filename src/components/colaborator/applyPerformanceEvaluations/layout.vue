@@ -17,7 +17,7 @@
         </a-row>
         <a-row style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
-                <evaluations-history />
+                <make-evaluation />
             </a-col>
             <a-col :span="24" style="padding-bottom: 30px;">
 
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import evaluationsHistory from '@/components/colaborator/performanceEvaluations/evaluationsHistory.vue';
+import makeEvaluation from '@/components/colaborator/applyPerformanceEvaluations/makeEvaluation.vue';
 
 export default {
     components: {
-        evaluationsHistory,
+        makeEvaluation,
     },
 };
 </script>

@@ -90,7 +90,9 @@
                                 <span>Home Colaborador</span>
                             </a-menu-item>
                             <a-menu-item key="2">
-                                <router-link :to="{ name: 'colaborator-assessments' }"></router-link>
+                                <router-link
+                                    :to="{ name: 'colaborator-assessments' }"
+                                ></router-link>
                                 <span>Evaluaciones</span>
                             </a-menu-item>
                         </a-sub-menu>
