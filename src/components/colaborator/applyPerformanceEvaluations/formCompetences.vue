@@ -32,10 +32,10 @@
                                     </a-select-option>
                                 </a-select>
                             </a-col>
-                            <a-col :span="24">
-                                <a-input placeholder="Comentarios"/>
-                            </a-col>
                         </a-row>
+                    </a-col>
+                    <a-col :span="24">
+                        <a-input placeholder="Comentarios"/>
                     </a-col>
                 </a-row>
             </a-col>

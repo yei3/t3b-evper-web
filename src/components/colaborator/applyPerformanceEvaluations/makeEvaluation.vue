@@ -16,9 +16,7 @@
         <transition name="fade">
             <div class="collapse-content" v-show="!collapsed">
                 <a-row class="steps">
-                    <span class="evaluation-tittle">
-                        {{data.evaluationTitle}}
-                    </span>
+                    <h1>{{data.evaluationTitle}}</h1>
                 </a-row>
                 <a-row>
                     <a-col :span="6"

@@ -6,8 +6,11 @@
             </a-col>
             <a-col :span="24">
                 <span>
-
+                    Acciones y objetivos del plan de capacitación.
                 </span>
+            </a-col>
+            <a-col :span="24">
+                <a-textarea placeholder="Detalle del plan de desarrollo..." :rows="6"/>
             </a-col>
         </a-row>
     </a-col>

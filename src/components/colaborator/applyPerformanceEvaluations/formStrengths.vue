@@ -6,7 +6,16 @@
             </a-col>
             <a-col :span="24">
                 <span>
+                    Las Fortalezas son características que otros reconocen en ti
+                    y te permiten alcanzar tus objetivos.
                 </span>
+            </a-col>
+            <a-col :span="24">
+                <a-input
+                    :key="i"
+                    :placeholder="'Fortaleza ' + i + '...'"
+                    v-for="i in formOptions.strengthsInputs"
+                />
             </a-col>
         </a-row>
     </a-col>
@@ -16,6 +25,9 @@
 export default {
     data() {
         return {
+            formOptions: {
+                strengthsInputs: 5,
+            },
         };
     },
 };

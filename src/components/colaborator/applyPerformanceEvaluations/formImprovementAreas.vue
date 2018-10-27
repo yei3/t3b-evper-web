@@ -6,8 +6,16 @@
             </a-col>
             <a-col :span="24">
                 <span>
-
+                    Las Áreas de Mejora son aspectos que puedes mejorar y
+                    que te permitirían lograr mejores resultados.
                 </span>
+            </a-col>
+            <a-col :span="24">
+                <a-input
+                    :key="i"
+                    :placeholder="'Mejora ' + i + '...'"
+                    v-for="i in formOptions.improvementInputs"
+                />
             </a-col>
         </a-row>
     </a-col>
@@ -17,6 +25,9 @@
 export default {
     data() {
         return {
+            formOptions: {
+                improvementInputs: 5,
+            },
         };
     },
 };
