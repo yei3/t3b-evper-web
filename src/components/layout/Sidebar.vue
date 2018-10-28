@@ -4,6 +4,7 @@
             :trigger="null"
             collapsible
             v-model="sidebarCollapsed"
+            @collapse="resetOpenKeys"
             theme="dark"
             width=220
         >
@@ -165,9 +166,13 @@ export default {
         return {
             rootSubmenuKeys: ['sub1', 'sub2', 'sub3'],
             openKeys: [],
+            lastOpenKeys: [],
         };
     },
     methods: {
+        resetOpenKeys(collapsed, type) {
+            this.openKeys = [];
+        },
         onOpenChange(openKeys) {
             const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
             if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -187,6 +192,17 @@ export default {
             },
         },
     },
+    watch: {
+        sidebarCollapsed(value) {
+            if (value) {
+                this.lastOpenKeys = this.openKeys;
+                this.openKeys = [];
+            } else {
+                this.openKeys = this.lastOpenKeys;
+                this.lastOpenKeys = [];
+            }
+        }
+    }
 };
 </script>
 
