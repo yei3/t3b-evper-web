@@ -1,162 +1,162 @@
 <template>
     <a-layout-sider
-            breakpoint="sm"
-            :trigger="null"
-            collapsible
-            v-model="sidebarCollapsed"
-            @collapse="resetOpenKeys"
-            theme="dark"
-            width=220
+        breakpoint="sm"
+        :trigger="null"
+        collapsible
+        v-model="sidebarCollapsed"
+        @collapse="resetOpenKeys"
+        theme="dark"
+        width=220
+    >
+        <a-row
+            style="padding: 25px 0px 20px 15px; background-color: #ff0000"
+            v-show="sidebarCollapsed"
         >
-            <a-row
-                style="padding: 25px 0px 20px 15px; background-color: #ff0000"
-                v-show="sidebarCollapsed"
-            >
-                <a-col v-show="sidebarCollapsed">
-                    <a-avatar
-                        shape="square"
-                        :size="48"
-                        src="/favicon.ico"
-                    />
-                </a-col>
-            </a-row>
-            <a-row
-                style="padding: 35px 25px 23px 25px; background-color: #ff0000"
-                v-show="!sidebarCollapsed"
-            >
-                <a-col>
-                    <a-row
-                        type="flex"
-                        justify="space-around"
-                        align="middle"
-                    >
-                        <a-col>
-                            <a-avatar
-                                shape="square"
-                                :size="48"
-                                src="@/assets/img/logo-tipografia.png"/>
-                        </a-col>
-                    </a-row>
-                    <a-row
-                        type="flex"
-                        justify="space-around"
-                        align="middle"
-                    >
-                        <a-col style="margin-top: 5px;">
-                            <strong
-                                style="font-family: 'Open Sans';
-                                    font-size: 13px;
-                                    font-weight: 600;
-                                    color: #fff;"
-                            >
-                                Karen Villanueva
-                            </strong>
-                        </a-col>
-                    </a-row>
-                    <a-row
-                        type="flex"
-                        justify="space-around"
-                        align="middle"
-                    >
-                        <a-col>
-                            <a-dropdown>
-                                <a class="ant-dropdown-link" href="#">
-                                    Analista <a-icon type="down" />
-                                </a>
-                                <a-menu slot="overlay">
-                                    <a-menu-item>
-                                    <a href="javascript:;">Logout</a>
-                                    </a-menu-item>
-                                </a-menu>
-                            </a-dropdown>
-                        </a-col>
-                    </a-row>
-                </a-col>
-            </a-row>
-            <a-row>
-                <a-col>
-                        <a-menu
-                        mode="inline"
-                        :openKeys="openKeys"
-                        @openChange="onOpenChange"
-                        theme="dark"
-                    >
-                        <a-sub-menu key="sub1" class="custom-sub-menu">
-                            <span slot="title">
-                                <a-icon type="user"/>
-                                <span>Colaborador</span>
-                            </span>
-                            <a-menu-item key="1">
-                                <router-link :to="{ name: 'colaborator-home' }"></router-link>
-                                <span>Home Colaborador</span>
-                            </a-menu-item>
-                            <a-menu-item key="2">
-                                <router-link
-                                    :to="{ name: 'colaborator-assessments' }"
-                                ></router-link>
-                                <span>Evaluaciones</span>
-                            </a-menu-item>
-                        </a-sub-menu>
-                        <a-sub-menu key="sub2">
-                            <span slot="title">
-                                <a-icon type="user"/>
-                                <span>Jefe</span>
-                            </span>
-                            <a-menu-item key="3">
-                                <router-link :to="{ name: 'boss-home' }"></router-link>
-                                <span>Home Jefe</span>
-                            </a-menu-item>
-                            <a-menu-item key="4">
-                                <router-link to="/"></router-link>
-                                <span>Evaluaciones</span>
-                            </a-menu-item>
-                            <a-menu-item key="5">
-                                <router-link to="/"></router-link>
-                                <span>Avisos</span>
-                            </a-menu-item>
-                            <a-menu-item key="6">
-                                <router-link to="/"></router-link>
-                                <span>Resultados</span>
-                            </a-menu-item>
-                        </a-sub-menu>
-                        <a-sub-menu key="sub3">
-                            <span slot="title">
-                                <a-icon type="user" />
-                                <span>Administrador</span>
-                            </span>
-                            <a-menu-item key="7">
-                                <router-link to="/"></router-link>
-                                <span>Home </span>
-                            </a-menu-item>
-                            <a-menu-item key="8">
-                                <router-link to="/"></router-link>
-                                <span>Formatos</span>
-                            </a-menu-item>
-                            <a-menu-item key="9">
-                                <router-link to="/"></router-link>
-                                <span>Evaluaciones</span>
-                            </a-menu-item>
-                            <a-menu-item key="10">
-                                <router-link to="/-chart"></router-link>
-                                <span>Organigrama</span>
-                            </a-menu-item>
-                            <a-menu-item key="11">
-                                <router-link to="/"></router-link>
-                                <span>Configuración</span>
-                            </a-menu-item>
-                            <a-menu-item key="12">
-                                <router-link to="/"></router-link>
-                                <span>Avisos</span>
-                            </a-menu-item>
-                            <a-menu-item key="13">
-                                <router-link to="/"></router-link>
-                                <span>Resultados</span>
-                            </a-menu-item>
-                        </a-sub-menu>
-                    </a-menu>
-                </a-col>
-            </a-row>
-        </a-layout-sider>
+            <a-col v-show="sidebarCollapsed">
+                <a-avatar
+                    shape="square"
+                    :size="48"
+                    src="/favicon.ico"
+                />
+            </a-col>
+        </a-row>
+        <a-row
+            style="padding: 35px 25px 23px 25px; background-color: #ff0000"
+            v-show="!sidebarCollapsed"
+        >
+            <a-col>
+                <a-row
+                    type="flex"
+                    justify="space-around"
+                    align="middle"
+                >
+                    <a-col>
+                        <a-avatar
+                            shape="square"
+                            :size="48"
+                            src="@/assets/img/logo-tipografia.png"/>
+                    </a-col>
+                </a-row>
+                <a-row
+                    type="flex"
+                    justify="space-around"
+                    align="middle"
+                >
+                    <a-col style="margin-top: 5px;">
+                        <strong
+                            style="font-family: 'Open Sans';
+                                font-size: 13px;
+                                font-weight: 600;
+                                color: #fff;"
+                        >
+                            Karen Villanueva
+                        </strong>
+                    </a-col>
+                </a-row>
+                <a-row
+                    type="flex"
+                    justify="space-around"
+                    align="middle"
+                >
+                    <a-col>
+                        <a-dropdown>
+                            <a class="ant-dropdown-link" href="#">
+                                Analista <a-icon type="down" />
+                            </a>
+                            <a-menu slot="overlay">
+                                <a-menu-item>
+                                <a href="javascript:;">Logout</a>
+                                </a-menu-item>
+                            </a-menu>
+                        </a-dropdown>
+                    </a-col>
+                </a-row>
+            </a-col>
+        </a-row>
+        <a-row>
+            <a-col>
+                    <a-menu
+                    mode="inline"
+                    :openKeys="openKeys"
+                    @openChange="onOpenChange"
+                    theme="dark"
+                >
+                    <a-sub-menu key="sub1" class="custom-sub-menu">
+                        <span slot="title">
+                            <a-icon type="user"/>
+                            <span>Colaborador</span>
+                        </span>
+                        <a-menu-item key="1">
+                            <router-link :to="{ name: 'colaborator-home' }"></router-link>
+                            <span>Home Colaborador</span>
+                        </a-menu-item>
+                        <a-menu-item key="2">
+                            <router-link
+                                :to="{ name: 'colaborator-assessments' }"
+                            ></router-link>
+                            <span>Evaluaciones</span>
+                        </a-menu-item>
+                    </a-sub-menu>
+                    <a-sub-menu key="sub2">
+                        <span slot="title">
+                            <a-icon type="user"/>
+                            <span>Jefe</span>
+                        </span>
+                        <a-menu-item key="3">
+                            <router-link :to="{ name: 'boss-home' }"></router-link>
+                            <span>Home Jefe</span>
+                        </a-menu-item>
+                        <a-menu-item key="4">
+                            <router-link to="/"></router-link>
+                            <span>Evaluaciones</span>
+                        </a-menu-item>
+                        <a-menu-item key="5">
+                            <router-link to="/"></router-link>
+                            <span>Avisos</span>
+                        </a-menu-item>
+                        <a-menu-item key="6">
+                            <router-link to="/"></router-link>
+                            <span>Resultados</span>
+                        </a-menu-item>
+                    </a-sub-menu>
+                    <a-sub-menu key="sub3">
+                        <span slot="title">
+                            <a-icon type="user" />
+                            <span>Administrador</span>
+                        </span>
+                        <a-menu-item key="7">
+                            <router-link to="/"></router-link>
+                            <span>Home </span>
+                        </a-menu-item>
+                        <a-menu-item key="8">
+                            <router-link to="/"></router-link>
+                            <span>Formatos</span>
+                        </a-menu-item>
+                        <a-menu-item key="9">
+                            <router-link to="/"></router-link>
+                            <span>Evaluaciones</span>
+                        </a-menu-item>
+                        <a-menu-item key="10">
+                            <router-link to="/-chart"></router-link>
+                            <span>Organigrama</span>
+                        </a-menu-item>
+                        <a-menu-item key="11">
+                            <router-link to="/"></router-link>
+                            <span>Configuración</span>
+                        </a-menu-item>
+                        <a-menu-item key="12">
+                            <router-link to="/"></router-link>
+                            <span>Avisos</span>
+                        </a-menu-item>
+                        <a-menu-item key="13">
+                            <router-link to="/"></router-link>
+                            <span>Resultados</span>
+                        </a-menu-item>
+                    </a-sub-menu>
+                </a-menu>
+            </a-col>
+        </a-row>
+    </a-layout-sider>
 </template>
 
 <script>
