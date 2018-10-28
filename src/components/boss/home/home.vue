@@ -5,37 +5,37 @@
                 <next-evaluation-period />
             </a-col>
             <a-col :lg="12" :sm="24">
-                <colaborator-issues/>
+                <boss-issues/>
             </a-col>
         </a-row>
         <a-row style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
-                <pending-auto-evaluations />
+                <pending-colaborator-evaluations />
             </a-col>
             <a-col :span="24" style="padding-bottom: 30px;">
-                <boss-evaluations />
+                <colaborator-evaluations />
             </a-col>
             <a-col :span="24">
-                <current-objectives />
+
             </a-col>
         </a-row>
     </div>
 </template>
 
 <script>
-import nextEvaluationPeriod from '@/components/colaborator/home/nextEvaluationPeriod.vue';
-import colaboratorIssues from '@/components/colaborator/home/colaboratorIssues.vue';
-import pendingAutoEvaluations from '@/components/colaborator/home/pendingAutoEvaluations.vue';
-import bossEvaluations from '@/components/colaborator/home/bossEvaluations.vue';
-import currentObjectives from '@/components/colaborator/home/currentObjectives.vue';
+import nextEvaluationPeriod from '@/components/boss/home/nextEvaluationPeriod.vue';
+import bossIssues from '@/components/boss/home/bossIssues.vue';
+import pendingColaboratorEvaluations from '@/components/boss/home/pendingColaboratorEvaluations.vue';
+import colaboratorEvaluations from '@/components/boss/home/colaboratorEvaluations.vue';
+// import currentObjectives from '@/components/colaborator/home/currentObjectives.vue';
 
 export default {
     components: {
         nextEvaluationPeriod,
-        colaboratorIssues,
-        pendingAutoEvaluations,
-        bossEvaluations,
-        currentObjectives,
+        bossIssues,
+        pendingColaboratorEvaluations,
+        colaboratorEvaluations,
+        // currentObjectives,
     },
 };
 </script>
