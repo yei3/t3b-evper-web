@@ -16,7 +16,7 @@
                 <colaborator-evaluations />
             </a-col>
             <a-col :span="24">
-
+                <current-colaborator-objectives />
             </a-col>
         </a-row>
     </div>
@@ -27,7 +27,7 @@ import nextEvaluationPeriod from '@/components/boss/home/nextEvaluationPeriod.vu
 import bossIssues from '@/components/boss/home/bossIssues.vue';
 import pendingColaboratorEvaluations from '@/components/boss/home/pendingColaboratorEvaluations.vue';
 import colaboratorEvaluations from '@/components/boss/home/colaboratorEvaluations.vue';
-// import currentObjectives from '@/components/colaborator/home/currentObjectives.vue';
+import currentColaboratorObjectives from '@/components/boss/home/currentColaboratorObjectives.vue';
 
 export default {
     components: {
@@ -35,7 +35,7 @@ export default {
         bossIssues,
         pendingColaboratorEvaluations,
         colaboratorEvaluations,
-        // currentObjectives,
+        currentColaboratorObjectives,
     },
 };
 </script>
