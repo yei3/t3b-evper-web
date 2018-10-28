@@ -12,10 +12,20 @@
                     Ver todas
                 </router-link>
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -23,16 +33,22 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <p><a href="">
+                        <p><a
+                            class="table-link"
+                            :to="{name: 'colaborator-assessments-apply' }"
+                        >
                             {{evaluation.title}}
                         </a></p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="action">
-                        <router-link :to="{ name: 'colaborator-assessments-apply' }">
+                        <router-link
+                            class="table-link-light"
+                            :to="{ name: 'colaborator-assessments-apply' }"
+                        >
                             {{transformStatus(action)}}
                         </router-link>
                     </span>
@@ -71,6 +87,7 @@ const columns = [
         dataIndex: 'status',
         key: 'action',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -149,11 +166,23 @@ export default {
                 return 'Continuar';
             }
             if (status === 'Finalizada') {
-                return 'Agendar revisión'
+                return 'Agendar revisión';
             }
             return 'Iniciar';
         },
-    }
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Finalizada') {
+                return 'ant-tag-green';
+            }
+            return 'ant-tag-gray';
+        },
+    },
 };
 </script>
 

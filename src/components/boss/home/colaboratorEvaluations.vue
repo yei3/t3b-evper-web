@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -17,21 +27,31 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <p><a @click="toggleFinishEvaluationModal">
+                        <p><a
+                            class="table-link"
+                            @click="toggleFinishEvaluationModal"
+                        >
                             {{evaluation.title}}
                         </a></p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="review" slot-scope="review">
-                        <a @click="toggleScheduleReviewModal">
+                        <a
+                            class="table-link-light"
+                            @click="toggleScheduleReviewModal"
+                        >
                             {{review}}
                         </a>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a @click="toggleFinishEvaluationModal">Cerrar</a>
+                        <a
+                            class="table-link-light"
+                            @click="toggleFinishEvaluationModal">
+                            Cerrar
+                        </a>
                     </span>
                 </a-table>
             </a-row>
@@ -64,7 +84,9 @@
                     <a-textarea placeholder="Comentarios..." :rows="6"/>
                 </a-col>
                 <a-col :span="24">
-                     <a-checkbox @change="finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton">
+                     <a-checkbox @change="
+                        finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton
+                    ">
                         He preparado esta evaluación de desempeño con detenimiento,
                         lo he explicado claramente y discutido en detalle con el colaborador.
                     </a-checkbox>
@@ -204,6 +226,18 @@ export default {
         },
         toggleFinishEvaluationModal() {
             this.finishEvaluationModal.show = !this.finishEvaluationModal.show;
+        },
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Finalizado') {
+                return 'ant-tag-green';
+            }
+            return 'ant-tag-gray';
         },
     },
 };

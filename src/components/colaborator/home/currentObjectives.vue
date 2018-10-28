@@ -131,12 +131,14 @@
                         </a-timeline-item>
                         <a-timeline-item>
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han revisado propuestas de 3 proveedores, se están revisando actualmente.</p>
+                            <p> Se han revisado propuestas de 3 proveedores,
+                                se están revisando actualmente.</p>
                         </a-timeline-item>
                         <a-timeline-item color="red">
                             <a-icon slot="dot" type="clock-circle-o" style="fontSize: '16px'" />
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p>  Se ha seleccionado el proveedor, ya contamos con a muestra del producto. </p>
+                            <p>  Se ha seleccionado el proveedor, ya contamos
+                                con a muestra del producto. </p>
                         </a-timeline-item>
                         <a-timeline-item>
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
@@ -144,7 +146,8 @@
                         </a-timeline-item>
                         <a-timeline-item>
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha completado el objetivo, ya contamos con el producto en operación. </p>
+                            <p> Se ha completado el objetivo, ya contamos con
+                                el producto en operación. </p>
                         </a-timeline-item>
                     </a-timeline>
                 </a-col>
