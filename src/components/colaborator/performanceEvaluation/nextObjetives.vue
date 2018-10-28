@@ -1,11 +1,17 @@
 <template>
-    <form-next-objetives />
+    <form-next-objetives :onlyLecture="onlyLecture" />
 </template>
 
 <script>
 import formNextObjetives from '@/components/colaborator/applyPerformanceEvaluations/formNextObjetives.vue';
 
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     components: {
         formNextObjetives,
     },

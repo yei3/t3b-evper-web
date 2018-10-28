@@ -10,7 +10,11 @@
                 </span>
             </a-col>
             <a-col :span="24">
-                <a-textarea placeholder="Detalle del plan de desarrollo..." :rows="6"/>
+                <a-textarea
+                    placeholder="Detalle del plan de desarrollo..."
+                    :rows="6"
+                    :disabled="onlyLecture"
+                />
             </a-col>
         </a-row>
     </a-col>
@@ -18,6 +22,12 @@
 
 <script>
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
         };

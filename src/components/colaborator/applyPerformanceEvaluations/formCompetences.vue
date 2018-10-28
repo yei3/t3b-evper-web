@@ -22,6 +22,7 @@
                                 <a-select
                                     placeholder="Seleccione..."
                                     style="width: 100%"
+                                    :disabled="onlyLecture"
                                 >
                                     <a-select-option
                                         :value="option.value"
@@ -35,7 +36,7 @@
                         </a-row>
                     </a-col>
                     <a-col :span="24">
-                        <a-input placeholder="Comentarios"/>
+                        <a-input placeholder="Comentarios" :disabled="onlyLecture"/>
                     </a-col>
                 </a-row>
             </a-col>
@@ -45,6 +46,12 @@
 
 <script>
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             selectOptions: [

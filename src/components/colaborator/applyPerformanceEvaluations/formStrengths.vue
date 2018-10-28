@@ -14,6 +14,7 @@
                 <a-input
                     :key="i"
                     :placeholder="'Fortaleza ' + i + '...'"
+                    :disabled="onlyLecture"
                     v-for="i in formOptions.strengthsInputs"
                 />
             </a-col>
@@ -23,6 +24,12 @@
 
 <script>
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             formOptions: {

@@ -18,10 +18,16 @@
                     <span slot="action" slot-scope="text, record">
                         <a-dropdown>
                             <a-menu slot="overlay">
-                                <a-menu-item key="1">Registrar avances</a-menu-item>
-                                <a-menu-item key="2">Ver avances</a-menu-item>
-                                <a-menu-divider />
-                                <a-menu-item key="3">Completar objectivo</a-menu-item>
+                                <a-menu-item key="1" v-show="!onlyLecture">
+                                    Registrar avances
+                                </a-menu-item>
+                                <a-menu-item key="2">
+                                    Ver avances
+                                </a-menu-item>
+                                <a-menu-divider v-show="!onlyLecture" />
+                                <a-menu-item key="3" v-show="!onlyLecture">
+                                    Completar objectivo
+                                </a-menu-item>
                             </a-menu>
                             <a-button style="margin-left: 8px">
                                 ...
@@ -59,6 +65,12 @@ const columns = [
 ];
 
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             data: [

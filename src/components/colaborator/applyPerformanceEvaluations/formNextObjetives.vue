@@ -10,13 +10,22 @@
                         <span>Objetivo {{i}}</span>
                     </a-col>
                     <a-col :span="12">
-                        <a-input placeholder="Objetivo: Específico/Medible/Alcanzable/Real" />
+                        <a-input
+                            placeholder="Objetivo: Específico/Medible/Alcanzable/Real"
+                            :disabled="onlyLecture"
+                        />
                     </a-col>
                     <a-col :span="6">
-                        <a-input placeholder="Entregable" />
+                        <a-input
+                            placeholder="Entregable"
+                            :disabled="onlyLecture"
+                        />
                     </a-col>
                     <a-col :span="6">
-                        <a-date-picker style="width: 100%" />
+                        <a-date-picker
+                            style="width: 100%"
+                            :disabled="onlyLecture"
+                        />
                     </a-col>
                 </a-row>
             </a-col>
@@ -26,6 +35,12 @@
 
 <script>
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             formOptions: {

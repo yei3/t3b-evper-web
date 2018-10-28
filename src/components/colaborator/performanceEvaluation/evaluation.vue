@@ -19,22 +19,22 @@
                 <a-col :span="24">
                     <a-tabs type="card">
                         <a-tab-pane tab="1. Objetivos" key="1">
-                            <objetives />
+                            <objetives :onlyLecture="true" />
                         </a-tab-pane>
                         <a-tab-pane tab="2. Competencias" key="2">
-                            <competences />
+                            <competences :onlyLecture="true" />
                         </a-tab-pane>
                         <a-tab-pane tab="3. Fortalezas" key="3">
-                            <strengths />
+                            <strengths :onlyLecture="true" />
                         </a-tab-pane>
                         <a-tab-pane tab="4. Áreas de mejora" key="4">
-                            <improvement-areas />
+                            <improvement-areas :onlyLecture="true" />
                         </a-tab-pane>
                         <a-tab-pane tab="5. Plan Desarrollo" key="5">
-                            <development-plan />
+                            <development-plan :onlyLecture="true" />
                         </a-tab-pane>
                         <a-tab-pane tab="6. Prox Objetivos" key="6">
-                            <next-objetives />
+                            <next-objetives :onlyLecture="true" />
                         </a-tab-pane>
                     </a-tabs>
                 </a-col>

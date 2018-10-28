@@ -170,7 +170,7 @@ export default {
         };
     },
     methods: {
-        resetOpenKeys(collapsed, type) {
+        resetOpenKeys() {
             this.openKeys = [];
         },
         onOpenChange(openKeys) {
@@ -201,8 +201,8 @@ export default {
                 this.openKeys = this.lastOpenKeys;
                 this.lastOpenKeys = [];
             }
-        }
-    }
+        },
+    },
 };
 </script>
 
