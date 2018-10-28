@@ -31,8 +31,10 @@
                         </router-link>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
-                    <span slot="action" slot-scope="text, record">
-                        <a href="javascript:;">Delete</a>
+                    <span slot="action" slot-scope="action">
+                        <router-link :to="{ name: 'colaborator-assessments-apply' }">
+                            {{transformStatus(action)}}
+                        </router-link>
                     </span>
                 </a-table>
             </a-row>
@@ -60,6 +62,7 @@ const columns = [
     {
         title: '',
         key: 'action',
+        dataIndex: 'status',
         scopedSlots: { customRender: 'action' },
     },
 ];
@@ -80,7 +83,16 @@ export default {
                 },
                 {
                     key: '2',
-                    status: 'No iniciado',
+                    status: 'Pendiente',
+                    evaluation: {
+                        title: 'Período 2017-1',
+                        subtitle: 'Evaluación de Desempeño',
+                    },
+                    endDate: '13/07/2017',
+                },
+                {
+                    key: '3',
+                    status: 'Finalizado',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -90,6 +102,14 @@ export default {
             ],
             columns,
         };
+    },
+    methods: {
+        transformStatus(status) {
+            if (status === 'Pendiente' || status === 'Finalizado') {
+                return 'Continuar';
+            }
+            return 'Iniciar';
+        },
     },
 };
 </script>

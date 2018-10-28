@@ -20,17 +20,72 @@
                         <a-tag color="red">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <p><a href="">
+                        <p><a @click="toggleCBEModal()">
                             {{evaluation.title}}
                         </a></p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a href="javascript:;">Delete</a>
+                        <a @click="toggleCBEModal()">
+                            Cerrar
+                        </a>
                     </span>
                 </a-table>
             </a-row>
         </transition>
+
+        <a-modal
+            v-model="CBEModal.show"
+            onOk="toggleCBEModal"
+            width="600px"
+        >
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24">
+                        <h1>Cerrar Evaluación</h1>
+                    </a-col>
+                    <a-col :span="24">
+                        <small>(Nombre de la evaluación)</small>
+                    </a-col>
+                </a-row>
+            </template>
+
+            <a-row>
+                <a-col :span="24">
+                    <span>
+                        Agregue un comentario referente a su evaluación y a la
+                        retroalimentación recibida por su Jefe.
+                    </span>
+                </a-col>
+                <a-col :span="24">
+                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                </a-col>
+                <a-col>
+                    <a-checkbox @change="CBEModal.enableButton = !CBEModal.enableButton">
+                        He leído y comprendido la evaluación de desempeño realizada por mi Jefe
+                        y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi
+                        desempeño basado en sus comentarios.
+                    </a-checkbox>
+                </a-col>
+            </a-row>
+
+            <template slot="footer">
+                <a-button
+                    key="back"
+                    @click="toggleCBEModal"
+                >
+                    Cancelar
+                </a-button>
+                <a-button
+                    key="submit"
+                    type="primary"
+                    @click="toggleCBEModal"
+                    :disabled="!CBEModal.enableButton"
+                >
+                    Si, cerrar evaluación
+                </a-button>
+            </template>
+        </a-modal>
     </div>
 </template>
 
@@ -67,6 +122,10 @@ export default {
     data() {
         return {
             collapsed: false,
+            CBEModal: {
+                show: false,
+                enableButton: false,
+            },
             data: [
                 {
                     key: '1',
@@ -78,19 +137,14 @@ export default {
                     reviewDate: '13/07/2017',
                     endDate: '13/07/2017',
                 },
-                {
-                    key: '2',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    reviewDate: '13/07/2017',
-                    endDate: '13/07/2017',
-                },
             ],
             columns,
         };
+    },
+    methods: {
+        toggleCBEModal() {
+            this.CBEModal.show = !this.CBEModal.show;
+        },
     },
 };
 </script>
