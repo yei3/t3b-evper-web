@@ -21,13 +21,21 @@
                         <a-tag color="red">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <p><a href="">
-                            {{evaluation.title}}
-                        </a></p>
+                        <p>
+                            <router-link
+                                :to="{ name: 'colaborator-assessment', params: { id: 123 }}"
+                            >
+                                {{evaluation.title}}
+                            </router-link>
+                        </p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a href="javascript:;">Ver</a>
+                        <router-link
+                                :to="{ name: 'colaborator-assessment', params: { id: 123 }}"
+                        >
+                            Ver
+                        </router-link>
                     </span>
                 </a-table>
             </a-row>

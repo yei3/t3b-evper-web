@@ -12,25 +12,34 @@
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong>Evaluaciones de desempeño</strong>
+                        <router-link :to="{ name: 'colaborator-assessments' }">
+                            <strong>Evaluaciones de desempeño</strong>
+                        </router-link>
+                    </a-breadcrumb-item>
+                    <a-breadcrumb-item>
+                        <strong>Ver Evaluación</strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
         </a-row>
         <a-row style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
-                <evaluations-history />
+                <evaluation />
             </a-col>
         </a-row>
     </div>
 </template>
 
 <script>
-import evaluationsHistory from '@/components/colaborator/performanceEvaluations/evaluationsHistory.vue';
+import evaluation from '@/components/colaborator/performanceEvaluation/evaluation.vue';
 
 export default {
     components: {
-        evaluationsHistory,
+        evaluation,
+    },
+    data() {
+        return {
+        };
     },
 };
 </script>

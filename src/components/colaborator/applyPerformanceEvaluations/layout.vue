@@ -7,7 +7,9 @@
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link to="/colaborator/home">Home Colaborador</router-link>
+                        <router-link :to="{ name: 'colaborator-home' }">
+                            Home Colaborador
+                        </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
                         <strong>Realizar auto-evaluación</strong>
@@ -18,12 +20,6 @@
         <a-row style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
                 <make-evaluation />
-            </a-col>
-            <a-col :span="24" style="padding-bottom: 30px;">
-
-            </a-col>
-            <a-col :span="24">
-
             </a-col>
         </a-row>
     </div>
