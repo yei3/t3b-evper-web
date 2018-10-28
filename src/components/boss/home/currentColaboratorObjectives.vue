@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -18,7 +28,9 @@
                 <a-col :span="24">
                     <a-col :span="20">
                         <a-avatar shape="square" icon="user" />
-                        <a @click="currentColaborator = (colaborator.id !== currentColaborator)? colaborator.id: 0 ">
+                        <a
+                            @click="currentColaborator = (colaborator.id !== currentColaborator)?
+                                colaborator.id:0">
                             {{colaborator.name}}
                         </a>
                     </a-col>
@@ -28,7 +40,11 @@
                     </a-col>
                 </a-col>
                 <a-col :span="24" v-show="currentColaborator == colaborator.id">
-                    <a-table :columns="columns" :dataSource="colaborator.objetives" :pagination=false>
+                    <a-table
+                        :columns="columns"
+                        :dataSource="colaborator.objetives"
+                        :pagination=false
+                    >
                         <span slot="status" slot-scope="status">
                             <a-tag color="red">{{status}}</a-tag>
                         </span>
@@ -80,12 +96,16 @@
                         </a-timeline-item>
                         <a-timeline-item>
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han revisado propuestas de 3 proveedores, se están revisando actualmente.</p>
+                            <p> Se han revisado propuestas de 3 proveedores,
+                                se están revisando actualmente.
+                            </p>
                         </a-timeline-item>
                         <a-timeline-item color="red">
                             <a-icon slot="dot" type="clock-circle-o" style="fontSize: '16px'" />
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p>  Se ha seleccionado el proveedor, ya contamos con a muestra del producto. </p>
+                            <p>  Se ha seleccionado el proveedor, ya contamos con a
+                                muestra del producto.
+                            </p>
                         </a-timeline-item>
                         <a-timeline-item>
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
@@ -93,7 +113,9 @@
                         </a-timeline-item>
                         <a-timeline-item>
                             <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha completado el objetivo, ya contamos con el producto en operación. </p>
+                            <p> Se ha completado el objetivo, ya
+                                contamos con el producto en operación.
+                            </p>
                         </a-timeline-item>
                     </a-timeline>
                 </a-col>
@@ -187,7 +209,7 @@ export default {
                             },
                             endDate: '13/07/2018',
                         },
-                    ]
+                    ],
                 },
                 {
                     id: 2,
@@ -229,7 +251,7 @@ export default {
                             },
                             endDate: '13/07/2018',
                         },
-                    ]
+                    ],
                 },
                 {
                     id: 3,
@@ -271,7 +293,7 @@ export default {
                             },
                             endDate: '13/07/2018',
                         },
-                    ]
+                    ],
                 },
             ],
         };
@@ -279,6 +301,18 @@ export default {
     methods: {
         toggleViewProgressModal() {
             this.viewProgressModal.show = !this.viewProgressModal.show;
+        },
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Finalizado') {
+                return 'ant-tag-green';
+            }
+            return 'ant-tag-gray';
         },
     },
 };

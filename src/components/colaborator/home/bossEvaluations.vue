@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -17,16 +27,22 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <p><a @click="toggleCBEModal()">
+                        <p><a
+                            class="table-link"
+                            @click="toggleCBEModal()"
+                        >
                             {{evaluation.title}}
                         </a></p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="text, record">
-                        <a @click="toggleCBEModal()">
+                        <a
+                            class="table-link-light"
+                            @click="toggleCBEModal()"
+                        >
                             Cerrar
                         </a>
                     </span>
@@ -115,6 +131,7 @@ const columns = [
         title: '',
         key: 'action',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -129,7 +146,7 @@ export default {
             data: [
                 {
                     key: '1',
-                    status: 'No iniciado',
+                    status: 'Pendiente de revisión',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -144,6 +161,18 @@ export default {
     methods: {
         toggleCBEModal() {
             this.CBEModal.show = !this.CBEModal.show;
+        },
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Finalizado') {
+                return 'ant-tag-green';
+            }
+            return 'ant-tag-gray';
         },
     },
 };

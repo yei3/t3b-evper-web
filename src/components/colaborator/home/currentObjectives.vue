@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -17,10 +27,13 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="objective" slot-scope="objective">
-                        <p><a @click="toggleViewProgressModal">
+                        <p><a
+                            class="table-link"
+                            @click="toggleViewProgressModal"
+                        >
                             {{objective.title}}
                         </a></p>
                         <p><small>{{objective.subtitle}}</small></p>
@@ -220,6 +233,7 @@ const columns = [
         title: '',
         key: 'action',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -244,19 +258,37 @@ export default {
                     key: '1',
                     status: 'No iniciado',
                     objective: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
+                        title: 'Planes de sucesión en Barrientos',
+                        subtitle: 'Entregable: Documento con plan detallado',
                     },
-                    endDate: '13/07/2017',
+                    endDate: '30/09/2018',
                 },
                 {
                     key: '2',
-                    status: 'No iniciado',
+                    status: 'Pendiente',
                     objective: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
+                        title: 'Portal de Beneficios',
+                        subtitle: 'Entregable: Sitio productivo con la información de beneficios',
                     },
-                    endDate: '13/07/2017',
+                    endDate: '15/10/2018',
+                },
+                {
+                    key: '3',
+                    status: 'Completado',
+                    objective: {
+                        title: 'Sistema de Evaluación de Desempeño',
+                        subtitle: 'Entregable: Sistema productivo',
+                    },
+                    endDate: '15/12/2018',
+                },
+                {
+                    key: '4',
+                    status: 'Validado',
+                    objective: {
+                        title: 'Plan de formación',
+                        subtitle: 'Entregable: Documento con plan detallado',
+                    },
+                    endDate: '15/12/2018',
                 },
             ],
             columns,
@@ -271,6 +303,21 @@ export default {
         },
         toggleFinishObjectiveModal() {
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+        },
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Completado') {
+                return 'ant-tag-green';
+            }
+            if (status === 'Validado') {
+                return 'ant-tag-blue';
+            }
+            return 'ant-tag-gray';
         },
     },
 };

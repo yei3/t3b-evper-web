@@ -1,0 +1,32 @@
+.collapse {
+    background-color: #fff;
+    border-top: solid 2px #ddd;
+}
+
+.collapse-title, .collapse-content {
+    padding: 15px 15px 7px;
+}
+
+.collapse-title {
+    font-family: 'Open Sans';
+    font-weight: 600;
+    font-size: 14px;
+    color: #676a6c;
+    margin-bottom: 10px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-tittle-link {
+    font-family: "Open Sans";
+    font-style: normal;
+    color: #7e8082;
+    font-size: 12px;
+    text-decoration: underline;
+    margin-right: 13px;
+}
+
+.dropdown-icon {
+    color: #7e8082;
+}
