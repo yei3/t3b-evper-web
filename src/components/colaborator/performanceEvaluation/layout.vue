@@ -1,28 +1,33 @@
 <template>
-    <div class="main-content">
-        <a-row :gutter="32">
+    <div>
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :span="24">
                 <h1>Evaluaciones de Desempeño</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'colaborator-home' }">
+                        <router-link
+                            class="breadcrumb-path"
+                            :to="{ name: 'colaborator-home' }"
+                        >
                             Home Colaborador
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'colaborator-assessments' }">
-                            <strong>Evaluaciones de desempeño</strong>
+                        <router-link
+                            class="breadcrumb-path"
+                            :to="{ name: 'colaborator-assessments' }">
+                            Evaluaciones de desempeño
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong>Ver Evaluación</strong>
+                        <strong class="breadcrumb-path-active">Ver Evaluación</strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
         </a-row>
-        <a-row style="margin-top: 30px;">
+        <a-row class="main-content" style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
                 <evaluation />
             </a-col>
@@ -44,6 +49,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.main-content >>> .form-autoevaluation {
+    background-color: #fff;
+}
 </style>

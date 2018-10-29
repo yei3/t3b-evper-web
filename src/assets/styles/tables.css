@@ -44,3 +44,7 @@ p {
     color: red;
     text-decoration: underline;
 }
+
+.ant-table-thead > tr > th {
+    background: transparent;
+}

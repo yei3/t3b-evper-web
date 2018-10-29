@@ -34,14 +34,14 @@ export default new Router({
                     component: performanceEvaluations,
                 },
                 {
-                    path: 'colaborator/assessments/:id',
-                    name: 'colaborator-assessment',
-                    component: performanceEvaluation,
-                },
-                {
                     path: 'colaborator/assessments/apply',
                     name: 'colaborator-assessments-apply',
                     component: applyPerformanceEvaluations,
+                },
+                {
+                    path: 'colaborator/assessments/:id',
+                    name: 'colaborator-assessment',
+                    component: performanceEvaluation,
                 },
                 {
                     path: 'boos/home',
