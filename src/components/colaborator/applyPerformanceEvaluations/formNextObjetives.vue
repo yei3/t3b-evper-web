@@ -4,28 +4,35 @@
             <a-col :span="24">
                 <h1>Objetivos para el próximo periodo</h1>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="24" style="padding: 0px 16px;">
                 <a-row :key="i" v-for="i in formOptions.objetivesForms">
-                    <a-col :span="24">
+                    <a-col :span="24" style="margin: 10px 0px;">
                         <span>Objetivo {{i}}</span>
                     </a-col>
                     <a-col :span="12">
-                        <a-input
-                            placeholder="Objetivo: Específico/Medible/Alcanzable/Real"
-                            :disabled="onlyLecture"
-                        />
+                        <div style="padding-right: 10px;">
+                            <a-input
+                                placeholder="Objetivo: Específico/Medible/Alcanzable/Real"
+                                :disabled="onlyLecture"
+                            />
+                        </div>
+
                     </a-col>
                     <a-col :span="6">
-                        <a-input
-                            placeholder="Entregable"
-                            :disabled="onlyLecture"
-                        />
+                        <div style="padding: 0px 10px;">
+                            <a-input
+                                placeholder="Entregable"
+                                :disabled="onlyLecture"
+                            />
+                        </div>
                     </a-col>
                     <a-col :span="6">
-                        <a-date-picker
-                            style="width: 100%"
-                            :disabled="onlyLecture"
-                        />
+                        <div style="padding-left: 10px;">
+                            <a-date-picker
+                                style="width: 100%"
+                                :disabled="onlyLecture"
+                            />
+                        </div>
                     </a-col>
                 </a-row>
             </a-col>

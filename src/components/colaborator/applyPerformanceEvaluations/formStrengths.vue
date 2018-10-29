@@ -4,19 +4,22 @@
             <a-col :span="24">
                 <h1>Fortalezas</h1>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="24" style="padding: 10px 16px;">
                 <span>
                     Las Fortalezas son características que otros reconocen en ti
                     y te permiten alcanzar tus objetivos.
                 </span>
             </a-col>
-            <a-col :span="24">
-                <a-input
-                    :key="i"
-                    :placeholder="'Fortaleza ' + i + '...'"
-                    :disabled="onlyLecture"
-                    v-for="i in formOptions.strengthsInputs"
-                />
+            <a-col :span="24" style="padding: 10px 15px 20px 15px;">
+                <div :key="i" v-for="i in formOptions.strengthsInputs"
+                    style="padding: 5px 0px;"
+                >
+                    <a-input
+                        :placeholder="'Fortaleza ' + i + '...'"
+                        :disabled="onlyLecture"
+                    />
+                </div>
+
             </a-col>
         </a-row>
     </a-col>

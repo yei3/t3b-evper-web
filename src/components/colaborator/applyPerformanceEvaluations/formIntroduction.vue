@@ -2,8 +2,10 @@
     <a-col class="form-autoevaluation">
         <a-row class="form-tittle">
             <a-col :span="24">
-                <h1>Instrucciones</h1>
+                <h2>Instrucciones</h2>
             </a-col>
+        </a-row>
+        <a-row style="padding: 70px 10px;">
             <a-col :span="24">
                 <span>
                     Lea cuidadosamente con el fin de evaluar su desempeño de manera objetiva.

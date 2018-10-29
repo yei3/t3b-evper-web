@@ -7,12 +7,12 @@
             <a-col :span="24">
                 <a-row class="form-section" :key="section.id" v-for="section in formSections">
                     <a-col :span="24" class="form-section-tittle">
-                        <span>
-                            {{section.tittle}}
-                        </span>
+                        <h4>{{section.tittle}}</h4>
                     </a-col>
                     <a-col :span="24">
-                        <a-row :key="question.id" v-for="question in section.questions">
+                        <a-row :key="question.id" v-for="question in section.questions"
+                            style="padding: 10px 16px;"
+                        >
                             <a-col :span="16" >
                                 <span>
                                     {{question.label}}
@@ -35,7 +35,7 @@
                             </a-col>
                         </a-row>
                     </a-col>
-                    <a-col :span="24">
+                    <a-col :span="24" style="padding: 10px 15px 20px 15px;">
                         <a-input placeholder="Comentarios" :disabled="onlyLecture"/>
                     </a-col>
                 </a-row>
