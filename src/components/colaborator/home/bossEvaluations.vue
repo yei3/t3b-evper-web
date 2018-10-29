@@ -57,31 +57,36 @@
         >
             <template slot="title">
                 <a-row>
-                    <a-col :span="24">
-                        <h1>Cerrar Evaluación</h1>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="check-square" class="modal-icon" />
                     </a-col>
-                    <a-col :span="24">
+                    <a-col :span="24" class="modal-header">
+                        <h1>Cerrar Evaluación</h1>
                         <small>(Nombre de la evaluación)</small>
                     </a-col>
                 </a-row>
             </template>
 
-            <a-row>
-                <a-col :span="24">
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
                     <span>
                         Agregue un comentario referente a su evaluación y a la
                         retroalimentación recibida por su Jefe.
                     </span>
                 </a-col>
-                <a-col :span="24">
+                <a-col :span="24" class="modal-content-seccion">
                     <a-textarea placeholder="Comentarios..." :rows="6"/>
                 </a-col>
-                <a-col>
+                <a-col class="modal-content-seccion">
                     <a-checkbox @change="CBEModal.enableButton = !CBEModal.enableButton">
+                        <strong style="font-size: 13px;">
                         He leído y comprendido la evaluación de desempeño realizada por mi Jefe
                         y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi
-                        desempeño basado en sus comentarios.
+                        desempeño basado en sus comentarios.</strong>
                     </a-checkbox>
+                </a-col>
+                <a-col class="modal-content-seccion-bottom">
+                    <p>¿Está seguro que desea cerrar la evaluación indicada?</p>
                 </a-col>
             </a-row>
 
@@ -93,6 +98,7 @@
                     Cancelar
                 </a-button>
                 <a-button
+                    class="modal-button-ok"
                     key="submit"
                     type="primary"
                     @click="toggleCBEModal"

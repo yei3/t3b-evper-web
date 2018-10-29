@@ -87,43 +87,106 @@
         >
             <template slot="title">
                 <a-row>
-                    <a-col :span="24">
+                    <a-col :span="24" class="modal-header">
                         <h1>Ver avances</h1>
-                    </a-col>
-                    <a-col :span="24">
                         <small>(Nombre del Objetivo) - (Nombre del colaborador)</small>
                     </a-col>
                 </a-row>
             </template>
 
-            <a-row>
-                <a-col :span="24">
+            <a-row class="modal-content">
+                <a-col :span="24"  style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han definido las características del producto. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se han definido las características del producto.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han revisado propuestas de 3 proveedores,
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se han revisado propuestas de 3 proveedores,
                                 se están revisando actualmente.
                             </p>
                         </a-timeline-item>
-                        <a-timeline-item color="red">
-                            <a-icon slot="dot" type="clock-circle-o" style="fontSize: '16px'" />
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p>  Se ha seleccionado el proveedor, ya contamos con a
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha seleccionado el proveedor, ya contamos con a
                                 muestra del producto.
                             </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha revisado el producto, se procede a la compra. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha revisado el producto, se procede a la compra.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha completado el objetivo, ya
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1ab394"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha completado el objetivo, ya
                                 contamos con el producto en operación.
+                            </p>
+                        </a-timeline-item>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #ed5565"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha reabierto el objetivo, falta documentación.
+                            </p>
+                        </a-timeline-item>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1ab394"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha completado el objetivo,
+                                se envia documentación.
+                            </p>
+                        </a-timeline-item>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1c84c6"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha validado el objetivo, todo funciona correctamente.
                             </p>
                         </a-timeline-item>
                     </a-timeline>
@@ -344,8 +407,8 @@ export default {
                     completed += 1;
                 }
             });
-            return completed * 100 / objectives.length;
-        }
+            return (completed * 100) / objectives.length;
+        },
     },
 };
 </script>
