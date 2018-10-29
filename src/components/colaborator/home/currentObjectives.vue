@@ -52,7 +52,7 @@
                                     Completar objectivo
                                 </a-menu-item>
                             </a-menu>
-                            <a-button style="margin-left: 8px">
+                            <a-button class="ant-btn-small">
                                 ...
                             </a-button>
                         </a-dropdown>

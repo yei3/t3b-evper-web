@@ -36,12 +36,14 @@
                         <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <p><a
-                            class="table-link"
-                            :to="{name: 'colaborator-assessments-apply' }"
-                        >
-                            {{evaluation.title}}
-                        </a></p>
+                        <p>
+                            <router-link
+                                class="table-link"
+                                :to="{name: 'colaborator-assessments-apply' }"
+                            >
+                                {{evaluation.title}}
+                            </router-link>
+                        </p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="action">
