@@ -23,33 +23,42 @@
                 </a>
             </a-col>
         </a-row>
-        <div v-show="!collapsed">
-            <a-row :key="colaborator.id" v-for="colaborator in data">
-                <a-col :span="24">
+        <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">
+            <a-row :key="colaborator.id" v-for="colaborator in data"
+                class="collapse-single-wrapper"
+            >
+                <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
                         <a-avatar shape="square" icon="user" />
-                        <a
+                        <a class="table-link" style="margin-left: 5px;"
                             @click="currentColaborator = (colaborator.id !== currentColaborator)?
                                 colaborator.id:0">
                             {{colaborator.name}}
                         </a>
                     </a-col>
                     <a-col :span="4">
-                        <p><a-progress :percent="50" :showInfo="false" /></p>
-                        <p>(3 de 4 objetivos cumplidos)</p>
+                        <p><a-progress :percent="objectivesPercet(colaborator.objectives)"
+                            :showInfo="false"
+                            size="small"
+                        /></p>
+                        <p><small>({{objectivesCount(colaborator.objectives)}})</small></p>
                     </a-col>
                 </a-col>
-                <a-col :span="24" v-show="currentColaborator == colaborator.id">
+                <a-col :span="24" class="collapse-single-content"
+                    v-show="currentColaborator == colaborator.id">
                     <a-table
                         :columns="columns"
-                        :dataSource="colaborator.objetives"
+                        :dataSource="colaborator.objectives"
                         :pagination=false
                     >
                         <span slot="status" slot-scope="status">
-                            <a-tag color="red">{{status}}</a-tag>
+                            <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                         </span>
                         <span slot="objective" slot-scope="objective">
-                            <p><a @click="toggleViewProgressModal">
+                            <p><a
+                                class="table-link"
+                                @click="toggleViewProgressModal"
+                            >
                                 {{objective.title}}
                             </a></p>
                             <p><small>{{objective.subtitle}}</small></p>
@@ -61,7 +70,7 @@
                                         Ver avances
                                     </a-menu-item>
                                 </a-menu>
-                                <a-button style="margin-left: 8px">
+                                <a-button class="ant-btn-small">
                                     ...
                                 </a-button>
                             </a-dropdown>
@@ -78,43 +87,106 @@
         >
             <template slot="title">
                 <a-row>
-                    <a-col :span="24">
+                    <a-col :span="24" class="modal-header">
                         <h1>Ver avances</h1>
-                    </a-col>
-                    <a-col :span="24">
                         <small>(Nombre del Objetivo) - (Nombre del colaborador)</small>
                     </a-col>
                 </a-row>
             </template>
 
-            <a-row>
-                <a-col :span="24">
+            <a-row class="modal-content">
+                <a-col :span="24"  style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han definido las características del producto. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se han definido las características del producto.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han revisado propuestas de 3 proveedores,
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se han revisado propuestas de 3 proveedores,
                                 se están revisando actualmente.
                             </p>
                         </a-timeline-item>
-                        <a-timeline-item color="red">
-                            <a-icon slot="dot" type="clock-circle-o" style="fontSize: '16px'" />
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p>  Se ha seleccionado el proveedor, ya contamos con a
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha seleccionado el proveedor, ya contamos con a
                                 muestra del producto.
                             </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha revisado el producto, se procede a la compra. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha revisado el producto, se procede a la compra.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha completado el objetivo, ya
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1ab394"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha completado el objetivo, ya
                                 contamos con el producto en operación.
+                            </p>
+                        </a-timeline-item>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #ed5565"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha reabierto el objetivo, falta documentación.
+                            </p>
+                        </a-timeline-item>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1ab394"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha completado el objetivo,
+                                se envia documentación.
+                            </p>
+                        </a-timeline-item>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1c84c6"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha validado el objetivo, todo funciona correctamente.
                             </p>
                         </a-timeline-item>
                     </a-timeline>
@@ -155,6 +227,7 @@ const columns = [
         title: '',
         key: 'action',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -172,7 +245,7 @@ export default {
                 {
                     id: 1,
                     name: 'Leonardo Juárez',
-                    objetives: [
+                    objectives: [
                         {
                             key: '1',
                             status: 'Validado',
@@ -214,7 +287,7 @@ export default {
                 {
                     id: 2,
                     name: 'Silvia Sánchez',
-                    objetives: [
+                    objectives: [
                         {
                             key: '1',
                             status: 'No iniciado',
@@ -244,7 +317,7 @@ export default {
                         },
                         {
                             key: '4',
-                            status: 'Validado',
+                            status: 'Completado',
                             objective: {
                                 title: 'Plan de formación',
                                 subtitle: 'Entregable: Documento con plan detallado',
@@ -256,10 +329,10 @@ export default {
                 {
                     id: 3,
                     name: 'Laura Alcántara',
-                    objetives: [
+                    objectives: [
                         {
                             key: '1',
-                            status: 'No iniciado',
+                            status: 'Completado',
                             objective: {
                                 title: 'Planes de sucesión en Barrientos',
                                 subtitle: 'Entregable: Documento con plan detallado ',
@@ -268,7 +341,7 @@ export default {
                         },
                         {
                             key: '2',
-                            status: 'Pendiente',
+                            status: 'Completado',
                             objective: {
                                 title: 'Portal de Beneficios',
                                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
@@ -286,7 +359,7 @@ export default {
                         },
                         {
                             key: '4',
-                            status: 'Validado',
+                            status: 'Completado',
                             objective: {
                                 title: 'Plan de formación',
                                 subtitle: 'Entregable: Documento con plan detallado',
@@ -309,10 +382,32 @@ export default {
             if (status === 'Pendiente') {
                 return 'ant-tag-yellow';
             }
-            if (status === 'Finalizado') {
+            if (status === 'Completado') {
                 return 'ant-tag-green';
             }
+            if (status === 'Validado') {
+                return 'ant-tag-blue';
+            }
             return 'ant-tag-gray';
+        },
+        objectivesCount(objectives) {
+            let completed = 0;
+            objectives.forEach((objective) => {
+                if (objective.status === 'Completado') {
+                    completed += 1;
+                }
+            });
+
+            return `${completed} de ${objectives.length} objetivos cumplidos`;
+        },
+        objectivesPercet(objectives) {
+            let completed = 0;
+            objectives.forEach((objective) => {
+                if (objective.status === 'Completado') {
+                    completed += 1;
+                }
+            });
+            return (completed * 100) / objectives.length;
         },
     },
 };

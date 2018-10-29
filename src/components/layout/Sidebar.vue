@@ -32,9 +32,9 @@
                 >
                     <a-col>
                         <a-avatar
-                            shape="square"
                             :size="48"
-                            src="@/assets/img/logo-tipografia.png"/>
+                            src="/user.jpg"
+                        />
                     </a-col>
                 </a-row>
                 <a-row

@@ -1,4 +1,21 @@
-.ant-btn {
+.ant-btn-small {
     padding: 0 5px;
     height: auto;
+}
+
+.ant-btn:hover {
+    border: 1px solid #a4a4a4;
+    color: #676a6c;
+}
+
+.ant-input:focus, .ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
+    border-color: #1ab394;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.ant-input:hover, .ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
+    border-color: #1ab394;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
