@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <a-row :gutter="32">
+    <div class="main-content">
+        <a-row :gutter="32" style="margin-top: 30px;">
             <a-col :lg="12" :sm="24">
                 <next-evaluation-period />
             </a-col>

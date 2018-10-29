@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-content">
         <a-row :gutter="32">
             <a-col :span="24">
                 <h1>Evaluaciones de Desempeño</h1>

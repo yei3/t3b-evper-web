@@ -3,3 +3,8 @@
 @import "collapses.css";
 @import "button.css";
 @import "modals.css";
+@import "breadcrumb.css";
+
+.main-content {
+    margin: 0px 30px;
+}
