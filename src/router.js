@@ -13,6 +13,14 @@ import bossHome from '@/components/boss/home/home.vue';
 
 Vue.use(Router);
 
+function beforeEnter(to, from, next) {
+    // Validate that the user can access to the route
+    next();
+
+    // Otherwise redirect to home
+    // next({ name: 'home' });
+}
+
 
 export default new Router({
     mode: 'history',
@@ -20,33 +28,44 @@ export default new Router({
     routes: [
         {
             path: '/',
+            name: 'home',
             redirect: { name: 'colaborator-home' },
             component: Layout,
+            beforeEnter: (to, from, next) => {
+                // Validate that the role for the user and redirect
+                // to the correct home
+                next();
+            },
             children: [
                 {
                     path: 'colaborator/home',
                     name: 'colaborator-home',
                     component: colaboratorHome,
+                    beforeEnter,
                 },
                 {
                     path: 'colaborator/assessments',
                     name: 'colaborator-assessments',
                     component: performanceEvaluations,
+                    beforeEnter,
                 },
                 {
                     path: 'colaborator/assessments/apply',
                     name: 'colaborator-assessments-apply',
                     component: applyPerformanceEvaluations,
+                    beforeEnter,
                 },
                 {
                     path: 'colaborator/assessments/:id',
                     name: 'colaborator-assessment',
                     component: performanceEvaluation,
+                    beforeEnter,
                 },
                 {
                     path: 'boos/home',
                     name: 'boss-home',
                     component: bossHome,
+                    beforeEnter,
                 },
             ],
         },
@@ -54,6 +73,13 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: Login,
+            beforeEnter: (to, from, next) => {
+                // Validate that the user is not login
+                next();
+
+                // Otherwise redirect to home
+                // next({ name: 'home' });
+            },
         },
     ],
 });

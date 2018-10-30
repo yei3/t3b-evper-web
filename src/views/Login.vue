@@ -47,12 +47,15 @@
                                     <a-form>
                                         <a-form-item>
                                             <a-input
+                                                v-model="user.id"
                                                 class="form-input"
                                                 placeholder="Número de Empleado"
                                             />
                                         </a-form-item>
                                         <a-form-item>
                                             <a-input
+                                                type="password"
+                                                v-model="user.password"
                                                 class="form-input"
                                                 placeholder="Contraseña"
                                             />
@@ -103,6 +106,7 @@
 
 <script>
 import Footer from '@/components/layout/Footer.vue';
+import client3B from '@/api/client3B';
 
 export default {
     components: {
@@ -110,12 +114,33 @@ export default {
     },
     data() {
         return {
+            user: {
+                id: '',
+                password: '',
+            },
             loading: false,
         };
     },
     methods: {
-        login() {
+        async login() {
             this.loading = true;
+            const auth = {
+                userNameOrEmailAddress: this.user.id,
+                password: this.user.password,
+            };
+            console.log(auth);
+
+            const result = await client3B.auth.authenticate(auth).catch((error) => {
+                console.error(error.response.data.error);
+            });
+            console.log(result.data.result, 'ok');
+
+            if (result) {
+                this.$store.dispatch('setAuthenticationData', result);
+                setTimeout(() => {
+                    this.$router.push({ name: 'home' });
+                }, 1000);
+            }
         },
     },
 };
