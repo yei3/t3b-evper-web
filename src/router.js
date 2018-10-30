@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Layout from '@/components/layout/Layout.vue';
 import Login from '@/views/Login.vue';
+import userUpdate from '@/components/user/Update.vue';
 
 import colaboratorHome from '@/components/colaborator/home/layout.vue';
 import performanceEvaluations from '@/components/colaborator/performanceEvaluations/layout.vue';
@@ -10,9 +11,7 @@ import performanceEvaluation from '@/components/colaborator/performanceEvaluatio
 import applyPerformanceEvaluations from '@/components/colaborator/applyPerformanceEvaluations/layout.vue';
 import bossHome from '@/components/boss/home/home.vue';
 
-
 Vue.use(Router);
-
 
 export default new Router({
     mode: 'history',
@@ -48,12 +47,17 @@ export default new Router({
                     name: 'boss-home',
                     component: bossHome,
                 },
+                {
+                    path: '/user/update',
+                    name: 'user',
+                    component: userUpdate
+                }
             ],
         },
         {
             path: '/login',
             name: 'login',
             component: Login,
-        },
+        }
     ],
 });
