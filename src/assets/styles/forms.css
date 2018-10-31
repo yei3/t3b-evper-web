@@ -1,0 +1,29 @@
+.step-form {
+    padding: 7px 10px;
+    margin: 3px 0px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.step-form-current {
+    background-color: #1AB394;
+    color: white;
+}
+
+.step-form-not-done {
+    background-color: #eee;
+    color: #aaa;
+}
+
+.step-form-done {
+    background-color: #6fd1bd;
+    color: white;
+    cursor: pointer;
+}
+
+.form-autoevaluation {
+    background-color: #eee;
+    margin: 10px 0px;
+    padding: 30px 40px;
+}

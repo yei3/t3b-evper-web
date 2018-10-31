@@ -5,12 +5,21 @@
                 Autoevaluaciones pendientes
             </a-col>
             <a-col :span="12" style="text-align: right;">
-                <router-link class="collapse-tittle-link" to="/foo">Ver todas</router-link>
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -18,11 +27,12 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
                         <p>
                             <router-link
+                                class="table-link"
                                 :to="{ name: 'colaborator-assessment', params: { id: 123 }}"
                             >
                                 {{evaluation.title}}
@@ -32,7 +42,8 @@
                     </span>
                     <span slot="action" slot-scope="text, record">
                         <router-link
-                                :to="{ name: 'colaborator-assessment', params: { id: 123 }}"
+                            class="table-link"
+                            :to="{ name: 'colaborator-assessment', params: { id: 123 }}"
                         >
                             Ver
                         </router-link>
@@ -64,6 +75,7 @@ const columns = [
         title: '',
         key: 'action',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -74,7 +86,7 @@ export default {
             data: [
                 {
                     key: '1',
-                    status: 'No iniciado',
+                    status: 'Cerrada',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -83,7 +95,7 @@ export default {
                 },
                 {
                     key: '2',
-                    status: 'No iniciado',
+                    status: 'Cerrada',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -93,6 +105,23 @@ export default {
             ],
             columns,
         };
+    },
+    methods: {
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Completado') {
+                return 'ant-tag-green';
+            }
+            if (status === 'Cerrada') {
+                return 'ant-tag-blue';
+            }
+            return 'ant-tag-gray';
+        },
     },
 };
 </script>

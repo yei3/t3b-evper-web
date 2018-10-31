@@ -12,10 +12,20 @@
                     Ver todas
                 </router-link>
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -23,16 +33,24 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="evaluation" slot-scope="evaluation">
-                        <router-link :to="{name: 'colaborator-assessments-apply' }">
-                            {{evaluation.title}}
-                        </router-link>
+                        <p>
+                            <router-link
+                                class="table-link"
+                                :to="{name: 'colaborator-assessments-apply' }"
+                            >
+                                {{evaluation.title}}
+                            </router-link>
+                        </p>
                         <p><small>{{evaluation.subtitle}}</small></p>
                     </span>
                     <span slot="action" slot-scope="action">
-                        <router-link :to="{ name: 'colaborator-assessments-apply' }">
+                        <router-link
+                            class="table-link-light"
+                            :to="{ name: 'colaborator-assessments-apply' }"
+                        >
                             {{transformStatus(action)}}
                         </router-link>
                     </span>
@@ -64,6 +82,7 @@ const columns = [
         key: 'action',
         dataIndex: 'status',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -109,6 +128,18 @@ export default {
                 return 'Continuar';
             }
             return 'Iniciar';
+        },
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Finalizado') {
+                return 'ant-tag-green';
+            }
+            return 'ant-tag-gray';
         },
     },
 };

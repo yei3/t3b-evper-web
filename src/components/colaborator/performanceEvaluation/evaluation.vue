@@ -68,6 +68,11 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.ant-tabs-tab {
+    color: #676a6c;
+}
+.ant-tabs.ant-tabs-card >>> .ant-tabs-bar .ant-tabs-tab-active {
+    color: #676a6c;
+}
 </style>

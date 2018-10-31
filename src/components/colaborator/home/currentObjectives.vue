@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <a>
-                    <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon type="up" @click="collapsed = !collapsed" v-show="collapsed"/>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -17,10 +27,13 @@
             <a-row class="collapse-content" v-show="!collapsed">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
-                        <a-tag color="red">{{status}}</a-tag>
+                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                     </span>
                     <span slot="objective" slot-scope="objective">
-                        <p><a @click="toggleViewProgressModal">
+                        <p><a
+                            class="table-link"
+                            @click="toggleViewProgressModal"
+                        >
                             {{objective.title}}
                         </a></p>
                         <p><small>{{objective.subtitle}}</small></p>
@@ -39,7 +52,7 @@
                                     Completar objectivo
                                 </a-menu-item>
                             </a-menu>
-                            <a-button style="margin-left: 8px">
+                            <a-button class="ant-btn-small">
                                 ...
                             </a-button>
                         </a-dropdown>
@@ -47,6 +60,7 @@
                 </a-table>
             </a-row>
         </transition>
+
         <a-modal
             v-model="recordProgressModal.show"
             onOk="toggleRecordProgressModal"
@@ -54,23 +68,24 @@
         >
             <template slot="title">
                 <a-row>
-                    <a-col :span="24">
-                        <h1>Registrar avance</h1>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="edit" class="modal-icon" />
                     </a-col>
-                    <a-col :span="24">
+                    <a-col :span="24" class="modal-header">
+                        <h1>Registrar avance</h1>
                         <small>(Nombre del Objetivo)</small>
                     </a-col>
                 </a-row>
             </template>
 
-            <a-row>
-                <a-col :span="24">
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
                     <span>
                         Agregue un comentario referente a las acciones realizadas
                         para cumplir el objetivo indicado.
                     </span>
                 </a-col>
-                <a-col :span="24">
+                <a-col :span="24" modal-content-seccion-bottom>
                     <a-textarea placeholder="Avance del objetivo..." :rows="6"/>
                 </a-col>
             </a-row>
@@ -83,6 +98,7 @@
                     Cancelar
                 </a-button>
                 <a-button
+                    class="modal-button-ok"
                     key="submit"
                     type="primary"
                     @click="toggleRecordProgressModal"
@@ -100,38 +116,76 @@
         >
             <template slot="title">
                 <a-row>
-                    <a-col :span="24">
+                    <a-col :span="24" class="modal-header" style="margin-top: 25px;">
                         <h1>Ver avances</h1>
-                    </a-col>
-                    <a-col :span="24">
                         <small>(Nombre del Objetivo)</small>
                     </a-col>
                 </a-row>
             </template>
 
-            <a-row>
-                <a-col :span="24">
+            <a-row class="modal-content">
+                <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han definido las características del producto. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se han definido las características del producto.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se han revisado propuestas de 3 proveedores, se están revisando actualmente.</p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se han revisado propuestas de 3 proveedores,
+                                se están revisando actualmente.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item color="red">
-                            <a-icon slot="dot" type="clock-circle-o" style="fontSize: '16px'" />
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p>  Se ha seleccionado el proveedor, ya contamos con a muestra del producto. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha seleccionado el proveedor, ya contamos
+                                con a muestra del producto.
+                            </p>
+                        </a-timeline-item >
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="edit"
+                                style="font-size: 20px; backgroud: #f8fafb"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small"
+                                    src="/user.jpg"
+                                /> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha revisado el producto, se procede a la compra.
+                            </p>
                         </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha revisado el producto, se procede a la compra. </p>
-                        </a-timeline-item>
-                        <a-timeline-item>
-                            <p> Karen Villanueva <small>13/07/2018 01:32:40 pm</small> </p>
-                            <p> Se ha completado el objetivo, ya contamos con el producto en operación. </p>
+                        <a-timeline-item color="gray" class="timeline-item">
+                            <a-icon slot="dot" type="check-circle"
+                                style="font-size: 20px; color: #1ab394"
+                            />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small"
+                                    src="/user.jpg"
+                                /> Karen Villanueva
+                                <small>13/07/2018 01:32:40 pm</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                Se ha completado el objetivo, ya contamos con
+                                el producto en operación.
+                            </p>
                         </a-timeline-item>
                     </a-timeline>
                 </a-col>
@@ -154,26 +208,27 @@
         >
             <template slot="title">
                 <a-row>
-                    <a-col :span="24">
-                        <h1>Completar Objetivo</h1>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="check-square" class="modal-icon" />
                     </a-col>
-                    <a-col :span="24">
+                    <a-col :span="24" class="modal-header">
+                        <h1>Completar Objetivo</h1>
                         <small>(Nombre del Objetivo)</small>
                     </a-col>
                 </a-row>
             </template>
 
-            <a-row>
-                <a-col :span="24">
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
                     <span>
                         Agregue un comentario referente a las acciones
                         realizadas para cumplir el objetivo indicado.
                     </span>
                 </a-col>
-                <a-col :span="24">
+                <a-col :span="24" class="modal-content-seccion">
                     <a-textarea placeholder="Comentarios..." :rows="6"/>
                 </a-col>
-                <a-col :span="24">
+                <a-col :span="24" class="modal-content-seccion-bottom">
                      ¿Está seguro que desea completar el objetivo indicado?
                 </a-col>
             </a-row>
@@ -186,6 +241,7 @@
                     Cancelar
                 </a-button>
                 <a-button
+                    class="modal-button-ok"
                     key="submit"
                     type="primary"
                     @click="toggleFinishObjectiveModal"
@@ -220,6 +276,7 @@ const columns = [
         title: '',
         key: 'action',
         scopedSlots: { customRender: 'action' },
+        align: 'right',
     },
 ];
 
@@ -244,19 +301,37 @@ export default {
                     key: '1',
                     status: 'No iniciado',
                     objective: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
+                        title: 'Planes de sucesión en Barrientos',
+                        subtitle: 'Entregable: Documento con plan detallado',
                     },
-                    endDate: '13/07/2017',
+                    endDate: '30/09/2018',
                 },
                 {
                     key: '2',
-                    status: 'No iniciado',
+                    status: 'Pendiente',
                     objective: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
+                        title: 'Portal de Beneficios',
+                        subtitle: 'Entregable: Sitio productivo con la información de beneficios',
                     },
-                    endDate: '13/07/2017',
+                    endDate: '15/10/2018',
+                },
+                {
+                    key: '3',
+                    status: 'Completado',
+                    objective: {
+                        title: 'Sistema de Evaluación de Desempeño',
+                        subtitle: 'Entregable: Sistema productivo',
+                    },
+                    endDate: '15/12/2018',
+                },
+                {
+                    key: '4',
+                    status: 'Validado',
+                    objective: {
+                        title: 'Plan de formación',
+                        subtitle: 'Entregable: Documento con plan detallado',
+                    },
+                    endDate: '15/12/2018',
                 },
             ],
             columns,
@@ -271,6 +346,21 @@ export default {
         },
         toggleFinishObjectiveModal() {
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+        },
+        selectTagColor(status) {
+            if (status === 'No iniciado') {
+                return 'ant-tag-red';
+            }
+            if (status === 'Pendiente') {
+                return 'ant-tag-yellow';
+            }
+            if (status === 'Completado') {
+                return 'ant-tag-green';
+            }
+            if (status === 'Validado') {
+                return 'ant-tag-blue';
+            }
+            return 'ant-tag-gray';
         },
     },
 };
