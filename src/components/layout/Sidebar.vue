@@ -33,7 +33,7 @@
                     <a-col>
                         <a-avatar
                             :size="48"
-                            src="/user.jpg"
+                            :src="imageUrl"
                         />
                     </a-col>
                 </a-row>
@@ -207,6 +207,9 @@ export default {
             set(value) {
                 return this.$store.dispatch('toggleSideBar', value);
             },
+        },
+        imageUrl() {
+            return `/avatar/${this.user.userName}.jpg`;
         },
         username() {
             return `${this.user.name}`;
