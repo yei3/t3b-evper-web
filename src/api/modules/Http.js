@@ -1,4 +1,5 @@
 import axios from 'axios';
+import authService from '../../services/auth';
 
 /**
  * Simple class to make synchronous Http request
@@ -17,27 +18,32 @@ class HttpRequest {
 
     /**
      * Send a specific request to 3B-Evaluation service
-     * @param  {String} endPoint [End-Point form the APIREST]
+     * @param  {String} path [End-Point form the APIREST]
      * @param  {String} method   [Http method]
      * @param  {Object} params   [Request data]
      * @return {Promise}         [Http Response]
      */
-    request(endPoint, method, params) {
-        console.log(this.api_base);
+    request(path, method, params) {
         const options = {
             method,
             baseURL: this.api_base,
-            url: endPoint,
+            url: path,
             headers: {
-                // authorization: `Bearer ${process.env.EVALUATION_3B_API_SECRET}`,
+                'Abp.TenantId': 1,
             },
         };
 
+        const accessToken = authService.getAccessToken();
+        if (accessToken) {
+            options.headers.authorization = `Bearer ${accessToken}`;
+        }
+        console.log(params);
         if (method === this.methods.get) {
             options.params = params;
         } else if (method !== this.methods.delete) {
             options.data = params;
         }
+        console.log(params);
         return axios(options);
     }
 }

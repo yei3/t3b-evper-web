@@ -1,4 +1,7 @@
-import Auth from './Auth';
+import Auth from './modules/Auth';
+import User from './modules/User';
+import Account from './modules/Account';
+import Session from './modules/Session';
 
 /**
  * Expose all the resources calls in a single client
@@ -6,6 +9,9 @@ import Auth from './Auth';
 class Client3B {
     constructor() {
         this.auth = new Auth();
+        this.user = new User();
+        this.account = new Account();
+        this.session = new Session();
     }
 }
 

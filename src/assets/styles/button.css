@@ -41,3 +41,7 @@
 .ant-select-dropdown-menu-item:hover, .ant-select-dropdown-menu-item-active {
     background-color: #ececec;
 }
+
+.has-error .ant-input:not([disabled]):hover {
+    border-color: #148b74;
+}

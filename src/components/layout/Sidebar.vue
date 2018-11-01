@@ -49,7 +49,7 @@
                                 font-weight: 600;
                                 color: #fff;"
                         >
-                            Karen Villanueva
+                            {{username}}
                         </strong>
                     </a-col>
                 </a-row>
@@ -61,11 +61,11 @@
                     <a-col>
                         <a-dropdown>
                             <a class="ant-dropdown-link" href="#">
-                                Analista <a-icon type="down" />
+                                {{roleToEs}} <a-icon type="down" />
                             </a>
                             <a-menu slot="overlay">
                                 <a-menu-item>
-                                <a href="javascript:;">Logout</a>
+                                <a @click="logout">Logout</a>
                                 </a-menu-item>
                             </a-menu>
                         </a-dropdown>
@@ -81,7 +81,10 @@
                     @openChange="onOpenChange"
                     theme="dark"
                 >
-                    <a-sub-menu key="sub1" class="custom-sub-menu">
+                    <a-sub-menu key="sub1"
+                        v-show="role == rolesAvailables.COLLABORATOR"
+                        class="custom-sub-menu"
+                    >
                         <span slot="title">
                             <a-icon type="user"/>
                             <span>Colaborador</span>
@@ -97,7 +100,9 @@
                             <span>Evaluaciones</span>
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="sub2">
+                    <a-sub-menu key="sub2"
+                        v-show="role == rolesAvailables.SUPERVISOR"
+                    >
                         <span slot="title">
                             <a-icon type="user"/>
                             <span>Jefe</span>
@@ -119,7 +124,9 @@
                             <span>Resultados</span>
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="sub3">
+                    <a-sub-menu key="sub3"
+                        v-show="role == rolesAvailables.ADMINISTRATOR"
+                    >
                         <span slot="title">
                             <a-icon type="user" />
                             <span>Administrador</span>
@@ -160,6 +167,8 @@
 </template>
 
 <script>
+import authService from '@/services/auth';
+
 export default {
     name: 'Sidebar',
     data() {
@@ -167,6 +176,8 @@ export default {
             rootSubmenuKeys: ['sub1', 'sub2', 'sub3'],
             openKeys: [],
             lastOpenKeys: [],
+            user: authService.getUserData(),
+            rolesAvailables: authService.ROLES,
         };
     },
     methods: {
@@ -181,6 +192,12 @@ export default {
                 this.openKeys = latestOpenKey ? [latestOpenKey] : [];
             }
         },
+        logout() {
+            console.log('logout');
+            authService.removeAuthData();
+            authService.removeUserData();
+            this.$router.push({ name: 'login' });
+        },
     },
     computed: {
         sidebarCollapsed: {
@@ -190,6 +207,27 @@ export default {
             set(value) {
                 return this.$store.dispatch('toggleSideBar', value);
             },
+        },
+        username() {
+            return `${this.user.name}`;
+            // return `${this.user.name} ${this.user.surname}`;
+        },
+        role() {
+            return this.user.roles[0];
+        },
+        roleToEs() {
+            const role = this.user.roles[0];
+            if (role === authService.ROLES.ADMINISTRATOR) {
+                return 'Administrador';
+            }
+            if (role === authService.ROLES.SUPERVISOR) {
+                return 'Supervisor';
+            }
+            if (role === authService.ROLES.COLLABORATOR) {
+                return 'Colaborador';
+            }
+
+            return 'Colaborador';
         },
     },
     watch: {

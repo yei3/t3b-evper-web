@@ -1,12 +1,12 @@
 import Http from './Http';
 
 /**
- * Class to make CRUD Schedule operations
+ * Class to make Auth operations
  */
 class Auth extends Http {
     constructor() {
         super();
-        this.endPointBase = '/api/TokenAuth';
+        this.entityPath = '/api/TokenAuth';
     }
 
     /**
@@ -15,8 +15,8 @@ class Auth extends Http {
      * @return {Promise}        Http Response
      */
     authenticate(data) {
-        const endPoint = `${this.endPointBase}/Authenticate`;
-        return this.request(endPoint, this.methods.post, data);
+        const path = `${this.entityPath}/Authenticate`;
+        return this.request(path, this.methods.post, data);
     }
 }
 

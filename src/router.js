@@ -10,15 +10,26 @@ import performanceEvaluation from '@/components/colaborator/performanceEvaluatio
 import applyPerformanceEvaluations from '@/components/colaborator/applyPerformanceEvaluations/layout.vue';
 import bossHome from '@/components/boss/home/home.vue';
 
+import authService from '@/services/auth';
 
 Vue.use(Router);
 
-function beforeEnter(to, from, next) {
-    // Validate that the user can access to the route
-    next();
+function beforeEnter(role) {
+    return (to, from, next) => {
+        // Validate that the user can access to the route
+        if (!authService.validateAccessToken()) {
+            return next({ name: 'login' });
+        }
 
-    // Otherwise redirect to home
-    // next({ name: 'home' });
+        const userData = authService.getUserData();
+        if (userData.roles[0] === role) {
+            return next();
+        }
+        console.log(userData.roles[0], role);
+
+        // Otherwise redirect to home
+        return next({ name: 'home' });
+    };
 }
 
 
@@ -29,43 +40,64 @@ export default new Router({
         {
             path: '/',
             name: 'home',
-            redirect: { name: 'colaborator-home' },
             component: Layout,
             beforeEnter: (to, from, next) => {
                 // Validate that the role for the user and redirect
                 // to the correct home
-                next();
+                console.log('asdasd1');
+                console.log(authService.validateAccessToken());
+                console.log('asdasd2');
+                if (!authService.validateAccessToken()) {
+                    return next({ name: 'login' });
+                }
+
+                if (to.name !== 'home') {
+                    return next();
+                }
+
+                const userData = authService.getUserData();
+                const role = userData.roles[0];
+                if (role === authService.ROLES.COLLABORATOR) {
+                    console.log('Redirect to Collaborator home');
+                    return next({ name: 'colaborator-home' });
+                }
+                if (role === authService.ROLES.SUPERVISOR) {
+                    console.log('Redirect to boss home');
+                    return next({ name: 'boss-home' });
+                }
+
+                return next();
             },
             children: [
                 {
                     path: 'colaborator/home',
                     name: 'colaborator-home',
                     component: colaboratorHome,
-                    beforeEnter,
+                    beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
                 },
                 {
                     path: 'colaborator/assessments',
                     name: 'colaborator-assessments',
                     component: performanceEvaluations,
-                    beforeEnter,
+                    beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
                 },
                 {
                     path: 'colaborator/assessments/apply',
                     name: 'colaborator-assessments-apply',
                     component: applyPerformanceEvaluations,
-                    beforeEnter,
+                    beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
                 },
                 {
                     path: 'colaborator/assessments/:id',
                     name: 'colaborator-assessment',
                     component: performanceEvaluation,
-                    beforeEnter,
+                    beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
                 },
                 {
                     path: 'boos/home',
                     name: 'boss-home',
                     component: bossHome,
-                    beforeEnter,
+                    beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
                 },
             ],
         },
@@ -75,10 +107,10 @@ export default new Router({
             component: Login,
             beforeEnter: (to, from, next) => {
                 // Validate that the user is not login
-                next();
-
-                // Otherwise redirect to home
-                // next({ name: 'home' });
+                if (authService.validateAccessToken()) {
+                    return next({ name: 'home' });
+                }
+                return next();
             },
         },
     ],
