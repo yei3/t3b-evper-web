@@ -243,6 +243,7 @@ export default {
         },
 
         async updatePassword() {
+            this.loading = true;
             const update = {
                 employeeNumber: this.user.id,
                 email: this.user.email,
