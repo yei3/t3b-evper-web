@@ -7,6 +7,6 @@ module.exports = {
         '@vue/airbnb',
     ],
     rules: {
-        "indent": ["error", 4],
+        indent: ['error', 4],
     },
 };
