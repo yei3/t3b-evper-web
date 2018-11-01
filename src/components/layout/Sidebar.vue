@@ -152,6 +152,10 @@
                             <router-link to="/"></router-link>
                             <span>Resultados</span>
                         </a-menu-item>
+                        <a-menu-item key="14">
+                            <router-link :to="{ name: 'user-update' }"></router-link>
+                            <span>Usuarios</span>
+                        </a-menu-item>
                     </a-sub-menu>
                 </a-menu>
             </a-col>

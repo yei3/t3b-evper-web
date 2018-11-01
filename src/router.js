@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import Layout from '@/components/layout/Layout.vue';
 import Login from '@/views/Login.vue';
-import userUpdate from '@/components/user/Update.vue';
+import userUpdate from '@/components/admin/users/Update.vue';
 
 import colaboratorHome from '@/components/colaborator/home/layout.vue';
 import performanceEvaluations from '@/components/colaborator/performanceEvaluations/layout.vue';
@@ -13,8 +13,6 @@ import bossHome from '@/components/boss/home/home.vue';
 
 Vue.use(Router);
 
-<<<<<<< HEAD
-=======
 function beforeEnter(to, from, next) {
     // Validate that the user can access to the route
     next();
@@ -24,7 +22,6 @@ function beforeEnter(to, from, next) {
 }
 
 
->>>>>>> develop
 export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
@@ -71,8 +68,8 @@ export default new Router({
                     beforeEnter,
                 },
                 {
-                    path: '/user/update',
-                    name: 'user',
+                    path: 'user/update',
+                    name: 'user-update',
                     component: userUpdate
                 }
             ],
