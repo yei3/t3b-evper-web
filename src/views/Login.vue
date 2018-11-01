@@ -229,10 +229,10 @@ export default {
             const userData = response.data.result.user;
             userData.roles = response.data.result.roles;
             authService.storeUserData(userData);
-            console.log(userData);
+            console.log("userdata", userData);
             console.log(authService.ROLES.ADMINISTRATOR, userData.roles[0]);
-            console.log(userData);
-            if (authData.isFirstTimeLongin
+        
+            if (authData.isFirstTimeLogin
                 && userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
                 this.showFormConfirmPassword = true;
                 this.loading = false;
