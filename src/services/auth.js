@@ -93,7 +93,7 @@ function removeUserData() {
 
 
 const ROLES = {
-    ADMINISTRATOR: 'Admnistrator',
+    ADMINISTRATOR: 'Admin',
     SUPERVISOR: 'Supervisor',
     COLLABORATOR: 'Collaborator',
 };

@@ -230,8 +230,10 @@ export default {
             userData.roles = response.data.result.roles;
             authService.storeUserData(userData);
             console.log(userData);
-
-            if (authData.isFirstTimeLongin) {
+            console.log(authService.ROLES.ADMINISTRATOR, userData.roles[0]);
+            console.log(userData);
+            if (authData.isFirstTimeLongin
+                && userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
                 this.showFormConfirmPassword = true;
                 this.loading = false;
                 return;
@@ -241,7 +243,6 @@ export default {
         },
 
         async updatePassword() {
-            const userData = authService.getUserData();
             const update = {
                 employeeNumber: this.user.id,
                 email: this.user.email,
