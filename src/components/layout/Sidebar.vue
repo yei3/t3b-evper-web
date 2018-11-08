@@ -21,7 +21,8 @@
             </a-col>
         </a-row>
         <a-row
-            style="padding: 35px 25px 23px 25px; background-color: #ff0000"
+            style="padding: 35px 25px 23px 25px; background-color: #ff0000;
+                   background-image: url('/img/header-profile-skin.png');"
             v-show="!sidebarCollapsed"
         >
             <a-col>
@@ -61,11 +62,18 @@
                     <a-col>
                         <a-dropdown>
                             <a class="ant-dropdown-link" href="#">
-                                {{roleToEs}} <a-icon type="down" />
+                                {{roleEs}} <a-icon type="down" />
                             </a>
                             <a-menu slot="overlay">
+                                <a-menu-item
+                                    :key="arole"
+                                    v-for="arole in user.roles"
+                                    v-show="arole !== userCurrentRole"
+                                >
+                                    <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
+                                </a-menu-item>
                                 <a-menu-item>
-                                <a @click="logout">Logout</a>
+                                    <a @click="logout">Cerrar Sesión</a>
                                 </a-menu-item>
                             </a-menu>
                         </a-dropdown>
@@ -90,12 +98,12 @@
                             <span>Colaborador</span>
                         </span>
                         <a-menu-item key="1">
-                            <router-link :to="{ name: 'colaborator-home' }"></router-link>
+                            <router-link :to="{ name: 'collaborator-home' }"></router-link>
                             <span>Home Colaborador</span>
                         </a-menu-item>
                         <a-menu-item key="2">
                             <router-link
-                                :to="{ name: 'colaborator-assessments' }"
+                                :to="{ name: 'collaborator-assessments' }"
                             ></router-link>
                             <span>Evaluaciones</span>
                         </a-menu-item>
@@ -177,6 +185,7 @@ export default {
             openKeys: [],
             lastOpenKeys: [],
             user: authService.getUserData(),
+            userCurrentRole: authService.getCurrentRole(),
             rolesAvailables: authService.ROLES,
         };
     },
@@ -192,11 +201,30 @@ export default {
                 this.openKeys = latestOpenKey ? [latestOpenKey] : [];
             }
         },
+        setCurrentRole(role) {
+            authService.setCurrentRole(role);
+            this.userCurrentRole = role;
+            this.$router.push({ name: 'home' });
+        },
         logout() {
-            console.log('logout');
             authService.removeAuthData();
             authService.removeUserData();
+            console.log('logout');
             this.$router.push({ name: 'login' });
+            console.log('end logout');
+        },
+        roleToEs(role) {
+            if (role === authService.ROLES.ADMINISTRATOR) {
+                return 'Administrador';
+            }
+            if (role === authService.ROLES.SUPERVISOR) {
+                return 'Supervisor';
+            }
+            if (role === authService.ROLES.COLLABORATOR) {
+                return 'Colaborador';
+            }
+
+            return 'Colaborador';
         },
     },
     computed: {
@@ -216,21 +244,11 @@ export default {
             // return `${this.user.name} ${this.user.surname}`;
         },
         role() {
-            return this.user.roles[0];
+            return this.userCurrentRole;
         },
-        roleToEs() {
-            const role = this.user.roles[0];
-            if (role === authService.ROLES.ADMINISTRATOR) {
-                return 'Administrador';
-            }
-            if (role === authService.ROLES.SUPERVISOR) {
-                return 'Supervisor';
-            }
-            if (role === authService.ROLES.COLLABORATOR) {
-                return 'Colaborador';
-            }
-
-            return 'Colaborador';
+        roleEs() {
+            const role = this.userCurrentRole;
+            return this.roleToEs(role);
         },
     },
     watch: {

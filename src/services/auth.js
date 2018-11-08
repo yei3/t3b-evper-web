@@ -20,17 +20,36 @@ function storeAuthData(data) {
 }
 
 /**
+ * Store the current role for the user
+ * @param {String} role
+ */
+function setCurrentRole(role) {
+    localStorage.setItem('user_role', role);
+}
+
+/**
+ * Returns the current role for the user
+ *
+ * @returns {String} User role
+ */
+function getCurrentRole() {
+    return localStorage.getItem('user_role');
+}
+
+/**
  * Store the user information
  *
  * @param {Object} data User information
  */
 function storeUserData(data) {
     localStorage.setItem('user', JSON.stringify(data));
-    console.log('stored', data);
+    setCurrentRole(data.roles[0]);
 }
 
 /**
  * Returns the user information
+ *
+3 * @returns {Object} User data
  */
 function getUserData() {
     return JSON.parse(localStorage.getItem('user') || '{}');
@@ -63,7 +82,7 @@ function getAccessToken() {
 function validateAccessToken() {
     const auth = getAuthData();
     const now = new Date();
-    console.log('auth', auth);
+
     if (!auth.expiration) {
         return false;
     }
@@ -107,5 +126,7 @@ export default {
     removeUserData,
     validateAccessToken,
     getAccessToken,
+    setCurrentRole,
+    getCurrentRole,
     ROLES,
 };

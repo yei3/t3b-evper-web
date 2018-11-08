@@ -5,7 +5,7 @@ import 'ant-design-vue/dist/antd.css';
 import '@/assets/styles/general.css';
 
 import App from './App.vue';
-import router from './router';
+import router from './routes/router';
 import store from './store/store';
 
 Vue.config.productionTip = false;
