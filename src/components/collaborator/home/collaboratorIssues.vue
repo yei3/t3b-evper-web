@@ -1,17 +1,21 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Pendientes como jefe" key="1" style="
+        <a-collapse-panel header="Pendientes como colaborador" key="1" style="
             font-family: 'Open Sans';
             font-weight: 600;
             font-size: 14px;"
         >
         <div class="badges-collaborator">
-            <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Evaluaciones de colaboradores pendientes</span>
+            <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+            <span class="badged-text">Auto-evaluaciones pendientes</span>
         </div>
         <div class="badges-collaborator">
-            <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Validación de objetivos de colaboradores pendientes</span>
+            <a-badge count="1" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+            <span class="badged-text">Cierre de mis evaluaciones pendientes</span>
+        </div>
+        <div class="badges-collaborator" style="margin-bottom: 5px;">
+            <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+            <span class="badged-text">Objectivos pendientes</span>
         </div>
         </a-collapse-panel>
     </a-collapse>

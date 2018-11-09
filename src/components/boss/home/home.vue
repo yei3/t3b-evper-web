@@ -10,13 +10,13 @@
         </a-row>
         <a-row style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
-                <pending-colaborator-evaluations />
+                <pending-collaborator-evaluations />
             </a-col>
             <a-col :span="24" style="padding-bottom: 30px;">
-                <colaborator-evaluations />
+                <collaborator-evaluations />
             </a-col>
             <a-col :span="24">
-                <current-colaborator-objectives />
+                <current-collaborator-objectives />
             </a-col>
         </a-row>
     </div>
@@ -25,17 +25,17 @@
 <script>
 import nextEvaluationPeriod from '@/components/boss/home/nextEvaluationPeriod.vue';
 import bossIssues from '@/components/boss/home/bossIssues.vue';
-import pendingColaboratorEvaluations from '@/components/boss/home/pendingColaboratorEvaluations.vue';
-import colaboratorEvaluations from '@/components/boss/home/colaboratorEvaluations.vue';
-import currentColaboratorObjectives from '@/components/boss/home/currentColaboratorObjectives.vue';
+import pendingCollaboratorEvaluations from '@/components/boss/home/pendingCollaboratorEvaluations.vue';
+import collaboratorEvaluations from '@/components/boss/home/collaboratorEvaluations.vue';
+import currentCollaboratorObjectives from '@/components/boss/home/currentCollaboratorObjectives.vue';
 
 export default {
     components: {
         nextEvaluationPeriod,
         bossIssues,
-        pendingColaboratorEvaluations,
-        colaboratorEvaluations,
-        currentColaboratorObjectives,
+        pendingCollaboratorEvaluations,
+        collaboratorEvaluations,
+        currentCollaboratorObjectives,
     },
 };
 </script>

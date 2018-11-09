@@ -21,7 +21,8 @@
             </a-col>
         </a-row>
         <a-row
-            style="padding: 35px 25px 23px 25px; background-color: #ff0000"
+            style="padding: 35px 25px 23px 25px; background-color: #ff0000;
+                   background-image: url('/img/header-profile-skin.png');"
             v-show="!sidebarCollapsed"
         >
             <a-col>
@@ -33,7 +34,7 @@
                     <a-col>
                         <a-avatar
                             :size="48"
-                            src="/user.jpg"
+                            :src="imageUrl"
                         />
                     </a-col>
                 </a-row>
@@ -49,7 +50,7 @@
                                 font-weight: 600;
                                 color: #fff;"
                         >
-                            Karen Villanueva
+                            {{username}}
                         </strong>
                     </a-col>
                 </a-row>
@@ -61,11 +62,18 @@
                     <a-col>
                         <a-dropdown>
                             <a class="ant-dropdown-link" href="#">
-                                Analista <a-icon type="down" />
+                                {{roleEs}} <a-icon type="down" />
                             </a>
                             <a-menu slot="overlay">
+                                <a-menu-item
+                                    :key="arole"
+                                    v-for="arole in user.roles"
+                                    v-show="arole !== userCurrentRole"
+                                >
+                                    <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
+                                </a-menu-item>
                                 <a-menu-item>
-                                <a href="javascript:;">Logout</a>
+                                    <a @click="logout">Cerrar Sesión</a>
                                 </a-menu-item>
                             </a-menu>
                         </a-dropdown>
@@ -81,23 +89,28 @@
                     @openChange="onOpenChange"
                     theme="dark"
                 >
-                    <a-sub-menu key="sub1" class="custom-sub-menu">
+                    <a-sub-menu key="sub1"
+                        v-show="role == rolesAvailables.COLLABORATOR"
+                        class="custom-sub-menu"
+                    >
                         <span slot="title">
                             <a-icon type="user"/>
                             <span>Colaborador</span>
                         </span>
                         <a-menu-item key="1">
-                            <router-link :to="{ name: 'colaborator-home' }"></router-link>
+                            <router-link :to="{ name: 'collaborator-home' }"></router-link>
                             <span>Home Colaborador</span>
                         </a-menu-item>
                         <a-menu-item key="2">
                             <router-link
-                                :to="{ name: 'colaborator-assessments' }"
+                                :to="{ name: 'collaborator-assessments' }"
                             ></router-link>
                             <span>Evaluaciones</span>
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="sub2">
+                    <a-sub-menu key="sub2"
+                        v-show="role == rolesAvailables.SUPERVISOR"
+                    >
                         <span slot="title">
                             <a-icon type="user"/>
                             <span>Jefe</span>
@@ -119,7 +132,9 @@
                             <span>Resultados</span>
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="sub3">
+                    <a-sub-menu key="sub3"
+                        v-show="role == rolesAvailables.ADMINISTRATOR"
+                    >
                         <span slot="title">
                             <a-icon type="user" />
                             <span>Administrador</span>
@@ -164,6 +179,8 @@
 </template>
 
 <script>
+import authService from '@/services/auth';
+
 export default {
     name: 'Sidebar',
     data() {
@@ -171,6 +188,9 @@ export default {
             rootSubmenuKeys: ['sub1', 'sub2', 'sub3'],
             openKeys: [],
             lastOpenKeys: [],
+            user: authService.getUserData(),
+            userCurrentRole: authService.getCurrentRole(),
+            rolesAvailables: authService.ROLES,
         };
     },
     methods: {
@@ -185,6 +205,31 @@ export default {
                 this.openKeys = latestOpenKey ? [latestOpenKey] : [];
             }
         },
+        setCurrentRole(role) {
+            authService.setCurrentRole(role);
+            this.userCurrentRole = role;
+            this.$router.push({ name: 'home' });
+        },
+        logout() {
+            authService.removeAuthData();
+            authService.removeUserData();
+            console.log('logout');
+            this.$router.push({ name: 'login' });
+            console.log('end logout');
+        },
+        roleToEs(role) {
+            if (role === authService.ROLES.ADMINISTRATOR) {
+                return 'Administrador';
+            }
+            if (role === authService.ROLES.SUPERVISOR) {
+                return 'Supervisor';
+            }
+            if (role === authService.ROLES.COLLABORATOR) {
+                return 'Colaborador';
+            }
+
+            return 'Colaborador';
+        },
     },
     computed: {
         sidebarCollapsed: {
@@ -194,6 +239,20 @@ export default {
             set(value) {
                 return this.$store.dispatch('toggleSideBar', value);
             },
+        },
+        imageUrl() {
+            return `/avatar/${this.user.userName}.jpg`;
+        },
+        username() {
+            return `${this.user.name}`;
+            // return `${this.user.name} ${this.user.surname}`;
+        },
+        role() {
+            return this.userCurrentRole;
+        },
+        roleEs() {
+            const role = this.userCurrentRole;
+            return this.roleToEs(role);
         },
     },
     watch: {

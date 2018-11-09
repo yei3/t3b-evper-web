@@ -11,9 +11,9 @@
             <a-col :span="12">
                 <a-row>
                     <a-col :span="12" style="text-align: right;">
-                        <a-badge :count="5">
+                        <!--     <a-badge :count="5">
                             <a-icon type="bell" />
-                        </a-badge>
+                        </a-badge> -->
                     </a-col>
                     <a-col :span="12" style="text-align: right;">
                         <a-button
@@ -21,6 +21,7 @@
                             icon="logout"
                             style="border-style: none;"
                             class="logout-buttom"
+                            @click="logout()"
                         >
                             Cerrar sesión
                         </a-button>
@@ -33,12 +34,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import authService from '@/services/auth';
 
 export default {
     methods: {
         ...mapActions({
             toggleSidebar: 'toggleSideBar',
         }),
+        logout() {
+            console.log('logout');
+            authService.removeAuthData();
+            authService.removeUserData();
+            this.$router.push({ name: 'login' });
+        },
     },
     computed: {
         ...mapGetters({
