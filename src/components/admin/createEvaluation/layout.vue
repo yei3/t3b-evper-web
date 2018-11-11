@@ -70,7 +70,7 @@ import formIntroduction from '@/components/admin/createEvaluation/formIntroducti
 export default {
     components: {
         formName,
-        formIntroduction
+        formIntroduction,
     },
     data() {
         return {

@@ -44,9 +44,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import errorHandler from '@/views/errorHandler';
-import { error } from 'util';
-
+// import errorHandler from '@/views/errorHandler';
 
 export default {
     methods: {
