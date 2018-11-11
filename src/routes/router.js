@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import collaboratorRoutes from '@/routes/collaborator';
 import bossRoutes from '@/routes/boss';
+import adminRoutes from '@/routes/admin';
 
 import Layout from '@/components/layout/Layout.vue';
 import Login from '@/views/Login.vue';
@@ -24,16 +25,20 @@ export default new Router({
                     path: '',
                     name: 'home',
                     beforeEnter: (to, from, next) => {
+                        if (!authService.validateAccessToken()) {
+                            return next({ name: 'login' });
+                        }
                         // Validate that the role for the user and redirect
                         // to the correct home
                         const userRole = authService.getCurrentRole();
                         if (userRole === authService.ROLES.COLLABORATOR) {
-                            console.log('Redirect to Collaborator home');
                             return next({ name: 'collaborator-home' });
                         }
                         if (userRole === authService.ROLES.SUPERVISOR) {
-                            console.log('Redirect to boss home');
                             return next({ name: 'boss-home' });
+                        }
+                        if (userRole === authService.ROLES.ADMINISTRATOR) {
+                            return next({ name: 'admin-home' });
                         }
 
                         return next();
@@ -41,6 +46,7 @@ export default new Router({
                 },
                 ...collaboratorRoutes,
                 ...bossRoutes,
+                ...adminRoutes,
             ],
         },
         {

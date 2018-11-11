@@ -8,7 +8,7 @@ import applyPerformanceEvaluations from '@/components/boss/applyPerformanceEvalu
 
 export default [
     {
-        path: 'boos/home',
+        path: 'boss/home',
         name: 'boss-home',
         component: bossHome,
         beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
