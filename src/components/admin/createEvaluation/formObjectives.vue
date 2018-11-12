@@ -17,7 +17,7 @@
                     <a-form-item
                         :label="'Objetivo ' + (index + 1)"
                         :labelCol="{ sm: 24, md: 3 }"
-                        :wrapperCol="{ sm: 24, md: 12 }"
+                        :wrapperCol="{ sm: 24, md: 20 }"
                         :fieldDecoratorId="'objective-' + objective.id"
                         style="margin-bottom: 0px;"
                         :fieldDecoratorOptions="{
@@ -39,9 +39,10 @@
                 </a-col>
                 <a-col :sm="24" :md="24">
                     <a-form-item
+                        style="margin-bottom: 0px;"
                         :label="'Entregable ' + (index + 1)"
                         :labelCol="{ sm: 24, md: 3 }"
-                        :wrapperCol="{ sm: 24, md: 12 }"
+                        :wrapperCol="{ sm: 24, md: 20 }"
                         :fieldDecoratorId="'deliverable-' + objective.id"
                         :fieldDecoratorOptions="{
                             rules: [
@@ -55,9 +56,27 @@
                         <a-input style="width: 90%; marginRight: 8px"/>
                     </a-form-item>
                 </a-col>
+                <a-col :sm="24" :md="24">
+                    <a-form-item
+                        :label="'Fecha ' + (index + 1)"
+                        :labelCol="{ sm: 24, md: 3 }"
+                        :wrapperCol="{ sm: 24, md: 20 }"
+                        :fieldDecoratorId="'date-' + objective.id"
+                        :fieldDecoratorOptions="{
+                            rules: [
+                                {
+                                    required: true,
+                                    message: 'Ingresa la fecha del Objetivo'
+                                }
+                            ]
+                        }"
+                    >
+                        <a-date-picker />
+                    </a-form-item>
+                </a-col>
             </a-row>
             <a-row>
-                <a-col :sm="24" :md="12" :offset="3">
+                <a-col :sm="24" :md="20" :offset="3">
                     <a-button
                         type='dashed'
                         @click="addObjectiveField"
@@ -66,9 +85,6 @@
                     </a-button>
                 </a-col>
             </a-row>
-            <a-button @click="formValues">
-                Form values
-            </a-button>
         </a-row>
         <a-row style="margin-bottom: 20px;">
             <a-col :span="24" style="text-align: right;">
@@ -79,7 +95,7 @@
                     Anterior
                 </a-button>
                 <a-button htmlType='submit' class="btn-green">
-                    Guardar y continuar
+                    Guardar y Finalizar
                 </a-button>
             </a-col>
         </a-row>
@@ -106,17 +122,19 @@ export default {
         saveObjectives(formValues) {
             const objectives = [];
             const keys = Object.keys(formValues);
-            for (let i = 0; i < keys.length; i += 2) {
+            for (let i = 0; i < keys.length; i += 3) {
                 objectives.push({
                     id: i,
                     objective: formValues[keys[i]],
                     deliverable: formValues[keys[i + 1]],
+                    date: formValues[keys[i + 2]],
                 });
             }
             this.updateEvaluationForm({
                 objectives,
             });
-            this.nextStep();
+            // this.nextStep();
+            this.$router.push({ name: 'home' });
         },
         handleForm(e) {
             e.preventDefault();

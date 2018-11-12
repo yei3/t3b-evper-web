@@ -56,8 +56,11 @@
                 <a-row >
                     <form-name v-show="currentStep == 0"/>
                     <form-introduction v-show="currentStep == 1"/>
-                    <form-objectives v-show="currentStep == 2"/>
-                    <form-competences v-show="currentStep == 3"/>
+                    <form-competences v-show="currentStep == 2"/>
+                    <form-strengths v-show="currentStep == 3" />
+                    <form-improvement-areas v-show="currentStep == 4"/>
+                    <form-development-plan v-show="currentStep == 5"/>
+                    <form-objectives v-show="currentStep == 6"/>
                 </a-row>
             </div>
         </transition>
@@ -68,15 +71,21 @@
 import { mapActions, mapGetters } from 'vuex';
 import formName from '@/components/admin/createEvaluation/formName.vue';
 import formIntroduction from '@/components/admin/createEvaluation/formIntroduction.vue';
-import formObjectives from '@/components/admin/createEvaluation/formObjectives.vue';
 import formCompetences from '@/components/admin/createEvaluation/formCompetences.vue';
+import formStrengths from '@/components/admin/createEvaluation/formStrengths.vue';
+import formImprovementAreas from '@/components/admin/createEvaluation/formImprovementAreas.vue';
+import formDevelopmentPlan from '@/components/admin/createEvaluation/formDevelopmentPlan.vue';
+import formObjectives from '@/components/admin/createEvaluation/formObjectives.vue';
 
 export default {
     components: {
         formName,
         formIntroduction,
-        formObjectives,
         formCompetences,
+        formStrengths,
+        formImprovementAreas,
+        formDevelopmentPlan,
+        formObjectives,
     },
     data() {
         return {
@@ -94,31 +103,26 @@ export default {
                     },
                     {
                         number: 2,
-                        label: 'Objetivos',
-                        name: 'objectives',
-                    },
-                    {
-                        number: 3,
                         label: 'Competencias',
                         name: 'competence',
                     },
                     {
-                        number: 4,
+                        number: 3,
                         label: 'Fortalezas',
                         name: 'strengths',
                     },
                     {
-                        number: 5,
+                        number: 4,
                         label: 'Áreas de mejora',
                         name: 'improvement-areas',
                     },
                     {
-                        number: 6,
+                        number: 5,
                         label: 'Plan Desarrollo',
                         name: 'development-plan',
                     },
                     {
-                        number: 7,
+                        number: 6,
                         label: 'Próx. Objectivos',
                         name: 'next-objectives',
                     },

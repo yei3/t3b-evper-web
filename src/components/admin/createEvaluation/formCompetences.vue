@@ -138,8 +138,8 @@ export default {
             this.updateEvaluationForm({
                 questions,
             });
-            this.nextStep();
             */
+            this.nextStep();
         },
         handleForm(e) {
             e.preventDefault();
