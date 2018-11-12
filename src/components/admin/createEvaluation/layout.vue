@@ -57,6 +57,7 @@
                     <form-name v-show="currentStep == 0"/>
                     <form-introduction v-show="currentStep == 1"/>
                     <form-objectives v-show="currentStep == 2"/>
+                    <form-competences v-show="currentStep == 3"/>
                 </a-row>
             </div>
         </transition>
@@ -68,12 +69,14 @@ import { mapActions, mapGetters } from 'vuex';
 import formName from '@/components/admin/createEvaluation/formName.vue';
 import formIntroduction from '@/components/admin/createEvaluation/formIntroduction.vue';
 import formObjectives from '@/components/admin/createEvaluation/formObjectives.vue';
+import formCompetences from '@/components/admin/createEvaluation/formCompetences.vue';
 
 export default {
     components: {
         formName,
         formIntroduction,
         formObjectives,
+        formCompetences,
     },
     data() {
         return {
