@@ -6,23 +6,30 @@
         <a-row class="form-autoevaluation">
             <a-row class="form-tittle">
                 <a-col :span="24">
-                    <h1>Instrucciones</h1>
+                    <h1>Fortalezas</h1>
                 </a-col>
             </a-row>
-            <a-form-item
-                label='Instrucciones de la evaluación'
-                fieldDecoratorId="instructions"
-                :fieldDecoratorOptions="{
-                    rules: [
-                        {
-                            required: true,
-                            message: 'Ingresa las instrucciones para realizar la evaluación'
-                        }
-                    ]
-                }"
-            >
-                <a-textarea :rows="4"/>
-            </a-form-item>
+            <a-row >
+                <a-col :sm="24" :md="24">
+                    <a-form-item
+                        label="Descripción de la sección de Fortalezas"
+                        fieldDecoratorId="description"
+                        style="margin-bottom: 0px;"
+                        :fieldDecoratorOptions="{
+                            rules: [
+                                {
+                                    required: true,
+                                    message: 'Ingresa la descripción la sección de Fortalezas'
+                                }
+                            ]
+                        }"
+                    >
+                        <a-textarea
+
+                        />
+                    </a-form-item>
+                </a-col>
+            </a-row>
         </a-row>
         <a-row style="margin-bottom: 20px;">
             <a-col :span="24" style="text-align: right;">
@@ -51,14 +58,17 @@ export default {
             previousStep: 'previousStep',
             updateEvaluationForm: 'updateEvaluationForm',
         }),
+        saveStrengths(formValues) {
+            this.updateEvaluationForm({
+                strengthsDescription: formValues.description,
+            });
+            this.nextStep();
+        },
         handleForm(e) {
             e.preventDefault();
             this.form.validateFields((error, values) => {
                 if (error) return;
-                this.updateEvaluationForm({
-                    instructions: values.instructions,
-                });
-                this.nextStep();
+                this.saveStrengths(values);
             });
         },
     },
@@ -66,5 +76,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
