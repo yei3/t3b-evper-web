@@ -26,7 +26,7 @@
         </a-row>
         <a-row style="margin-bottom: 20px;">
             <a-col :span="24" style="text-align: right;">
-                <a-button @click="previousStep" :disabled="true"
+                <a-button @click="previousStep"
                     class="btn-green"
                     style="margin-right: 15px;"
                 >

@@ -32,6 +32,10 @@ export default {
             const state = _state;
             state.view.currentStep = step;
         },
+        setLastStep: (_state, step) => {
+            const state = _state;
+            state.view.lastStep = step;
+        },
         updateEvaluationForm: (_state, data) => {
             const state = _state;
             state.evaluation = { ...state.evaluation, ...data };
@@ -52,6 +56,9 @@ export default {
         },
         setStep: (context, step) => {
             context.commit('setStep', step);
+        },
+        setLastStep: (context, step) => {
+            context.commit('setLastStep', step);
         },
         updateEvaluationForm: (context, data) => {
             context.commit('updateEvaluationForm', data);

@@ -6,7 +6,7 @@
         <a-row class="form-autoevaluation">
             <a-row class="form-tittle">
                 <a-col :span="24">
-                    <h1>Objetivos del periodo</h1>
+                    <h1>Objetivos del siguiente periodo</h1>
                 </a-col>
             </a-row>
             <a-row
@@ -88,7 +88,7 @@
         </a-row>
         <a-row style="margin-bottom: 20px;">
             <a-col :span="24" style="text-align: right;">
-                <a-button @click="previousStep" :disabled="true"
+                <a-button @click="previousStep"
                     class="btn-green"
                     style="margin-right: 15px;"
                 >
