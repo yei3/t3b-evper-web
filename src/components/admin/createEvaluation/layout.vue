@@ -79,7 +79,7 @@
                         <a-button
                             style="color: #fb4646; width: 48%;"
                             @click="deleteSection(view.activeSection)"
-                            v-show="view.activeSection != 0 && view.activeSection != 1"
+                            v-show="view.activeSection !== 0 && view.activeSection !== 1"
                         >
                             <a-icon type="delete" /> Borrar Sección
                         </a-button>
@@ -90,6 +90,7 @@
                     <form-introduction v-show="currentStep === 1"/>
                     <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                         :sectionTitle="step.label"
+                        :showFinishButton="index === (dinamicSteps.length - 1)"
                         v-show="(index + 2) == currentStep"
                     />
                 </a-row>
@@ -178,6 +179,9 @@ export default {
         },
         deleteSection(sectionId) {
             this.view.steps = this.view.steps.filter(section => section.id !== sectionId);
+            this.setStep(this.view.steps.length - 1);
+            this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
+            console.log(this.view.steps.length - 1, this.view.activeSection);
         },
     },
     computed: {
