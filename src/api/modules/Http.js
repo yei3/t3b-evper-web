@@ -38,7 +38,7 @@ class HttpRequest {
             options.headers.authorization = `Bearer ${accessToken}`;
         }
         console.log(params);
-        if (method === this.methods.get) {
+        if (method === this.methods.get || method === this.methods.delete) {
             options.params = params;
         } else if (method !== this.methods.delete) {
             options.data = params;

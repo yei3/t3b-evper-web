@@ -12,7 +12,7 @@
             </a-col>
             <a-col :span="3">
                 <a-input placeholder="Evaluado" />
-            </a-col>  
+            </a-col>
             <a-col :span="4">
                 <a-date-picker placeholder="Fecha Inicio" />
             </a-col>
@@ -21,7 +21,7 @@
             </a-col>
             <a-col :span="1">
                 <a-button shape="circle" icon="search" @click="search" />
-            </a-col>            
+            </a-col>
         </a-row>
         <a-row class="collapse-title" style="margin-top: 16px;">
             <a-col :span="12">
@@ -61,13 +61,11 @@
                     <span slot="action" slot-scope="text, record">
                         <a-dropdown>
                             <a-menu slot="overlay">
-                                <a-menu-item >
+                                <a-menu-item @click="test">
                                     Editar
                                 </a-menu-item>
-                                <a-menu-item >
-                                    <a @click="delete(record.id)">
+                                <a-menu-item @click="deleteEvaluation(record.key)">
                                     Eliminar
-                                    </a>
                                 </a-menu-item>
                             </a-menu>
                             <a-button class="ant-btn-small">
@@ -126,15 +124,21 @@ export default {
         '$route': 'search'
     },
     methods: {
-        async delete(id) {
+        async deleteEvaluation(id) {
+            console.log('delete');
             let response = null;
-
+            console.log('deleteing', id);
             try {
-                response = await client3B.evaluation.delete(id);
+                response = await client3B.evaluation.delete({
+                    Id: id,
+                });
             } catch (error) {
-                
+
             }
-            await this.search();            
+            await this.search();
+        },
+        test() {
+            console.log('works');
         },
         async search() {
             let items = null;
@@ -145,7 +149,7 @@ export default {
                 items = response.data.result.items;
                 this.data = [];
                 for (let index = 0; index < items.length; index++) {
-                    
+
                     this.data.push({
                         key: items[index].id,
                         status: this.getStatus(items[index].status),
@@ -166,7 +170,7 @@ export default {
                 case 1: return 'Pendiente';
                 case 2: return 'Finalizado';
                 case 3: return 'Validado';
-            
+
                 default:
                     break;
             }
@@ -183,7 +187,7 @@ export default {
                 case 'Pendiente': return 'ant-tag-yellow';
                 case 'Finalizado': return 'ant-tag-green';
                 case 'Validado': return 'ant-tag-blue';
-            
+
                 default:
                     return 'ant-tag-gray';
             }
