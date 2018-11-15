@@ -46,8 +46,13 @@
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin size="large" />
+            </div>
+        </a-row>
         <transition name="fade">
-            <a-row class="collapse-content" v-show="!collapsed">
+            <a-row class="collapse-content" v-show="!collapsed && !spin">
                 <a-table :columns="columns" :dataSource="data" :pagination=false>
                     <span slot="status" slot-scope="status">
                         <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
@@ -109,6 +114,7 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
             data: [],
             columns,
@@ -125,6 +131,7 @@ export default {
     },
     methods: {
         async deleteEvaluation(id) {
+            this.spin = true;
             console.log('delete');
             let response = null;
             console.log('deleteing', id);
@@ -143,7 +150,7 @@ export default {
         async search() {
             let items = null;
             let response = null;
-
+            this.spin = true;
             try {
                 response = await client3B.evaluation.getAll();
                 items = response.data.result.items;
@@ -163,6 +170,7 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+            this.spin = false;
         },
         getStatus(status) {
             switch (status) {
