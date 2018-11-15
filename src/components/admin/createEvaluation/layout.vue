@@ -27,14 +27,13 @@
                 style="background-color: white;
                 margin: 30px 30px;"
             >
-                <a-row class="steps"
-                    style="margin-bottom: 15px;"
-                >
-                    <span class="breadcrumb-header">
-                        {{evaluation.name}} -
+                <a-row class="steps">
+                    <span class="breadcrumb-header" style="font-weight: 400;">
+                        {{evaluation.name}}
                     </span>
                     <span style="font-size: 16px;">{{evaluation.description}}</span>
                 </a-row>
+                <a-divider />
                 <a-row :gutter="16">
                     <a-col :span="6"
                         v-for="(step, index) in view.steps"
@@ -43,7 +42,7 @@
                         <div class="step-form step-form-done"
                             v-show="lastStep >= index &&
                                     index !== currentStep"
-                            @click="setStep(index)"
+                            @click="view.activeSection = step.id; setStep(index);"
                         >
                             <span>{{index + 1}}. {{step.label}}</span>
                         </div>
@@ -62,27 +61,42 @@
                     </a-col>
                 </a-row>
                 <a-row>
-                    <a-col :sm="24" :md="7"
+                    <a-col :sm="24" :md="12"
                         style="padding-top: 10px;"
                     >
                         <a-button
                             type='dashed'
                             class="add-button"
-                            style="width: 82%;"
+                            style="width: 48%;"
                             @click="view.sectionModal.show=true"
                         >
                             <a-icon type='plus' /> Agregar Sección
+                        </a-button>
+                    </a-col>
+                    <a-col :sm="24" :md="12"
+                        style="padding-top: 10px; text-align: right;"
+                    >
+                        <a-button
+                            style="color: #fb4646; width: 48%;"
+                            @click="deleteSection(view.activeSection)"
+                            v-show="view.activeSection != 0 && view.activeSection != 1"
+                        >
+                            <a-icon type="delete" /> Borrar Sección
                         </a-button>
                     </a-col>
                 </a-row>
                 <a-row >
                     <form-name v-show="currentStep === 0"/>
                     <form-introduction v-show="currentStep === 1"/>
-                    <form-objectives v-show="currentStep === 2"/>
                     <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                         :sectionTitle="step.label"
-                        v-show="(index + 3) == currentStep"
+                        v-show="(index + 2) == currentStep"
                     />
+                </a-row>
+                <a-row>
+                    <a-col :span="24">
+
+                    </a-col>
                 </a-row>
             </div>
         </transition>
@@ -90,7 +104,10 @@
             title="Agregar Nueva Sección"
             v-model="view.sectionModal.show"
         >
-            <a-input  v-model="view.sectionModal.value"/>
+            <a-input
+                v-model="view.sectionModal.value"
+                @keyup.enter.native="addSection"
+            />
             <template slot="footer">
                 <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
                 <a-button key="submit" class="btn-green" @click="addSection">
@@ -106,24 +123,23 @@ import { mapActions, mapGetters } from 'vuex';
 import formName from '@/components/admin/createEvaluation/formName.vue';
 import formIntroduction from '@/components/admin/createEvaluation/formIntroduction.vue';
 import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
-import formObjectives from '@/components/admin/createEvaluation/formObjectives.vue';
 
 export default {
     components: {
         formName,
         formIntroduction,
         formGeneric,
-        formObjectives,
     },
     data() {
         return {
             view: {
+                activeSection: 0,
                 sectionModal: {
                     show: false,
                     error: null,
                     value: '',
                 },
-                stepsUUID: 3,
+                stepsUUID: 2,
                 steps: [
                     {
                         id: 0,
@@ -134,11 +150,6 @@ export default {
                         id: 1,
                         label: 'Intro',
                         name: 'intro',
-                    },
-                    {
-                        id: 2,
-                        label: 'Próx. Objectivos',
-                        name: 'next-objectives',
                     },
                 ],
             },
@@ -157,16 +168,20 @@ export default {
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
             };
-            // this.view.steps.splice(this.view.steps.length - 1, 0, step);
             this.view.steps.push(step);
+            // this.view.activeSection = this.view.stepsUUID;
+            // this.setStep(this.view.steps.length - 1);
+            // this.setLastStep(this.view.steps.length - 1);
             this.view.stepsUUID += 1;
-            this.setStep(this.view.steps.length - 1);
-            this.setLastStep(this.view.steps.length - 1);
             this.cancelAddSection();
+            console.log(JSON.stringify(this.dinamicSteps));
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
+        },
+        deleteSection(sectionId) {
+            this.view.steps = this.view.steps.filter(section => section.id !== sectionId);
         },
     },
     computed: {
@@ -176,7 +191,7 @@ export default {
             evaluation: 'evaluation',
         }),
         dinamicSteps() {
-            return this.view.steps.slice(3);
+            return this.view.steps.slice(2);
         },
     },
 };

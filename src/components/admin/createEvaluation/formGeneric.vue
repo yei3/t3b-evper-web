@@ -20,13 +20,22 @@
                         </span>
                     </a-checkbox>
                     <a @click="subsection.showModal = true" v-show="subsection.title.visible">
-                        Editar
+                        <a-icon type="edit" />
+                    </a>
+
+                    <a @click="removeSubsection(subsection.id)" v-show="subsection.title.visible"
+                        style="color: red; margin-left: 10px;"
+                    >
+                        <a-icon type="delete" />
                     </a>
                     <a-modal
                         title="Editar nombre de la Sección"
                         v-model="subsection.showModal"
                     >
-                        <a-input  v-model="subsection.title.value"/>
+                        <a-input
+                            v-model="subsection.title.value"
+                            @keyup.enter.native="subsection.showModal = false"
+                        />
                         <template slot="footer">
                             <a-button class="btn-green" @click="subsection.showModal = false">
                                 Aceptar
@@ -39,8 +48,6 @@
                         <a-form-item
                             :label="'Pregunta ' + (indexQ + 1)"
                             :fieldDecoratorId="'question-' + subsection.id + '-' + question.id"
-                            :labelCol="{ md: 5, sm: 24 }"
-                            :wrapperCol="{ md: 19, sm: 24 }"
                             style="margin: 10px 0px;"
                             :fieldDecoratorOptions="{
                                 rules: [
@@ -61,8 +68,6 @@
                         <a-form-item
                             :label="'Respuesta ' + (indexQ + 1)"
                             :fieldDecoratorId="'answer-' + subsection.id + '-' + question.id"
-                            :labelCol="{ md: 5, sm: 24 }"
-                            :wrapperCol="{ md: 19, sm: 24 }"
                             style="margin: 10px 0px;"
                             :fieldDecoratorOptions="{
                                 rules: [
@@ -116,14 +121,17 @@
                         title="Agregar nueva subsección"
                         v-model="addSubsectionModal.visible"
                     >
-                        <a-input  v-model="addSubsectionModal.value"/>
+                        <a-input
+                            v-model="addSubsectionModal.value"
+                            @keyup.enter.native="addSubsection(addSubsectionModal.value)"
+                        />
                         <template slot="footer">
                             <a-button @click="addSubsectionModal.visible = false;
                                 addSubsectionModal.value = '';">
                                 Cancelar
                             </a-button>
                             <a-button class="btn-green"
-                                @click="addSection(addSubsectionModal.value)">
+                                @click="addSubsection(addSubsectionModal.value)">
                                 Aceptar
                             </a-button>
                         </template>
@@ -140,9 +148,6 @@
                 </a-button>
                 <a-button class="btn-green" htmlType='submit'>
                     Guardar y continuar
-                </a-button>
-                <a-button class="btn-green" @click="printData">
-                    Data
                 </a-button>
             </a-col>
         </a-row>
@@ -181,24 +186,7 @@ export default {
                 },
             ],
             subsectionUUID: 0,
-            subsections: [
-                /*
-                {
-                    id: 0,
-                    showModal: false,
-                    title: {
-                        visible: true,
-                        value: 'Subsection title',
-                    },
-                    questionUUID: 0,
-                    questions: [{
-                        id: 0,
-                        label: '',
-                        answerType: 'selection',
-                    }],
-                }
-                */
-            ],
+            subsections: [],
         };
     },
     methods: {
@@ -232,7 +220,7 @@ export default {
                 this.saveObjectives(values);
             });
         },
-        addSection(sectionTitle) {
+        addSubsection(sectionTitle) {
             this.subsectionUUID += 1;
             this.subsections.push({
                 id: this.subsectionUUID,
@@ -265,8 +253,9 @@ export default {
             const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
             subsection.questions = subsection.questions.filter(qst => qst.id !== questionId);
         },
-        removeSection(sectionId) {
-            this.subsections = this.subsections.filter(subsection => subsection.id !== sectionId);
+        removeSubsection(subsectionId) {
+            this.subsections = this.subsections.filter(subsection =>
+                subsection.id !== subsectionId);
         },
         printData() {
             console.log(JSON.stringify(this.subsections));
