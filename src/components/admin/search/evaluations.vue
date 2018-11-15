@@ -21,17 +21,8 @@
             </a-col>
             <a-col :span="1">
                 <a-button shape="circle" icon="search" @click="search" />
-            </a-col>
-            
+            </a-col>            
         </a-row>
-        <!-- <a-row style="margin-top: 16px;">
-            <a-col :span="22" />
-            <a-col :span="2">
-                <a-button type="primary">
-                    Buscar <a-icon type="search" />
-                </a-button>
-            </a-col>
-        </a-row> -->
         <a-row class="collapse-title" style="margin-top: 16px;">
             <a-col :span="12">
                 Evaluaciones
@@ -70,11 +61,13 @@
                     <span slot="action" slot-scope="text, record">
                         <a-dropdown>
                             <a-menu slot="overlay">
-                                <a-menu-item key="1">
+                                <a-menu-item >
                                     Editar
                                 </a-menu-item>
-                                <a-menu-item key="2">
+                                <a-menu-item >
+                                    <a @click="delete(record.id)">
                                     Eliminar
+                                    </a>
                                 </a-menu-item>
                             </a-menu>
                             <a-button class="ant-btn-small">
@@ -109,8 +102,7 @@ const columns = [
     },
     {
         title: '',
-        key: 'action',
-        dataIndex: 'status',
+        key: 'key',
         scopedSlots: { customRender: 'action' },
         align: 'right',
     },
@@ -134,38 +126,49 @@ export default {
         '$route': 'search'
     },
     methods: {
+        async delete(id) {
+            let response = null;
+
+            try {
+                response = await client3B.evaluation.delete(id);
+            } catch (error) {
+                
+            }
+            await this.search();            
+        },
         async search() {
             let items = null;
             let response = null;
-            let evaluations = {
-                key: '',
-                status: '',
-                evaluation: {
-                    title: '',
-                    subtitle: '',
-                },
-                endDate: '',
-            }
+
             try {
                 response = await client3B.evaluation.getAll();
                 items = response.data.result.items;
+                this.data = [];
                 for (let index = 0; index < items.length; index++) {
-                    try {
-                        response = await client3B.evaluation.get(items[index].id);
-                        console.log(response);
-                    } catch (error) {
-                        this.handleError(error);
-                        return;
-                    }
-                    evaluations.key = index;
-                    evaluations.status = 'No iniciado'
-                    evaluations.evaluation.title = response.data.result;
                     
-                    // this.data.push(evaluation);
+                    this.data.push({
+                        key: items[index].id,
+                        status: this.getStatus(items[index].status),
+                        evaluation: {
+                            title: items[index].name,
+                            subtitle: items[index].description,
+                        },
+                        endDate: items[index].endDate,
+                    });
                 }
             } catch (error) {
-                this.handleError(error);
-                return;
+                console.log(error);
+            }
+        },
+        getStatus(status) {
+            switch (status) {
+                case 0: return 'No iniciado';
+                case 1: return 'Pendiente';
+                case 2: return 'Finalizado';
+                case 3: return 'Validado';
+            
+                default:
+                    break;
             }
         },
         transformStatus(status) {
@@ -175,16 +178,15 @@ export default {
             return 'Iniciar';
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado': return 'ant-tag-red';
+                case 'Pendiente': return 'ant-tag-yellow';
+                case 'Finalizado': return 'ant-tag-green';
+                case 'Validado': return 'ant-tag-blue';
+            
+                default:
+                    return 'ant-tag-gray';
             }
-            if (status === 'Pendiente') {
-                return 'ant-tag-yellow';
-            }
-            if (status === 'Finalizado') {
-                return 'ant-tag-green';
-            }
-            return 'ant-tag-gray';
         },
     },
 };

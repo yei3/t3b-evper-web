@@ -55,6 +55,17 @@ class Evaluation extends Http {
     }
 
     /**
+     * Delete a new evaluation
+     * @param {Object} data   Data to delete a evaluation
+     *
+     * @return {Promise}        Http Response
+     */
+    delete(data) {
+        const path = `${this.entityPath}/Delete`;
+        return this.request(path, this.methods.delete, data);
+    }
+
+    /**
      * Add the instructions for the evaluation
      * @param {Object} data   Data to add a evaluation instructions
      *
