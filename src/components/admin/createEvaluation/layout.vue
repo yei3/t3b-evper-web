@@ -169,12 +169,8 @@ export default {
                 name: this.view.sectionModal.value.replace(/ /g, ''),
             };
             this.view.steps.push(step);
-            // this.view.activeSection = this.view.stepsUUID;
-            // this.setStep(this.view.steps.length - 1);
-            // this.setLastStep(this.view.steps.length - 1);
             this.view.stepsUUID += 1;
             this.cancelAddSection();
-            console.log(JSON.stringify(this.dinamicSteps));
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;

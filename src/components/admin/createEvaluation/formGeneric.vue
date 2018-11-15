@@ -59,7 +59,7 @@
                             }"
                         >
                             <a-input style="width: 95%;"
-                                v-model="question.label"
+                                v-model="question.text"
                                 placeholder="Escribe el texto de la pregunta"
                             />
                         </a-form-item>
@@ -147,7 +147,7 @@
                     Anterior
                 </a-button>
                 <a-button class="btn-green" htmlType='submit'>
-                    Guardar y continuar
+                    Continuar
                 </a-button>
             </a-col>
         </a-row>
@@ -155,8 +155,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-// import errorHandler from '@/views/errorHandler';
+import { mapActions, mapGetters } from 'vuex';
+import authService from '@/services/auth';
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
 
 export default {
     props: {
@@ -195,30 +197,38 @@ export default {
             previousStep: 'previousStep',
             updateEvaluationForm: 'updateEvaluationForm',
         }),
-        saveObjectives(formValues) {
-            console.log(formValues);
-            /*
-            const questions = [];
-            const keys = Object.keys(formValues);
-            for (let i = 0; i < keys.length; i += 2) {
-                questions.push({
-                    id: i,
-                    question: formValues[keys[i]],
-                    deliverable: formValues[keys[i + 1]],
-                });
-            }
-            this.updateEvaluationForm({
-                questions,
-            });
-            */
-            this.nextStep();
-        },
         handleForm(e) {
             e.preventDefault();
             this.form.validateFields((error, values) => {
                 if (error) return;
-                this.saveObjectives(values);
+                this.saveObjectives();
             });
+        },
+        async saveObjectives() {
+            const section = {
+                name: this.sectionTitle,
+                showName: true,
+                evaluationId: this.evaluationStored.id,
+                parentId: 0,
+                subsections: this.subsections.map((subsection) => {
+                    return {
+                        name: subsection.title.value,
+                        showName: subsection.title.visible,
+                        evaluationId: this.evaluationStored.id,
+                        questions: subsection.questions.map((question) => {
+                            return {
+                                text: question.text,
+                                questionType: question.answerType,
+                            };
+                        }),
+                    };
+                }),
+            };
+
+            const response = await client3B.evaluation.addSection(section).catch((error) => {
+                errorHandler(this, error);
+            });
+            // this.nextStep();
         },
         addSubsection(sectionTitle) {
             this.subsectionUUID += 1;
@@ -232,7 +242,7 @@ export default {
                 questionUUID: 0,
                 questions: [{
                     id: 0,
-                    label: '',
+                    text: '',
                     answerType: 'selection',
                 }],
             });
@@ -245,7 +255,7 @@ export default {
             subsection.questionUUID += 1;
             subsection.questions.push({
                 id: subsection.questionUUID,
-                label: '',
+                text: '',
                 answerType: 'selection',
             });
         },
@@ -260,6 +270,11 @@ export default {
         printData() {
             console.log(JSON.stringify(this.subsections));
         },
+    },
+    computed: {
+        ...mapGetters({
+            evaluationStored: 'evaluation',
+        }),
     },
 };
 </script>

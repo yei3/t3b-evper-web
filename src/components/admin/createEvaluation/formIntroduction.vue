@@ -21,7 +21,7 @@
                     ]
                 }"
             >
-                <a-textarea :rows="4"/>
+                <a-textarea :rows="4" v-model="evaluation.instructions"/>
             </a-form-item>
         </a-row>
         <a-row style="margin-bottom: 20px;">
@@ -32,7 +32,7 @@
                 >
                     Anterior
                 </a-button>
-                <a-button htmlType='submit' class="btn-green">
+                <a-button htmlType='submit' class="btn-green" :loading="view.loading">
                     Guardar y continuar
                 </a-button>
             </a-col>
@@ -41,10 +41,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-// import errorHandler from '@/views/errorHandler';
+import { mapActions, mapGetters } from 'vuex';
+import authService from '@/services/auth';
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
 
 export default {
+    data() {
+        return {
+            view: {
+                loading: false,
+            },
+            evaluation: {
+                instructions: '',
+            },
+        };
+    },
     methods: {
         ...mapActions({
             nextStep: 'nextStep',
@@ -55,12 +67,33 @@ export default {
             e.preventDefault();
             this.form.validateFields((error, values) => {
                 if (error) return;
-                this.updateEvaluationForm({
-                    instructions: values.instructions,
-                });
-                this.nextStep();
+                this.view.loading = true;
+                return this.addInstructions();
             });
         },
+        async addInstructions() {
+            const response = await client3B.evaluation.addInstructions({
+                id: this.evaluationStored.id,
+                instructions: this.evaluation.instructions,
+            }).catch((error) => {
+                errorHandler(this, error);
+            });
+
+            this.view.loading = false;
+            if (!response) return;
+
+            this.updateEvaluationForm({
+                instructions: this.evaluation.instructions,
+            });
+
+            this.$message.success('Evaluación guardada correctamente');
+            this.nextStep();
+        }
+    },
+    computed: {
+        ...mapGetters({
+            evaluationStored: 'evaluation',
+        }),
     },
 };
 </script>
