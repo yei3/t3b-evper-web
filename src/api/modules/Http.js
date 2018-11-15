@@ -10,7 +10,7 @@ class HttpRequest {
         this.methods = {
             get: 'get',
             post: 'post',
-            pust: 'put',
+            put: 'put',
             patch: 'patch',
             delete: 'delete',
         };

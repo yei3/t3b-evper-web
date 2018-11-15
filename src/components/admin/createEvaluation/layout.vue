@@ -23,47 +23,98 @@
             </a-col>
         </a-row>
         <transition name="fade">
-            <div class="collapse-content">
+            <div class="collapse-content"
+                style="background-color: white;
+                margin: 30px 30px;"
+            >
                 <a-row class="steps">
-                    <h1 class="breadcrumb-header">{{evaluation.name}}</h1>
+                    <span class="breadcrumb-header" style="font-weight: 400;">
+                        {{evaluation.name}}
+                    </span>
+                    <span style="font-size: 16px;">{{evaluation.description}}</span>
                 </a-row>
+                <a-divider />
                 <a-row :gutter="16">
                     <a-col :span="6"
-                        v-for="step in view.steps"
-                        :key="step.number"
+                        v-for="(step, index) in view.steps"
+                        :key="index"
                     >
                         <div class="step-form step-form-done"
-                            v-show="lastStep >= step.number &&
-                                    step.number !== currentStep"
-                            @click="setStep(step.number)"
+                            v-show="lastStep >= index &&
+                                    index !== currentStep"
+                            @click="view.activeSection = step.id; setStep(index);"
                         >
-                            <span>{{step.number + 1}}. {{step.label}}</span>
+                            <span>{{index + 1}}. {{step.label}}</span>
                         </div>
 
                         <div class="step-form step-form-current"
-                            v-show="currentStep === step.number"
+                            v-show="currentStep === index"
                         >
-                            <span>{{step.number + 1}}. {{step.label}}</span>
+                            <span>{{index + 1}}. {{step.label}}</span>
                         </div>
 
                         <div class="step-form step-form-not-done"
-                            v-show="lastStep < step.number"
+                            v-show="lastStep < index"
                         >
-                            <span>{{step.number + 1}}. {{step.label}}</span>
+                            <span>{{index + 1}}. {{step.label}}</span>
                         </div>
                     </a-col>
                 </a-row>
+                <a-row>
+                    <a-col :sm="24" :md="12"
+                        style="padding-top: 10px;"
+                    >
+                        <a-button
+                            type='dashed'
+                            class="add-button"
+                            style="width: 48%;"
+                            @click="view.sectionModal.show=true"
+                        >
+                            <a-icon type='plus' /> Agregar Sección
+                        </a-button>
+                    </a-col>
+                    <a-col :sm="24" :md="12"
+                        style="padding-top: 10px; text-align: right;"
+                    >
+                        <a-button
+                            style="color: #fb4646; width: 48%;"
+                            @click="deleteSection(view.activeSection)"
+                            v-show="view.activeSection != 0 && view.activeSection != 1"
+                        >
+                            <a-icon type="delete" /> Borrar Sección
+                        </a-button>
+                    </a-col>
+                </a-row>
                 <a-row >
-                    <form-name v-show="currentStep == 0"/>
-                    <form-introduction v-show="currentStep == 1"/>
-                    <form-competences v-show="currentStep == 2"/>
-                    <form-strengths v-show="currentStep == 3" />
-                    <form-improvement-areas v-show="currentStep == 4"/>
-                    <form-development-plan v-show="currentStep == 5"/>
-                    <form-objectives v-show="currentStep == 6"/>
+                    <form-name v-show="currentStep === 0"/>
+                    <form-introduction v-show="currentStep === 1"/>
+                    <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
+                        :sectionTitle="step.label"
+                        v-show="(index + 2) == currentStep"
+                    />
+                </a-row>
+                <a-row>
+                    <a-col :span="24">
+
+                    </a-col>
                 </a-row>
             </div>
         </transition>
+        <a-modal
+            title="Agregar Nueva Sección"
+            v-model="view.sectionModal.show"
+        >
+            <a-input
+                v-model="view.sectionModal.value"
+                @keyup.enter.native="addSection"
+            />
+            <template slot="footer">
+                <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
+                <a-button key="submit" class="btn-green" @click="addSection">
+                    Agregar
+                </a-button>
+            </template>
+        </a-modal>
     </div>
 </template>
 
@@ -71,60 +122,34 @@
 import { mapActions, mapGetters } from 'vuex';
 import formName from '@/components/admin/createEvaluation/formName.vue';
 import formIntroduction from '@/components/admin/createEvaluation/formIntroduction.vue';
-import formCompetences from '@/components/admin/createEvaluation/formCompetences.vue';
-import formStrengths from '@/components/admin/createEvaluation/formStrengths.vue';
-import formImprovementAreas from '@/components/admin/createEvaluation/formImprovementAreas.vue';
-import formDevelopmentPlan from '@/components/admin/createEvaluation/formDevelopmentPlan.vue';
-import formObjectives from '@/components/admin/createEvaluation/formObjectives.vue';
+import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
 
 export default {
     components: {
         formName,
         formIntroduction,
-        formCompetences,
-        formStrengths,
-        formImprovementAreas,
-        formDevelopmentPlan,
-        formObjectives,
+        formGeneric,
     },
     data() {
         return {
             view: {
+                activeSection: 0,
+                sectionModal: {
+                    show: false,
+                    error: null,
+                    value: '',
+                },
+                stepsUUID: 2,
                 steps: [
                     {
-                        number: 0,
+                        id: 0,
                         label: 'Nombre de la evaluación',
                         name: 'name',
                     },
                     {
-                        number: 1,
+                        id: 1,
                         label: 'Intro',
                         name: 'intro',
-                    },
-                    {
-                        number: 2,
-                        label: 'Competencias',
-                        name: 'competence',
-                    },
-                    {
-                        number: 3,
-                        label: 'Fortalezas',
-                        name: 'strengths',
-                    },
-                    {
-                        number: 4,
-                        label: 'Áreas de mejora',
-                        name: 'improvement-areas',
-                    },
-                    {
-                        number: 5,
-                        label: 'Plan Desarrollo',
-                        name: 'development-plan',
-                    },
-                    {
-                        number: 6,
-                        label: 'Próx. Objectivos',
-                        name: 'next-objectives',
                     },
                 ],
             },
@@ -135,7 +160,25 @@ export default {
             nextStep: 'nextStep',
             previousStep: 'previousStep',
             setStep: 'setStep',
+            setLastStep: 'setLastStep',
         }),
+        addSection() {
+            const step = {
+                id: this.view.stepsUUID,
+                label: this.view.sectionModal.value,
+                name: this.view.sectionModal.value.replace(/ /g, ''),
+            };
+            this.view.steps.push(step);
+            this.view.stepsUUID += 1;
+            this.cancelAddSection();
+        },
+        cancelAddSection() {
+            this.view.sectionModal.show = false;
+            this.view.sectionModal.value = '';
+        },
+        deleteSection(sectionId) {
+            this.view.steps = this.view.steps.filter(section => section.id !== sectionId);
+        },
     },
     computed: {
         ...mapGetters({
@@ -143,10 +186,29 @@ export default {
             lastStep: 'lastStep',
             evaluation: 'evaluation',
         }),
+        dinamicSteps() {
+            return this.view.steps.slice(2);
+        },
     },
 };
 </script>
 
 <style scoped>
-
+.dynamic-delete-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
+.dynamic-delete-button:hover {
+  color: #777;
+}
+.add-button {
+    width: 90%;
+}
+.add-button:hover {
+    border-style: dashed;
+}
 </style>

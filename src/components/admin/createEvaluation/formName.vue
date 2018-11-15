@@ -1,6 +1,6 @@
 <template>
     <a-form
-        @submit="createEvaluation"
+        @submit="handleForm"
         :autoFormCreate="(form)=>{this.form = form}"
     >
         <a-row class="form-autoevaluation">
@@ -25,7 +25,7 @@
                             ]
                         }"
                     >
-                        <a-input />
+                        <a-input v-model="evaluation.name"/>
                     </a-form-item>
                 </a-col>
                 <a-col :sm="24" :md="24">
@@ -43,7 +43,7 @@
                             ]
                         }"
                     >
-                        <a-input />
+                        <a-input v-model="evaluation.description"/>
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -56,7 +56,7 @@
                 >
                     Anterior
                 </a-button>
-                <a-button htmlType='submit' class="btn-green">
+                <a-button htmlType='submit' class="btn-green" :loading="view.loading">
                     Guardar y continuar
                 </a-button>
             </a-col>
@@ -65,33 +65,89 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-// import errorHandler from '@/views/errorHandler';
-
+import { mapActions, mapGetters } from 'vuex';
+import authService from '@/services/auth';
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
 
 export default {
+    data() {
+        return {
+            view: {
+                loading: false,
+            },
+            evaluation: {
+                name: '',
+                description: '',
+            },
+        };
+    },
     methods: {
         ...mapActions({
             nextStep: 'nextStep',
             previousStep: 'previousStep',
-            updateEvaluationForm: 'updateEvaluationForm',
+            updateEvaluationStored: 'updateEvaluationForm',
         }),
-        test() {
-            console.log(this.form.setFieldsValue({
-                name: 'asdkjashjdb',
-            }));
-        },
-        createEvaluation(e) {
+        handleForm(e) {
             e.preventDefault();
             this.form.validateFields((error, values) => {
                 if (error) return;
-                this.updateEvaluationForm({
-                    name: values.name,
-                    description: values.description,
-                });
-                this.nextStep();
+                this.view.loading= true;
+                if (this.evaluationStored.id)
+                    return this.updateEvaluation();
+                return this.createEvaluation();
             });
         },
+        async createEvaluation() {
+            const user = authService.getUserData();
+            const response = await client3B.evaluation.create({
+                evaluatorUserId: user.id,
+                term: 1,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+            }).catch((error) => {
+                errorHandler(this, error);
+            });
+
+            this.view.loading= false;
+            if(!response) return;
+
+            this.updateEvaluationStored({
+                id: response.data.result.id,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+            });
+            this.$message.success('Evaluación guardada correctamente');
+            this.nextStep();
+        },
+        async updateEvaluation() {
+            const user = authService.getUserData();
+            const response = await client3B.evaluation.update({
+                id: this.evaluationStored.id,
+                evaluatorUserId: user.id,
+                term: 1,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+            }).catch((error) => {
+                errorHandler(this, error);
+            });
+
+            this.view.loading= false;
+            if(!response) return;
+
+            this.updateEvaluationStored({
+                id: response.data.result.id,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+            });
+            this.$message.success('Evaluación guardada correctamente');
+            this.nextStep();
+        },
+    },
+    computed: {
+        ...mapGetters({
+            evaluationStored: 'evaluation',
+        }),
     },
 };
 </script>

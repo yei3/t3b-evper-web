@@ -241,7 +241,7 @@ export default {
             },
         },
         imageUrl() {
-            return `/avatar/${this.user.userName}.jpg`;
+            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${this.user.userName}.png`;
         },
         username() {
             return `${this.user.name}`;
