@@ -140,14 +140,25 @@
         </a-row>
         <a-row style="margin-bottom: 20px;">
             <a-col :span="24" style="text-align: right;">
-                <a-button @click="previousStep" :disabled="true"
+                <a-button @click="previousStep" :disabled="false"
                     class="btn-green"
                     style="margin-right: 15px;"
                 >
                     Anterior
                 </a-button>
-                <a-button class="btn-green" htmlType='submit'>
-                    Continuar
+                <a-button class="btn-green" htmlType='submit'
+                    v-show="!showFinishButton"
+                    :loading="view.loading"
+                    :disabled="subsections.length === 0"
+                >
+                    Guardar y continuar
+                </a-button>
+                <a-button class="btn-green" htmlType='submit'
+                    v-show="showFinishButton"
+                    :loading="view.loading"
+                    :disabled="subsections.length === 0"
+                >
+                    Guardar y Finalizar
                 </a-button>
             </a-col>
         </a-row>
@@ -156,12 +167,15 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import authService from '@/services/auth';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
 export default {
     props: {
+        showFinishButton: {
+            type: Boolean,
+            required: false,
+        },
         sectionTitle: {
             type: String,
             required: true,
@@ -169,6 +183,9 @@ export default {
     },
     data() {
         return {
+            view: {
+                loading: false,
+            },
             addSubsectionModal: {
                 visible: false,
                 value: '',
@@ -186,6 +203,10 @@ export default {
                     label: 'Selección de respuesta predefinida',
                     value: 'selection',
                 },
+                {
+                    label: 'Si / No',
+                    value: 'boolean',
+                },
             ],
             subsectionUUID: 0,
             subsections: [],
@@ -199,8 +220,9 @@ export default {
         }),
         handleForm(e) {
             e.preventDefault();
-            this.form.validateFields((error, values) => {
+            this.form.validateFields((error) => {
                 if (error) return;
+                this.view.loading = true;
                 this.saveObjectives();
             });
         },
@@ -210,25 +232,29 @@ export default {
                 showName: true,
                 evaluationId: this.evaluationStored.id,
                 parentId: 0,
-                subsections: this.subsections.map((subsection) => {
-                    return {
-                        name: subsection.title.value,
-                        showName: subsection.title.visible,
-                        evaluationId: this.evaluationStored.id,
-                        questions: subsection.questions.map((question) => {
-                            return {
-                                text: question.text,
-                                questionType: question.answerType,
-                            };
-                        }),
-                    };
-                }),
+                subsections: this.subsections.map(subsection => ({
+                    name: subsection.title.value,
+                    showName: subsection.title.visible,
+                    evaluationId: this.evaluationStored.id,
+                    questions: subsection.questions.map(question => ({
+                        text: question.text,
+                        questionType: question.answerType,
+                    })),
+                })),
             };
 
             const response = await client3B.evaluation.addSection(section).catch((error) => {
                 errorHandler(this, error);
             });
-            // this.nextStep();
+
+            this.view.loading = false;
+            if (!response) return;
+
+            this.$message.success('Evaluación guardada correctamente');
+            this.nextStep();
+            if (this.showFinishButton) {
+                this.$router.push({ name: 'home' });
+            }
         },
         addSubsection(sectionTitle) {
             this.subsectionUUID += 1;
@@ -248,7 +274,6 @@ export default {
             });
             this.addSubsectionModal.visible = false;
             this.addSubsectionModal.value = '';
-            console.log(JSON.parse(JSON.stringify(this.subsections)));
         },
         addQuestion(sectionId) {
             const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
@@ -266,9 +291,6 @@ export default {
         removeSubsection(subsectionId) {
             this.subsections = this.subsections.filter(subsection =>
                 subsection.id !== subsectionId);
-        },
-        printData() {
-            console.log(JSON.stringify(this.subsections));
         },
     },
     computed: {
