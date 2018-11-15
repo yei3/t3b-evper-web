@@ -90,12 +90,14 @@ export default {
         }),
         handleForm(e) {
             e.preventDefault();
-            this.form.validateFields((error, values) => {
+            this.form.validateFields((error) => {
                 if (error) return;
-                this.view.loading= true;
-                if (this.evaluationStored.id)
-                    return this.updateEvaluation();
-                return this.createEvaluation();
+                this.view.loading = true;
+                if (this.evaluationStored.id) {
+                    this.updateEvaluation();
+                } else {
+                    this.createEvaluation();
+                }
             });
         },
         async createEvaluation() {
@@ -109,8 +111,8 @@ export default {
                 errorHandler(this, error);
             });
 
-            this.view.loading= false;
-            if(!response) return;
+            this.view.loading = false;
+            if (!response) return;
 
             this.updateEvaluationStored({
                 id: response.data.result.id,
@@ -132,8 +134,8 @@ export default {
                 errorHandler(this, error);
             });
 
-            this.view.loading= false;
-            if(!response) return;
+            this.view.loading = false;
+            if (!response) return;
 
             this.updateEvaluationStored({
                 id: response.data.result.id,

@@ -42,7 +42,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import authService from '@/services/auth';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -65,10 +64,10 @@ export default {
         }),
         handleForm(e) {
             e.preventDefault();
-            this.form.validateFields((error, values) => {
+            this.form.validateFields((error) => {
                 if (error) return;
                 this.view.loading = true;
-                return this.addInstructions();
+                this.addInstructions();
             });
         },
         async addInstructions() {
@@ -88,7 +87,7 @@ export default {
 
             this.$message.success('Evaluación guardada correctamente');
             this.nextStep();
-        }
+        },
     },
     computed: {
         ...mapGetters({

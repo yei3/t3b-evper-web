@@ -167,7 +167,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import authService from '@/services/auth';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -221,7 +220,7 @@ export default {
         }),
         handleForm(e) {
             e.preventDefault();
-            this.form.validateFields((error, values) => {
+            this.form.validateFields((error) => {
                 if (error) return;
                 this.view.loading = true;
                 this.saveObjectives();
@@ -233,19 +232,15 @@ export default {
                 showName: true,
                 evaluationId: this.evaluationStored.id,
                 parentId: 0,
-                subsections: this.subsections.map((subsection) => {
-                    return {
-                        name: subsection.title.value,
-                        showName: subsection.title.visible,
-                        evaluationId: this.evaluationStored.id,
-                        questions: subsection.questions.map((question) => {
-                            return {
-                                text: question.text,
-                                questionType: question.answerType,
-                            };
-                        }),
-                    };
-                }),
+                subsections: this.subsections.map(subsection => ({
+                    name: subsection.title.value,
+                    showName: subsection.title.visible,
+                    evaluationId: this.evaluationStored.id,
+                    questions: subsection.questions.map(question => ({
+                        text: question.text,
+                        questionType: question.answerType,
+                    })),
+                })),
             };
 
             const response = await client3B.evaluation.addSection(section).catch((error) => {
