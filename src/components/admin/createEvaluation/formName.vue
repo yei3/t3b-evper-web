@@ -9,12 +9,10 @@
                     <h1>Evaluación - Datos Generales</h1>
                 </a-col>
             </a-row>
-            <a-row>
-                <a-col :sm="24" :md="24">
+            <a-row :gutter="16">
+                <a-col :sm="24" :md="12">
                     <a-form-item
-                        label='Evaluación'
-                        :labelCol="{ sm: 24, md: 5 }"
-                        :wrapperCol="{ sm: 24, md: 12 }"
+                        label='Nombre de la Evaluación'
                         fieldDecoratorId="name"
                         :fieldDecoratorOptions="{
                             rules: [
@@ -28,11 +26,9 @@
                         <a-input v-model="evaluation.name"/>
                     </a-form-item>
                 </a-col>
-                <a-col :sm="24" :md="24">
+                <a-col :sm="24" :md="12">
                     <a-form-item
-                        label='Descripción'
-                        :labelCol="{ sm: 24, md: 5 }"
-                        :wrapperCol="{ sm: 24, md: 12 }"
+                        label='Descripción de la Evaluación'
                         fieldDecoratorId="description"
                         :fieldDecoratorOptions="{
                             rules: [
@@ -44,6 +40,22 @@
                         }"
                     >
                         <a-input v-model="evaluation.description"/>
+                    </a-form-item>
+                </a-col>
+                <a-col :span="24">
+                    <a-form-item
+                        label='Instrucciones de la Evaluación'
+                        fieldDecoratorId="instructions"
+                        :fieldDecoratorOptions="{
+                            rules: [
+                                {
+                                    required: true,
+                                    message: 'Ingresa las instrucciones para realizar la evaluación'
+                                }
+                            ]
+                        }"
+                    >
+                        <a-textarea :rows="4" v-model="evaluation.instructions"/>
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -71,6 +83,12 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
 export default {
+    props: {
+        showContinueButton: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             view: {
@@ -79,6 +97,7 @@ export default {
             evaluation: {
                 name: '',
                 description: '',
+                instructions: '',
             },
         };
     },
@@ -107,6 +126,7 @@ export default {
                 term: 1,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
             }).catch((error) => {
                 errorHandler(this, error);
             });
@@ -118,9 +138,12 @@ export default {
                 id: response.data.result.id,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
             });
             this.$message.success('Evaluación guardada correctamente');
-            this.nextStep();
+            if (this.showContinueButton) {
+                this.nextStep();
+            }
         },
         async updateEvaluation() {
             const user = authService.getUserData();
@@ -130,6 +153,7 @@ export default {
                 term: 1,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
             }).catch((error) => {
                 errorHandler(this, error);
             });
@@ -141,9 +165,12 @@ export default {
                 id: response.data.result.id,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
             });
             this.$message.success('Evaluación guardada correctamente');
-            this.nextStep();
+            if (this.showContinueButton) {
+                this.nextStep();
+            }
         },
     },
     computed: {

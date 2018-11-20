@@ -67,7 +67,9 @@
                         <a-dropdown>
                             <a-menu slot="overlay">
                                 <a-menu-item @click="test">
-                                    Editar
+                                    <router-link :to="{ name: 'update-evaluation', params: { id: record.key}}">
+                                        Editar
+                                    </router-link>
                                 </a-menu-item>
                                 <a-menu-item @click="deleteEvaluation(record.key)">
                                     Eliminar

@@ -17,7 +17,14 @@
                         <strong class="breadcrumb-path">Evaluaciones</strong>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active">Crear Evaluación</strong>
+                        <strong class="breadcrumb-path-active"
+                            v-if="!$route.params.id"
+                        >
+                            Crear Evaluación
+                        </strong>
+                        <strong class="breadcrumb-path-active" v-else>
+                            Actualizar Evaluación
+                        </strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
@@ -69,6 +76,7 @@
                             class="add-button"
                             style="width: 48%;"
                             @click="view.sectionModal.show=true"
+                            v-show="currentStep !== 0 || evaluation.id"
                         >
                             <a-icon type='plus' /> Agregar Sección
                         </a-button>
@@ -78,26 +86,23 @@
                     >
                         <a-button
                             style="color: #fb4646; width: 48%;"
-                            @click="deleteSection(view.activeSection)"
-                            v-show="view.activeSection !== 0 && view.activeSection !== 1"
+                            @click="deleteSection(currentStep)"
+                            v-show="currentStep !== 0"
                         >
                             <a-icon type="delete" /> Borrar Sección
                         </a-button>
                     </a-col>
                 </a-row>
                 <a-row >
-                    <form-name v-show="currentStep === 0"/>
-                    <form-introduction v-show="currentStep === 1"/>
-                    <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
-                        :sectionTitle="step.label"
-                        :showFinishButton="index === (dinamicSteps.length - 1)"
-                        v-show="(index + 2) == currentStep"
+                    <form-name
+                        v-show="currentStep === 0"
+                        :showContinueButton="dinamicSteps.length !== 0"
                     />
-                </a-row>
-                <a-row>
-                    <a-col :span="24">
-
-                    </a-col>
+                    <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
+                        v-model="step.label"
+                        :showFinishButton="index === (dinamicSteps.length - 1)"
+                        v-show="(index + 1) == currentStep"
+                    />
                 </a-row>
             </div>
         </transition>
@@ -122,14 +127,21 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import formName from '@/components/admin/createEvaluation/formName.vue';
-import formIntroduction from '@/components/admin/createEvaluation/formIntroduction.vue';
 import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+import { error } from 'util';
 
 export default {
     components: {
         formName,
-        formIntroduction,
         formGeneric,
+    },
+    created() {
+        this.fetchData();
+    },
+    watch: {
+        $route: 'fetchData',
     },
     data() {
         return {
@@ -146,11 +158,6 @@ export default {
                         id: 0,
                         label: 'Nombre de la evaluación',
                         name: 'name',
-                    },
-                    {
-                        id: 1,
-                        label: 'Intro',
-                        name: 'intro',
                     },
                 ],
             },
@@ -172,16 +179,41 @@ export default {
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
             this.cancelAddSection();
+            this.setStep(this.view.steps.length - 1);
+            this.setLastStep(this.view.steps.length - 1);
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
         },
-        deleteSection(sectionId) {
-            this.view.steps = this.view.steps.filter(section => section.id !== sectionId);
+        deleteSection(sectionStep) {
+            let step = -1;
+            this.view.steps = this.view.steps.filter(() => {
+                step += 1;
+                return sectionStep !== step;
+            });
             this.setStep(this.view.steps.length - 1);
             this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
-            console.log(this.view.steps.length - 1, this.view.activeSection);
+        },
+        async fetchData() {
+            if (!this.$route.params.id) return;
+            const response = await client3B.evaluation.get(this.$route.params.id)
+                .catch(error => errorHandler(error));
+            if (!response) return;
+
+            const evaluaction = response.data.result;
+            this.evaluationId = evaluaction.id;
+            console.log(evaluaction);
+            evaluaction.sections.forEach((section) => {
+                this.view.steps.push({
+                    id: this.view.stepsUUID,
+                    label: section.name,
+                    name: section.name,
+                });
+                this.view.stepsUUID += 1;
+            });
+
+            this.setLastStep(this.view.steps.length - 1);
         },
     },
     computed: {
@@ -191,7 +223,7 @@ export default {
             evaluation: 'evaluation',
         }),
         dinamicSteps() {
-            return this.view.steps.slice(2);
+            return this.view.steps.slice(1);
         },
     },
 };

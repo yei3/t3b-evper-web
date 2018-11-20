@@ -2,8 +2,16 @@
     <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
         <a-row class="form-autoevaluation">
             <a-row class="form-tittle">
-                <a-col :span="24">
-                    <h1>{{sectionTitle}}</h1>
+                <a-col :span="24" style="margin-bottom: 20px">
+                    <span style="font-size: 26px;
+                        font-weight: 100;
+                        font-family: 'Open Sans';"
+                    >
+                        {{sectionTitle}}
+                    </span>
+                    <a @click="sectionModal.visible = true; sectionModal.value = sectionTitle;">
+                        <a-icon type="edit" />
+                    </a>
                 </a-col>
             </a-row>
             <a-row v-for="subsection in subsections" :key="subsection.id">
@@ -19,7 +27,10 @@
                             El título de la sección no será mostrado
                         </span>
                     </a-checkbox>
-                    <a @click="subsection.showModal = true" v-show="subsection.title.visible">
+                    <a @click="subsection.showModal = true;
+                        subsection.title.lastValue = subsection.title.value;"
+                        v-show="subsection.title.visible"
+                    >
                         <a-icon type="edit" />
                     </a>
 
@@ -29,15 +40,21 @@
                         <a-icon type="delete" />
                     </a>
                     <a-modal
-                        title="Editar nombre de la Sección"
+                        title="Título de la  Subsección"
                         v-model="subsection.showModal"
                     >
                         <a-input
-                            v-model="subsection.title.value"
-                            @keyup.enter.native="subsection.showModal = false"
+                            v-model="subsection.title.lastValue"
+                            @keyup.enter.native="subsection.showModal = false;
+                                subsection.title.value = subsection.title.lastValue;"
                         />
                         <template slot="footer">
-                            <a-button class="btn-green" @click="subsection.showModal = false">
+                            <a-button class="" @click="subsection.showModal = false;">
+                                Cancelar
+                            </a-button>
+                            <a-button class="btn-green" @click="subsection.showModal = false;
+                                subsection.title.value = subsection.title.lastValue;"
+                            >
                                 Aceptar
                             </a-button>
                         </template>
@@ -118,24 +135,43 @@
                     </a-button>
                 </a-col>
                 <a-modal
-                        title="Agregar nueva subsección"
-                        v-model="addSubsectionModal.visible"
-                    >
-                        <a-input
-                            v-model="addSubsectionModal.value"
-                            @keyup.enter.native="addSubsection(addSubsectionModal.value)"
-                        />
-                        <template slot="footer">
-                            <a-button @click="addSubsectionModal.visible = false;
-                                addSubsectionModal.value = '';">
-                                Cancelar
-                            </a-button>
-                            <a-button class="btn-green"
-                                @click="addSubsection(addSubsectionModal.value)">
-                                Aceptar
-                            </a-button>
-                        </template>
-                    </a-modal>
+                    title="Título de la Sección"
+                    v-model="sectionModal.visible"
+                >
+                    <a-input
+                        v-model="sectionModal.value"
+                        @keyup.enter.native="handleSectionTitleInput"
+                    />
+                    <template slot="footer">
+                        <a-button @click="sectionModal.visible = false;
+                            sectionModal.value = '';">
+                            Cancelar
+                        </a-button>
+                        <a-button class="btn-green"
+                            @click="handleSectionTitleInput">
+                            Aceptar
+                        </a-button>
+                    </template>
+                </a-modal>
+                <a-modal
+                    title="Agregar nueva subsección"
+                    v-model="addSubsectionModal.visible"
+                >
+                    <a-input
+                        v-model="addSubsectionModal.value"
+                        @keyup.enter.native="addSubsection(addSubsectionModal.value)"
+                    />
+                    <template slot="footer">
+                        <a-button @click="addSubsectionModal.visible = false;
+                            addSubsectionModal.value = '';">
+                            Cancelar
+                        </a-button>
+                        <a-button class="btn-green"
+                            @click="addSubsection(addSubsectionModal.value)">
+                            Aceptar
+                        </a-button>
+                    </template>
+                </a-modal>
             </a-row>
         </a-row>
         <a-row style="margin-bottom: 20px;">
@@ -181,12 +217,20 @@ export default {
             required: true,
         },
     },
+    model: {
+        prop: 'sectionTitle',
+        event: 'input',
+    },
     data() {
         return {
             view: {
                 loading: false,
             },
             addSubsectionModal: {
+                visible: false,
+                value: '',
+            },
+            sectionModal: {
                 visible: false,
                 value: '',
             },
@@ -264,6 +308,7 @@ export default {
                 title: {
                     visible: true,
                     value: sectionTitle,
+                    lastValue: sectionTitle,
                 },
                 questionUUID: 0,
                 questions: [{
@@ -291,6 +336,14 @@ export default {
         removeSubsection(subsectionId) {
             this.subsections = this.subsections.filter(subsection =>
                 subsection.id !== subsectionId);
+        },
+        handleSectionTitleInput() {
+            this.sectionModal.visible = false;
+            this.$emit('input', this.sectionModal.value);
+            this.sectionModal.value = '';
+        },
+        handleSubsectionTitleInput() {
+            this.sectionModal.visible = false;
         },
     },
     computed: {

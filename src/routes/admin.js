@@ -19,6 +19,12 @@ export default [
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
     {
+        path: 'admin/evaluations/:id/update',
+        name: 'update-evaluation',
+        component: CreateEvaluation,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
         path: 'admin/users',
         name: 'users',
         component: Users,
