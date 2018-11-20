@@ -23,43 +23,41 @@
                 </a>
             </a-col>
         </a-row>
-        <transition name="fade">
-            <a-row class="collapse-content" v-show="!collapsed">
-                <a-table :columns="columns" :dataSource="data" :pagination=false>
-                    <span slot="status" slot-scope="status">
-                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                    </span>
-                    <span slot="objective" slot-scope="objective">
-                        <p><a
-                            class="table-link"
-                            @click="toggleViewProgressModal"
-                        >
-                            {{objective.title}}
-                        </a></p>
-                        <p><small>{{objective.subtitle}}</small></p>
-                    </span>
-                    <span slot="action" slot-scope="text, record">
-                        <a-dropdown>
-                            <a-menu slot="overlay">
-                                <a-menu-item key="1" @click="toggleRecordProgressModal">
-                                    Registrar avances
-                                </a-menu-item>
-                                <a-menu-item key="2" @click="toggleViewProgressModal">
-                                    Ver avances
-                                </a-menu-item>
-                                <a-menu-divider />
-                                <a-menu-item key="3" @click="toggleFinishObjectiveModal">
-                                    Completar objectivo
-                                </a-menu-item>
-                            </a-menu>
-                            <a-button class="ant-btn-small">
-                                ...
-                            </a-button>
-                        </a-dropdown>
-                    </span>
-                </a-table>
-            </a-row>
-        </transition>
+        <a-row class="collapse-content" v-show="!collapsed">
+            <a-table :columns="columns" :dataSource="data" :pagination=false>
+                <span slot="status" slot-scope="status">
+                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                </span>
+                <span slot="objective" slot-scope="objective">
+                    <p><a
+                        class="table-link"
+                        @click="toggleViewProgressModal"
+                    >
+                        {{objective.title}}
+                    </a></p>
+                    <p><small>{{objective.subtitle}}</small></p>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                    <a-dropdown>
+                        <a-menu slot="overlay">
+                            <a-menu-item key="1" @click="toggleRecordProgressModal">
+                                Registrar avances
+                            </a-menu-item>
+                            <a-menu-item key="2" @click="toggleViewProgressModal">
+                                Ver avances
+                            </a-menu-item>
+                            <a-menu-divider />
+                            <a-menu-item key="3" @click="toggleFinishObjectiveModal">
+                                Completar objectivo
+                            </a-menu-item>
+                        </a-menu>
+                        <a-button class="ant-btn-small">
+                            ...
+                        </a-button>
+                    </a-dropdown>
+                </span>
+            </a-table>
+        </a-row>
 
         <a-modal
             v-model="recordProgressModal.show"

@@ -29,83 +29,81 @@
                 </a-breadcrumb>
             </a-col>
         </a-row>
-        <transition name="fade">
-            <div class="collapse-content"
-                style="background-color: white;
-                margin: 30px 30px;"
-            >
-                <a-row class="steps">
-                    <span class="breadcrumb-header" style="font-weight: 400;">
-                        {{evaluation.name}}
-                    </span>
-                    <span style="font-size: 16px;">{{evaluation.description}}</span>
-                </a-row>
-                <a-divider />
-                <a-row :gutter="16">
-                    <a-col :span="6"
-                        v-for="(step, index) in view.steps"
-                        :key="index"
+        <div class="collapse-content"
+            style="background-color: white;
+            margin: 30px 30px;"
+        >
+            <a-row class="steps">
+                <span class="breadcrumb-header" style="font-weight: 400;">
+                    {{evaluation.name}}
+                </span>
+                <span style="font-size: 16px;">{{evaluation.description}}</span>
+            </a-row>
+            <a-divider />
+            <a-row :gutter="16">
+                <a-col :span="6"
+                    v-for="(step, index) in view.steps"
+                    :key="index"
+                >
+                    <div class="step-form step-form-done"
+                        v-show="lastStep >= index &&
+                                index !== currentStep"
+                        @click="view.activeSection = step.id; setStep(index);"
                     >
-                        <div class="step-form step-form-done"
-                            v-show="lastStep >= index &&
-                                    index !== currentStep"
-                            @click="view.activeSection = step.id; setStep(index);"
-                        >
-                            <span>{{index + 1}}. {{step.label}}</span>
-                        </div>
+                        <span>{{index + 1}}. {{step.label}}</span>
+                    </div>
 
-                        <div class="step-form step-form-current"
-                            v-show="currentStep === index"
-                        >
-                            <span>{{index + 1}}. {{step.label}}</span>
-                        </div>
+                    <div class="step-form step-form-current"
+                        v-show="currentStep === index"
+                    >
+                        <span>{{index + 1}}. {{step.label}}</span>
+                    </div>
 
-                        <div class="step-form step-form-not-done"
-                            v-show="lastStep < index"
-                        >
-                            <span>{{index + 1}}. {{step.label}}</span>
-                        </div>
-                    </a-col>
-                </a-row>
-                <a-row>
-                    <a-col :sm="24" :md="12"
-                        style="padding-top: 10px;"
+                    <div class="step-form step-form-not-done"
+                        v-show="lastStep < index"
                     >
-                        <a-button
-                            type='dashed'
-                            class="add-button"
-                            style="width: 48%;"
-                            @click="view.sectionModal.show=true"
-                            v-show="currentStep !== 0 || evaluation.id"
-                        >
-                            <a-icon type='plus' /> Agregar Sección
-                        </a-button>
-                    </a-col>
-                    <a-col :sm="24" :md="12"
-                        style="padding-top: 10px; text-align: right;"
+                        <span>{{index + 1}}. {{step.label}}</span>
+                    </div>
+                </a-col>
+            </a-row>
+            <a-row>
+                <a-col :sm="24" :md="12"
+                    style="padding-top: 10px;"
+                >
+                    <a-button
+                        type='dashed'
+                        class="add-button"
+                        style="width: 48%;"
+                        @click="view.sectionModal.show=true"
+                        v-show="currentStep !== 0 || evaluation.id"
                     >
-                        <a-button
-                            style="color: #fb4646; width: 48%;"
-                            @click="deleteSection(currentStep)"
-                            v-show="currentStep !== 0"
-                        >
-                            <a-icon type="delete" /> Borrar Sección
-                        </a-button>
-                    </a-col>
-                </a-row>
-                <a-row >
-                    <form-name
-                        v-show="currentStep === 0"
-                        :showContinueButton="dinamicSteps.length !== 0"
-                    />
-                    <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
-                        v-model="step.label"
-                        :showFinishButton="index === (dinamicSteps.length - 1)"
-                        v-show="(index + 1) == currentStep"
-                    />
-                </a-row>
-            </div>
-        </transition>
+                        <a-icon type='plus' /> Agregar Sección
+                    </a-button>
+                </a-col>
+                <a-col :sm="24" :md="12"
+                    style="padding-top: 10px; text-align: right;"
+                >
+                    <a-button
+                        style="color: #fb4646; width: 48%;"
+                        @click="deleteSection(currentStep)"
+                        v-show="currentStep !== 0"
+                    >
+                        <a-icon type="delete" /> Borrar Sección
+                    </a-button>
+                </a-col>
+            </a-row>
+            <a-row >
+                <form-name
+                    v-show="currentStep === 0"
+                    :showContinueButton="dinamicSteps.length !== 0"
+                />
+                <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
+                    v-model="step.label"
+                    :showFinishButton="index === (dinamicSteps.length - 1)"
+                    v-show="(index + 1) == currentStep"
+                />
+            </a-row>
+        </div>
         <a-modal
             title="Agregar Nueva Sección"
             v-model="view.sectionModal.show"

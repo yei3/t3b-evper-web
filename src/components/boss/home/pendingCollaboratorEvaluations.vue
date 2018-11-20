@@ -29,42 +29,40 @@
                 </a>
             </a-col>
         </a-row>
-        <transition name="fade">
-            <a-row class="collapse-content" v-show="!collapsed">
-                <a-table :columns="columns" :dataSource="data" :pagination=false>
-                    <span slot="status" slot-scope="status">
-                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                    </span>
-                    <span slot="evaluation" slot-scope="evaluation">
-                        <p>
-                            <router-link
-                                class="table-link"
-                                :to="{name: 'boss-assessments-apply' }"
-                            >
-                                {{evaluation.title}}
-                            </router-link>
-                        </p>
-                        <p><small>{{evaluation.subtitle}}</small></p>
-                    </span>
-                    <span slot="action" slot-scope="action">
-                        <div v-show="transformStatus(action) !== 'Agendar revisión'">
-                            <router-link
-                                class="table-link-light"
-                                :to="{ name: 'boss-assessments-apply' }"
-                            >
-                                {{transformStatus(action)}}
-                            </router-link>
-                        </div>
-                        <a class="table-link-light"
-                            @click="toggleScheduleReviewModal"
-                            v-show="transformStatus(action) === 'Agendar revisión'"
+        <a-row class="collapse-content" v-show="!collapsed">
+            <a-table :columns="columns" :dataSource="data" :pagination=false>
+                <span slot="status" slot-scope="status">
+                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                </span>
+                <span slot="evaluation" slot-scope="evaluation">
+                    <p>
+                        <router-link
+                            class="table-link"
+                            :to="{name: 'boss-assessments-apply' }"
+                        >
+                            {{evaluation.title}}
+                        </router-link>
+                    </p>
+                    <p><small>{{evaluation.subtitle}}</small></p>
+                </span>
+                <span slot="action" slot-scope="action">
+                    <div v-show="transformStatus(action) !== 'Agendar revisión'">
+                        <router-link
+                            class="table-link-light"
+                            :to="{ name: 'boss-assessments-apply' }"
                         >
                             {{transformStatus(action)}}
-                        </a>
-                    </span>
-                </a-table>
-            </a-row>
-        </transition>
+                        </router-link>
+                    </div>
+                    <a class="table-link-light"
+                        @click="toggleScheduleReviewModal"
+                        v-show="transformStatus(action) === 'Agendar revisión'"
+                    >
+                        {{transformStatus(action)}}
+                    </a>
+                </span>
+            </a-table>
+        </a-row>
 
         <a-modal
             v-model="scheduleReviewModal.show"

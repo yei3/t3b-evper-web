@@ -51,38 +51,36 @@
                 <a-spin size="large" />
             </div>
         </a-row>
-        <transition name="fade">
-            <a-row class="collapse-content" v-show="!collapsed && !spin">
-                <a-table :columns="columns" :dataSource="data" :pagination=false>
-                    <span slot="status" slot-scope="status">
-                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                    </span>
-                    <span slot="evaluation" slot-scope="evaluation">
-                        <p><a class="table-link">
-                            {{evaluation.title}}
-                        </a></p>
-                        <p><small>{{evaluation.subtitle}}</small></p>
-                    </span>
-                    <span slot="action" slot-scope="text, record">
-                        <a-dropdown>
-                            <a-menu slot="overlay">
-                                <a-menu-item @click="test">
-                                    <router-link :to="{ name: 'update-evaluation', params: { id: record.key}}">
-                                        Editar
-                                    </router-link>
-                                </a-menu-item>
-                                <a-menu-item @click="deleteEvaluation(record.key)">
-                                    Eliminar
-                                </a-menu-item>
-                            </a-menu>
-                            <a-button class="ant-btn-small">
-                                ...
-                            </a-button>
-                        </a-dropdown>
-                    </span>
-                </a-table>
-            </a-row>
-        </transition>
+        <a-row class="collapse-content" v-show="!collapsed && !spin">
+            <a-table :columns="columns" :dataSource="data" :pagination=false>
+                <span slot="status" slot-scope="status">
+                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                </span>
+                <span slot="evaluation" slot-scope="evaluation">
+                    <p><a class="table-link">
+                        {{evaluation.title}}
+                    </a></p>
+                    <p><small>{{evaluation.subtitle}}</small></p>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                    <a-dropdown>
+                        <a-menu slot="overlay">
+                            <a-menu-item @click="test">
+                                <router-link :to="{ name: 'update-evaluation', params: { id: record.key}}">
+                                    Editar
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item @click="deleteEvaluation(record.key)">
+                                Eliminar
+                            </a-menu-item>
+                        </a-menu>
+                        <a-button class="ant-btn-small">
+                            ...
+                        </a-button>
+                    </a-dropdown>
+                </span>
+            </a-table>
+        </a-row>
     </div>
 </template>
 <script>

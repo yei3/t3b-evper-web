@@ -23,70 +23,68 @@
                 </a>
             </a-col>
         </a-row>
-        <transition name="fade">
-            <div class="collapse-content" v-show="!collapsed">
-                <a-row class="steps">
-                    <h1 class="breadcrumb-header">{{data.evaluationTitle}}</h1>
-                </a-row>
-                <a-row :gutter="16">
-                    <a-col :span="6"
-                        v-for="step in data.steps"
-                        :key="step.number"
+        <div class="collapse-content" v-show="!collapsed">
+            <a-row class="steps">
+                <h1 class="breadcrumb-header">{{data.evaluationTitle}}</h1>
+            </a-row>
+            <a-row :gutter="16">
+                <a-col :span="6"
+                    v-for="step in data.steps"
+                    :key="step.number"
+                >
+                    <div class="step-form step-form-done"
+                        v-show="data.lastStep >= step.number &&
+                                step.number !== data.currentStep"
+                        @click="data.currentStep = step.number"
                     >
-                        <div class="step-form step-form-done"
-                            v-show="data.lastStep >= step.number &&
-                                    step.number !== data.currentStep"
-                            @click="data.currentStep = step.number"
-                        >
-                            <span>{{step.number}}. {{step.label}}</span>
-                        </div>
+                        <span>{{step.number}}. {{step.label}}</span>
+                    </div>
 
-                        <div class="step-form step-form-current"
-                            v-show="data.currentStep === step.number"
-                        >
-                            <span>{{step.number}}. {{step.label}}</span>
-                        </div>
+                    <div class="step-form step-form-current"
+                        v-show="data.currentStep === step.number"
+                    >
+                        <span>{{step.number}}. {{step.label}}</span>
+                    </div>
 
-                        <div class="step-form step-form-not-done"
-                            v-show="data.lastStep < step.number"
-                        >
-                            <span>{{step.number}}. {{step.label}}</span>
-                        </div>
-                    </a-col>
-                </a-row>
-                <a-row >
-                    <form-introduction v-show="data.currentStep == 1" />
-                    <form-objetives v-show="data.currentStep == 2" />
-                    <form-competences v-show="data.currentStep == 3" />
-                    <form-strengths v-show="data.currentStep == 4"/>
-                    <form-improvement-areas v-show="data.currentStep == 5" />
-                    <form-development-plan v-show="data.currentStep == 6" />
-                    <form-next-objetives v-show="data.currentStep == 7" />
-                </a-row>
-                <a-row style="margin-bottom: 20px;">
-                    <a-col :span="24" style="text-align: right;">
-                        <a-button @click="previousStep" :disabled="data.currentStep === 1"
-                            class="btn-green"
-                            style="margin-right: 15px;"
-                        >
-                            Anterior
-                        </a-button>
-                        <a-button @click="nextStep"
-                            class="btn-green"
-                            v-show="data.currentStep < 7"
-                        >
-                            Siguiente
-                        </a-button>
-                        <a-button @click="nextStep"
-                            class="btn-green"
-                            v-show="data.currentStep === 7"
-                        >
-                            Finalizar
-                        </a-button>
-                    </a-col>
-                </a-row>
-            </div>
-        </transition>
+                    <div class="step-form step-form-not-done"
+                        v-show="data.lastStep < step.number"
+                    >
+                        <span>{{step.number}}. {{step.label}}</span>
+                    </div>
+                </a-col>
+            </a-row>
+            <a-row >
+                <form-introduction v-show="data.currentStep == 1" />
+                <form-objetives v-show="data.currentStep == 2" />
+                <form-competences v-show="data.currentStep == 3" />
+                <form-strengths v-show="data.currentStep == 4"/>
+                <form-improvement-areas v-show="data.currentStep == 5" />
+                <form-development-plan v-show="data.currentStep == 6" />
+                <form-next-objetives v-show="data.currentStep == 7" />
+            </a-row>
+            <a-row style="margin-bottom: 20px;">
+                <a-col :span="24" style="text-align: right;">
+                    <a-button @click="previousStep" :disabled="data.currentStep === 1"
+                        class="btn-green"
+                        style="margin-right: 15px;"
+                    >
+                        Anterior
+                    </a-button>
+                    <a-button @click="nextStep"
+                        class="btn-green"
+                        v-show="data.currentStep < 7"
+                    >
+                        Siguiente
+                    </a-button>
+                    <a-button @click="nextStep"
+                        class="btn-green"
+                        v-show="data.currentStep === 7"
+                    >
+                        Finalizar
+                    </a-button>
+                </a-col>
+            </a-row>
+        </div>
     </div>
 </template>
 

@@ -14,32 +14,30 @@
                 </a>
             </a-col>
         </a-row>
-        <transition name="fade">
-            <a-row class="collapse-content" v-show="!collapsed">
-                <a-col :span="24">
-                    <a-tabs type="card">
-                        <a-tab-pane tab="1. Objetivos" key="1">
-                            <objetives :onlyLecture="true" />
-                        </a-tab-pane>
-                        <a-tab-pane tab="2. Competencias" key="2">
-                            <competences :onlyLecture="true" />
-                        </a-tab-pane>
-                        <a-tab-pane tab="3. Fortalezas" key="3">
-                            <strengths :onlyLecture="true" />
-                        </a-tab-pane>
-                        <a-tab-pane tab="4. Áreas de mejora" key="4">
-                            <improvement-areas :onlyLecture="true" />
-                        </a-tab-pane>
-                        <a-tab-pane tab="5. Plan Desarrollo" key="5">
-                            <development-plan :onlyLecture="true" />
-                        </a-tab-pane>
-                        <a-tab-pane tab="6. Prox Objetivos" key="6">
-                            <next-objetives :onlyLecture="true" />
-                        </a-tab-pane>
-                    </a-tabs>
-                </a-col>
-            </a-row>
-        </transition>
+        <a-row class="collapse-content" v-show="!collapsed">
+            <a-col :span="24">
+                <a-tabs type="card">
+                    <a-tab-pane tab="1. Objetivos" key="1">
+                        <objetives :onlyLecture="true" />
+                    </a-tab-pane>
+                    <a-tab-pane tab="2. Competencias" key="2">
+                        <competences :onlyLecture="true" />
+                    </a-tab-pane>
+                    <a-tab-pane tab="3. Fortalezas" key="3">
+                        <strengths :onlyLecture="true" />
+                    </a-tab-pane>
+                    <a-tab-pane tab="4. Áreas de mejora" key="4">
+                        <improvement-areas :onlyLecture="true" />
+                    </a-tab-pane>
+                    <a-tab-pane tab="5. Plan Desarrollo" key="5">
+                        <development-plan :onlyLecture="true" />
+                    </a-tab-pane>
+                    <a-tab-pane tab="6. Prox Objetivos" key="6">
+                        <next-objetives :onlyLecture="true" />
+                    </a-tab-pane>
+                </a-tabs>
+            </a-col>
+        </a-row>
     </div>
 </template>
 

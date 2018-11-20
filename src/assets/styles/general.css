@@ -6,6 +6,7 @@
 @import "breadcrumb.css";
 @import "forms.css";
 @import "tabs.css";
+@import "transitions.css";
 
 .main-content {
     margin: 0px 30px;

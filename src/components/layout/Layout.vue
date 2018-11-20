@@ -9,7 +9,9 @@
                             'background-color': '#f4f6fa'
                         }"
             >
-                <router-view> </router-view>
+                <transition name="fade" appear mode="out-in">
+                    <router-view> </router-view>
+                </transition>
             </a-layout-content>
             <Footer/>
         </a-layout>

@@ -23,32 +23,30 @@
                 </a>
             </a-col>
         </a-row>
-        <transition name="fade">
-            <a-row class="collapse-content" v-show="!collapsed">
-                <a-table :columns="columns" :dataSource="data" :pagination=false>
-                    <span slot="status" slot-scope="status">
-                        <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                    </span>
-                    <span slot="evaluation" slot-scope="evaluation">
-                        <p><a
-                            class="table-link"
-                            @click="toggleCBEModal()"
-                        >
-                            {{evaluation.title}}
-                        </a></p>
-                        <p><small>{{evaluation.subtitle}}</small></p>
-                    </span>
-                    <span slot="action" slot-scope="text, record">
-                        <a
-                            class="table-link-light"
-                            @click="toggleCBEModal()"
-                        >
-                            Cerrar
-                        </a>
-                    </span>
-                </a-table>
-            </a-row>
-        </transition>
+        <a-row class="collapse-content" v-show="!collapsed">
+            <a-table :columns="columns" :dataSource="data" :pagination=false>
+                <span slot="status" slot-scope="status">
+                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                </span>
+                <span slot="evaluation" slot-scope="evaluation">
+                    <p><a
+                        class="table-link"
+                        @click="toggleCBEModal()"
+                    >
+                        {{evaluation.title}}
+                    </a></p>
+                    <p><small>{{evaluation.subtitle}}</small></p>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                    <a
+                        class="table-link-light"
+                        @click="toggleCBEModal()"
+                    >
+                        Cerrar
+                    </a>
+                </span>
+            </a-table>
+        </a-row>
 
         <a-modal
             v-model="CBEModal.show"
