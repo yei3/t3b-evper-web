@@ -84,10 +84,6 @@ import errorHandler from '@/views/errorHandler';
 
 export default {
     props: {
-        showContinueButton: {
-            type: Boolean,
-            default: false,
-        },
     },
     data() {
         return {
@@ -106,6 +102,7 @@ export default {
             nextStep: 'nextStep',
             previousStep: 'previousStep',
             updateEvaluationStored: 'updateEvaluationForm',
+            setLastStep: 'setLastStep',
         }),
         handleForm(e) {
             e.preventDefault();
@@ -121,27 +118,29 @@ export default {
         },
         async createEvaluation() {
             const user = authService.getUserData();
-            const response = await client3B.evaluation.create({
-                evaluatorUserId: user.id,
-                term: 1,
-                name: this.evaluation.name,
-                description: this.evaluation.description,
-                instructions: this.evaluation.instructions,
-            }).catch((error) => {
-                errorHandler(this, error);
-            });
+            // const response = await client3B.evaluation.create({
+            //     evaluatorUserId: user.id,
+            //     term: 1,
+            //     name: this.evaluation.name,
+            //     description: this.evaluation.description,
+            //     instructions: this.evaluation.instructions,
+            // }).catch((error) => {
+            //     errorHandler(this, error);
+            // });
 
             this.view.loading = false;
-            if (!response) return;
+            // if (!response) return;
 
-            this.updateEvaluationStored({
-                id: response.data.result.id,
-                name: this.evaluation.name,
-                description: this.evaluation.description,
-                instructions: this.evaluation.instructions,
-            });
+            // this.updateEvaluationStored({
+            //     id: response.data.result.id,
+            //     name: this.evaluation.name,
+            //     description: this.evaluation.description,
+            //     instructions: this.evaluation.instructions,
+            // });
             this.$message.success('Evaluación guardada correctamente');
-            if (this.showContinueButton) {
+            if (this.lastStep == 0) {
+                this.setLastStep(1);
+            } else {
                 this.nextStep();
             }
         },
@@ -168,14 +167,13 @@ export default {
                 instructions: this.evaluation.instructions,
             });
             this.$message.success('Evaluación guardada correctamente');
-            if (this.showContinueButton) {
-                this.nextStep();
-            }
+            this.nextStep();
         },
     },
     computed: {
         ...mapGetters({
             evaluationStored: 'evaluation',
+            lastStep: 'lastStep',
         }),
     },
 };

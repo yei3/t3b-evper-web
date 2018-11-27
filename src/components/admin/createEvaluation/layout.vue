@@ -75,7 +75,7 @@
                         class="add-button"
                         style="width: 48%;"
                         @click="view.sectionModal.show=true"
-                        v-show="currentStep !== 0 || evaluation.id"
+                        v-show="lastStep !== 0 || evaluation.id"
                     >
                         <a-icon type='plus' /> Agregar Sección
                     </a-button>
@@ -143,6 +143,39 @@ export default {
     },
     data() {
         return {
+            defaultObjetives: [
+                {
+                    form: 'Objetivos AV',
+                    objetives: [
+                        'Ventas', 'Merma', 'Mistery Shopper', 'Diferencias en caja registradora',
+                    ]
+                },
+                {
+                    form: 'Objetivos Gerente de Distrito',
+                    objetives: [
+                        'Ventas', 'Merma', 'Costo mano de obra', 'Rotación (Tienda)',
+                        'Mistery Shopper', 'SO Promedio por tienda', 'Auditorias',
+                        'Entrega de recibos y horarios', 'Aprovación de exámenes AV',
+                    ]
+                },
+                {
+                    form: 'Objetivos Gerente de Tienda',
+                    objetives: [
+                        'Ventas', 'Merma', 'Diferencias de dinero', 'Mistery Shopper',
+                        'Rotación de AV', 'Rotación de TR', 'Costo mano de obra', 'Auditorias',
+                        'Máximo SO en tienda por productos no pedidos',
+                    ]
+                },
+
+                {
+                    form: 'Gerente de Zona',
+                    objetives: [
+                        'Ventas', 'Merma', 'Diferencias de dinero', 'Mistery Shopper',
+                        'Rotación de AV', 'Rotación de TR', 'Costo mano de obra', 'Auditorias',
+                        'Máximo SO en tienda por productos no pedidos',
+                    ]
+                },
+            ],
             view: {
                 activeSection: 0,
                 sectionModal: {
