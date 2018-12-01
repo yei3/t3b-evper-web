@@ -43,7 +43,8 @@
                         </a>
                     </a-tooltip>
                     <a-tooltip placement="top" title="Borrar Subsección">
-                        <a @click="removeSubsection(subsection.id)" v-show="subsection.title.visible"
+                        <a @click="removeSubsection(subsection.id)"
+                            v-show="subsection.title.visible"
                             style="color: #777; margin-left: 10px;"
                         >
                             <a-icon type="delete" class="form-icon"/>

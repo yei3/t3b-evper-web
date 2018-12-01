@@ -279,7 +279,7 @@ export default {
 .ant-menu .ant-menu-submenu-title {
     background: #333;
     color: #93a6b9;
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
     font-size: 13px;
 }
@@ -356,7 +356,7 @@ export default {
     color: #fff;
     opacity: 0.8;
     cursor: pointer;
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
     text-decoration:none;
 }
