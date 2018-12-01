@@ -73,7 +73,7 @@
                     <a-button
                         type='dashed'
                         class="add-button"
-                        style="width: 48%;"
+                        style="width: 48%; min-width: 200px;"
                         @click="view.sectionModal.show=true"
                         v-show="lastStep !== 0 || evaluation.id"
                     >
@@ -84,7 +84,7 @@
                     style="padding-top: 10px; text-align: right;"
                 >
                     <a-button
-                        style="color: #fb4646; width: 48%;"
+                        style="color: #fb4646; width: 48%; min-width: 200px;"
                         @click="deleteSection(currentStep)"
                         v-show="currentStep !== 0"
                     >
@@ -176,8 +176,8 @@ export default {
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
             this.cancelAddSection();
-            this.setStep(this.view.steps.length - 1);
-            this.setLastStep(this.view.steps.length - 1);
+            // this.setStep(this.view.steps.length - 1);
+            // this.setLastStep(this.view.steps.length - 1);
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;

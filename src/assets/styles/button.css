@@ -45,3 +45,12 @@
 .has-error .ant-input:not([disabled]):hover {
     border-color: #148b74;
 }
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #1ab394;
+    border-color: #1ab394;
+}
+
+.ant-form input[type="checkbox"]:focus {
+    border-color: #1ab394;
+}

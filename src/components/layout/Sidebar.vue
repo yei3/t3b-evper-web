@@ -1,6 +1,6 @@
 <template>
     <a-layout-sider
-        breakpoint="sm"
+        breakpoint="lg"
         :trigger="null"
         collapsible
         v-model="sidebarCollapsed"

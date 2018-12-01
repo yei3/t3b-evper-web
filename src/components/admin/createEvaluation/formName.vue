@@ -131,12 +131,12 @@ export default {
             this.view.loading = false;
             // if (!response) return;
 
-            // this.updateEvaluationStored({
-            //     id: response.data.result.id,
-            //     name: this.evaluation.name,
-            //     description: this.evaluation.description,
-            //     instructions: this.evaluation.instructions,
-            // });
+            this.updateEvaluationStored({
+                // id: response.data.result.id,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
+            });
             this.$message.success('Evaluación guardada correctamente');
             if (this.lastStep === 0) {
                 this.setLastStep(1);
