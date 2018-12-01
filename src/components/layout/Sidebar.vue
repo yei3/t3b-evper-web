@@ -95,11 +95,11 @@
                     >
                         <span slot="title">
                             <a-icon type="user"/>
-                            <span>Colaborador</span>
+                            <span>Evaluado</span>
                         </span>
                         <a-menu-item key="1">
                             <router-link :to="{ name: 'collaborator-home' }"></router-link>
-                            <span>Home Colaborador</span>
+                            <span>Home Evaluado</span>
                         </a-menu-item>
                         <a-menu-item key="2">
                             <router-link
@@ -113,11 +113,11 @@
                     >
                         <span slot="title">
                             <a-icon type="user"/>
-                            <span>Jefe</span>
+                            <span>Evaluador</span>
                         </span>
                         <a-menu-item key="3">
                             <router-link :to="{ name: 'boss-home' }"></router-link>
-                            <span>Home Jefe</span>
+                            <span>Home Evaluador</span>
                         </a-menu-item>
                         <a-menu-item key="4">
                             <router-link to="/"></router-link>
@@ -222,13 +222,13 @@ export default {
                 return 'Administrador';
             }
             if (role === authService.ROLES.SUPERVISOR) {
-                return 'Supervisor';
+                return 'Evaluador';
             }
             if (role === authService.ROLES.COLLABORATOR) {
-                return 'Colaborador';
+                return 'Evaluado';
             }
 
-            return 'Colaborador';
+            return 'Evaluado';
         },
     },
     computed: {

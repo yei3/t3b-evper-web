@@ -306,7 +306,7 @@ export default {
                 },
                 {
                     key: '2',
-                    status: 'Pendiente',
+                    status: 'En proceso',
                     objective: {
                         title: 'Portal de Beneficios',
                         subtitle: 'Entregable: Sitio productivo con la información de beneficios',
@@ -349,7 +349,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Completado') {

@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="12">
-                Evaluaciones de Colaboradores Pendientes
+                Evaluaciones de Colaboradores En procesos
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <router-link
@@ -192,7 +192,7 @@ export default {
                 },
                 {
                     key: '4',
-                    status: 'Pendiente',
+                    status: 'En proceso',
                     evaluation: {
                         title: 'Período 2018-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -202,7 +202,7 @@ export default {
                 },
                 {
                     key: '5',
-                    status: 'Pendiente',
+                    status: 'En proceso',
                     evaluation: {
                         title: 'Período 2018-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -229,7 +229,7 @@ export default {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
         transformStatus(status) {
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'Continuar';
             }
             if (status === 'Finalizada') {
@@ -241,7 +241,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Finalizada') {

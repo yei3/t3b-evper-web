@@ -171,7 +171,7 @@ export default {
         getStatus(status) {
             switch (status) {
             case 0: return 'No iniciado';
-            case 1: return 'Pendiente';
+            case 1: return 'En proceso';
             case 2: return 'Finalizado';
             case 3: return 'Validado';
 
@@ -182,7 +182,7 @@ export default {
             return 'No iniciado';
         },
         transformStatus(status) {
-            if (status === 'Pendiente' || status === 'Finalizado') {
+            if (status === 'En proceso' || status === 'Finalizado') {
                 return 'Continuar';
             }
             return 'Iniciar';
@@ -190,7 +190,7 @@ export default {
         selectTagColor(status) {
             switch (status) {
             case 'No iniciado': return 'ant-tag-red';
-            case 'Pendiente': return 'ant-tag-yellow';
+            case 'En proceso': return 'ant-tag-yellow';
             case 'Finalizado': return 'ant-tag-green';
             case 'Validado': return 'ant-tag-blue';
 

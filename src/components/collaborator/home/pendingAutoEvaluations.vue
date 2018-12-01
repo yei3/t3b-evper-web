@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="12">
-                Autoevaluaciones pendientes
+                Mis evaluaciones
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <router-link
@@ -100,7 +100,7 @@ export default {
                 },
                 {
                     key: '2',
-                    status: 'Pendiente',
+                    status: 'En proceso',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -122,7 +122,7 @@ export default {
     },
     methods: {
         transformStatus(status) {
-            if (status === 'Pendiente' || status === 'Finalizado') {
+            if (status === 'En proceso' || status === 'Finalizado') {
                 return 'Continuar';
             }
             return 'Iniciar';
@@ -131,7 +131,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Finalizado') {

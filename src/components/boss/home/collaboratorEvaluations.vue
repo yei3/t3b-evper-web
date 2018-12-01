@@ -217,7 +217,7 @@ export default {
             data: [
                 {
                     key: '1',
-                    status: 'Pendiente de revisión',
+                    status: 'En proceso de revisión',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -240,7 +240,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Finalizado') {

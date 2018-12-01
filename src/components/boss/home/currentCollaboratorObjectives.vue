@@ -379,7 +379,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Completado') {
