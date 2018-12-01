@@ -37,3 +37,7 @@ h4 {
     font-size: 14px;
     margin-bottom: 10px;
 }
+
+body {
+    min-width: 576px;
+}

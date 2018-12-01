@@ -66,7 +66,8 @@
                     <a-dropdown>
                         <a-menu slot="overlay">
                             <a-menu-item @click="test">
-                                <router-link :to="{ name: 'update-evaluation', params: { id: record.key}}">
+                                <router-link
+                                    :to="{ name: 'update-evaluation', params: { id: record.key}}">
                                     Editar
                                 </router-link>
                             </a-menu-item>
@@ -84,8 +85,8 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
 import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
@@ -120,27 +121,24 @@ export default {
             columns,
         };
     },
-    created () {
+    created() {
         // fetch the data when the view is created and the data is
         // already being observed
-        this.search()
+        this.search();
     },
     watch: {
         // call again the method if the route changes
-        '$route': 'search'
+        $route: 'search',
     },
     methods: {
         async deleteEvaluation(id) {
             this.spin = true;
-            console.log('delete');
-            let response = null;
-            console.log('deleteing', id);
             try {
-                response = await client3B.evaluation.delete({
+                await client3B.evaluation.delete({
                     Id: id,
                 });
             } catch (error) {
-
+                errorHandler(error);
             }
             await this.search();
         },
@@ -148,15 +146,13 @@ export default {
             console.log('works');
         },
         async search() {
-            let items = null;
             let response = null;
             this.spin = true;
             try {
                 response = await client3B.evaluation.getAll();
-                items = response.data.result.items;
+                const { items } = response.data.result;
                 this.data = [];
-                for (let index = 0; index < items.length; index++) {
-
+                for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
                         key: items[index].id,
                         status: this.getStatus(items[index].status),
@@ -174,14 +170,16 @@ export default {
         },
         getStatus(status) {
             switch (status) {
-                case 0: return 'No iniciado';
-                case 1: return 'Pendiente';
-                case 2: return 'Finalizado';
-                case 3: return 'Validado';
+            case 0: return 'No iniciado';
+            case 1: return 'Pendiente';
+            case 2: return 'Finalizado';
+            case 3: return 'Validado';
 
-                default:
-                    break;
+            default:
+                break;
             }
+
+            return 'No iniciado';
         },
         transformStatus(status) {
             if (status === 'Pendiente' || status === 'Finalizado') {
@@ -191,13 +189,13 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado': return 'ant-tag-red';
-                case 'Pendiente': return 'ant-tag-yellow';
-                case 'Finalizado': return 'ant-tag-green';
-                case 'Validado': return 'ant-tag-blue';
+            case 'No iniciado': return 'ant-tag-red';
+            case 'Pendiente': return 'ant-tag-yellow';
+            case 'Finalizado': return 'ant-tag-green';
+            case 'Validado': return 'ant-tag-blue';
 
-                default:
-                    return 'ant-tag-gray';
+            default:
+                return 'ant-tag-gray';
             }
         },
     },

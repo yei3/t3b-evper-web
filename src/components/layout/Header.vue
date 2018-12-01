@@ -19,7 +19,7 @@
                         <a-button
                             type="dashed"
                             icon="logout"
-                            style="border-style: none;"
+                            style="border-style: none; margin-right: 20px;"
                             class="logout-buttom"
                             @click="logout()"
                         >

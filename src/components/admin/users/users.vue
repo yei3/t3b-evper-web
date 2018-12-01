@@ -18,7 +18,11 @@
             </a-col>
         </a-row>
         <br /><br />
-        <a-input-search placeholder="Ingrese número o nombre del empleado" @search="onSearch" enterButton="Search" />
+        <a-input-search
+            placeholder="Ingrese número o nombre del empleado"
+            @search="onSearch"
+            enterButton="Search"
+        />
     </div>
 </template>
 <script>

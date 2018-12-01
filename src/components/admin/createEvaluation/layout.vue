@@ -41,7 +41,7 @@
             </a-row>
             <a-divider />
             <a-row :gutter="16">
-                <a-col :span="6"
+                <a-col :sm="24" :md="6"
                     v-for="(step, index) in view.steps"
                     :key="index"
                 >
@@ -73,9 +73,9 @@
                     <a-button
                         type='dashed'
                         class="add-button"
-                        style="width: 48%;"
+                        style="width: 48%; min-width: 200px;"
                         @click="view.sectionModal.show=true"
-                        v-show="currentStep !== 0 || evaluation.id"
+                        v-show="lastStep !== 0 || evaluation.id"
                     >
                         <a-icon type='plus' /> Agregar Sección
                     </a-button>
@@ -84,7 +84,7 @@
                     style="padding-top: 10px; text-align: right;"
                 >
                     <a-button
-                        style="color: #fb4646; width: 48%;"
+                        style="color: #fb4646; width: 48%; min-width: 200px;"
                         @click="deleteSection(currentStep)"
                         v-show="currentStep !== 0"
                     >
@@ -128,7 +128,6 @@ import formName from '@/components/admin/createEvaluation/formName.vue';
 import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
-import { error } from 'util';
 
 export default {
     components: {
@@ -177,8 +176,8 @@ export default {
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
             this.cancelAddSection();
-            this.setStep(this.view.steps.length - 1);
-            this.setLastStep(this.view.steps.length - 1);
+            // this.setStep(this.view.steps.length - 1);
+            // this.setLastStep(this.view.steps.length - 1);
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;
