@@ -113,6 +113,63 @@
                             />
                         </a-form-item>
                     </a-col>
+                    <a-col :md="14" :sm="24" v-show="question.answerType === 'objective'">
+                        <a-form-item
+                            :label="'Valor del Objetivo ' + (indexQ + 1)"
+                            :fieldDecoratorId="'expectedValue-' + subsection.id + '-' + question.id"
+                            style="margin: 10px 0px;"
+                            :fieldDecoratorOptions="{
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: 'Ingresa el valor numérico del objetivo'
+                                    }
+                                ]
+                            }"
+                        >
+                            <a-input style="width: 95%;"
+                                type="number"
+                                v-model="question.expectedValue"
+                                placeholder="Escribe el texto de la pregunta"
+                            />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :md="10" :sm="24" v-show="question.answerType === 'objective'">
+                        <a-form-item
+                            :label="'Relación de aprobación del objetivo ' + (indexQ + 1)"
+                            :fieldDecoratorId="`approvalRship-${subsection.id}-${question.id}`"
+                            style="margin: 10px 0px;"
+                            :fieldDecoratorOptions="{
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: 'Selecciona un tipo de respuesta'
+                                    }
+                                ]
+                            }"
+                        >
+                            <a-select style="width: 90%; margin-right: 10px;"
+                                v-model="question.approvalRelationship"
+                                placeholder="Selecciona un tipo de respuesta"
+                            >
+                                <a-select-option value="gt">
+                                    Mientras más grande mejor
+                                </a-select-option>
+                                <a-select-option value="lt">
+                                    Mientras más pequeño mejor
+                                </a-select-option>
+                                <a-select-option value="eq">
+                                    Debe ser igual
+                                </a-select-option>
+                            </a-select>
+                            <a-icon
+                                class='dynamic-delete-button'
+                                type='minus-circle-o'
+                                @click="removeQuestion(subsection.id, question.id)"
+                            />
+                        </a-form-item>
+                    </a-col>
+                    <a-divider />
                 </a-col></a-row>
                 <a-row><a-col :sm="24" :md="12" style="text-align: center;">
                     <a-button
@@ -235,6 +292,10 @@ export default {
                 value: '',
             },
             answerTypes: [
+                {
+                    label: 'Objetivo',
+                    value: 'objective',
+                },
                 {
                     label: 'Pregunta abierta',
                     value: 'open',

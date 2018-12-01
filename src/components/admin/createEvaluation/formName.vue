@@ -117,7 +117,7 @@ export default {
             });
         },
         async createEvaluation() {
-            const user = authService.getUserData();
+            // const user = authService.getUserData();
             // const response = await client3B.evaluation.create({
             //     evaluatorUserId: user.id,
             //     term: 1,
@@ -138,7 +138,7 @@ export default {
             //     instructions: this.evaluation.instructions,
             // });
             this.$message.success('Evaluación guardada correctamente');
-            if (this.lastStep == 0) {
+            if (this.lastStep === 0) {
                 this.setLastStep(1);
             } else {
                 this.nextStep();

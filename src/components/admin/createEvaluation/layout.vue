@@ -41,7 +41,7 @@
             </a-row>
             <a-divider />
             <a-row :gutter="16">
-                <a-col :span="6"
+                <a-col :sm="24" :md="6"
                     v-for="(step, index) in view.steps"
                     :key="index"
                 >
@@ -128,7 +128,6 @@ import formName from '@/components/admin/createEvaluation/formName.vue';
 import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
-import { error } from 'util';
 
 export default {
     components: {
@@ -143,39 +142,6 @@ export default {
     },
     data() {
         return {
-            defaultObjetives: [
-                {
-                    form: 'Objetivos AV',
-                    objetives: [
-                        'Ventas', 'Merma', 'Mistery Shopper', 'Diferencias en caja registradora',
-                    ]
-                },
-                {
-                    form: 'Objetivos Gerente de Distrito',
-                    objetives: [
-                        'Ventas', 'Merma', 'Costo mano de obra', 'Rotación (Tienda)',
-                        'Mistery Shopper', 'SO Promedio por tienda', 'Auditorias',
-                        'Entrega de recibos y horarios', 'Aprovación de exámenes AV',
-                    ]
-                },
-                {
-                    form: 'Objetivos Gerente de Tienda',
-                    objetives: [
-                        'Ventas', 'Merma', 'Diferencias de dinero', 'Mistery Shopper',
-                        'Rotación de AV', 'Rotación de TR', 'Costo mano de obra', 'Auditorias',
-                        'Máximo SO en tienda por productos no pedidos',
-                    ]
-                },
-
-                {
-                    form: 'Gerente de Zona',
-                    objetives: [
-                        'Ventas', 'Merma', 'Diferencias de dinero', 'Mistery Shopper',
-                        'Rotación de AV', 'Rotación de TR', 'Costo mano de obra', 'Auditorias',
-                        'Máximo SO en tienda por productos no pedidos',
-                    ]
-                },
-            ],
             view: {
                 activeSection: 0,
                 sectionModal: {

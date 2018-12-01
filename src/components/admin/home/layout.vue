@@ -13,7 +13,7 @@
                             Home Administrador
                         </router-link>
                     </a-breadcrumb-item>
-                </a-breadcrumb>                
+                </a-breadcrumb>
             </a-col>
             <a-col :span="4">
                 <a-button type="primary" ghost @click="initNewEvaluationForm">
@@ -36,11 +36,10 @@
 <script>
 import { mapActions } from 'vuex';
 import searchEvaluation from '@/components/admin/search/evaluations.vue';
-import createEvaluation from '@/components/admin/createEvaluation/layout.vue';
 
 export default {
     components: {
-        searchEvaluation
+        searchEvaluation,
     },
     methods: {
         ...mapActions({
