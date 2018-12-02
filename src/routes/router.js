@@ -62,6 +62,18 @@ export default new Router({
             },
         },
         {
+            path: '/profile',
+            name: 'profile',
+            component: Login,
+            beforeEnter: (to, from, next) => {
+                // Validate that the user is not login
+                if (authService.validateAccessToken()) {
+                    return next({ name: 'home' });
+                }
+                return next();
+            },
+        },
+        {
             path: '*',
             component: NotFound,
         },

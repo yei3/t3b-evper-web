@@ -3,9 +3,8 @@
         <a-row class="form-autoevaluation">
             <a-row class="form-tittle">
                 <a-col :span="24" style="margin-bottom: 20px">
-                    <span style="font-size: 28px;
-                        font-weight: 400;
-                        font-family: 'Open Sans';"
+                    <span style="font-size: 26px;
+                        font-weight: 100;"
                     >
                         {{sectionTitle}}
                     </span>

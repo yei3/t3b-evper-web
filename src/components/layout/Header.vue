@@ -1,5 +1,5 @@
 <template>
-    <a-layout-header class="header" style="background: #fff; padding: 0px; height: 60px;">
+    <a-layout-header class="header" style="background: white; padding: 0px; height: 60px;">
         <a-row>
             <a-col :span="12">
                 <a-icon
@@ -10,16 +10,16 @@
             </a-col>
             <a-col :span="12">
                 <a-row>
-                    <a-col :span="12" style="text-align: right;">
+                    <a-col :span="17" style="text-align: right;">
+                        <b class="beta-tag">B E T A</b>
                         <!--     <a-badge :count="5">
                             <a-icon type="bell" />
                         </a-badge> -->
                     </a-col>
-                    <a-col :span="12" style="text-align: right;">
+                    <a-col :span="7" style="text-align: right;">                        
                         <a-button
-                            type="dashed"
                             icon="logout"
-                            style="border-style: none; margin-right: 20px;"
+                            style="border-style: none"
                             class="logout-buttom"
                             @click="logout()"
                         >
@@ -57,6 +57,13 @@ export default {
 </script>
 
 <style>
+    .beta-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+        text-align: center;
+        background: #dddddd;
+        border-radius: 2px;        
+    }
     .logout-buttom:hover {
         color: #000;
     }

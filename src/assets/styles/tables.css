@@ -1,6 +1,5 @@
 .ant-table-thead > tr > th {
     background: #fff;
-    font-family: 'Open Sans';
     font-weight: 700;
     font-size: 13px;
     color: #676a6c;
@@ -20,7 +19,6 @@ p {
 }
 
 .table-link-light {
-    font-family: 'Open Sans';
     font-weight: 400;
     font-size: 13px;
     color: #676a6c;
@@ -33,7 +31,6 @@ p {
 }
 
 .table-link {
-    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 13px;
     color: #676a6c;

@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title">
-            <a-col :span="12">
+            <a-col :span="21" style="text-align: center;">
                 Autoevaluaciones En procesos
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="3" style="text-align: right;">
                 <router-link class="collapse-tittle-link" to="/foo">Ver resultados</router-link>
                 <a>
                     <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>

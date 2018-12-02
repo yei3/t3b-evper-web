@@ -4,7 +4,7 @@
             <a-col :span="12">
                 Autoevaluaciones En procesos
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="3" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"

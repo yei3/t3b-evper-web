@@ -1,16 +1,11 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23">
                 Mis evaluaciones
             </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <router-link
-                    class="collapse-tittle-link"
-                    :to="{ name: 'collaborator-assessments' }"
-                >
-                    Ver todas
-                </router-link>
+            <a-col :span="1" style="text-align: right; color: #fff;">
+                
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -144,5 +139,9 @@ export default {
 </script>
 
 <style scoped>
-
+    .background--title {
+        color: #fff;
+        background: #e00000;
+        text-align: center;
+    }    
 </style>
