@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23">
                 Seguimiento a Objetivos Actuales de Colaboradores
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="1" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"

@@ -139,9 +139,5 @@ export default {
 </script>
 
 <style scoped>
-    .background--title {
-        color: #fff;
-        background: #e00000;
-        text-align: center;
-    }    
+    
 </style>

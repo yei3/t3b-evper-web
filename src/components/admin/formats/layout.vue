@@ -2,7 +2,7 @@
     <div>
         <a-row :gutter="32"  class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Crear Evaluación</h1>
+                <h1 class="breadcrumb-header">Crear Formato</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
@@ -14,16 +14,16 @@
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path">Evaluaciones</strong>
+                        <strong class="breadcrumb-path">Formatos</strong>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
                         <strong class="breadcrumb-path-active"
                             v-if="!$route.params.id"
                         >
-                            Crear Evaluación
+                            Crear Formato
                         </strong>
                         <strong class="breadcrumb-path-active" v-else>
-                            Actualizar Evaluación
+                            Actualizar Formato
                         </strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
@@ -124,8 +124,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import formName from '@/components/admin/createEvaluation/formName.vue';
-import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
+import formName from '@/components/admin/formats/formName.vue';
+import formGeneric from '@/components/admin/formats/formGeneric.vue';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -153,7 +153,7 @@ export default {
                 steps: [
                     {
                         id: 0,
-                        label: 'Nombre de la evaluación',
+                        label: 'Nombre del Formato',
                         name: 'name',
                     },
                 ],

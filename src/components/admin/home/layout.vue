@@ -2,7 +2,7 @@
     <div>
         <a-row :gutter="32"  class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Evaluaciones de Personal</h1>
+                <h1 class="breadcrumb-header">Administración de Formatos de Evaluaciones</h1>
             </a-col>
             <a-col :span="20">
                 <a-breadcrumb>
@@ -17,16 +17,16 @@
             </a-col>
             <a-col :span="4">
                 <a-button type="primary" ghost @click="initNewEvaluationForm">
-                    Crear evaluación <a-icon type="plus" />
+                    Crear formato <a-icon type="plus" />
                 </a-button>
             </a-col>
         </a-row>
         <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
-            <h3 class="breadcrumb-header">Criterios de búsqueda</h3>
+            <h3 class="breadcrumb-header">Formatos</h3>
             <a-divider />
             <a-row class="main-content" style="margin-top: 30px;">
                 <a-col :span="24" style="padding-bottom: 30px;">
-                    <search-evaluation />
+                    <search-formats />
                 </a-col>
             </a-row>
         </div>
@@ -35,11 +35,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import searchEvaluation from '@/components/admin/search/evaluations.vue';
+import searchFormats from '@/components/admin/search/formats.vue';
 
 export default {
     components: {
-        searchEvaluation,
+        searchFormats,
     },
     methods: {
         ...mapActions({
@@ -47,7 +47,7 @@ export default {
         }),
         initNewEvaluationForm() {
             this.clearEvaluationForm();
-            this.$router.push({ name: 'create-evaluation' });
+            this.$router.push({ name: 'create-format' });
         },
     },
 };

@@ -6,19 +6,19 @@
         <a-row class="form-autoevaluation">
             <a-row class="form-tittle">
                 <a-col :span="24">
-                    <h1>Evaluación - Datos Generales</h1>
+                    <h1>Formato - Datos Generales</h1>
                 </a-col>
             </a-row>
             <a-row :gutter="16">
                 <a-col :sm="24" :md="12">
                     <a-form-item
-                        label='Nombre de la Evaluación'
+                        label='Nombre del Formato'
                         fieldDecoratorId="name"
                         :fieldDecoratorOptions="{
                             rules: [
                                 {
                                     required: true,
-                                    message: 'Ingresa el nombre de la Evaluación'
+                                    message: 'Ingresa el nombre del Formato'
                                 }
                             ]
                         }"
@@ -28,13 +28,13 @@
                 </a-col>
                 <a-col :sm="24" :md="12">
                     <a-form-item
-                        label='Descripción de la Evaluación'
+                        label='Descripción del Formato'
                         fieldDecoratorId="description"
                         :fieldDecoratorOptions="{
                             rules: [
                                 {
                                     required: true,
-                                    message: 'Ingresa la Descripción de la Evaluación'
+                                    message: 'Ingresa la Descripción del Formato'
                                 }
                             ]
                         }"
@@ -44,13 +44,13 @@
                 </a-col>
                 <a-col :span="24">
                     <a-form-item
-                        label='Instrucciones de la Evaluación'
+                        label='Instrucciones del Formato'
                         fieldDecoratorId="instructions"
                         :fieldDecoratorOptions="{
                             rules: [
                                 {
                                     required: true,
-                                    message: 'Ingresa las instrucciones para realizar la evaluación'
+                                    message: 'Ingresa las instrucciones para realizar el Formato'
                                 }
                             ]
                         }"

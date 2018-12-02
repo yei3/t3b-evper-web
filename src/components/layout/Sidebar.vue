@@ -144,11 +144,11 @@
                             <span>Home </span>
                         </a-menu-item>
                         <a-menu-item key="8">
-                            <router-link to="/"></router-link>
+                            <router-link :to="{ name: 'admin-home' }"></router-link>
                             <span>Formatos</span>
                         </a-menu-item>
                         <a-menu-item key="9">
-                            <router-link to="/"></router-link>
+                            <router-link :to="{ name: 'admin-evaluations' }"></router-link>
                             <span>Evaluaciones</span>
                         </a-menu-item>
                         <a-menu-item key="10">
@@ -279,10 +279,6 @@ export default {
 .ant-menu .ant-menu-submenu-title {
     background: #333;
     color: #93a6b9;
-<<<<<<< HEAD
-    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-=======
->>>>>>> t3b_pbi_improve-styles
     font-weight: 600;
     font-size: 13px;
 }

@@ -18,6 +18,9 @@ export default {
         background-color: #2f4050;
         font-size: 13px;
     }
+    .text-center {
+        text-align: center;
+    }
     a:hover {
         color: white
     }
@@ -31,4 +34,9 @@ export default {
     .collapse-tittle-link {
         color: #fff;
     }
+    .background--title {
+        color: #fff;
+        background: #e00000;
+        text-align: center;
+    }   
 </style>

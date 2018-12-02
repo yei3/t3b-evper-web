@@ -35,7 +35,7 @@ export default {
 }
 
 .collapse-mod >>> .ant-collapse-header {
-    color: #676a6c;
+    color: #fff;
 }
 
 .badges-collaborator {
