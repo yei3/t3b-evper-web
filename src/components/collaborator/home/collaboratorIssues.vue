@@ -1,7 +1,6 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
         <a-collapse-panel header="Pendientes como colaborador" key="1" style="
-            font-family: 'Open Sans';
             font-weight: 600;
             font-size: 14px;"
         >
@@ -30,7 +29,6 @@ export default {
 
 <style scoped>
 .collapse-mod {
-    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 14px;
 }
@@ -50,7 +48,6 @@ export default {
 }
 
 .badged-text {
-    font-family: "Open Sans";
     font-weight: 600;
     font-size: 12px;
     color: #777;

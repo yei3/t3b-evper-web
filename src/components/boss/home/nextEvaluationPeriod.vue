@@ -17,7 +17,6 @@ export default {
 
 <style scoped>
 .collapse-mod {
-    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 14px;
 }
@@ -34,7 +33,6 @@ export default {
 .tittle-collapse {
     font-weight: 200;
     font-size: 24px;
-    font-family: "Open Sans";
     font-weight: 300;
     padding-top: 10px;
     padding-bottom: 0px;

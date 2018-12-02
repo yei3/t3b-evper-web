@@ -14,20 +14,17 @@
 
 h1 {
     font-size: 26px;
-    font-family: 'Open Sans';
     font-weight: 100;
     color: #676a6c;
 }
 
 h2 {
     font-size: 24px;
-    font-family: 'Open Sans';
     font-weight: 100;
     color: #676a6c;
 }
 
 h3, h4, h5 {
-    font-family: 'Open Sans';
     margin-top: 5px;
     font-weight: 600;
     color: #676a6c;

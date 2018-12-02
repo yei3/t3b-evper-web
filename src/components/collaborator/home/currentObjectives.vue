@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="22" style="text-align: center;">
                 Seguimiento a mis objectivos actuales
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="2" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -365,5 +365,9 @@ export default {
 </script>
 
 <style scoped>
-
+    .background--title {
+        color: #fff;
+        background: #e00000;
+        text-align: center;
+    }   
 </style>

@@ -10,10 +10,25 @@ export default {
 </script>
 
 <style>
-    @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i');
+    @import url('https://fonts.googleapis.com/css?family=Quicksand');
+    * {
+        font-family: 'Quicksand', sans-serif;
+    }
     body {
-        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
         background-color: #2f4050;
         font-size: 13px;
+    }
+    a:hover {
+        color: white
+    }
+    .dropdown-icon {
+        color: #fff;
+    }
+    .ant-collapse-borderless {
+        
+        background: #e00000;
+    }
+    .collapse-tittle-link {
+        color: #fff;
     }
 </style>

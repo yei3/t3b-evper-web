@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="21">
                 Autoevaluaciones pendientes
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="3" style="text-align: right; color: #fff;">
                 <router-link
                     class="collapse-tittle-link"
                     :to="{ name: 'collaborator-assessments' }"
@@ -144,5 +144,9 @@ export default {
 </script>
 
 <style scoped>
-
+    .background--title {
+        color: #fff;
+        background: #e00000;
+        text-align: center;
+    }    
 </style>
