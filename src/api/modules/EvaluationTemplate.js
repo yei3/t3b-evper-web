@@ -3,7 +3,7 @@ import Http from './Http';
 /**
  * Class to make operations to the Format entity
  */
-class EvaluationTemplate extends Http {
+class Format extends Http {
     constructor() {
         super();
         this.entityPath = '/api/services/app/EvaluationTemplate';
@@ -66,4 +66,4 @@ class EvaluationTemplate extends Http {
     }
 }
 
-export default EvaluationTemplate;
+export default Format;

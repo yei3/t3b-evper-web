@@ -28,15 +28,14 @@ export default {
         color: #fff;
     }
     .ant-collapse-borderless {
-        
-        background: #e00000;
+        background: #f35b5b;
     }
     .collapse-tittle-link {
         color: #fff;
     }
     .background--title {
         color: #fff;
-        background: #e00000;
+        background: #f35b5b;
         text-align: center;
     }   
 </style>

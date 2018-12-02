@@ -35,9 +35,9 @@
         >
             <a-row class="steps">
                 <span class="breadcrumb-header" style="font-weight: 400;">
-                    {{evaluation.name}}
+                    {{format.name}}
                 </span>
-                <span style="font-size: 16px;">{{evaluation.description}}</span>
+                <span style="font-size: 16px;">{{format.description}}</span>
             </a-row>
             <a-divider />
             <a-row :gutter="16">
@@ -75,7 +75,7 @@
                         class="add-button"
                         style="width: 48%; min-width: 200px;"
                         @click="view.sectionModal.show=true"
-                        v-show="lastStep !== 0 || evaluation.id"
+                        v-show="lastStep !== 0 || format.id"
                     >
                         <a-icon type='plus' /> Agregar Sección
                     </a-button>
@@ -194,14 +194,14 @@ export default {
         },
         async fetchData() {
             if (!this.$route.params.id) return;
-            const response = await client3B.evaluation.get(this.$route.params.id)
+            const response = await client3B.format.get(this.$route.params.id)
                 .catch(error => errorHandler(error));
             if (!response) return;
 
-            const evaluaction = response.data.result;
-            this.evaluationId = evaluaction.id;
-            console.log(evaluaction);
-            evaluaction.sections.forEach((section) => {
+            const format = response.data.result;
+            this.formatId = format.id;
+            console.log(format);
+            format.sections.forEach((section) => {
                 this.view.steps.push({
                     id: this.view.stepsUUID,
                     label: section.name,
@@ -217,7 +217,7 @@ export default {
         ...mapGetters({
             currentStep: 'currentStep',
             lastStep: 'lastStep',
-            evaluation: 'evaluation',
+            format: 'format',
         }),
         dinamicSteps() {
             return this.view.steps.slice(1);
