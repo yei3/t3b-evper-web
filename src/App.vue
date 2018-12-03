@@ -24,18 +24,38 @@ export default {
     a:hover {
         color: white
     }
+    .ant-tag, .ant-tag:hover {
+        cursor: auto;
+        color: #606060;        
+    }
+    .ant-tag-red {
+        background: #fff1f0;
+    }
+    .ant-tag-blue {
+        background: #d2eeff;
+    }
+    .ant-tag-green {
+        background: #ccfff4;
+    }
+    .ant-tag-yellow {
+        background: #fff6b4;
+    }
     .dropdown-icon {
         color: #fff;
     }
     .ant-collapse-borderless {
-        background: #f35b5b;
+        background: #ff5b5b;
     }
     .collapse-tittle-link {
         color: #fff;
     }
     .background--title {
         color: #fff;
-        background: #f35b5b;
+        line-height: 16px;
         text-align: center;
-    }   
+        background: #ff5b5b;        
+    }
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+        line-height: 16px;
+    }
 </style>

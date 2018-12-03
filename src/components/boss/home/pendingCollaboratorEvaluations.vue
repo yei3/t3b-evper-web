@@ -1,16 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23">
                 Evaluaciones de Colaboradores En procesos
             </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <router-link
-                    class="collapse-tittle-link"
-                    :to="{ name: 'boss-assessments' }"
-                >
-                    Ver todas
-                </router-link>
+            <a-col :span="1" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -46,6 +40,13 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="action">
+                    <!-- <a-button 
+                        class="table-link-light" ghost                        
+                        :to="{ name: 'boss-assessments-apply' }"
+                        v-show="transformStatus(action) !== 'Agendar revisión'"
+                    >
+                        {{transformStatus(action)}}
+                    </a-button> -->
                     <div v-show="transformStatus(action) !== 'Agendar revisión'">
                         <router-link
                             class="table-link-light"
@@ -54,12 +55,13 @@
                             {{transformStatus(action)}}
                         </router-link>
                     </div>
-                    <a class="table-link-light"
+                    <a-button 
+                        class="table-link-light" ghost
                         @click="toggleScheduleReviewModal"
                         v-show="transformStatus(action) === 'Agendar revisión'"
                     >
                         {{transformStatus(action)}}
-                    </a>
+                    </a-button>
                 </span>
             </a-table>
         </a-row>
