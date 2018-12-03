@@ -163,8 +163,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            currentStep: 'currentStep',
-            lastStep: 'lastStep',
+            currentStep: 'currentStepEvaluation',
+            lastStep: 'lastStepEvaluation',
             format: 'format',
         }),
         dinamicSteps() {
