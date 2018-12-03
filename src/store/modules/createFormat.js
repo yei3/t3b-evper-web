@@ -6,12 +6,12 @@ export default {
             currentStep: 0,
             lastStep: 0,
         },
-        evaluation: {},
+        format: {},
     },
     getters: {
         currentStep: state => state.view.currentStep,
         lastStep: state => state.view.lastStep,
-        evaluation: state => state.evaluation,
+        format: state => state.format,
     },
     mutations: {
         nextStep: (_state) => {
@@ -36,13 +36,13 @@ export default {
             const state = _state;
             state.view.lastStep = step;
         },
-        updateEvaluationForm: (_state, data) => {
+        updateFormatForm: (_state, data) => {
             const state = _state;
-            state.evaluation = { ...state.evaluation, ...data };
+            state.format = { ...state.format, ...data };
         },
-        clearEvaluationForm: (_state) => {
+        clearFormatForm: (_state) => {
             const state = _state;
-            state.evaluation = {};
+            state.format = {};
             state.view.currentStep = 0;
             state.view.lastStep = 0;
         },
@@ -63,7 +63,7 @@ export default {
         updateFormatForm: (context, data) => {
             context.commit('updateFormatForm', data);
         },
-        clearEvaluationForm: (context) => {
+        clearFormatForm: (context) => {
             context.commit('clearFormatForm');
         },
     },

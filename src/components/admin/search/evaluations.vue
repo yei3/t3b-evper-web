@@ -146,7 +146,7 @@ export default {
             let response = null;
             this.spin = true;
             try {
-                response = await client3B.Evaluation.getAll();
+                response = await client3B.evaluation.getAll();
                 const { items } = response.data.result;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {

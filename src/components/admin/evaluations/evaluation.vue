@@ -1,207 +1,195 @@
 <template>
     <div>
-        <!-- <a-row :gutter="16">
-            <a-col :span="4">
-                <a-input placeholder="Nombre" />
+        <a-row :gutter="32"  class="breadcrumb-wrapper">
+            <a-col :span="24">
+                <h1 class="breadcrumb-header">Crear Formato</h1>
             </a-col>
-            <a-col :span="5">
-                <a-input placeholder="Area" />
-            </a-col>
-            <a-col :span="3">
-                <a-input placeholder="Evaluador" />
-            </a-col>
-            <a-col :span="3">
-                <a-input placeholder="Evaluado" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Inicio" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Fin" />
-            </a-col>
-            <a-col :span="1">
-                <a-button shape="circle" icon="search" @click="search" />
-            </a-col>
-        </a-row> -->
-        <a-row class="collapse-title" style="margin-top: 16px;">
-            <a-col :span="12">
-                Formatos
-            </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
+            <a-col :span="24">
+                <a-breadcrumb>
+                    <a-breadcrumb-item>
+                        <router-link :to="{ name: 'admin-home' }"
+                            class="breadcrumb-path"
+                        >
+                            Home Administrador
+                        </router-link>
+                    </a-breadcrumb-item>
+                    <a-breadcrumb-item>
+                        <strong class="breadcrumb-path">Formatos</strong>
+                    </a-breadcrumb-item>
+                    <a-breadcrumb-item>
+                        <strong class="breadcrumb-path-active"
+                            v-if="!$route.params.id"
+                        >
+                            Crear Formato
+                        </strong>
+                        <strong class="breadcrumb-path-active" v-else>
+                            Actualizar Formato
+                        </strong>
+                    </a-breadcrumb-item>
+                </a-breadcrumb>
             </a-col>
         </a-row>
-        <a-row v-show="spin">
-            <div style="text-align: center; margin-top: 20px;">
-                <a-spin size="large" />
-            </div>
-        </a-row>
-        <a-row class="collapse-content" v-show="!collapsed && !spin">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                </span>
-                <span slot="format" slot-scope="format">
-                    <p><a class="table-link">
-                        {{format.title}}
-                    </a></p>
-                    <p><small>{{format.subtitle}}</small></p>
-                </span>
-                <span slot="action" slot-scope="text, record">
-                    <a-dropdown>
-                        <a-menu slot="overlay">
-                            <a-menu-item @click="test">
-                                <router-link
-                                    :to="{ name: 'update-format', params: { id: record.key}}">
-                                    Editar
-                                </router-link>
-                            </a-menu-item>
-                            <a-menu-item @click="deleteFormat(record.key)">
-                                Eliminar
-                            </a-menu-item>
-                        </a-menu>
-                        <a-button class="ant-btn-small">
-                            ...
-                        </a-button>
-                    </a-dropdown>
-                </span>
-            </a-table>
-        </a-row>
+        <div class="collapse-content"
+            style="background-color: white;
+            margin: 30px 30px;"
+        >
+            <a-row :gutter="16">
+                <a-col :span="5">
+                    <a-input placeholder="Formatos" />
+                </a-col>
+                <a-col :span="5">
+                    <a-input placeholder="Región" />
+                </a-col>
+                <a-col :span="5">
+                    <a-input placeholder="Areas" />
+                </a-col>
+                <a-col :span="4">
+                    <a-date-picker placeholder="Fecha Inicio" />
+                </a-col>
+                <a-col :span="4">
+                    <a-date-picker placeholder="Fecha Fin" />
+                </a-col>
+            </a-row>
+            
+        </div>
+        <a-modal
+            title="Agregar Nueva Sección"
+            v-model="view.sectionModal.show"
+        >
+            <a-input
+                v-model="view.sectionModal.value"
+                @keyup.enter.native="addSection"
+            />
+            <template slot="footer">
+                <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
+                <a-button key="submit" class="btn-green" @click="addSection">
+                    Agregar
+                </a-button>
+            </template>
+        </a-modal>
     </div>
 </template>
+
 <script>
+import { mapActions, mapGetters } from 'vuex';
+import formName from '@/components/admin/formats/formName.vue';
+import formGeneric from '@/components/admin/formats/formGeneric.vue';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
-const columns = [
-    {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
-    }, {
-        title: 'Evaluación',
-        dataIndex: 'format',
-        key: 'format',
-        scopedSlots: { customRender: 'format' },
-    }, {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
-    },
-    {
-        title: '',
-        key: 'key',
-        scopedSlots: { customRender: 'action' },
-        align: 'right',
-    },
-];
-
 export default {
-    data() {
-        return {
-            spin: false,
-            collapsed: false,
-            data: [],
-            columns,
-        };
+    components: {
+        formName,
+        formGeneric,
     },
     created() {
-        // fetch the data when the view is created and the data is
-        // already being observed
-        this.search();
+        this.fetchData();
     },
     watch: {
-        // call again the method if the route changes
-        $route: 'search',
+        $route: 'fetchData',
+    },
+    data() {
+        return {
+            view: {
+                activeSection: 0,
+                sectionModal: {
+                    show: false,
+                    error: null,
+                    value: '',
+                },
+                stepsUUID: 2,
+                steps: [
+                    {
+                        id: 0,
+                        label: 'Nombre del Formato',
+                        name: 'name',
+                    },
+                ],
+            },
+        };
     },
     methods: {
-        async deleteFormat(id) {
-            this.spin = true;
-            try {
-                await client3B.format.delete({
-                    Id: id,
+        ...mapActions({
+            nextStep: 'nextStep',
+            previousStep: 'previousStep',
+            setStep: 'setStep',
+            setLastStep: 'setLastStep',
+        }),
+        addSection() {
+            const step = {
+                id: this.view.stepsUUID,
+                label: this.view.sectionModal.value,
+                name: this.view.sectionModal.value.replace(/ /g, ''),
+            };
+            this.view.steps.push(step);
+            this.view.stepsUUID += 1;
+            this.cancelAddSection();
+            // this.setStep(this.view.steps.length - 1);
+            // this.setLastStep(this.view.steps.length - 1);
+        },
+        cancelAddSection() {
+            this.view.sectionModal.show = false;
+            this.view.sectionModal.value = '';
+        },
+        deleteSection(sectionStep) {
+            let step = -1;
+            this.view.steps = this.view.steps.filter(() => {
+                step += 1;
+                return sectionStep !== step;
+            });
+            this.setStep(this.view.steps.length - 1);
+            this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
+        },
+        async fetchData() {
+            if (!this.$route.params.id) return;
+            const response = await client3B.format.get(this.$route.params.id)
+                .catch(error => errorHandler(error));
+            if (!response) return;
+
+            const format = response.data.result;
+            this.formatId = format.id;
+            console.log(format);
+            format.sections.forEach((section) => {
+                this.view.steps.push({
+                    id: this.view.stepsUUID,
+                    label: section.name,
+                    name: section.name,
                 });
-            } catch (error) {
-                errorHandler(error);
-            }
-            await this.search();
-        },
-        test() {
-            console.log('works');
-        },
-        async search() {
-            let response = null;
-            this.spin = true;
-            try {
-                response = await client3B.format.getAll();
-                const { items } = response.data.result;
-                this.data = [];
-                for (let index = 0; index < items.length; index += 1) {
-                    this.data.push({
-                        key: items[index].id,
-                        status: this.getStatus(items[index].status),
-                        format: {
-                            title: items[index].name,
-                            subtitle: items[index].description,
-                        },
-                        endDate: items[index].endDate,
-                    });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-            this.spin = false;
-        },
-        getStatus(status) {
-            switch (status) {
-            case 0: return 'No iniciado';
-            case 1: return 'En proceso';
-            case 2: return 'Finalizado';
-            case 3: return 'Validado';
+                this.view.stepsUUID += 1;
+            });
 
-            default:
-                break;
-            }
-
-            return 'No iniciado';
+            this.setLastStep(this.view.steps.length - 1);
         },
-        transformStatus(status) {
-            if (status === 'En proceso' || status === 'Finalizado') {
-                return 'Continuar';
-            }
-            return 'Iniciar';
-        },
-        selectTagColor(status) {
-            switch (status) {
-            case 'No iniciado': return 'ant-tag-red';
-            case 'En proceso': return 'ant-tag-yellow';
-            case 'Finalizado': return 'ant-tag-green';
-            case 'Validado': return 'ant-tag-blue';
-
-            default:
-                return 'ant-tag-gray';
-            }
+    },
+    computed: {
+        ...mapGetters({
+            currentStep: 'currentStep',
+            lastStep: 'lastStep',
+            format: 'format',
+        }),
+        dinamicSteps() {
+            return this.view.steps.slice(1);
         },
     },
 };
 </script>
 
-<style>
-
+<style scoped>
+    .dynamic-delete-button {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    transition: all .3s;
+    }
+    .dynamic-delete-button:hover {
+    color: #777;
+    }
+    .add-button {
+        width: 90%;
+    }
+    .add-button:hover {
+        border-style: dashed;
+    }
 </style>

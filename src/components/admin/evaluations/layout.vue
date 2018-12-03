@@ -16,7 +16,7 @@
                 </a-breadcrumb>
             </a-col>
             <a-col :span="4">
-                <a-button type="primary" ghost @click="initNewFormatForm">
+                <a-button type="primary" ghost @click="initNewEvaluationForm">
                     Crear Evaluación <a-icon type="plus" />
                 </a-button>
             </a-col>
@@ -43,11 +43,11 @@ export default {
     },
     methods: {
         ...mapActions({
-            // clearFormatForm: 'clearFormatForm',
+            clearEvaluationForm: 'clearEvaluationForm',
         }),
-        initNewFormatForm() {
-            // this.clearFormatForm();
-            // this.$router.push({ name: 'create-evaluation' });
+        initNewEvaluationForm() {
+            this.clearEvaluationForm();
+            this.$router.push({ name: 'create-evaluation' });
         },
     },
 };
