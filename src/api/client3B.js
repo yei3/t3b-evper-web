@@ -6,6 +6,7 @@ import Evaluation from './modules/Evaluation';
 import Format from './modules/EvaluationTemplate';
 import Section from './modules/Section';
 import Question from './modules/Question';
+import OrganizationUnit from './modules/OrganizationUnit';
 
 
 /**
@@ -21,6 +22,7 @@ class Client3B {
         this.format = new Format();
         this.question = new Question();
         this.section = new Section();
+        this.organizationUnit = new OrganizationUnit();
     }
 }
 

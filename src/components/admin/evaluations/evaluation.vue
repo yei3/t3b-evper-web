@@ -2,7 +2,7 @@
     <div>
         <a-row :gutter="32"  class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Crear Formato</h1>
+                <h1 class="breadcrumb-header">Crear Evaluación</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
@@ -10,20 +10,20 @@
                         <router-link :to="{ name: 'admin-home' }"
                             class="breadcrumb-path"
                         >
-                            Home Administrador
+                            Administrador de Evaluaciones
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path">Formatos</strong>
+                        <strong class="breadcrumb-path">Evaluaciones</strong>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
                         <strong class="breadcrumb-path-active"
                             v-if="!$route.params.id"
                         >
-                            Crear Formato
+                            Crear Evaluación
                         </strong>
                         <strong class="breadcrumb-path-active" v-else>
-                            Actualizar Formato
+                            Actualizar Evaluación
                         </strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
@@ -33,12 +33,26 @@
             style="background-color: white;
             margin: 30px 30px;"
         >
+            <a-row class="collapse-title" style="margin: 16px 0;">
+                <a-col :span="24">
+                    Programar nueva Evaluación
+                </a-col>
+                
+            </a-row>
             <a-row :gutter="16">
-                <a-col :span="5">
-                    <a-input placeholder="Formatos" />
+                <a-col :span="6">
+                    <a-select placeholder="Formatos" name="format" v-model="formatSelected" style='width: 256px'>
+                        <a-select-option v-for="item in formats" v-bind:value="item.id" :key="item.id">
+                            {{ item.name }}
+                        </a-select-option>
+                    </a-select>
                 </a-col>
                 <a-col :span="5">
-                    <a-input placeholder="Región" />
+                    <a-select defaultValue="Regiones" name="region" v-model="regionSelected" style='width: 200px'>
+                        <a-select-option v-for="item in regions" v-bind:value="item.id" :key="item.id">
+                            {{ item.name }}
+                        </a-select-option>
+                    </a-select>
                 </a-col>
                 <a-col :span="5">
                     <a-input placeholder="Areas" />
@@ -50,146 +64,95 @@
                     <a-date-picker placeholder="Fecha Fin" />
                 </a-col>
             </a-row>
-            
-        </div>
-        <a-modal
-            title="Agregar Nueva Sección"
-            v-model="view.sectionModal.show"
-        >
-            <a-input
-                v-model="view.sectionModal.value"
-                @keyup.enter.native="addSection"
-            />
-            <template slot="footer">
-                <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
-                <a-button key="submit" class="btn-green" @click="addSection">
-                    Agregar
+            <a-row class="text-right" style="padding: 16px 0;">
+                <a-button type="primary" ghost @click="getAllFormats()">
+                    Programar <a-icon type="plus" />
                 </a-button>
-            </template>
-        </a-modal>
+            </a-row>
+            <a-row v-show="spin">
+                <div style="text-align: center; margin-top: 20px;">
+                    <a-spin size="large" />
+                </div>
+            </a-row>
+        </div>
+        
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import formName from '@/components/admin/formats/formName.vue';
-import formGeneric from '@/components/admin/formats/formGeneric.vue';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
 export default {
-    components: {
-        formName,
-        formGeneric,
-    },
-    created() {
-        this.fetchData();
-    },
-    watch: {
-        $route: 'fetchData',
-    },
     data() {
         return {
-            view: {
-                activeSection: 0,
-                sectionModal: {
-                    show: false,
-                    error: null,
-                    value: '',
-                },
-                stepsUUID: 2,
-                steps: [
-                    {
-                        id: 0,
-                        label: 'Nombre del Formato',
-                        name: 'name',
-                    },
-                ],
-            },
+            spin: false,
+            data: [],
+            formats: [],
+            regions: [],
+            areas: [],
+            formatSelected: null,
+            regionSelected: null,
+            areaSelected: null,
         };
     },
+    created() {
+        // fetch the data when the view is created and the data is
+        // already being observed
+        this.getAllFormats();
+        
+    },
+    components: {
+        
+    },
     methods: {
-        ...mapActions({
-            nextStep: 'nextStep',
-            previousStep: 'previousStep',
-            setStep: 'setStep',
-            setLastStep: 'setLastStep',
-        }),
-        addSection() {
-            const step = {
-                id: this.view.stepsUUID,
-                label: this.view.sectionModal.value,
-                name: this.view.sectionModal.value.replace(/ /g, ''),
-            };
-            this.view.steps.push(step);
-            this.view.stepsUUID += 1;
-            this.cancelAddSection();
-            // this.setStep(this.view.steps.length - 1);
-            // this.setLastStep(this.view.steps.length - 1);
+        test() {
+            console.log('works');
         },
-        cancelAddSection() {
-            this.view.sectionModal.show = false;
-            this.view.sectionModal.value = '';
+        async getAllFormats() {
+            let response = null;
+            this.spin = true;
+            try {
+                response = await client3B.format.getAll();                
+                this.formats = response.data.result.items;
+                console.log("formats");
+                console.log(response.data.result.items);
+            } catch (error) {
+                console.log(error);
+            }
+            this.spin = false;
         },
-        deleteSection(sectionStep) {
-            let step = -1;
-            this.view.steps = this.view.steps.filter(() => {
-                step += 1;
-                return sectionStep !== step;
-            });
-            this.setStep(this.view.steps.length - 1);
-            this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
+        async getAllRegions() {
+            let response = null;
+            this.spin = true;
+            try {
+                response = await client3B.organizationUnit.getAllRegions();
+                this.regions = response.data.result;
+                console.log("reg");
+                console.log(response.data.result);
+            } catch (error) {
+                console.log(error);
+            }
+            this.spin = false;
         },
-        async fetchData() {
-            if (!this.$route.params.id) return;
-            const response = await client3B.format.get(this.$route.params.id)
-                .catch(error => errorHandler(error));
-            if (!response) return;
-
-            const format = response.data.result;
-            this.formatId = format.id;
-            console.log(format);
-            format.sections.forEach((section) => {
-                this.view.steps.push({
-                    id: this.view.stepsUUID,
-                    label: section.name,
-                    name: section.name,
-                });
-                this.view.stepsUUID += 1;
-            });
-
-            this.setLastStep(this.view.steps.length - 1);
+        async getAllAreas() {
+            let response = null;
+            this.spin = true;
+            try {
+                response = await client3B.organizationUnit.getAllAreas();
+                this.areas = response.data.result;
+                console.log("are");
+                console.log(response.data.result);
+            } catch (error) {
+                console.log(error);
+            }
+            this.spin = false;
         },
-    },
-    computed: {
-        ...mapGetters({
-            currentStep: 'currentStepEvaluation',
-            lastStep: 'lastStepEvaluation',
-            format: 'format',
-        }),
-        dinamicSteps() {
-            return this.view.steps.slice(1);
-        },
-    },
+    }    
 };
 </script>
 
 <style scoped>
-    .dynamic-delete-button {
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    font-size: 24px;
-    color: #999;
-    transition: all .3s;
-    }
-    .dynamic-delete-button:hover {
-    color: #777;
-    }
-    .add-button {
-        width: 90%;
-    }
-    .add-button:hover {
-        border-style: dashed;
-    }
+    
 </style>

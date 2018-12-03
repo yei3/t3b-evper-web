@@ -37,6 +37,9 @@ export default {
     .ant-tag-yellow {
         background: #fff6b4;
     }
+    .text-right {
+        text-align: right
+    }
     .text-center {
         text-align: center;
     }
