@@ -282,6 +282,10 @@ import errorHandler from '@/views/errorHandler';
 
 export default {
     props: {
+        sectionId: {
+            type: Number,
+            required: true,
+        },
         showFinishButton: {
             type: Boolean,
             required: false,
@@ -332,6 +336,11 @@ export default {
             ],
             subsectionUUID: 0,
             subsections: [],
+            userActions: {
+                create: [],
+                update: [],
+                delete: [],
+            },
         };
     },
     methods: {
@@ -401,6 +410,9 @@ export default {
         addQuestion(sectionId) {
             const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
             subsection.questionUUID += 1;
+            // const response = await client3B.question.create({
+
+            // }).catch(error => errorHandler(error));
             subsection.questions.push({
                 id: subsection.questionUUID,
                 text: '',

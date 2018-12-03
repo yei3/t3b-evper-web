@@ -101,7 +101,7 @@ export default {
         ...mapActions({
             nextStep: 'nextStep',
             previousStep: 'previousStep',
-            updateEvaluationStored: 'updateEvaluationForm',
+            updateFormatForm: 'updateFormatForm',
             setLastStep: 'setLastStep',
         }),
         handleForm(e) {
@@ -109,7 +109,7 @@ export default {
             this.form.validateFields((error) => {
                 if (error) return;
                 this.view.loading = true;
-                if (this.evaluationStored.id) {
+                if (this.formatStored.id) {
                     this.updateEvaluation();
                 } else {
                     this.createEvaluation();
@@ -117,22 +117,21 @@ export default {
             });
         },
         async createEvaluation() {
-            // const user = authService.getUserData();
-            // const response = await client3B.evaluation.create({
-            //     evaluatorUserId: user.id,
-            //     term: 1,
-            //     name: this.evaluation.name,
-            //     description: this.evaluation.description,
-            //     instructions: this.evaluation.instructions,
-            // }).catch((error) => {
-            //     errorHandler(this, error);
-            // });
+            const user = authService.getUserData();
+            const response = await client3B.format.create({
+                // evaluatorUserId: user.id,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
+            }).catch((error) => {
+                errorHandler(this, error);
+            });
 
             this.view.loading = false;
-            // if (!response) return;
+            if (!response) return;
 
-            this.updateEvaluationStored({
-                // id: response.data.result.id,
+            this.updateFormatForm({
+                id: response.data.result.id,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
@@ -147,7 +146,7 @@ export default {
         async updateEvaluation() {
             const user = authService.getUserData();
             const response = await client3B.evaluation.update({
-                id: this.evaluationStored.id,
+                id: this.formatStored.id,
                 evaluatorUserId: user.id,
                 term: 1,
                 name: this.evaluation.name,
@@ -160,7 +159,7 @@ export default {
             this.view.loading = false;
             if (!response) return;
 
-            this.updateEvaluationStored({
+            this.updateFormatForm({
                 id: response.data.result.id,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
@@ -172,7 +171,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            evaluationStored: 'evaluation',
+            formatStored: 'format',
             lastStep: 'lastStep',
         }),
     },
