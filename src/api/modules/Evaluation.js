@@ -64,28 +64,6 @@ class Evaluation extends Http {
         const path = `${this.entityPath}/Delete`;
         return this.request(path, this.methods.delete, data);
     }
-
-    /**
-     * Add the instructions for the evaluation
-     * @param {Object} data   Data to add a evaluation instructions
-     *
-     * @return {Promise}        Http Response
-     */
-    addInstructions(data) {
-        const path = `${this.entityPath}/AddEvaluationInstructionsAndGetIdAsync`;
-        return this.request(path, this.methods.post, data);
-    }
-
-    /**
-     * Add the section for the evaluation
-     * @param {Object} data   Data to add a evaluation section
-     *
-     * @return {Promise}        Http Response
-     */
-    addSection(data) {
-        const path = `${this.entityPath}/AddEvaluationSectionAndGetIdAsync`;
-        return this.request(path, this.methods.post, data);
-    }
 }
 
 export default Evaluation;

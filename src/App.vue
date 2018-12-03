@@ -17,10 +17,7 @@ export default {
     body {
         background-color: #2f4050;
         font-size: 13px;
-    }
-    .text-center {
-        text-align: center;
-    }
+    }    
     a:hover {
         color: white
     }
@@ -40,13 +37,10 @@ export default {
     .ant-tag-yellow {
         background: #fff6b4;
     }
+    .text-center {
+        text-align: center;
+    }
     .dropdown-icon {
-        color: #fff;
-    }
-    .ant-collapse-borderless {
-        background: #ff5b5b;
-    }
-    .collapse-tittle-link {
         color: #fff;
     }
     .background--title {
@@ -55,6 +49,12 @@ export default {
         text-align: center;
         background: #ff5b5b;        
     }
+    .collapse-tittle-link {
+        color: #fff;
+    }
+    .ant-collapse-borderless {
+        background: #ff5b5b;
+    }        
     .ant-collapse > .ant-collapse-item > .ant-collapse-header {
         line-height: 16px;
     }

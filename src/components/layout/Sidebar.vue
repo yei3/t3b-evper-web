@@ -152,7 +152,7 @@
                             <span>Evaluaciones</span>
                         </a-menu-item>
                         <a-menu-item key="10">
-                            <router-link to="/-chart"></router-link>
+                            <router-link to="/"></router-link>
                             <span>Organigrama</span>
                         </a-menu-item>
                         <a-menu-item key="11">
@@ -168,7 +168,7 @@
                             <span>Resultados</span>
                         </a-menu-item>
                         <a-menu-item key="14">
-                            <router-link :to="{ name: 'user-update' }"></router-link>
+                            <router-link to="/"></router-link>
                             <span>Usuarios</span>
                         </a-menu-item>
                     </a-sub-menu>

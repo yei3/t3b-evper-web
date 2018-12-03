@@ -2,9 +2,9 @@
     <div>
         <a-row :gutter="32"  class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Crear Formato</h1>
+                <h1 class="breadcrumb-header">Administración de Evaluaciones</h1>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="20">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
                         <router-link :to="{ name: 'admin-home' }"
@@ -13,235 +13,46 @@
                             Home Administrador
                         </router-link>
                     </a-breadcrumb-item>
-                    <a-breadcrumb-item>
-                        <strong class="breadcrumb-path">Formatos</strong>
-                    </a-breadcrumb-item>
-                    <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active"
-                            v-if="!$route.params.id"
-                        >
-                            Crear Formato
-                        </strong>
-                        <strong class="breadcrumb-path-active" v-else>
-                            Actualizar Formato
-                        </strong>
-                    </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
+            <a-col :span="4">
+                <a-button type="primary" ghost @click="initNewFormatForm">
+                    Crear Evaluación <a-icon type="plus" />
+                </a-button>
+            </a-col>
         </a-row>
-        <div class="collapse-content"
-            style="background-color: white;
-            margin: 30px 30px;"
-        >
-            <a-row class="steps">
-                <span class="breadcrumb-header" style="font-weight: 400;">
-                    {{format.name}}
-                </span>
-                <span style="font-size: 16px;">{{format.description}}</span>
-            </a-row>
+        <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
+            <h3 class="breadcrumb-header">Evaluaciones</h3>
             <a-divider />
-            <a-row :gutter="16">
-                <a-col :sm="24" :md="6"
-                    v-for="(step, index) in view.steps"
-                    :key="index"
-                >
-                    <div class="step-form step-form-done"
-                        v-show="lastStep >= index &&
-                                index !== currentStep"
-                        @click="view.activeSection = step.id; setStep(index);"
-                    >
-                        <span>{{index + 1}}. {{step.label}}</span>
-                    </div>
-
-                    <div class="step-form step-form-current"
-                        v-show="currentStep === index"
-                    >
-                        <span>{{index + 1}}. {{step.label}}</span>
-                    </div>
-
-                    <div class="step-form step-form-not-done"
-                        v-show="lastStep < index"
-                    >
-                        <span>{{index + 1}}. {{step.label}}</span>
-                    </div>
+            <a-row class="main-content" style="margin-top: 30px;">
+                <a-col :span="24" style="padding-bottom: 30px;">
+                    <evaluations />
                 </a-col>
-            </a-row>
-            <a-row>
-                <a-col :sm="24" :md="12"
-                    style="padding-top: 10px;"
-                >
-                    <a-button
-                        type='dashed'
-                        class="add-button"
-                        style="width: 48%; min-width: 200px;"
-                        @click="view.sectionModal.show=true"
-                        v-show="lastStep !== 0 || format.id"
-                    >
-                        <a-icon type='plus' /> Agregar Sección
-                    </a-button>
-                </a-col>
-                <a-col :sm="24" :md="12"
-                    style="padding-top: 10px; text-align: right;"
-                >
-                    <a-button
-                        style="color: #fb4646; width: 48%; min-width: 200px;"
-                        @click="deleteSection(currentStep)"
-                        v-show="currentStep !== 0"
-                    >
-                        <a-icon type="delete" /> Borrar Sección
-                    </a-button>
-                </a-col>
-            </a-row>
-            <a-row >
-                <form-name
-                    v-show="currentStep === 0"
-                    :showContinueButton="dinamicSteps.length !== 0"
-                />
-                <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
-                    v-model="step.label"
-                    :showFinishButton="index === (dinamicSteps.length - 1)"
-                    v-show="(index + 1) == currentStep"
-                />
             </a-row>
         </div>
-        <a-modal
-            title="Agregar Nueva Sección"
-            v-model="view.sectionModal.show"
-        >
-            <a-input
-                v-model="view.sectionModal.value"
-                @keyup.enter.native="addSection"
-            />
-            <template slot="footer">
-                <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
-                <a-button key="submit" class="btn-green" @click="addSection">
-                    Agregar
-                </a-button>
-            </template>
-        </a-modal>
     </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import formName from '@/components/admin/formats/formName.vue';
-import formGeneric from '@/components/admin/formats/formGeneric.vue';
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import { mapActions } from 'vuex';
+import evaluations from '@/components/admin/search/evaluations.vue';
 
 export default {
     components: {
-        formName,
-        formGeneric,
-    },
-    created() {
-        this.fetchData();
-    },
-    watch: {
-        $route: 'fetchData',
-    },
-    data() {
-        return {
-            view: {
-                activeSection: 0,
-                sectionModal: {
-                    show: false,
-                    error: null,
-                    value: '',
-                },
-                stepsUUID: 2,
-                steps: [
-                    {
-                        id: 0,
-                        label: 'Nombre del Formato',
-                        name: 'name',
-                    },
-                ],
-            },
-        };
+        evaluations,
     },
     methods: {
         ...mapActions({
-            nextStep: 'nextStep',
-            previousStep: 'previousStep',
-            setStep: 'setStep',
-            setLastStep: 'setLastStep',
+            // clearFormatForm: 'clearFormatForm',
         }),
-        addSection() {
-            const step = {
-                id: this.view.stepsUUID,
-                label: this.view.sectionModal.value,
-                name: this.view.sectionModal.value.replace(/ /g, ''),
-            };
-            this.view.steps.push(step);
-            this.view.stepsUUID += 1;
-            this.cancelAddSection();
-            // this.setStep(this.view.steps.length - 1);
-            // this.setLastStep(this.view.steps.length - 1);
-        },
-        cancelAddSection() {
-            this.view.sectionModal.show = false;
-            this.view.sectionModal.value = '';
-        },
-        deleteSection(sectionStep) {
-            let step = -1;
-            this.view.steps = this.view.steps.filter(() => {
-                step += 1;
-                return sectionStep !== step;
-            });
-            this.setStep(this.view.steps.length - 1);
-            this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
-        },
-        async fetchData() {
-            if (!this.$route.params.id) return;
-            const response = await client3B.format.get(this.$route.params.id)
-                .catch(error => errorHandler(error));
-            if (!response) return;
-
-            const format = response.data.result;
-            this.formatId = format.id;
-            console.log(format);
-            format.sections.forEach((section) => {
-                this.view.steps.push({
-                    id: this.view.stepsUUID,
-                    label: section.name,
-                    name: section.name,
-                });
-                this.view.stepsUUID += 1;
-            });
-
-            this.setLastStep(this.view.steps.length - 1);
-        },
-    },
-    computed: {
-        ...mapGetters({
-            currentStep: 'currentStep',
-            lastStep: 'lastStep',
-            format: 'format',
-        }),
-        dinamicSteps() {
-            return this.view.steps.slice(1);
+        initNewFormatForm() {
+            // this.clearFormatForm();
+            // this.$router.push({ name: 'create-evaluation' });
         },
     },
 };
 </script>
 
-<style scoped>
-    .dynamic-delete-button {
-    cursor: pointer;
-    position: relative;
-    top: 4px;
-    font-size: 24px;
-    color: #999;
-    transition: all .3s;
-    }
-    .dynamic-delete-button:hover {
-    color: #777;
-    }
-    .add-button {
-        width: 90%;
-    }
-    .add-button:hover {
-        border-style: dashed;
-    }
+<style>
+
 </style>

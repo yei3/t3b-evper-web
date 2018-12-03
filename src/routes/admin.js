@@ -27,7 +27,7 @@ export default [
     },
     {
         path: 'admin/evaluations',
-        name: 'create-evaluation',
+        name: 'admin-evaluations',
         component: CreateEvaluation,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
