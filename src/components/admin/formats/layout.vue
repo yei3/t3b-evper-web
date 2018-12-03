@@ -99,6 +99,7 @@
                 />
                 <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                     v-model="step.label"
+                    :sectionId="step.id"
                     :showFinishButton="index === (dinamicSteps.length - 1)"
                     v-show="(index + 1) == currentStep"
                 />
@@ -167,9 +168,16 @@ export default {
             setStep: 'setStep',
             setLastStep: 'setLastStep',
         }),
-        addSection() {
+        async addSection() {
+            const response = await client3B.section.create({
+                name: this.view.sectionModal.value,
+                evaluationTemplateId: this.format.id,
+                displayName: true,
+            }).catch(error => errorHandler(error));
+            console.log(response);
+            const section = response.data.result;
             const step = {
-                id: this.view.stepsUUID,
+                id: section.id,
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
             };
@@ -183,12 +191,20 @@ export default {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
         },
-        deleteSection(sectionStep) {
+        async deleteSection(sectionStep) {
+            let section = null;
             let step = -1;
-            this.view.steps = this.view.steps.filter(() => {
+            this.view.steps = this.view.steps.filter((sect) => {
                 step += 1;
+                if (sectionStep === step) {
+                    section = sect;
+                }
                 return sectionStep !== step;
             });
+            const response = await client3B.section.delete({
+                id: section.id,
+            }).catch(error => errorHandler(error));
+            console.log(response);
             this.setStep(this.view.steps.length - 1);
             this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
         },
