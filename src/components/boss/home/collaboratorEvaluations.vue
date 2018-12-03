@@ -217,7 +217,7 @@ export default {
             data: [
                 {
                     key: '1',
-                    status: 'En proceso de revisión',
+                    status: 'En revisión',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',

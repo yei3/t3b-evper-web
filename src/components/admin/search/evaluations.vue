@@ -139,15 +139,14 @@ export default {
             }
             await this.search();
         },
-        test() {
-            console.log('works');
-        },
         async search() {
             let response = null;
             this.spin = true;
             try {
                 response = await client3B.evaluation.getAll();
-                const { items } = response.data.result;
+
+                const items = response.data.result;
+                console.log(items);
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({

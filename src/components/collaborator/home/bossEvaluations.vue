@@ -150,7 +150,7 @@ export default {
             data: [
                 {
                     key: '1',
-                    status: 'En proceso de revisión',
+                    status: 'En revisión',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -167,16 +167,21 @@ export default {
             this.CBEModal.show = !this.CBEModal.show;
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado':
+                    return 'ant-tag-red'; break;                
+                case 'Finalizado':
+                    return 'ant-tag-blue'; break;
+                case 'En revisión':
+                    return 'ant-tag-gray'; break;
+                case 'Completado':
+                    return 'ant-tag-green'; break;
+                case 'En proceso':
+                    return 'ant-tag-yellow'; break;
+                default:
+                    break;
             }
-            if (status === 'En proceso') {
-                return 'ant-tag-yellow';
-            }
-            if (status === 'Finalizado') {
-                return 'ant-tag-green';
-            }
-            return 'ant-tag-gray';
+            
         },
     },
 };

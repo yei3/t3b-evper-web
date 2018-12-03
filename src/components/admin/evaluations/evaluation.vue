@@ -50,12 +50,16 @@
                 <a-col :span="5">
                     <a-select defaultValue="Regiones" name="region" v-model="regionSelected" style='width: 200px'>
                         <a-select-option v-for="item in regions" v-bind:value="item.id" :key="item.id">
-                            {{ item.name }}
+                            {{ item.displayName }}
                         </a-select-option>
                     </a-select>
                 </a-col>
                 <a-col :span="5">
-                    <a-input placeholder="Areas" />
+                    <a-select defaultValue="Areas" name="area" v-model="areaSelected" style='width: 200px'>
+                        <a-select-option v-for="item in areas" v-bind:value="item.id" :key="item.id">
+                            {{ item.displayName }}
+                        </a-select-option>
+                    </a-select>
                 </a-col>
                 <a-col :span="4">
                     <a-date-picker placeholder="Fecha Inicio" />
@@ -65,7 +69,7 @@
                 </a-col>
             </a-row>
             <a-row class="text-right" style="padding: 16px 0;">
-                <a-button type="primary" ghost @click="getAllFormats()">
+                <a-button type="primary" ghost @click="applyEvaluation()">
                     Programar <a-icon type="plus" />
                 </a-button>
             </a-row>
@@ -74,8 +78,7 @@
                     <a-spin size="large" />
                 </div>
             </a-row>
-        </div>
-        
+        </div>        
     </div>
 </template>
 
@@ -99,51 +102,42 @@ export default {
     },
     created() {
         // fetch the data when the view is created and the data is
-        // already being observed
+        // already being observed        
         this.getAllFormats();
-        
+        this.getAllRegions();
+        this.getAllAreas();
     },
     components: {
         
     },
     methods: {
-        test() {
-            console.log('works');
+        applyEvaluation() {
+            this.$router.push({ name: 'admin-evaluations' });
         },
         async getAllFormats() {
-            let response = null;
             this.spin = true;
+            let response = null;
             try {
                 response = await client3B.format.getAll();                
                 this.formats = response.data.result.items;
-                console.log("formats");
-                console.log(response.data.result.items);
             } catch (error) {
                 console.log(error);
             }
-            this.spin = false;
         },
         async getAllRegions() {
             let response = null;
-            this.spin = true;
             try {
                 response = await client3B.organizationUnit.getAllRegions();
                 this.regions = response.data.result;
-                console.log("reg");
-                console.log(response.data.result);
             } catch (error) {
                 console.log(error);
             }
-            this.spin = false;
         },
         async getAllAreas() {
             let response = null;
-            this.spin = true;
             try {
                 response = await client3B.organizationUnit.getAllAreas();
                 this.areas = response.data.result;
-                console.log("are");
-                console.log(response.data.result);
             } catch (error) {
                 console.log(error);
             }

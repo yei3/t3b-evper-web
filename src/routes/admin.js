@@ -3,7 +3,7 @@ import authService from '@/services/auth';
 
 import Home from '@/components/admin/home/layout.vue';
 import CreateFormat from '@/components/admin/formats/layout.vue';
-import Evaluation from '@/components/admin/evaluations/evaluation.vue';
+import Evaluation from '@/components/admin/evaluations/layout.vue';
 import CreateEvaluation from '@/components/admin/evaluations/evaluation.vue';
 import Users from '@/components/admin/users/users.vue';
 
@@ -33,7 +33,7 @@ export default [
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
     {
-        path: 'admin/evaluations',
+        path: 'admin/evaluations/create',
         name: 'create-evaluation',
         component: CreateEvaluation,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),

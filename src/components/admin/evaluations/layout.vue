@@ -46,7 +46,7 @@ export default {
             clearEvaluationForm: 'clearEvaluationForm',
         }),
         initNewEvaluationForm() {
-            this.clearEvaluationForm();
+            // this.clearEvaluationForm();
             this.$router.push({ name: 'create-evaluation' });
         },
     },

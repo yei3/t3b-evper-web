@@ -28,7 +28,7 @@ class Evaluation extends Http {
      * @return {Promise}        Http Response
      */
     getAll() {
-        const path = `${this.entityPath}/GetAll`;
+        const path = `${this.entityPath}/GetAllAsync`;
         return this.request(path, this.methods.get, {});
     }
 
