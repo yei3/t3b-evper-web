@@ -20,37 +20,33 @@
             <a-row v-for="subsection in subsections" :key="subsection.id">
                 <a-row><a-col :span="24">
                     <a-tooltip placement="top" title="Mostrar Subtítulo">
-                        <a-checkbox
-                            :checked="subsection.title.visible"
-                            @change="subsection.title.visible = !subsection.title.visible"
-                        >
-                            <span style="font-size: 20px;" v-show="subsection.title.visible">
-                                {{subsection.title.value}}
-                            </span>
-                            <span style="color: red;" v-show="!subsection.title.visible">
-                                El título de la sección no será mostrado
-                            </span>
-                        </a-checkbox>
+                        <span style="font-size: 20px;">
+                            {{subsection.title.value}}
+                        </span>
                     </a-tooltip>
                     <a-tooltip placement="top" title="Editar Subtítulo">
                         <a @click="subsection.showModal = true;
                             subsection.title.lastValue = subsection.title.value;"
-                            v-show="subsection.title.visible"
-                            style="color: #777;"
+                            style="color: #777; margin: 0px 10px 0px 15px;"
                         >
-                            <a-icon type="edit" class="form-icon"/>
+                            <a-icon type="edit" class="form-icon"/> Editar
                         </a>
                     </a-tooltip>
                     <a-tooltip placement="top" title="Borrar Subsección">
                         <a @click="removeSubsection(subsection.id)"
-                            v-show="subsection.title.visible"
-                            style="color: #777; margin-left: 10px;"
+                            style="color: #777; margin: 0px 15px 0px 10px;"
                         >
-                            <a-icon type="delete" class="form-icon"/>
+                            <a-icon type="delete" class="form-icon"/> Eliminar
                         </a>
                     </a-tooltip>
+                    <a-tooltip placement="top" title="Visibilidad del título">
+                        Visibilidad <a-switch
+                            :checked="subsection.title.visible"
+                            @change="subsection.title.visible = !subsection.title.visible"
+                        />
+                    </a-tooltip>
                     <a-modal
-                        title="Título de la  Subsección"
+                        title="Título de la Subsección"
                         v-model="subsection.showModal"
                     >
                         <a-input
@@ -517,7 +513,6 @@ export default {
     },
     computed: {
         ...mapGetters({
-            evaluationStored: 'evaluation',
             format: 'format',
         }),
     },
