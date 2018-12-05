@@ -72,7 +72,7 @@
                 </a-col></a-row>
                 <a-row><a-col v-for="question in subsection.questions"
                     :key="question.id"
-                    class="question-row"
+                    :class="getQuestionStatus(question)"
                 >
                     <a-form-item
                         :fieldDecoratorId="'question-' + subsection.id + '-' + question.id"
@@ -174,16 +174,25 @@
                             </a-select-option>
                         </a-select>
                     </a-form-item>
-                    <a-col :md="24" style="text-align: right; margin-top: 10px;">
+                    <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
                         <a @click="removeQuestion(subsection.id, question.id)"
                             class="link-delete-question form-icon"
+                            style="padding-right: 2%;"
                         >
                             <a-icon
                                 class='dynamic-delete-button form-icon'
                                 type='delete'
-                            /> Eliminar pregunta
+                            /> Eliminar
                         </a>
-
+                        <a @click="saveQuestion(subsection.id, question)"
+                            class="link-delete-question form-icon"
+                            style="padding-left: 2%;"
+                        >
+                            <a-icon
+                                class='dynamic-delete-button form-icon'
+                                type='check'
+                            /> Guardar
+                        </a>
                     </a-col>
                     <a-divider />
                 </a-col></a-row>
@@ -315,31 +324,38 @@ export default {
             answerTypes: [
                 {
                     label: 'Objetivo',
-                    value: 'objective',
+                    value: 3,
                 },
                 {
                     label: 'Pregunta abierta',
-                    value: 'open',
+                    value: 0,
                 },
                 {
                     label: 'Múltiples respuestas abiertas',
-                    value: 'multiple',
+                    value: 1,
                 },
                 {
                     label: 'Selección de respuesta predefinida',
-                    value: 'selection',
+                    value: 2,
                 },
                 {
                     label: 'Si / No',
-                    value: 'boolean',
+                    value: 4,
                 },
             ],
             subsectionUUID: 0,
             subsections: [],
             userActions: {
-                create: [],
-                update: [],
-                delete: [],
+                sections: {
+                    create: [],
+                    update: [],
+                    delete: [],
+                },
+                questions: {
+                    create: [],
+                    update: [],
+                    delete: [],
+                },
             },
         };
     },
@@ -401,7 +417,9 @@ export default {
                 questions: [{
                     id: 0,
                     text: '',
-                    answerType: 'selection',
+                    key: null,
+                    answerType: null,
+                    edited: true,
                 }],
             });
             this.addSubsectionModal.visible = false;
@@ -415,8 +433,10 @@ export default {
             // }).catch(error => errorHandler(error));
             subsection.questions.push({
                 id: subsection.questionUUID,
+                key: null,
                 text: '',
-                answerType: 'selection',
+                answerType: null,
+                edited: true,
             });
         },
         removeQuestion(sectionId, questionId) {
@@ -435,6 +455,34 @@ export default {
         handleSubsectionTitleInput() {
             this.sectionModal.visible = false;
         },
+        getQuestionStatus(question) {
+            if (question.edited) {
+                return 'question-row orange-bar';
+            }
+            return 'question-row green-bar';
+        },
+        async saveQuestion(sectionId, question) {
+            let response = null
+            console.log(question.key);
+            if (question.key) {
+                response = await client3B.question.update({
+                    id: question.key,
+                    text: question.text,
+                    questionType: question.answerType,
+                }).catch(error => errorHandler(this, error));
+            } else {
+                response = await client3B.question.create({
+                    text: question.text,
+                    questionType: question.answerType,
+                    section: sectionId,
+                }).catch(error => errorHandler(this, error));
+            }
+            if (!response) return;
+            console.log(response);
+            question.key = response.data.result.id;
+            question.edited = false;
+            this.$message.success('Evaluación guardada correctamente');
+        }
     },
     computed: {
         ...mapGetters({
@@ -481,6 +529,12 @@ export default {
     margin: 30px 0px;
     padding: 0px 10px;
     border-left: 3px solid #1AB394;
+}
+.green-bar {
+    border-left: 3px solid #1AB394;
+}
+.orange-bar {
+    border-left: 3px solid #F57B22;
 }
 
 </style>

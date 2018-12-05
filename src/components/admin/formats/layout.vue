@@ -83,13 +83,20 @@
                 <a-col :sm="24" :md="12"
                     style="padding-top: 10px; text-align: right;"
                 >
-                    <a-button
-                        style="color: #fb4646; width: 48%; min-width: 200px;"
-                        @click="deleteSection(currentStep)"
-                        v-show="currentStep !== 0"
+                    <a-popconfirm title="Está seguro de borrar la sección?"
+                        @confirm="deleteSection(currentStep)"
+                        okText="SI"
+                        cancelText="No"
                     >
-                        <a-icon type="delete" /> Borrar Sección
-                    </a-button>
+                        <a-button
+                            style="color: #fb4646; width: 48%; min-width: 200px;"
+                            v-show="currentStep !== 0"
+                        >
+                            <a-icon
+                                :type="view.loadingDelete? 'loading': 'delete'"
+                            /> Borrar Sección
+                        </a-button>
+                    </a-popconfirm>
                 </a-col>
             </a-row>
             <a-row >
@@ -115,7 +122,11 @@
             />
             <template slot="footer">
                 <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
-                <a-button key="submit" class="btn-green" @click="addSection">
+                <a-button key="submit"
+                    class="btn-green"
+                    @click="addSection"
+                    :loading="view.sectionModal.loading"
+                >
                     Agregar
                 </a-button>
             </template>
@@ -144,11 +155,13 @@ export default {
     data() {
         return {
             view: {
+                loadingDelete: false,
                 activeSection: 0,
                 sectionModal: {
                     show: false,
                     error: null,
                     value: '',
+                    loading: false,
                 },
                 stepsUUID: 2,
                 steps: [
@@ -169,12 +182,17 @@ export default {
             setLastStep: 'setLastStep',
         }),
         async addSection() {
+            this.view.sectionModal.loading = true;
             const response = await client3B.section.create({
                 name: this.view.sectionModal.value,
                 evaluationTemplateId: this.format.id,
                 displayName: true,
             }).catch(error => errorHandler(error));
-            console.log(response);
+            if (!response) {
+                this.view.sectionModal.loading = false;
+                return;
+            }
+
             const section = response.data.result;
             const step = {
                 id: section.id,
@@ -184,17 +202,19 @@ export default {
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
             this.cancelAddSection();
-            // this.setStep(this.view.steps.length - 1);
-            // this.setLastStep(this.view.steps.length - 1);
+            this.setLastStep(this.view.steps.length - 1);
+            this.view.sectionModal.loading = false;
+            this.$message.success('Evaluación guardada correctamente');
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
         },
         async deleteSection(sectionStep) {
+            this.view.loadingDelete = true;
             let section = null;
             let step = -1;
-            this.view.steps = this.view.steps.filter((sect) => {
+            const leftSteps = this.view.steps.filter((sect) => {
                 step += 1;
                 if (sectionStep === step) {
                     section = sect;
@@ -204,9 +224,15 @@ export default {
             const response = await client3B.section.delete({
                 id: section.id,
             }).catch(error => errorHandler(error));
-            console.log(response);
+            if (!response) {
+                this.view.loadingDelete = false;
+                return;
+            }
+            this.view.steps = leftSteps;
             this.setStep(this.view.steps.length - 1);
             this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
+            this.view.loadingDelete = false;
+            this.$message.success('Evaluación guardada correctamente');
         },
         async fetchData() {
             if (!this.$route.params.id) return;

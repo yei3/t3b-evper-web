@@ -119,7 +119,6 @@ export default {
         async createEvaluation() {
             const user = authService.getUserData();
             const response = await client3B.format.create({
-                // evaluatorUserId: user.id,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
@@ -145,10 +144,8 @@ export default {
         },
         async updateEvaluation() {
             const user = authService.getUserData();
-            const response = await client3B.evaluation.update({
+            const response = await client3B.format.update({
                 id: this.formatStored.id,
-                evaluatorUserId: user.id,
-                term: 1,
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
