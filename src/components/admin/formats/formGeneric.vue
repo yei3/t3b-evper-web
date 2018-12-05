@@ -231,7 +231,9 @@
                             Cancelar
                         </a-button>
                         <a-button class="btn-green"
-                            @click="handleSectionTitleInput">
+                            @click="handleSectionTitleInput"
+                            :loading="sectionModal.loading"
+                        >
                             Aceptar
                         </a-button>
                     </template>
@@ -250,7 +252,9 @@
                             Cancelar
                         </a-button>
                         <a-button class="btn-green"
-                            @click="addSubsection(addSubsectionModal.value)">
+                            @click="addSubsection(addSubsectionModal.value)"
+                            :loading="addSubsectionModal.loading"
+                        >
                             Aceptar
                         </a-button>
                     </template>
@@ -270,14 +274,14 @@
                     :loading="view.loading"
                     :disabled="subsections.length === 0"
                 >
-                    Guardar y continuar
+                    Siguiente
                 </a-button>
                 <a-button class="btn-green" htmlType='submit'
                     v-show="showFinishButton"
                     :loading="view.loading"
                     :disabled="subsections.length === 0"
                 >
-                    Guardar y Finalizar
+                    Finalizar
                 </a-button>
             </a-col>
         </a-row>
@@ -316,10 +320,12 @@ export default {
             addSubsectionModal: {
                 visible: false,
                 value: '',
+                loading: false,
             },
             sectionModal: {
                 visible: false,
                 value: '',
+                loading: false,
             },
             answerTypes: [
                 {
@@ -403,7 +409,18 @@ export default {
                 this.$router.push({ name: 'home' });
             }
         },
-        addSubsection(sectionTitle) {
+        async addSubsection(sectionTitle) {
+            this.addSubsectionModal.loading = true;
+            const response = await client3B.section.create({
+                name: sectionTitle,
+                evaluationTemplateId: this.format.id,
+                displayName: true,
+                parentId: this.sectionId,
+            }).catch(error => errorHandler(error));
+            if (!response) {
+                this.addSubsectionModal.loading = false;
+                return;
+            }
             this.subsectionUUID += 1;
             this.subsections.push({
                 id: this.subsectionUUID,
@@ -424,6 +441,7 @@ export default {
             });
             this.addSubsectionModal.visible = false;
             this.addSubsectionModal.value = '';
+            this.addSubsectionModal.loading = false;
         },
         addQuestion(sectionId) {
             const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
@@ -447,10 +465,23 @@ export default {
             this.subsections = this.subsections.filter(subsection =>
                 subsection.id !== subsectionId);
         },
-        handleSectionTitleInput() {
+        async handleSectionTitleInput() {
+            this.sectionModal.loading = true;
+            const response = await client3B.section.update({
+                id: this.sectionId,
+                evaluationTemplateId: this.format.id,
+                name: this.sectionModal.value,
+            }).catch(error => errorHandler(error));
+            if(!response) {
+                this.sectionModal.loading = false;
+                return;
+            }
+
             this.sectionModal.visible = false;
             this.$emit('input', this.sectionModal.value);
             this.sectionModal.value = '';
+            this.sectionModal.loading = false;
+            this.$message.success('Evaluación guardada correctamente');
         },
         handleSubsectionTitleInput() {
             this.sectionModal.visible = false;
@@ -487,6 +518,7 @@ export default {
     computed: {
         ...mapGetters({
             evaluationStored: 'evaluation',
+            format: 'format',
         }),
     },
 };
