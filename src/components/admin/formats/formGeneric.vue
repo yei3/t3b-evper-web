@@ -1,5 +1,5 @@
 <template>
-    <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
+    <div>
         <a-row class="form-autoevaluation">
             <a-row class="form-tittle">
                 <a-col :span="24" style="margin-bottom: 20px">
@@ -55,10 +55,7 @@
                             v-show="subsection.loading"
                         />
                     </a-tooltip>
-                    <a-modal
-                        title="Título de la Subsección"
-                        v-model="subsection.showModal"
-                    >
+                    <a-modal title="Título de la Subsección" v-model="subsection.showModal">
                         <a-input
                             v-model="subsection.title.lastValue"
                             @keyup.enter.native="updateSubsection(subsection)"
@@ -78,7 +75,8 @@
                 <a-row><a-col v-for="question in subsection.questions"
                     :key="question.id"
                     :class="getQuestionStatus(question)"
-                >
+                ><a-form @submit="handleForm" :autoFormCreate="(form)=>{question.form = form}">
+
                     <a-form-item
                         :fieldDecoratorId="'question-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
@@ -97,6 +95,7 @@
                         <a-input style=""
                             v-model="question.text"
                             placeholder="Texto de la pregunta"
+                            @change="setQuestionAsModify(question)"
                         />
                     </a-form-item>
 
@@ -118,6 +117,7 @@
                         <a-select
                             v-model="question.answerType"
                             placeholder="Tipo de respuesta"
+                            @select="setQuestionAsModify(question)"
                         >
                             <a-select-option :key="answerType.value"
                                 :value="answerType.value"
@@ -128,7 +128,7 @@
                         </a-select>
                     </a-form-item>
                     <a-form-item
-                        v-show="question.answerType === 'objective'"
+                        v-if="question.answerType === 3"
                         :fieldDecoratorId="'expectedValue-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Valor del Objetivo'
@@ -147,10 +147,11 @@
                             type="number"
                             v-model="question.expectedValue"
                             placeholder="Valor del Objetivo"
+                            @change="setQuestionAsModify(question)"
                         />
                     </a-form-item>
                     <a-form-item
-                        v-show="question.answerType === 'objective'"
+                        v-if="question.answerType === 3"
                         label='Relación de aprobación del objetivo'
                         :fieldDecoratorId="`approvalRship-${subsection.id}-${question.id}`"
                         style="margin: 10px 0px;"
@@ -167,6 +168,7 @@
                     >
                         <a-select v-model="question.approvalRelationship"
                             placeholder="Relación de aprobación del objetivo"
+                            @select="setQuestionAsModify(question)"
                         >
                             <a-select-option value="gt">
                                 Mientras más grande mejor
@@ -180,27 +182,35 @@
                         </a-select>
                     </a-form-item>
                     <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
-                        <a @click="removeQuestion(subsection.id, question.id)"
+                        <a @click="removeQuestion(subsection.key, question.key)"
                             class="link-delete-question form-icon"
                             style="padding-right: 2%;"
+                            :disabled="question.loading"
                         >
                             <a-icon
                                 class='dynamic-delete-button form-icon'
-                                type='delete'
+                                type="delete"
                             /> Eliminar
                         </a>
-                        <a @click="saveQuestion(subsection.id, question)"
+                        <a @click="saveQuestion(subsection.key, question)"
                             class="link-delete-question form-icon"
                             style="padding-left: 2%;"
+                            :disabled="question.loading"
                         >
                             <a-icon
                                 class='dynamic-delete-button form-icon'
-                                type='check'
+                                type="check"
                             /> Guardar
                         </a>
+                        <a-icon
+                            v-show="question.loading"
+                            class='dynamic-delete-button form-icon'
+                            type="loading"
+                            style="padding-left: 2%;"
+                        />
                     </a-col>
                     <a-divider />
-                </a-col></a-row>
+                </a-form></a-col></a-row>
                 <a-row><a-col :md="24" style="text-align: center;">
                     <a-button
                         type='dashed'
@@ -290,7 +300,7 @@
                 </a-button>
             </a-col>
         </a-row>
-    </a-form>
+    </div>
 </template>
 
 <script>
@@ -378,41 +388,6 @@ export default {
         }),
         handleForm(e) {
             e.preventDefault();
-            this.form.validateFields((error) => {
-                if (error) return;
-                this.view.loading = true;
-                this.saveObjectives();
-            });
-        },
-        async saveObjectives() {
-            const section = {
-                name: this.sectionTitle,
-                showName: true,
-                evaluationId: this.evaluationStored.id,
-                parentId: 0,
-                subsections: this.subsections.map(subsection => ({
-                    name: subsection.title.value,
-                    showName: subsection.title.visible,
-                    evaluationId: this.evaluationStored.id,
-                    questions: subsection.questions.map(question => ({
-                        text: question.text,
-                        questionType: question.answerType,
-                    })),
-                })),
-            };
-
-            const response = await client3B.evaluation.addSection(section).catch((error) => {
-                errorHandler(this, error);
-            });
-
-            this.view.loading = false;
-            if (!response) return;
-
-            this.$message.success('Evaluación guardada correctamente');
-            this.nextStep();
-            if (this.showFinishButton) {
-                this.$router.push({ name: 'home' });
-            }
         },
         async addSubsection(sectionTitle) {
             this.addSubsectionModal.loading = true;
@@ -442,6 +417,7 @@ export default {
                     id: 0,
                     text: '',
                     key: null,
+                    loading: false,
                     answerType: null,
                     edited: true,
                 }],
@@ -472,13 +448,11 @@ export default {
         addQuestion(sectionId) {
             const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
             subsection.questionUUID += 1;
-            // const response = await client3B.question.create({
-
-            // }).catch(error => errorHandler(error));
             subsection.questions.push({
                 id: subsection.questionUUID,
                 key: null,
                 text: '',
+                loading: false,
                 answerType: null,
                 edited: true,
             });
@@ -527,27 +501,46 @@ export default {
             }
             return 'question-row green-bar';
         },
+        setQuestionAsModify(question) {
+            question.edited = true;
+        },
         async saveQuestion(sectionId, question) {
+            let validForm = true;
+            question.form.validateFields((error) => {
+                console.log(error);
+                if (error) validForm = false;
+            });
+            if (!validForm) return;
+            console.log('pass');
+
+            question.loading = true;
             let response = null
             console.log(question.key);
-            if (question.key) {
-                response = await client3B.question.update({
-                    id: question.key,
-                    text: question.text,
-                    questionType: question.answerType,
-                }).catch(error => errorHandler(this, error));
-            } else {
-                response = await client3B.question.create({
-                    text: question.text,
-                    questionType: question.answerType,
-                    section: sectionId,
-                }).catch(error => errorHandler(this, error));
-            }
-            if (!response) return;
-            console.log(response);
-            question.key = response.data.result.id;
+            // if (question.key) {
+            //     response = await client3B.question.update({
+            //         id: question.key,
+            //         text: question.text,
+            //         questionType: question.answerType,
+            //     }).catch(error => errorHandler(this, error));
+            // } else {
+            //     response = await client3B.question.create({
+            //         text: question.text,
+            //         questionType: question.answerType,
+            //         section: sectionId,
+            //         expected: 0,
+            //         deliverable: 'asdsa'
+            //     }).catch(error => errorHandler(this, error));
+            // }
+            // if (!response) {
+            //     question.loading = false;
+            //     return
+            // };
+            // console.log(response);
+            // question.key = response.data.result.id;
+
             question.edited = false;
             this.$message.success('Evaluación guardada correctamente');
+            question.loading = false;
         }
     },
     computed: {
