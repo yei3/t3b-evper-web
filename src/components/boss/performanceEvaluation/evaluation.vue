@@ -2,9 +2,9 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="12">
-                Autoevaluaciones pendientes
+                Autoevaluaciones En procesos
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="4" style="text-align: right;">
                 <router-link class="collapse-tittle-link" to="/foo">Ver resultados</router-link>
                 <a>
                     <a-icon type="down" @click="collapsed = !collapsed" v-show="!collapsed"/>

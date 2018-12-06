@@ -1,40 +1,40 @@
 import Http from './Http';
 
 /**
- * Class to make operations to the Evaluation entity
+ * Class to make operations to the Section entity
  */
-class Evaluation extends Http {
+class Section extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Evaluation';
+        this.entityPath = '/api/services/app/Section';
     }
 
     /**
-     * Request for the information for a evaluation
+     * Request for the information for a section
      *
      * @param {String} UserId   Id for the user
      *
      * @return {Promise}        Http Response
      */
-    get(evaluationId) {
+    get(sectionId) {
         const path = `${this.entityPath}/Get`;
-        const params = { Id: evaluationId };
+        const params = { Id: sectionId };
         return this.request(path, this.methods.get, params);
     }
 
     /**
-     * Request for the information for all the evaluations
+     * Request for the information for all the sections
      *
      * @return {Promise}        Http Response
      */
     getAll() {
-        const path = `${this.entityPath}/GetAllAsync`;
+        const path = `${this.entityPath}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
 
     /**
-     * Create a new evaluation
-     * @param {Object} data   Data to create a evaluation
+     * Create a new section
+     * @param {Object} data   Data to create a section
      *
      * @return {Promise}        Http Response
      */
@@ -44,8 +44,8 @@ class Evaluation extends Http {
     }
 
     /**
-     * Create a new evaluation
-     * @param {Object} data   Data to create a evaluation
+     * Create a new section
+     * @param {Object} data   Data to create a section
      *
      * @return {Promise}        Http Response
      */
@@ -55,8 +55,8 @@ class Evaluation extends Http {
     }
 
     /**
-     * Delete a new evaluation
-     * @param {Object} data   Data to delete a evaluation
+     * Delete a new section
+     * @param {Object} data   Data to delete a section
      *
      * @return {Promise}        Http Response
      */
@@ -66,4 +66,4 @@ class Evaluation extends Http {
     }
 }
 
-export default Evaluation;
+export default Section;

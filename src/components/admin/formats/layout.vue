@@ -2,7 +2,7 @@
     <div>
         <a-row :gutter="32"  class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Crear Evaluación</h1>
+                <h1 class="breadcrumb-header">Crear Formato</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
@@ -14,16 +14,16 @@
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path">Evaluaciones</strong>
+                        <strong class="breadcrumb-path">Formatos</strong>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
                         <strong class="breadcrumb-path-active"
                             v-if="!$route.params.id"
                         >
-                            Crear Evaluación
+                            Crear Formato
                         </strong>
                         <strong class="breadcrumb-path-active" v-else>
-                            Actualizar Evaluación
+                            Actualizar Formato
                         </strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
@@ -35,9 +35,9 @@
         >
             <a-row class="steps">
                 <span class="breadcrumb-header" style="font-weight: 400;">
-                    {{evaluation.name}}
+                    {{format.name}}
                 </span>
-                <span style="font-size: 16px;">{{evaluation.description}}</span>
+                <span style="font-size: 16px;">{{format.description}}</span>
             </a-row>
             <a-divider />
             <a-row :gutter="16">
@@ -73,9 +73,9 @@
                     <a-button
                         type='dashed'
                         class="add-button"
-                        style="width: 48%;"
+                        style="width: 48%; min-width: 200px;"
                         @click="view.sectionModal.show=true"
-                        v-show="lastStep !== 0 || evaluation.id"
+                        v-show="lastStep !== 0 || format.id"
                     >
                         <a-icon type='plus' /> Agregar Sección
                     </a-button>
@@ -83,13 +83,20 @@
                 <a-col :sm="24" :md="12"
                     style="padding-top: 10px; text-align: right;"
                 >
-                    <a-button
-                        style="color: #fb4646; width: 48%;"
-                        @click="deleteSection(currentStep)"
-                        v-show="currentStep !== 0"
+                    <a-popconfirm title="Está seguro de borrar la sección?"
+                        @confirm="deleteSection(currentStep)"
+                        okText="SI"
+                        cancelText="No"
                     >
-                        <a-icon type="delete" /> Borrar Sección
-                    </a-button>
+                        <a-button
+                            style="color: #fb4646; width: 48%; min-width: 200px;"
+                            v-show="currentStep !== 0"
+                        >
+                            <a-icon
+                                :type="view.loadingDelete? 'loading': 'delete'"
+                            /> Borrar Sección
+                        </a-button>
+                    </a-popconfirm>
                 </a-col>
             </a-row>
             <a-row >
@@ -99,6 +106,7 @@
                 />
                 <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                     v-model="step.label"
+                    :sectionId="step.id"
                     :showFinishButton="index === (dinamicSteps.length - 1)"
                     v-show="(index + 1) == currentStep"
                 />
@@ -114,7 +122,11 @@
             />
             <template slot="footer">
                 <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
-                <a-button key="submit" class="btn-green" @click="addSection">
+                <a-button key="submit"
+                    class="btn-green"
+                    @click="addSection"
+                    :loading="view.sectionModal.loading"
+                >
                     Agregar
                 </a-button>
             </template>
@@ -124,8 +136,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import formName from '@/components/admin/createEvaluation/formName.vue';
-import formGeneric from '@/components/admin/createEvaluation/formGeneric.vue';
+import formName from '@/components/admin/formats/formName.vue';
+import formGeneric from '@/components/admin/formats/formGeneric.vue';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -143,17 +155,19 @@ export default {
     data() {
         return {
             view: {
+                loadingDelete: false,
                 activeSection: 0,
                 sectionModal: {
                     show: false,
                     error: null,
                     value: '',
+                    loading: false,
                 },
                 stepsUUID: 2,
                 steps: [
                     {
                         id: 0,
-                        label: 'Nombre de la evaluación',
+                        label: 'Nombre del Formato',
                         name: 'name',
                     },
                 ],
@@ -167,41 +181,69 @@ export default {
             setStep: 'setStep',
             setLastStep: 'setLastStep',
         }),
-        addSection() {
+        async addSection() {
+            this.view.sectionModal.loading = true;
+            const response = await client3B.section.create({
+                name: this.view.sectionModal.value,
+                evaluationTemplateId: this.format.id,
+                displayName: true,
+            }).catch(error => errorHandler(error));
+            if (!response) {
+                this.view.sectionModal.loading = false;
+                return;
+            }
+
+            const section = response.data.result;
             const step = {
-                id: this.view.stepsUUID,
+                id: section.id,
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
             };
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
             this.cancelAddSection();
-            this.setStep(this.view.steps.length - 1);
             this.setLastStep(this.view.steps.length - 1);
+            this.view.sectionModal.loading = false;
+            this.$message.success('Evaluación guardada correctamente');
         },
         cancelAddSection() {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
         },
-        deleteSection(sectionStep) {
+        async deleteSection(sectionStep) {
+            this.view.loadingDelete = true;
+            let section = null;
             let step = -1;
-            this.view.steps = this.view.steps.filter(() => {
+            const leftSteps = this.view.steps.filter((sect) => {
                 step += 1;
+                if (sectionStep === step) {
+                    section = sect;
+                }
                 return sectionStep !== step;
             });
+            const response = await client3B.section.delete({
+                id: section.id,
+            }).catch(error => errorHandler(error));
+            if (!response) {
+                this.view.loadingDelete = false;
+                return;
+            }
+            this.view.steps = leftSteps;
             this.setStep(this.view.steps.length - 1);
             this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
+            this.view.loadingDelete = false;
+            this.$message.success('Evaluación guardada correctamente');
         },
         async fetchData() {
             if (!this.$route.params.id) return;
-            const response = await client3B.evaluation.get(this.$route.params.id)
+            const response = await client3B.format.get(this.$route.params.id)
                 .catch(error => errorHandler(error));
             if (!response) return;
 
-            const evaluaction = response.data.result;
-            this.evaluationId = evaluaction.id;
-            console.log(evaluaction);
-            evaluaction.sections.forEach((section) => {
+            const format = response.data.result;
+            this.formatId = format.id;
+            console.log(format);
+            format.sections.forEach((section) => {
                 this.view.steps.push({
                     id: this.view.stepsUUID,
                     label: section.name,
@@ -217,7 +259,7 @@ export default {
         ...mapGetters({
             currentStep: 'currentStep',
             lastStep: 'lastStep',
-            evaluation: 'evaluation',
+            format: 'format',
         }),
         dinamicSteps() {
             return this.view.steps.slice(1);
@@ -227,21 +269,21 @@ export default {
 </script>
 
 <style scoped>
-.dynamic-delete-button {
-  cursor: pointer;
-  position: relative;
-  top: 4px;
-  font-size: 24px;
-  color: #999;
-  transition: all .3s;
-}
-.dynamic-delete-button:hover {
-  color: #777;
-}
-.add-button {
-    width: 90%;
-}
-.add-button:hover {
-    border-style: dashed;
-}
+    .dynamic-delete-button {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    transition: all .3s;
+    }
+    .dynamic-delete-button:hover {
+    color: #777;
+    }
+    .add-button {
+        width: 90%;
+    }
+    .add-button:hover {
+        border-style: dashed;
+    }
 </style>

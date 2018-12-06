@@ -1,21 +1,21 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Pendientes como colaborador" key="1" style="
+        <a-collapse-panel header="Acciones por finalizar" key="1" style="
             font-family: 'Open Sans';
             font-weight: 600;
             font-size: 14px;"
         >
         <div class="badges-collaborator">
             <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Auto-evaluaciones pendientes</span>
+            <span class="badged-text">Auto-evaluaciones En procesos</span>
         </div>
         <div class="badges-collaborator">
             <a-badge count="1" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Cierre de mis evaluaciones pendientes</span>
+            <span class="badged-text">Cierre de mis evaluaciones En procesos</span>
         </div>
         <div class="badges-collaborator" style="margin-bottom: 5px;">
             <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Objectivos pendientes</span>
+            <span class="badged-text">Objectivos En procesos</span>
         </div>
         </a-collapse-panel>
     </a-collapse>
@@ -30,7 +30,6 @@ export default {
 
 <style scoped>
 .collapse-mod {
-    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 14px;
 }
@@ -50,7 +49,6 @@ export default {
 }
 
 .badged-text {
-    font-family: "Open Sans";
     font-weight: 600;
     font-size: 12px;
     color: #777;

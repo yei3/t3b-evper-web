@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23" style="text-align: center;">
                 Seguimiento a mis objectivos actuales
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="1" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -306,7 +306,7 @@ export default {
                 },
                 {
                     key: '2',
-                    status: 'Pendiente',
+                    status: 'En proceso',
                     objective: {
                         title: 'Portal de Beneficios',
                         subtitle: 'Entregable: Sitio productivo con la información de beneficios',
@@ -349,7 +349,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Completado') {
@@ -365,5 +365,5 @@ export default {
 </script>
 
 <style scoped>
-
+    
 </style>

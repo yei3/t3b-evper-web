@@ -9,33 +9,33 @@ export default {
         evaluation: {},
     },
     getters: {
-        currentStep: state => state.view.currentStep,
-        lastStep: state => state.view.lastStep,
+        // currentStep: state => state.view.currentStep,
+        // lastStep: state => state.view.lastStep,
         evaluation: state => state.evaluation,
     },
     mutations: {
-        nextStep: (_state) => {
-            const state = _state;
-            if (state.view.currentStep < MAX_STEPS) {
-                state.view.currentStep += 1;
-            }
-            state.view.lastStep = Math.max(state.view.currentStep, state.view.lastStep);
-        },
-        previousStep: (_state) => {
-            const state = _state;
-            if (state.view.currentStep > 0) {
-                state.view.currentStep -= 1;
-            }
-            state.view.lastStep = Math.max(state.view.currentStep, state.view.lastStep);
-        },
-        setStep: (_state, step) => {
-            const state = _state;
-            state.view.currentStep = step;
-        },
-        setLastStep: (_state, step) => {
-            const state = _state;
-            state.view.lastStep = step;
-        },
+        // nextStep: (_state) => {
+        //     const state = _state;
+        //     if (state.view.currentStep < MAX_STEPS) {
+        //         state.view.currentStep += 1;
+        //     }
+        //     state.view.lastStep = Math.max(state.view.currentStep, state.view.lastStep);
+        // },
+        // previousStep: (_state) => {
+        //     const state = _state;
+        //     if (state.view.currentStep > 0) {
+        //         state.view.currentStep -= 1;
+        //     }
+        //     state.view.lastStep = Math.max(state.view.currentStep, state.view.lastStep);
+        // },
+        // setStep: (_state, step) => {
+        //     const state = _state;
+        //     state.view.currentStep = step;
+        // },
+        // setLastStep: (_state, step) => {
+        //     const state = _state;
+        //     state.view.lastStep = step;
+        // },
         updateEvaluationForm: (_state, data) => {
             const state = _state;
             state.evaluation = { ...state.evaluation, ...data };
@@ -48,23 +48,23 @@ export default {
         },
     },
     actions: {
-        nextStep: (context) => {
-            context.commit('nextStep');
-        },
-        previousStep: (context) => {
-            context.commit('previousStep');
-        },
-        setStep: (context, step) => {
-            context.commit('setStep', step);
-        },
-        setLastStep: (context, step) => {
-            context.commit('setLastStep', step);
-        },
-        updateEvaluationForm: (context, data) => {
-            context.commit('updateEvaluationForm', data);
+        // nextStep: (context) => {
+        //     context.commit('nextStep');
+        // },
+        // previousStep: (context) => {
+        //     context.commit('previousStep');
+        // },
+        // setStep: (context, step) => {
+        //     context.commit('setStep', step);
+        // },
+        // setLastStep: (context, step) => {
+        //     context.commit('setLastStep', step);
+        // },
+        updateFormatForm: (context, data) => {
+            context.commit('updateFormatForm', data);
         },
         clearEvaluationForm: (context) => {
-            context.commit('clearEvaluationForm');
+            context.commit('clearFormatForm');
         },
     },
 };

@@ -1,40 +1,40 @@
 import Http from './Http';
 
 /**
- * Class to make operations to the Evaluation entity
+ * Class to make operations to the Question entity
  */
-class Evaluation extends Http {
+class Question extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Evaluation';
+        this.entityPath = '/api/services/app/Question';
     }
 
     /**
-     * Request for the information for a evaluation
+     * Request for the information for a question
      *
      * @param {String} UserId   Id for the user
      *
      * @return {Promise}        Http Response
      */
-    get(evaluationId) {
+    get(questionId) {
         const path = `${this.entityPath}/Get`;
-        const params = { Id: evaluationId };
+        const params = { Id: questionId };
         return this.request(path, this.methods.get, params);
     }
 
     /**
-     * Request for the information for all the evaluations
+     * Request for the information for all the questions
      *
      * @return {Promise}        Http Response
      */
     getAll() {
-        const path = `${this.entityPath}/GetAllAsync`;
+        const path = `${this.entityPath}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
 
     /**
-     * Create a new evaluation
-     * @param {Object} data   Data to create a evaluation
+     * Create a new question
+     * @param {Object} data   Data to create a question
      *
      * @return {Promise}        Http Response
      */
@@ -44,8 +44,8 @@ class Evaluation extends Http {
     }
 
     /**
-     * Create a new evaluation
-     * @param {Object} data   Data to create a evaluation
+     * Create a new question
+     * @param {Object} data   Data to create a question
      *
      * @return {Promise}        Http Response
      */
@@ -55,8 +55,8 @@ class Evaluation extends Http {
     }
 
     /**
-     * Delete a new evaluation
-     * @param {Object} data   Data to delete a evaluation
+     * Delete a new question
+     * @param {Object} data   Data to delete a question
      *
      * @return {Promise}        Http Response
      */
@@ -66,4 +66,4 @@ class Evaluation extends Http {
     }
 }
 
-export default Evaluation;
+export default Question;

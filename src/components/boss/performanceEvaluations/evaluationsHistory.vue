@@ -2,9 +2,9 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="12">
-                Autoevaluaciones pendientes
+                Autoevaluaciones En procesos
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="3" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -109,7 +109,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Completado') {

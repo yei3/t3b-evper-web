@@ -1,6 +1,6 @@
 <template>
     <a-layout-sider
-        breakpoint="sm"
+        breakpoint="lg"
         :trigger="null"
         collapsible
         v-model="sidebarCollapsed"
@@ -45,7 +45,7 @@
                 >
                     <a-col style="margin-top: 5px;">
                         <strong
-                            style="font-family: 'Open Sans';
+                            style="
                                 font-size: 13px;
                                 font-weight: 600;
                                 color: #fff;"
@@ -95,11 +95,11 @@
                     >
                         <span slot="title">
                             <a-icon type="user"/>
-                            <span>Colaborador</span>
+                            <span>Evaluado</span>
                         </span>
                         <a-menu-item key="1">
                             <router-link :to="{ name: 'collaborator-home' }"></router-link>
-                            <span>Home Colaborador</span>
+                            <span>Home Evaluado</span>
                         </a-menu-item>
                         <a-menu-item key="2">
                             <router-link
@@ -113,11 +113,11 @@
                     >
                         <span slot="title">
                             <a-icon type="user"/>
-                            <span>Jefe</span>
+                            <span>Evaluador</span>
                         </span>
                         <a-menu-item key="3">
                             <router-link :to="{ name: 'boss-home' }"></router-link>
-                            <span>Home Jefe</span>
+                            <span>Home Evaluador</span>
                         </a-menu-item>
                         <a-menu-item key="4">
                             <router-link to="/"></router-link>
@@ -144,15 +144,15 @@
                             <span>Home </span>
                         </a-menu-item>
                         <a-menu-item key="8">
-                            <router-link to="/"></router-link>
+                            <router-link :to="{ name: 'admin-home' }"></router-link>
                             <span>Formatos</span>
                         </a-menu-item>
                         <a-menu-item key="9">
-                            <router-link to="/"></router-link>
+                            <router-link :to="{ name: 'admin-evaluations' }"></router-link>
                             <span>Evaluaciones</span>
                         </a-menu-item>
                         <a-menu-item key="10">
-                            <router-link to="/-chart"></router-link>
+                            <router-link to="/"></router-link>
                             <span>Organigrama</span>
                         </a-menu-item>
                         <a-menu-item key="11">
@@ -168,7 +168,7 @@
                             <span>Resultados</span>
                         </a-menu-item>
                         <a-menu-item key="14">
-                            <router-link :to="{ name: 'user-update' }"></router-link>
+                            <router-link to="/"></router-link>
                             <span>Usuarios</span>
                         </a-menu-item>
                     </a-sub-menu>
@@ -222,13 +222,13 @@ export default {
                 return 'Administrador';
             }
             if (role === authService.ROLES.SUPERVISOR) {
-                return 'Supervisor';
+                return 'Evaluador';
             }
             if (role === authService.ROLES.COLLABORATOR) {
-                return 'Colaborador';
+                return 'Evaluado';
             }
 
-            return 'Colaborador';
+            return 'Evaluado';
         },
     },
     computed: {
@@ -279,7 +279,6 @@ export default {
 .ant-menu .ant-menu-submenu-title {
     background: #333;
     color: #93a6b9;
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
     font-size: 13px;
 }
@@ -356,7 +355,6 @@ export default {
     color: #fff;
     opacity: 0.8;
     cursor: pointer;
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
     text-decoration:none;
 }

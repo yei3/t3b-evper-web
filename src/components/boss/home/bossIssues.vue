@@ -1,17 +1,16 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
         <a-collapse-panel header="Pendientes como jefe" key="1" style="
-            font-family: 'Open Sans';
             font-weight: 600;
             font-size: 14px;"
         >
         <div class="badges-collaborator">
             <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Evaluaciones de colaboradores pendientes</span>
+            <span class="badged-text">Evaluaciones de colaboradores En procesos</span>
         </div>
         <div class="badges-collaborator">
             <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Validación de objetivos de colaboradores pendientes</span>
+            <span class="badged-text">Validación de objetivos de colaboradores En procesos</span>
         </div>
         </a-collapse-panel>
     </a-collapse>
@@ -26,7 +25,6 @@ export default {
 
 <style scoped>
 .collapse-mod {
-    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 14px;
 }
@@ -37,7 +35,7 @@ export default {
 }
 
 .collapse-mod >>> .ant-collapse-header {
-    color: #676a6c;
+    color: #fff;
 }
 
 .badges-collaborator {
@@ -46,7 +44,6 @@ export default {
 }
 
 .badged-text {
-    font-family: "Open Sans";
     font-weight: 600;
     font-size: 12px;
     color: #777;

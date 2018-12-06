@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title">
-            <a-col :span="12">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23" class="text-center">
                 Cierre de las evaluaciones de Colaboradores
             </a-col>
-            <a-col :span="12" style="text-align: right;">
+            <a-col :span="1" style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -217,7 +217,7 @@ export default {
             data: [
                 {
                     key: '1',
-                    status: 'Pendiente de revisión',
+                    status: 'En revisión',
                     evaluation: {
                         title: 'Período 2017-1',
                         subtitle: 'Evaluación de Desempeño',
@@ -240,7 +240,7 @@ export default {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
             }
-            if (status === 'Pendiente') {
+            if (status === 'En proceso') {
                 return 'ant-tag-yellow';
             }
             if (status === 'Finalizado') {
@@ -253,5 +253,5 @@ export default {
 </script>
 
 <style scoped>
-
+    
 </style>

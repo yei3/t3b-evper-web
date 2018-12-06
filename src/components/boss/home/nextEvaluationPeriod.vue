@@ -17,7 +17,6 @@ export default {
 
 <style scoped>
 .collapse-mod {
-    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 14px;
 }
@@ -28,13 +27,12 @@ export default {
 }
 
 .collapse-mod >>> .ant-collapse-header {
-    color: #676a6c;
+    color: #fff;
 }
 
 .tittle-collapse {
     font-weight: 200;
     font-size: 24px;
-    font-family: "Open Sans";
     font-weight: 300;
     padding-top: 10px;
     padding-bottom: 0px;

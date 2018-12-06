@@ -1,40 +1,40 @@
 import Http from './Http';
 
 /**
- * Class to make operations to the Evaluation entity
+ * Class to make operations to the Format entity
  */
-class Evaluation extends Http {
+class Format extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Evaluation';
+        this.entityPath = '/api/services/app/EvaluationTemplate';
     }
 
     /**
-     * Request for the information for a evaluation
+     * Request for the information for a format
      *
-     * @param {String} UserId   Id for the user
+     * @param {String} FormatId   Id for the user
      *
      * @return {Promise}        Http Response
      */
-    get(evaluationId) {
+    get(formatId) {
         const path = `${this.entityPath}/Get`;
-        const params = { Id: evaluationId };
+        const params = { Id: formatId };
         return this.request(path, this.methods.get, params);
     }
 
     /**
-     * Request for the information for all the evaluations
+     * Request for the information for all the formats
      *
      * @return {Promise}        Http Response
      */
     getAll() {
-        const path = `${this.entityPath}/GetAllAsync`;
+        const path = `${this.entityPath}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
 
     /**
-     * Create a new evaluation
-     * @param {Object} data   Data to create a evaluation
+     * Create a new format
+     * @param {Object} data   Data to create a format
      *
      * @return {Promise}        Http Response
      */
@@ -44,8 +44,8 @@ class Evaluation extends Http {
     }
 
     /**
-     * Create a new evaluation
-     * @param {Object} data   Data to create a evaluation
+     * Create a new format
+     * @param {Object} data   Data to create a format
      *
      * @return {Promise}        Http Response
      */
@@ -55,8 +55,8 @@ class Evaluation extends Http {
     }
 
     /**
-     * Delete a new evaluation
-     * @param {Object} data   Data to delete a evaluation
+     * Delete a new format
+     * @param {Object} data   Data to delete a format
      *
      * @return {Promise}        Http Response
      */
@@ -66,4 +66,4 @@ class Evaluation extends Http {
     }
 }
 
-export default Evaluation;
+export default Format;

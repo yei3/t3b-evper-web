@@ -1,14 +1,17 @@
 <template>
     <div>
         <!-- <a-row :gutter="16">
-            <a-col :span="5">
-                <a-input placeholder="Formatos" />
+            <a-col :span="4">
+                <a-input placeholder="Nombre" />
             </a-col>
             <a-col :span="5">
-                <a-input placeholder="Región" />
+                <a-input placeholder="Area" />
             </a-col>
-            <a-col :span="5">
-                <a-input placeholder="Areas" />
+            <a-col :span="3">
+                <a-input placeholder="Evaluador" />
+            </a-col>
+            <a-col :span="3">
+                <a-input placeholder="Evaluado" />
             </a-col>
             <a-col :span="4">
                 <a-date-picker placeholder="Fecha Inicio" />
@@ -22,7 +25,7 @@
         </a-row> -->
         <a-row class="collapse-title" style="margin-top: 16px;">
             <a-col :span="12">
-                Evaluaciones
+                Formatos
             </a-col>
             <a-col :span="12" style="text-align: right;">
                 <a>
@@ -53,18 +56,18 @@
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
-                <span slot="evaluation" slot-scope="evaluation">
+                <span slot="format" slot-scope="format">
                     <p><a class="table-link">
-                        {{evaluation.title}}
+                        {{format.title}}
                     </a></p>
-                    <p><small>{{evaluation.subtitle}}</small></p>
+                    <p><small>{{format.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
                             <a-menu-item @click="test">
                                 <router-link
-                                    :to="{ name: 'update-evaluation', params: { id: record.key}}">
+                                    :to="{ name: 'update-format', params: { id: record.key}}">
                                     Editar
                                 </router-link>
                             </a-menu-item>
@@ -93,9 +96,9 @@ const columns = [
         scopedSlots: { customRender: 'status' },
     }, {
         title: 'Evaluación',
-        dataIndex: 'evaluation',
-        key: 'evaluation',
-        scopedSlots: { customRender: 'evaluation' },
+        dataIndex: 'format',
+        key: 'format',
+        scopedSlots: { customRender: 'format' },
     }, {
         title: 'Fecha fin',
         dataIndex: 'endDate',
@@ -131,7 +134,7 @@ export default {
         async deleteFormat(id) {
             this.spin = true;
             try {
-                await client3B.Evaluation.delete({
+                await client3B.format.delete({
                     Id: id,
                 });
             } catch (error) {
@@ -139,20 +142,21 @@ export default {
             }
             await this.search();
         },
+        test() {
+            console.log('works');
+        },
         async search() {
             let response = null;
             this.spin = true;
             try {
-                response = await client3B.evaluation.getAll();
-
-                const items = response.data.result;
-                console.log(items);
+                response = await client3B.format.getAll();
+                const { items } = response.data.result;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
                         key: items[index].id,
                         status: this.getStatus(items[index].status),
-                        evaluation: {
+                        format: {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
