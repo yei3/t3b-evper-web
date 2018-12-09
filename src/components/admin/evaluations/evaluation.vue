@@ -41,22 +41,27 @@
             </a-row>
             <a-row :gutter="16">
                 <a-col :span="6">
-                    <a-select placeholder="Formatos" name="format" v-model="formatSelected" style='width: 256px'>
-                        <a-select-option v-for="item in formats" v-bind:value="item.id" :key="item.id">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Formatos">
+                        <a-select-option v-for="item in formats" :key="item.id">
                             {{ item.name }}
                         </a-select-option>
                     </a-select>
+                    <!-- <a-select placeholder="Formatos" name="format" v-model="formatSelected" style='width: 256px'>
+                        <a-select-option v-for="item in formats" v-bind:value="item.id" :key="item.id">
+                            {{ item.name }}
+                        </a-select-option>
+                    </a-select> -->
                 </a-col>
                 <a-col :span="5">
-                    <a-select defaultValue="Regiones" name="region" v-model="regionSelected" style='width: 200px'>
-                        <a-select-option v-for="item in regions" v-bind:value="item.id" :key="item.id">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Regiones">
+                        <a-select-option v-for="item in regions" :key="item.id">
                             {{ item.displayName }}
                         </a-select-option>
                     </a-select>
                 </a-col>
                 <a-col :span="5">
-                    <a-select defaultValue="Areas" name="area" v-model="areaSelected" style='width: 200px'>
-                        <a-select-option v-for="item in areas" v-bind:value="item.id" :key="item.id">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Areas">
+                        <a-select-option v-for="item in areas" :key="item.id">
                             {{ item.displayName }}
                         </a-select-option>
                     </a-select>

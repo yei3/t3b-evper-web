@@ -62,7 +62,7 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
-                            <a-menu-item @click="test">
+                            <a-menu-item>
                                 <router-link
                                     :to="{ name: 'update-evaluation', params: { id: record.key}}">
                                     Editar

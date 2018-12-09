@@ -38,12 +38,9 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a
-                        class="table-link-light"
-                        @click="toggleCBEModal()"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="toggleCBEModal()">
                         Cerrar
-                    </a>
+                    </a-button>
                 </span>
             </a-table>
         </a-row>
@@ -188,5 +185,11 @@ export default {
 </script>
 
 <style scoped>
-    
+    .btn--start-evaluations {
+        border: none;
+        background: #00d5af;
+        color: #000;
+        font-size: 11px;
+        width: 82px;
+    }    
 </style>

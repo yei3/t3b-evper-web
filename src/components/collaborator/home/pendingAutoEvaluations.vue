@@ -41,12 +41,15 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="action">
-                    <router-link
+                    <a-button size="small" class="btn--start-evaluations">
+                        {{transformStatus(action)}}
+                    </a-button>
+                    <!-- <router-link
                         class="table-link-light"
                         :to="{ name: 'collaborator-assessments-apply' }"
                     >
                         {{transformStatus(action)}}
-                    </router-link>
+                    </router-link> -->
                 </span>
             </a-table>
         </a-row>
@@ -139,5 +142,11 @@ export default {
 </script>
 
 <style scoped>
-    
+    .btn--start-evaluations {
+        border: none;
+        background: #00d5af;
+        color: #000;
+        font-size: 11px;
+        width: 82px;
+    }
 </style>

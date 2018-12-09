@@ -22,7 +22,7 @@ export default {
         color: white
     }
     .ant-tag {
-        width: 71px;
+        width: 84px;
         color: #606060;        
         text-align: center;
     }
@@ -59,14 +59,26 @@ export default {
         color: #fff;
         line-height: 16px;
         text-align: center;
-        background: #ff5b5b;        
+        background: #ff5b5b;
+        border-radius: 6px 6px 0px 0;
+    }
+    .collapse {
+        border-top: none;
+        border-radius: 6px;
+    }
+    .ant-collapse-borderless > .ant-collapse-item {
+        border-bottom: none;
     }
     .collapse-tittle-link {
         color: #fff;
     }
     .ant-collapse-borderless {
         background: #ff5b5b;
-    }        
+        border-radius: 6px;
+    }
+    .ant-collapse-content {
+        background: #fff !important;
+    }
     .ant-collapse > .ant-collapse-item > .ant-collapse-header {
         line-height: 16px;
     }
