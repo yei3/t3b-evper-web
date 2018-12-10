@@ -59,7 +59,7 @@ export default {
         color: #fff;
         line-height: 16px;
         text-align: center;
-        background: #ff5b5b;
+        background: #ff6565;
         border-radius: 6px 6px 0px 0;
     }
     .collapse {
@@ -73,7 +73,7 @@ export default {
         color: #fff;
     }
     .ant-collapse-borderless {
-        background: #ff5b5b;
+        background: #ff6565;
         border-radius: 6px;
     }
     .ant-collapse-content {
