@@ -41,7 +41,7 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="action">
-                    <a-button size="small" class="btn--start-evaluations">
+                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation()">
                         {{transformStatus(action)}}
                     </a-button>
                     <!-- <router-link
@@ -119,6 +119,9 @@ export default {
         };
     },
     methods: {
+        fillEvaluation() {
+            this.$router.push({ name: 'collaborator-assessments-apply' });
+        },
         transformStatus(status) {
             if (status === 'En proceso' || status === 'Finalizado') {
                 return 'Continuar';
@@ -148,5 +151,9 @@ export default {
         color: #000;
         font-size: 11px;
         width: 82px;
+    }
+    .btn--start-evaluations:hover {
+        background: #00af8f;
+        color: #fff;
     }
 </style>

@@ -191,5 +191,9 @@ export default {
         color: #000;
         font-size: 11px;
         width: 82px;
-    }    
+    }
+    .btn--start-evaluations:hover {
+        background: #00af8f;
+        color: #fff;
+    }
 </style>
