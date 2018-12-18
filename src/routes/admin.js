@@ -9,7 +9,7 @@ import Users from '@/components/admin/users/users.vue';
 
 export default [
     {
-        path: 'admin/home',
+        path: 'admin/formats',
         name: 'admin-home',
         component: Home,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),

@@ -23,27 +23,9 @@
                 <a-button shape="circle" icon="search" @click="search" />
             </a-col>
         </a-row> -->
-        <a-row class="collapse-title" style="margin-top: 16px;">
+        <a-row class="collapse-title" style="margin-top: 0px;">
             <a-col :span="12">
-                Formatos
-            </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
+                <h1>Formatos</h1>
             </a-col>
         </a-row>
         <a-row v-show="spin">

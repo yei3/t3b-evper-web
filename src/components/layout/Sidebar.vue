@@ -12,13 +12,28 @@
             style="padding: 25px 0px 20px 15px; background-color: #ff0000"
             v-show="sidebarCollapsed"
         >
-            <a-col v-show="sidebarCollapsed">
-                <a-avatar
-                    shape="square"
-                    :size="48"
-                    src="/favicon.ico"
-                />
-            </a-col>
+            <a-dropdown >
+                <a-col class="ant-dropdown-link" v-show="sidebarCollapsed">
+                    <a-avatar
+                        shape="square"
+                        :size="48"
+                        src="/favicon.ico"
+                    />
+                </a-col>
+                <a-menu slot="overlay">
+                    <a-menu-item
+                        :key="arole"
+                        v-for="arole in user.roles"
+                        v-show="arole !== userCurrentRole"
+                    >
+                        <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
+                    </a-menu-item>
+                    <a-menu-item>
+                        <a @click="logout">Cerrar Sesión</a>
+                    </a-menu-item>
+                </a-menu>
+            </a-dropdown>
+
         </a-row>
         <a-row
             style="padding: 35px 25px 23px 25px; background-color: #ff0000;
@@ -83,95 +98,100 @@
         </a-row>
         <a-row>
             <a-col>
-                    <a-menu
+                <a-menu
                     mode="inline"
                     :openKeys="openKeys"
                     @openChange="onOpenChange"
                     theme="dark"
                 >
-                    <a-sub-menu key="sub1"
-                        v-show="role == rolesAvailables.COLLABORATOR"
-                        class="custom-sub-menu"
-                    >
-                        <span slot="title">
-                            <a-icon type="user"/>
-                            <span>Evaluado</span>
-                        </span>
-                        <a-menu-item key="1">
-                            <router-link :to="{ name: 'collaborator-home' }"></router-link>
+                    <a-menu-item key="1" v-show="role == rolesAvailables.COLLABORATOR">
+                        <router-link :to="{ name: 'collaborator-home' }">
+                            <a-icon type="home" />
                             <span>Home Evaluado</span>
-                        </a-menu-item>
-                        <a-menu-item key="2">
-                            <router-link
-                                :to="{ name: 'collaborator-assessments' }"
-                            ></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="2" v-show="role == rolesAvailables.COLLABORATOR">
+                        <router-link :to="{ name: 'collaborator-assessments' }" >
+                            <a-icon type="form" />
                             <span>Evaluaciones</span>
-                        </a-menu-item>
-                    </a-sub-menu>
-                    <a-sub-menu key="sub2"
-                        v-show="role == rolesAvailables.SUPERVISOR"
-                    >
-                        <span slot="title">
-                            <a-icon type="user"/>
-                            <span>Evaluador</span>
-                        </span>
-                        <a-menu-item key="3">
-                            <router-link :to="{ name: 'boss-home' }"></router-link>
+                        </router-link>
+                    </a-menu-item>
+
+                    <a-menu-item key="3" v-show="role == rolesAvailables.SUPERVISOR">
+                        <router-link :to="{ name: 'boss-home' }">
+                            <a-icon type="home" />
                             <span>Home Evaluador</span>
-                        </a-menu-item>
-                        <a-menu-item key="4">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="4" v-show="role == rolesAvailables.SUPERVISOR">
+                        <router-link to="/">
+                            <a-icon type="form" />
                             <span>Evaluaciones</span>
-                        </a-menu-item>
-                        <a-menu-item key="5">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="5" v-show="role == rolesAvailables.SUPERVISOR">
+                        <router-link to="/">
+                            <a-icon type="notification" />
                             <span>Avisos</span>
-                        </a-menu-item>
-                        <a-menu-item key="6">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="6" v-show="role == rolesAvailables.SUPERVISOR">
+                        <router-link to="/">
+                            <a-icon type="line-chart" />
                             <span>Resultados</span>
-                        </a-menu-item>
-                    </a-sub-menu>
-                    <a-sub-menu key="sub3"
-                        v-show="role == rolesAvailables.ADMINISTRATOR"
-                    >
-                        <span slot="title">
-                            <a-icon type="user" />
-                            <span>Administrador</span>
-                        </span>
-                        <a-menu-item key="7">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+
+                    <!--
+                    <a-menu-item key="7" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link to="/">
+                            <a-icon type="home" />
                             <span>Home </span>
-                        </a-menu-item>
-                        <a-menu-item key="8">
-                            <router-link :to="{ name: 'admin-home' }"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    -->
+                    <a-menu-item key="8" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link :to="{ name: 'admin-home' }">
+                            <a-icon type="file-text" />
                             <span>Formatos</span>
-                        </a-menu-item>
-                        <a-menu-item key="9">
-                            <router-link :to="{ name: 'admin-evaluations' }"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="9" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link :to="{ name: 'admin-evaluations' }">
+                            <a-icon type="form" />
                             <span>Evaluaciones</span>
-                        </a-menu-item>
-                        <a-menu-item key="10">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="10" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link to="/">
+                            <a-icon type="cluster" />
                             <span>Organigrama</span>
-                        </a-menu-item>
-                        <a-menu-item key="11">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="11" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link to="/">
+                            <a-icon type="setting" />
                             <span>Configuración</span>
-                        </a-menu-item>
-                        <a-menu-item key="12">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="12" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link to="/">
+                            <a-icon type="notification" />
                             <span>Avisos</span>
-                        </a-menu-item>
-                        <a-menu-item key="13">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="13" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link to="/">
+                            <a-icon type="line-chart" />
                             <span>Resultados</span>
-                        </a-menu-item>
-                        <a-menu-item key="14">
-                            <router-link to="/"></router-link>
+                        </router-link>
+                    </a-menu-item>
+                    <a-menu-item key="14" v-show="role == rolesAvailables.ADMINISTRATOR">
+                        <router-link to="/">
+                            <a-icon type="user" />
                             <span>Usuarios</span>
-                        </a-menu-item>
-                    </a-sub-menu>
+                        </router-link>
+                    </a-menu-item>
                 </a-menu>
             </a-col>
         </a-row>
