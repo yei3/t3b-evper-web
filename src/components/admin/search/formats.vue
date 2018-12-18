@@ -50,6 +50,7 @@
                                     @confirm="deleteFormat(record.key)"
                                     okText="SI"
                                     cancelText="No"
+                                    class="pop-confirm"
                                 >
                                     Eliminar
                                 </a-popconfirm>
@@ -177,6 +178,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.pop-confirm:hover {
+    color: white;
+}
 </style>

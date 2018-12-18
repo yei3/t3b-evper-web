@@ -383,4 +383,8 @@ export default {
 .ant-menu.ant-menu-dark .ant-menu-item-selected {
     border-left: 2px solid #1890ff;
 }
+
+.ant-dropdown-menu-item >>> a:hover {
+    color: #333;
+}
 </style>
