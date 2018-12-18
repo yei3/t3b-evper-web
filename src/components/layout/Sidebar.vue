@@ -379,4 +379,8 @@ export default {
     font-size: 12px;
     text-decoration:none;
 }
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected {
+    border-left: 2px solid #1890ff;
+}
 </style>
