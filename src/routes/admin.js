@@ -40,7 +40,7 @@ export default [
     },
     {
         path: 'admin/users',
-        name: 'users',
+        name: 'admin-users',
         component: Users,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },

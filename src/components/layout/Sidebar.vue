@@ -168,7 +168,7 @@
                             <span>Resultados</span>
                         </a-menu-item>
                         <a-menu-item key="14">
-                            <router-link to="/"></router-link>
+                            <router-link :to="{ name: 'admin-users' }"></router-link>
                             <span>Usuarios</span>
                         </a-menu-item>
                     </a-sub-menu>
