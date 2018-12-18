@@ -1,24 +1,45 @@
 <template>
-    <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Acciones por finalizar" key="1" style="
-            font-family: 'Open Sans';
-            font-weight: 600;
-            font-size: 14px;"
-        >
-        <div class="badges-collaborator">
-            <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Auto-evaluaciones En procesos</span>
-        </div>
-        <div class="badges-collaborator">
-            <a-badge count="1" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Cierre de mis evaluaciones En procesos</span>
-        </div>
-        <div class="badges-collaborator" style="margin-bottom: 5px;">
-            <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Objectivos En procesos</span>
-        </div>
-        </a-collapse-panel>
-    </a-collapse>
+    <div class="collapse">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23" style="text-align: center;">
+                Acciones por finalizar
+            </a-col>
+            <a-col :span="1" style="text-align: right;">
+                <a>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
+                </a>
+                <a>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
+                </a>
+            </a-col>
+        </a-row>
+        <a-row class="collapse-content" v-show="!collapsed">
+            <div class="badges-collaborator">
+                <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <span class="badged-text">Auto-evaluaciones En procesos</span>
+            </div>
+            <div class="badges-collaborator">
+                <a-badge count="1" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <span class="badged-text">Cierre de mis evaluaciones En procesos</span>
+            </div>
+            <div class="badges-collaborator" style="margin-bottom: 5px;">
+                <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <span class="badged-text">Objectivos En procesos</span>
+            </div>
+        </a-row>
+        
+    </div>
+    
 </template>
 
 

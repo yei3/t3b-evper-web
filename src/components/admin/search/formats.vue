@@ -23,29 +23,7 @@
                 <a-button shape="circle" icon="search" @click="search" />
             </a-col>
         </a-row> -->
-        <a-row class="collapse-title" style="margin-top: 16px;">
-            <a-col :span="12">
-                Formatos
-            </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
-            </a-col>
-        </a-row>
+        
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin size="large" />
@@ -70,7 +48,7 @@
                             </a-menu-item>
                             <a-menu-item >
                                 <a-popconfirm
-                                    title="¿Está seguro de borrar el Formato de Evaluación?"
+                                    title="¿Está seguro de eliminar el Formato de Evaluación?"
                                     @confirm="deleteFormat(record.key)"
                                     okText="SI"
                                     cancelText="No"

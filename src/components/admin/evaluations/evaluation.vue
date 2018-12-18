@@ -7,7 +7,7 @@
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-home' }"
+                        <router-link :to="{ name: 'admin-evaluations' }"
                             class="breadcrumb-path"
                         >
                             Administrador de Evaluaciones

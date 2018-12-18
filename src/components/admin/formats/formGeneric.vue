@@ -33,7 +33,7 @@
                             <a-icon type="edit" class="form-icon"/> Editar
                         </a>
                     </a-tooltip>
-                    <a-tooltip placement="top" title="Borrar Subsección">
+                    <a-tooltip placement="top" title="Eliminar">
                         <a @click="removeSubsection(subsection)"
                             style="color: #777; margin: 0px 15px 0px 10px;"
                             :disabled="subsection.loading"
