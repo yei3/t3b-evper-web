@@ -35,12 +35,6 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <span slot="format" slot-scope="format">
-                    <p><a class="table-link">
-                        {{format.title}}
-                    </a></p>
-                    <p><small>{{format.subtitle}}</small></p>
-                </span>
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
@@ -52,7 +46,7 @@
                             </a-menu-item>
                             <a-menu-item >
                                 <a-popconfirm
-                                    title="¿Está seguro de borrar el Formato de Evaluación?"
+                                    title="¿Está seguro de eliminar el Formato de Evaluación?"
                                     @confirm="deleteFormat(record.key)"
                                     okText="SI"
                                     cancelText="No"
@@ -76,10 +70,14 @@ import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
-        title: 'Evaluación',
-        dataIndex: 'format',
+        title: 'Nombre',
+        dataIndex: 'format.title',
         key: 'format',
-        scopedSlots: { customRender: 'format' },
+    },
+    {
+        title: 'Descripción',
+        dataIndex: 'format.subtitle',
+        key: 'format',
     },
     {
         title: '',

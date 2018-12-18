@@ -10,7 +10,7 @@
                         <router-link :to="{ name: 'admin-home' }"
                             class="breadcrumb-path"
                         >
-                            Home Administrador
+                            Formatos
                         </router-link>
                     </a-breadcrumb-item>
                 </a-breadcrumb>

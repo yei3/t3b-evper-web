@@ -7,10 +7,10 @@
             <a-col :span="20">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-home' }"
+                        <router-link :to="{ name: 'admin-evaluations' }"
                             class="breadcrumb-path"
                         >
-                            Home Administrador
+                            Evaluaciones
                         </router-link>
                     </a-breadcrumb-item>
                 </a-breadcrumb>

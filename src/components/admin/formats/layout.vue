@@ -10,11 +10,8 @@
                         <router-link :to="{ name: 'admin-home' }"
                             class="breadcrumb-path"
                         >
-                            Home Administrador
+                            Formatos
                         </router-link>
-                    </a-breadcrumb-item>
-                    <a-breadcrumb-item>
-                        <strong class="breadcrumb-path">Formatos</strong>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
                         <strong class="breadcrumb-path-active"
@@ -83,7 +80,7 @@
                 <a-col :sm="24" :md="12"
                     style="padding-top: 10px; text-align: right;"
                 >
-                    <a-popconfirm title="Está seguro de borrar la sección?"
+                    <a-popconfirm title="Está seguro de eliminar la sección?"
                         @confirm="deleteSection(currentStep)"
                         okText="SI"
                         cancelText="No"
@@ -194,7 +191,7 @@ export default {
                 name: this.view.sectionModal.value,
                 evaluationTemplateId: this.format.id,
                 displayName: true,
-            }).catch(error => errorHandler(error));
+            }).catch(this.$message.success('Hubo un error al guardar la sección'));
             if (!response) {
                 this.view.sectionModal.loading = false;
                 return;
@@ -231,7 +228,7 @@ export default {
             });
             const response = await client3B.section.delete({
                 id: section.id,
-            }).catch(error => errorHandler(error));
+            }).catch(this.$message.success('Hubo un error al eliminar la sección'));
             if (!response) {
                 this.view.loadingDelete = false;
                 return;
