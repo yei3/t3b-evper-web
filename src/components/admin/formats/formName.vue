@@ -15,6 +15,7 @@
                         label='Nombre del Formato'
                         fieldDecoratorId="name"
                         :fieldDecoratorOptions="{
+                            initialValue: evaluation.name,
                             rules: [
                                 {
                                     required: true,
@@ -23,7 +24,9 @@
                             ]
                         }"
                     >
-                        <a-input v-model="evaluation.name"/>
+                        <a-input
+                            v-model="evaluation.name"
+                        />
                     </a-form-item>
                 </a-col>
                 <a-col :sm="24" :md="12">
@@ -31,6 +34,7 @@
                         label='Descripción del Formato'
                         fieldDecoratorId="description"
                         :fieldDecoratorOptions="{
+                            initialValue: evaluation.description,
                             rules: [
                                 {
                                     required: true,
@@ -47,6 +51,7 @@
                         label='Instrucciones del Formato'
                         fieldDecoratorId="instructions"
                         :fieldDecoratorOptions="{
+                            initialValue: evaluation.instructions,
                             rules: [
                                 {
                                     required: true,
@@ -84,6 +89,10 @@ import errorHandler from '@/views/errorHandler';
 
 export default {
     props: {
+        formatfetched: {
+            type: Object,
+            required: false,
+        }
     },
     data() {
         return {
@@ -91,11 +100,14 @@ export default {
                 loading: false,
             },
             evaluation: {
-                name: '',
-                description: '',
-                instructions: '',
+                name: 'name',
+                description: 'description',
+                instructions: 'instructions',
             },
         };
+    },
+    mounted() {
+        this.loadData();
     },
     methods: {
         ...mapActions({
@@ -104,6 +116,13 @@ export default {
             updateFormatForm: 'updateFormatForm',
             setLastStep: 'setLastStep',
         }),
+        loadData() {
+            if (this.formatfetched) {
+                this.evaluation.name = this.formatfetched.name;
+                this.evaluation.description = this.formatfetched.description;
+                this.evaluation.instructions = this.formatfetched.instructions;
+            }
+        },
         handleForm(e) {
             e.preventDefault();
             this.form.validateFields((error) => {

@@ -23,29 +23,7 @@
                 <a-button shape="circle" icon="search" @click="search" />
             </a-col>
         </a-row> -->
-        <a-row class="collapse-title" style="margin-top: 16px;">
-            <a-col :span="12">
-                Formatos
-            </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
-            </a-col>
-        </a-row>
+        
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin size="large" />
@@ -53,9 +31,6 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                </span>
                 <span slot="format" slot-scope="format">
                     <p><a class="table-link">
                         {{format.title}}
@@ -71,8 +46,15 @@
                                     Editar
                                 </router-link>
                             </a-menu-item>
-                            <a-menu-item @click="deleteFormat(record.key)">
-                                Eliminar
+                            <a-menu-item >
+                                <a-popconfirm
+                                    title="¿Está seguro de eliminar el Formato de Evaluación?"
+                                    @confirm="deleteFormat(record.key)"
+                                    okText="SI"
+                                    cancelText="No"
+                                >
+                                    Eliminar
+                                </a-popconfirm>
                             </a-menu-item>
                         </a-menu>
                         <a-button class="ant-btn-small">
@@ -90,19 +72,10 @@ import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
-    }, {
         title: 'Evaluación',
         dataIndex: 'format',
         key: 'format',
         scopedSlots: { customRender: 'format' },
-    }, {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
     },
     {
         title: '',

@@ -64,6 +64,17 @@ class Evaluation extends Http {
         const path = `${this.entityPath}/Delete`;
         return this.request(path, this.methods.delete, data);
     }
+
+    /**
+     * Apply a format to several orgnizations units
+     * @param {Object} data   Data to delete a format
+     *
+     * @return {Promise}        Http Response
+     */
+    apply(data) {
+        const path = `${this.entityPath}/ApplyEvaluationTemplate`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default Evaluation;

@@ -83,7 +83,7 @@
                 <a-col :sm="24" :md="12"
                     style="padding-top: 10px; text-align: right;"
                 >
-                    <a-popconfirm title="Está seguro de borrar la sección?"
+                    <a-popconfirm title="Está seguro de eliminar la sección?"
                         @confirm="deleteSection(currentStep)"
                         okText="SI"
                         cancelText="No"
@@ -94,19 +94,23 @@
                         >
                             <a-icon
                                 :type="view.loadingDelete? 'loading': 'delete'"
-                            /> Borrar Sección
+                            /> Eliminar Sección
                         </a-button>
                     </a-popconfirm>
                 </a-col>
             </a-row>
             <a-row >
                 <form-name
+                    v-for="(_, index) in view.formNames"
+                    :key="index"
                     v-show="currentStep === 0"
                     :showContinueButton="dinamicSteps.length !== 0"
+                    :formatfetched="formatfetched"
                 />
                 <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                     v-model="step.label"
                     :sectionId="step.id"
+                    :subsectionsFetched="step.section.childSections"
                     :showFinishButton="index === (dinamicSteps.length - 1)"
                     v-show="(index + 1) == currentStep"
                 />
@@ -154,7 +158,9 @@ export default {
     },
     data() {
         return {
+            formatfetched: {},
             view: {
+                formNames: [],
                 loadingDelete: false,
                 activeSection: 0,
                 sectionModal: {
@@ -180,6 +186,7 @@ export default {
             previousStep: 'previousStep',
             setStep: 'setStep',
             setLastStep: 'setLastStep',
+            updateFormatForm: 'updateFormatForm',
         }),
         async addSection() {
             this.view.sectionModal.loading = true;
@@ -187,7 +194,7 @@ export default {
                 name: this.view.sectionModal.value,
                 evaluationTemplateId: this.format.id,
                 displayName: true,
-            }).catch(error => errorHandler(error));
+            }).catch(this.$message.success('Hubo un error al guardar la sección'));
             if (!response) {
                 this.view.sectionModal.loading = false;
                 return;
@@ -198,6 +205,7 @@ export default {
                 id: section.id,
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
+                section: { childSections: [] },
             };
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
@@ -223,7 +231,7 @@ export default {
             });
             const response = await client3B.section.delete({
                 id: section.id,
-            }).catch(error => errorHandler(error));
+            }).catch(this.$message.success('Hubo un error al eliminar la sección'));
             if (!response) {
                 this.view.loadingDelete = false;
                 return;
@@ -235,23 +243,33 @@ export default {
             this.$message.success('Evaluación guardada correctamente');
         },
         async fetchData() {
-            if (!this.$route.params.id) return;
+            if (!this.$route.params.id) {
+                this.view.formNames.push(1);
+                return;
+            };
             const response = await client3B.format.get(this.$route.params.id)
                 .catch(error => errorHandler(error));
             if (!response) return;
 
             const format = response.data.result;
+            this.formatfetched = format;
             this.formatId = format.id;
-            console.log(format);
+            this.updateFormatForm({
+                id: format.id,
+                name: format.name,
+                description: format.description,
+                instructions: format.instructions,
+            });
             format.sections.forEach((section) => {
                 this.view.steps.push({
-                    id: this.view.stepsUUID,
+                    id: section.id,
                     label: section.name,
                     name: section.name,
+                    section,
                 });
                 this.view.stepsUUID += 1;
             });
-
+            this.view.formNames.push(1);
             this.setLastStep(this.view.steps.length - 1);
         },
     },

@@ -59,11 +59,12 @@
                     </a></p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
+                
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
                             <a-menu-item>
-                                <router-link
+                                <router-link disabled
                                     :to="{ name: 'update-evaluation', params: { id: record.key}}">
                                     Editar
                                 </router-link>
@@ -146,7 +147,7 @@ export default {
                 response = await client3B.evaluation.getAll();
 
                 const items = response.data.result;
-                console.log(items);
+                // console.log(items);
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
@@ -156,7 +157,7 @@ export default {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
-                        endDate: items[index].endDate,
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }
             } catch (error) {
