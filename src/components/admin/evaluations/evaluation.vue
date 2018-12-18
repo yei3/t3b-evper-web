@@ -40,7 +40,12 @@
 
             </a-row>
             <a-row :gutter="16">
-                <a-col :span="6">
+
+                <a-col :span="8">
+                    <a-input v-model="form.name" placeholder="Nombre" />
+                </a-col>
+
+                <a-col :span="8" style="padding-bottom: 15px;">
                     <a-select style="width: 100%" placeholder="Formatos"
                         v-model="form.format"
                     >
@@ -57,7 +62,7 @@
                     </a-select> -->
                 </a-col>
 
-                <a-col :span="5">
+                <a-col :span="8" style="padding-bottom: 15px;">
                     <a-select mode="multiple" style="width: 100%" placeholder="Regions"
                         v-model="form.regs"
                     >
@@ -68,7 +73,7 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="5">
+                <a-col :span="8" style="padding-bottom: 15px;">
                     <a-select mode="multiple" style="width: 100%" placeholder="Areas"
                         v-model="form.areas"
                     >
@@ -79,15 +84,21 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="4">
-                    <a-date-picker placeholder="Fecha Inicio" v-model="form.startDate"/>
+                <a-col :span="8" style="padding-bottom: 15px;">
+                    <a-date-picker placeholder="Fecha Inicio"
+                        style="width: 100%"
+                        v-model="form.startDate"
+                    />
                 </a-col>
-                <a-col :span="4">
-                    <a-date-picker placeholder="Fecha Fin" v-model="form.finishDate"/>
+                <a-col :span="8" style="padding-bottom: 15px;">
+                    <a-date-picker placeholder="Fecha Fin"
+                        style="width: 100%"
+                        v-model="form.finishDate"
+                    />
                 </a-col>
             </a-row>
             <a-row class="text-right" style="padding: 16px 0;">
-                <a-button type="primary" ghost @click="applyEvaluation()">
+                <a-button class="btn-green" @click="applyEvaluation()">
                     Programar <a-icon type="plus" />
                 </a-button>
             </a-row>
@@ -114,6 +125,7 @@ export default {
             regions: [],
             areas: [],
             form: {
+                name: null,
                 format: null,
                 regs: [],
                 areas: [],
@@ -151,9 +163,8 @@ export default {
             this.spin = false;
         },
         async applyEvaluation() {
-            const format = this.formats.find(format => format.id === this.form.format);
             const response = await client3B.evaluation.apply({
-                name: format.name + this.startDate,
+                name: this.form.name,
                 evaluationTemplateId: this.form.format,
                 organizationUnitIds: [...this.form.areas, ...this.form.regs],
                 startDate: this.form.startDate,
