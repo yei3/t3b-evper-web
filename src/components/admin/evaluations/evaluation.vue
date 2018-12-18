@@ -37,40 +37,53 @@
                 <a-col :span="24">
                     Programar nueva Evaluación
                 </a-col>
-                
+
             </a-row>
             <a-row :gutter="16">
                 <a-col :span="6">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Formatos">
-                        <a-select-option v-for="item in formats" :key="item.id">
+                    <a-select style="width: 100%" placeholder="Formatos"
+                        v-model="form.format"
+                    >
+                        <a-select-option v-for="(item, index) in formats" :key="index"
+                            :value="item.id"
+                        >
                             {{ item.name }}
                         </a-select-option>
                     </a-select>
                     <!-- <a-select placeholder="Formatos" name="format" v-model="formatSelected" style='width: 256px'>
-                        <a-select-option v-for="item in formats" v-bind:value="item.id" :key="item.id">
+                        <a-select-option v-for="(item, index) in formats" v-bind:value="item.id" :key="index">
                             {{ item.name }}
                         </a-select-option>
                     </a-select> -->
                 </a-col>
+
                 <a-col :span="5">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Regiones">
-                        <a-select-option v-for="item in regions" :key="item.id">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Regions"
+                        v-model="form.regs"
+                    >
+                        <a-select-option v-for="(item, index) in regions" :key="index"
+                            :value="item.id"
+                        >
                             {{ item.displayName }}
                         </a-select-option>
                     </a-select>
                 </a-col>
                 <a-col :span="5">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Areas">
-                        <a-select-option v-for="item in areas" :key="item.id">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Areas"
+                        v-model="form.areas"
+                    >
+                        <a-select-option v-for="(item, index) in areas" :key="index"
+                            :value="item.id"
+                        >
                             {{ item.displayName }}
                         </a-select-option>
                     </a-select>
                 </a-col>
                 <a-col :span="4">
-                    <a-date-picker placeholder="Fecha Inicio" />
+                    <a-date-picker placeholder="Fecha Inicio" v-model="form.startDate"/>
                 </a-col>
                 <a-col :span="4">
-                    <a-date-picker placeholder="Fecha Fin" />
+                    <a-date-picker placeholder="Fecha Fin" v-model="form.finishDate"/>
                 </a-col>
             </a-row>
             <a-row class="text-right" style="padding: 16px 0;">
@@ -83,7 +96,7 @@
                     <a-spin size="large" />
                 </div>
             </a-row>
-        </div>        
+        </div>
     </div>
 </template>
 
@@ -100,58 +113,61 @@ export default {
             formats: [],
             regions: [],
             areas: [],
-            formatSelected: null,
-            regionSelected: null,
-            areaSelected: null,
+            form: {
+                format: null,
+                regs: [],
+                areas: [],
+                startDate: null,
+                finishDate: null,
+            }
         };
     },
     created() {
         // fetch the data when the view is created and the data is
-        // already being observed        
+        // already being observed
         this.getAllFormats();
         this.getAllRegions();
         this.getAllAreas();
     },
     components: {
-        
+
     },
     methods: {
-        applyEvaluation() {
-            this.$router.push({ name: 'admin-evaluations' });
-        },
         async getAllFormats() {
             this.spin = true;
-            let response = null;
-            try {
-                response = await client3B.format.getAll();                
-                this.formats = response.data.result.items;
-            } catch (error) {
-                console.log(error);
-            }
+            const response = await client3B.format.getAll()
+                .catch(error => errorHandler(error));
+            this.formats = response.data.result.items;
         },
         async getAllRegions() {
-            let response = null;
-            try {
-                response = await client3B.organizationUnit.getAllRegions();
-                this.regions = response.data.result;
-            } catch (error) {
-                console.log(error);
-            }
+            const response = await client3B.organizationUnit.getAllRegions()
+                .catch(error => errorHandler(error));
+            this.regions = response.data.result;
         },
         async getAllAreas() {
-            let response = null;
-            try {
-                response = await client3B.organizationUnit.getAllAreas();
-                this.areas = response.data.result;
-            } catch (error) {
-                console.log(error);
-            }
+            const response = await client3B.organizationUnit.getAllAreas()
+                .catch(error => errorHandler(error));
+            this.areas = response.data.result;
             this.spin = false;
         },
-    }    
+        async applyEvaluation() {
+            const format = this.formats.find(format => format.id === this.form.format);
+            const response = await client3B.evaluation.apply({
+                name: format.name + this.startDate,
+                evaluationTemplateId: this.form.format,
+                organizationUnitIds: [...this.form.areas, ...this.form.regs],
+                startDate: this.form.startDate,
+                endDate: this.form.finishDate,
+            }).catch(error => errorHandler(error))
+            if (response) {
+                this.$message.success('Evaluación aplicada correctamente.');
+                this.$router.push({ name: 'admin-evaluations' });
+            }
+        },
+    }
 };
 </script>
 
 <style scoped>
-    
+
 </style>

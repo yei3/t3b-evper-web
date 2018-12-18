@@ -53,9 +53,6 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                </span>
                 <span slot="format" slot-scope="format">
                     <p><a class="table-link">
                         {{format.title}}
@@ -97,19 +94,10 @@ import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
-    }, {
         title: 'Evaluación',
         dataIndex: 'format',
         key: 'format',
         scopedSlots: { customRender: 'format' },
-    }, {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
     },
     {
         title: '',
