@@ -94,7 +94,7 @@
                         >
                             <a-icon
                                 :type="view.loadingDelete? 'loading': 'delete'"
-                            /> Borrar Sección
+                            /> Eliminar Sección
                         </a-button>
                     </a-popconfirm>
                 </a-col>
@@ -154,6 +154,7 @@ export default {
     },
     data() {
         return {
+            formatfetched: {},
             view: {
                 loadingDelete: false,
                 activeSection: 0,
@@ -180,6 +181,7 @@ export default {
             previousStep: 'previousStep',
             setStep: 'setStep',
             setLastStep: 'setLastStep',
+            updateFormatForm: 'updateFormatForm',
         }),
         async addSection() {
             this.view.sectionModal.loading = true;
@@ -241,8 +243,15 @@ export default {
             if (!response) return;
 
             const format = response.data.result;
+            this.formatfetched = format;
             this.formatId = format.id;
-            console.log(format);
+            console.log('fetched', this.formatfetched);
+            this.updateFormatForm({
+                id: format.id,
+                name: format.name,
+                description: format.description,
+                instructions: format.instructions,
+            });
             format.sections.forEach((section) => {
                 this.view.steps.push({
                     id: this.view.stepsUUID,

@@ -170,19 +170,25 @@
                             placeholder="Relación de aprobación del objetivo"
                             @select="setQuestionAsModify(question)"
                         >
-                            <a-select-option value="gt">
-                                Mientras más grande mejor
+                            <a-select-option value="1">
+                                El valor real debe ser menor al del objetivo
                             </a-select-option>
-                            <a-select-option value="lt">
-                                Mientras más pequeño mejor
+                            <a-select-option value="2">
+                                El valor real debe ser menor o igual al del objetivo
                             </a-select-option>
-                            <a-select-option value="eq">
-                                Debe ser igual
+                            <a-select-option value="3">
+                                El valor real debe ser igual al del objetivo
+                            </a-select-option>
+                            <a-select-option value="5">
+                                El valor real debe ser mayor o igual al del objetivo
+                            </a-select-option>
+                            <a-select-option value="4">
+                                El valor real debe ser mayor al del objetivo
                             </a-select-option>
                         </a-select>
                     </a-form-item>
                     <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
-                        <a @click="removeQuestion(subsection.key, question.key)"
+                        <a @click="removeQuestion(subsection.key, question)"
                             class="link-delete-question form-icon"
                             style="padding-right: 2%;"
                             :disabled="question.loading"
@@ -214,7 +220,7 @@
                 <a-row><a-col :md="24" style="text-align: center;">
                     <a-button
                         type='dashed'
-                        @click="addQuestion(subsection.id)"
+                        @click="addQuestion(subsection.key)"
                         class="add-button"
                         style="min-width: 200px; width: 300px; margin: 0px 0px 40px 0px;"
                     >
@@ -288,6 +294,7 @@
                     v-show="!showFinishButton"
                     :loading="view.loading"
                     :disabled="subsections.length === 0"
+                    @click="nextStep"
                 >
                     Siguiente
                 </a-button>
@@ -295,6 +302,7 @@
                     v-show="showFinishButton"
                     :loading="view.loading"
                     :disabled="subsections.length === 0"
+                    @click="$router.push({ name: 'home' })"
                 >
                     Finalizar
                 </a-button>
@@ -307,6 +315,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
+import { timeout } from 'q';
+import { setTimeout } from 'timers';
 
 export default {
     props: {
@@ -348,7 +358,7 @@ export default {
                     value: 3,
                 },
                 {
-                    label: 'Pregunta abierta',
+                    label: 'Respuesta abierta',
                     value: 0,
                 },
                 {
@@ -446,7 +456,7 @@ export default {
             this.$message.success('Evaluación guardada correctamente');
         },
         addQuestion(sectionId) {
-            const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
+            const subsection = this.subsections.find(cmpt => cmpt.key === sectionId);
             subsection.questionUUID += 1;
             subsection.questions.push({
                 id: subsection.questionUUID,
@@ -457,9 +467,21 @@ export default {
                 edited: true,
             });
         },
-        removeQuestion(sectionId, questionId) {
-            const subsection = this.subsections.find(cmpt => cmpt.id === sectionId);
-            subsection.questions = subsection.questions.filter(qst => qst.id !== questionId);
+        async removeQuestion(sectionId, question) {
+            console.log(sectionId);
+            question.loading = true;
+            if (question.key) {
+                await this.deleteQuestion(sectionId, question);
+            }
+            const subsection = this.subsections.find(cmpt => cmpt.key === sectionId);
+            console.log(subsection);
+            subsection.questions = subsection.questions.filter(qst => qst.key !== question.key);
+            this.$message.success('Evaluación guardada correctamente');
+            if (!subsection.questions.length) {
+                setTimeout(() => {
+                    this.addQuestion(sectionId);
+                }, 500);
+            }
         },
         async removeSubsection(subsection) {
             subsection.loading = true;
@@ -507,41 +529,43 @@ export default {
         async saveQuestion(sectionId, question) {
             let validForm = true;
             question.form.validateFields((error) => {
-                console.log(error);
                 if (error) validForm = false;
             });
             if (!validForm) return;
-            console.log('pass');
 
             question.loading = true;
             let response = null
-            console.log(question.key);
-            // if (question.key) {
-            //     response = await client3B.question.update({
-            //         id: question.key,
-            //         text: question.text,
-            //         questionType: question.answerType,
-            //     }).catch(error => errorHandler(this, error));
-            // } else {
-            //     response = await client3B.question.create({
-            //         text: question.text,
-            //         questionType: question.answerType,
-            //         section: sectionId,
-            //         expected: 0,
-            //         deliverable: 'asdsa'
-            //     }).catch(error => errorHandler(this, error));
-            // }
-            // if (!response) {
-            //     question.loading = false;
-            //     return
-            // };
-            // console.log(response);
-            // question.key = response.data.result.id;
 
+            if (question.key) {
+                await this.deleteQuestion(sectionId, question);
+                question.key = null;
+            }
+
+            response = await client3B.question.create({
+                text: question.text,
+                questionType: question.answerType,
+                sectionId: sectionId,
+                relation: question.approvalRelationship,
+                expected: question.expectedValue,
+            }, { objective: question.answerType === 3 })
+                .catch(error => errorHandler(this, error));
+
+            if (!response) {
+                question.loading = false;
+                return
+            };
+
+            question.key = response.data.result.id;
             question.edited = false;
             this.$message.success('Evaluación guardada correctamente');
             question.loading = false;
-        }
+        },
+        async deleteQuestion(sectionId, question) {
+            await client3B.question.delete({
+                id: question.key,
+            }, { objective: question.answerType === 3 })
+                .catch(error => errorHandler(this, error));
+        },
     },
     computed: {
         ...mapGetters({

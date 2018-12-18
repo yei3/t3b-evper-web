@@ -84,6 +84,10 @@ import errorHandler from '@/views/errorHandler';
 
 export default {
     props: {
+        formatfetched: {
+            type: Object,
+            required: false,
+        }
     },
     data() {
         return {
@@ -91,11 +95,14 @@ export default {
                 loading: false,
             },
             evaluation: {
-                name: '',
-                description: '',
-                instructions: '',
+                name: 'name',
+                description: 'description',
+                instructions: 'instructions',
             },
         };
+    },
+    mounted() {
+        this.loadData();
     },
     methods: {
         ...mapActions({
@@ -104,6 +111,18 @@ export default {
             updateFormatForm: 'updateFormatForm',
             setLastStep: 'setLastStep',
         }),
+        loadData() {
+            console.log('FF', JSON.stringify(this.formatfetched));
+            console.log(Object.keys(this.form));
+            if (this.formatfetched) {
+                this.evaluation.name = this.formatfetched.name;
+                // this.form.setFieldsValue('name', this.formatfetched.name)
+                this.evaluation.description = this.formatfetched.description;
+                // this.form.setFieldsValue('description', this.formatfetched.description)
+                this.evaluation.instructions = this.formatfetched.instructions;
+                // this.form.setFieldsValue('instructions', this.formatfetched.instructions)
+            }
+        },
         handleForm(e) {
             e.preventDefault();
             this.form.validateFields((error) => {
