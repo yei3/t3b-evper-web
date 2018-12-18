@@ -72,12 +72,12 @@ const columns = [
     {
         title: 'Nombre',
         dataIndex: 'format.title',
-        key: 'format',
+        key: 'format.title',
     },
     {
         title: 'Descripción',
         dataIndex: 'format.subtitle',
-        key: 'format',
+        key: 'format.subtitle',
     },
     {
         title: '',

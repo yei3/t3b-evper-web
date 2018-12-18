@@ -4,7 +4,6 @@
         :trigger="null"
         collapsible
         v-model="sidebarCollapsed"
-        @collapse="resetOpenKeys"
         theme="dark"
         width=220
     >
@@ -100,9 +99,8 @@
             <a-col>
                 <a-menu
                     mode="inline"
-                    :openKeys="openKeys"
-                    @openChange="onOpenChange"
                     theme="dark"
+                    :selectedKeys="selectedKeys"
                 >
                     <a-menu-item key="1" v-show="role == rolesAvailables.COLLABORATOR">
                         <router-link :to="{ name: 'collaborator-home' }">
@@ -205,17 +203,31 @@ export default {
     name: 'Sidebar',
     data() {
         return {
-            rootSubmenuKeys: ['sub1', 'sub2', 'sub3'],
-            openKeys: [],
-            lastOpenKeys: [],
+            selectedKeys:[],
             user: authService.getUserData(),
             userCurrentRole: authService.getCurrentRole(),
             rolesAvailables: authService.ROLES,
         };
     },
+    created() {
+        this.getSelectedItem();
+    },
+    watch: {
+        $route: 'getSelectedItem',
+    },
     methods: {
-        resetOpenKeys() {
-            this.openKeys = [];
+        getSelectedItem() {
+            const mapRouteItem = {
+                'collaborator-home': 1,
+                'collaborator-assessments': 2,
+                'boss-home': 3,
+                'admin-home': 8,
+                'admin-evaluations' : 9
+            };
+            const selectedkey = mapRouteItem[this.$route.name]
+            if (selectedkey) {
+                this.selectedKeys = [String(selectedkey)];
+            }
         },
         onOpenChange(openKeys) {
             const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
@@ -273,17 +285,6 @@ export default {
         roleEs() {
             const role = this.userCurrentRole;
             return this.roleToEs(role);
-        },
-    },
-    watch: {
-        sidebarCollapsed(value) {
-            if (value) {
-                this.lastOpenKeys = this.openKeys;
-                this.openKeys = [];
-            } else {
-                this.openKeys = this.lastOpenKeys;
-                this.lastOpenKeys = [];
-            }
         },
     },
 };
