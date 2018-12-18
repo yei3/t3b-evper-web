@@ -203,7 +203,7 @@ export default {
     name: 'Sidebar',
     data() {
         return {
-            selectedKeys:[],
+            selectedKeys: [],
             user: authService.getUserData(),
             userCurrentRole: authService.getCurrentRole(),
             rolesAvailables: authService.ROLES,
@@ -222,9 +222,9 @@ export default {
                 'collaborator-assessments': 2,
                 'boss-home': 3,
                 'admin-home': 8,
-                'admin-evaluations' : 9
+                'admin-evaluations': 9,
             };
-            const selectedkey = mapRouteItem[this.$route.name]
+            const selectedkey = mapRouteItem[this.$route.name];
             if (selectedkey) {
                 this.selectedKeys = [String(selectedkey)];
             }
