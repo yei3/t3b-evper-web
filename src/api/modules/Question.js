@@ -1,12 +1,30 @@
 import Http from './Http';
 
+
 /**
  * Class to make operations to the Question entity
  */
 class Question extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Question';
+        this.entityPath = {
+            default: '/api/services/app/Question',
+            objective: '/api/services/app/Objective',
+        };
+    }
+
+    /**
+     * Request for the information for a question
+     *
+     * @param {String} objectiveType   Id for the user
+     *
+     * @return {Promise}        Http Response
+     */
+    getPath({ objective = false }) {
+        if (objective) {
+            return this.entityPath.objective;
+        }
+        return this.entityPath.default;
     }
 
     /**
@@ -16,8 +34,8 @@ class Question extends Http {
      *
      * @return {Promise}        Http Response
      */
-    get(questionId) {
-        const path = `${this.entityPath}/Get`;
+    get(questionId, { objective = false }) {
+        const path = `${this.getPath({ objective })}/Get`;
         const params = { Id: questionId };
         return this.request(path, this.methods.get, params);
     }
@@ -27,8 +45,8 @@ class Question extends Http {
      *
      * @return {Promise}        Http Response
      */
-    getAll() {
-        const path = `${this.entityPath}/GetAll`;
+    getAll({ objective = false }) {
+        const path = `${this.getPath({ objective })}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
 
@@ -38,8 +56,8 @@ class Question extends Http {
      *
      * @return {Promise}        Http Response
      */
-    create(data) {
-        const path = `${this.entityPath}/Create`;
+    create(data, { objective = false }) {
+        const path = `${this.getPath({ objective })}/Create`;
         return this.request(path, this.methods.post, data);
     }
 
@@ -49,8 +67,8 @@ class Question extends Http {
      *
      * @return {Promise}        Http Response
      */
-    update(data) {
-        const path = `${this.entityPath}/Update`;
+    update(data, { objective = false }) {
+        const path = `${this.getPath({ objective })}/Update`;
         return this.request(path, this.methods.put, data);
     }
 
@@ -60,8 +78,8 @@ class Question extends Http {
      *
      * @return {Promise}        Http Response
      */
-    delete(data) {
-        const path = `${this.entityPath}/Delete`;
+    delete(data, { objective = false }) {
+        const path = `${this.getPath({ objective })}/Delete`;
         return this.request(path, this.methods.delete, data);
     }
 }
