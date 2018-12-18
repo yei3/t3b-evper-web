@@ -84,6 +84,7 @@
                         :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
                         :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
                         :fieldDecoratorOptions="{
+                            initialValue: question.text,
                             rules: [
                                 {
                                     required: true,
@@ -106,6 +107,7 @@
                         :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
                         :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
                         :fieldDecoratorOptions="{
+                            initialValue: question.answerType,
                             rules: [
                                 {
                                     required: true,
@@ -135,6 +137,7 @@
                         :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
                         :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
                         :fieldDecoratorOptions="{
+                            initialValue: question.expectedValue,
                             rules: [
                                 {
                                     required: true,
@@ -158,6 +161,7 @@
                         :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
                         :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
                         :fieldDecoratorOptions="{
+                            initialValue: question.approvalRelationship,
                             rules: [
                                 {
                                     required: true,
@@ -222,7 +226,7 @@
                         type='dashed'
                         @click="addQuestion(subsection.key)"
                         class="add-button"
-                        style="min-width: 200px; width: 300px; margin: 0px 0px 40px 0px;"
+                        style="min-width: 200px; width: 300px; margin: 15px 0px 40px 0px;"
                     >
                         <a-icon type='plus' /> Agregar Pregunta
                     </a-button>
@@ -320,6 +324,10 @@ import { setTimeout } from 'timers';
 
 export default {
     props: {
+        subsectionsFetched: {
+            type: Array,
+            required: false,
+        },
         sectionId: {
             type: Number,
             required: true,
@@ -390,12 +398,53 @@ export default {
             },
         };
     },
+    mounted() {
+        this.loadData();
+    },
     methods: {
         ...mapActions({
             nextStep: 'nextStep',
             previousStep: 'previousStep',
             updateEvaluationForm: 'updateEvaluationForm',
         }),
+        loadData() {
+            if (this.subsectionsFetched) {
+                this.subsections = this.subsectionsFetched.map((subs) => ({
+                    id: subs.id,
+                    key: subs.id,
+                    loading: false,
+                    showModal: false,
+                    title: {
+                        visible: subs.displayName,
+                        value: subs.name,
+                        lastValue: subs.name,
+                    },
+                    questionUUID: -1000,
+                    questions: [
+                        ...subs.unmeasuredQuestions.map(qst => ({
+                            id: qst.id,
+                            key: qst.id,
+                            text: qst.text,
+                            loading: false,
+                            answerType: qst.questionType,
+                            lastAnswerType: qst.questionType,
+                            edited: false,
+                        })),
+                        ...subs.measuredQuestions.map(qst => ({
+                            id: qst.id,
+                            key: qst.id,
+                            text: qst.text,
+                            loading: false,
+                            answerType: qst.questionType,
+                            lastAnswerType: qst.questionType,
+                            edited: false,
+                            approvalRelationship: qst.relation,
+                            expectedValue: qst.expected,
+                        })),
+                    ],
+                }));
+            }
+        },
         handleForm(e) {
             e.preventDefault();
         },
@@ -429,6 +478,7 @@ export default {
                     key: null,
                     loading: false,
                     answerType: null,
+                    lastAnswerType: null,
                     edited: true,
                 }],
             });
@@ -464,17 +514,16 @@ export default {
                 text: '',
                 loading: false,
                 answerType: null,
+                lastAnswerType: null,
                 edited: true,
             });
         },
         async removeQuestion(sectionId, question) {
-            console.log(sectionId);
             question.loading = true;
             if (question.key) {
                 await this.deleteQuestion(sectionId, question);
             }
             const subsection = this.subsections.find(cmpt => cmpt.key === sectionId);
-            console.log(subsection);
             subsection.questions = subsection.questions.filter(qst => qst.key !== question.key);
             this.$message.success('Evaluación guardada correctamente');
             if (!subsection.questions.length) {
@@ -557,13 +606,14 @@ export default {
 
             question.key = response.data.result.id;
             question.edited = false;
+            question.lastAnswerType = question.answerType;
             this.$message.success('Evaluación guardada correctamente');
             question.loading = false;
         },
         async deleteQuestion(sectionId, question) {
             await client3B.question.delete({
                 id: question.key,
-            }, { objective: question.answerType === 3 })
+            }, { objective: question.lastAnswerType === 3 })
                 .catch(error => errorHandler(this, error));
         },
     },

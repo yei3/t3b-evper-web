@@ -15,6 +15,7 @@
                         label='Nombre del Formato'
                         fieldDecoratorId="name"
                         :fieldDecoratorOptions="{
+                            initialValue: evaluation.name,
                             rules: [
                                 {
                                     required: true,
@@ -23,7 +24,9 @@
                             ]
                         }"
                     >
-                        <a-input v-model="evaluation.name"/>
+                        <a-input
+                            v-model="evaluation.name"
+                        />
                     </a-form-item>
                 </a-col>
                 <a-col :sm="24" :md="12">
@@ -31,6 +34,7 @@
                         label='Descripción del Formato'
                         fieldDecoratorId="description"
                         :fieldDecoratorOptions="{
+                            initialValue: evaluation.description,
                             rules: [
                                 {
                                     required: true,
@@ -47,6 +51,7 @@
                         label='Instrucciones del Formato'
                         fieldDecoratorId="instructions"
                         :fieldDecoratorOptions="{
+                            initialValue: evaluation.instructions,
                             rules: [
                                 {
                                     required: true,
@@ -112,15 +117,10 @@ export default {
             setLastStep: 'setLastStep',
         }),
         loadData() {
-            console.log('FF', JSON.stringify(this.formatfetched));
-            console.log(Object.keys(this.form));
             if (this.formatfetched) {
                 this.evaluation.name = this.formatfetched.name;
-                // this.form.setFieldsValue('name', this.formatfetched.name)
                 this.evaluation.description = this.formatfetched.description;
-                // this.form.setFieldsValue('description', this.formatfetched.description)
                 this.evaluation.instructions = this.formatfetched.instructions;
-                // this.form.setFieldsValue('instructions', this.formatfetched.instructions)
             }
         },
         handleForm(e) {

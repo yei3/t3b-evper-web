@@ -101,12 +101,16 @@
             </a-row>
             <a-row >
                 <form-name
+                    v-for="(_, index) in view.formNames"
+                    :key="index"
                     v-show="currentStep === 0"
                     :showContinueButton="dinamicSteps.length !== 0"
+                    :formatfetched="formatfetched"
                 />
                 <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                     v-model="step.label"
                     :sectionId="step.id"
+                    :subsectionsFetched="step.section.childSections"
                     :showFinishButton="index === (dinamicSteps.length - 1)"
                     v-show="(index + 1) == currentStep"
                 />
@@ -156,6 +160,7 @@ export default {
         return {
             formatfetched: {},
             view: {
+                formNames: [],
                 loadingDelete: false,
                 activeSection: 0,
                 sectionModal: {
@@ -200,6 +205,7 @@ export default {
                 id: section.id,
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
+                section: { childSections: [] },
             };
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
@@ -237,7 +243,10 @@ export default {
             this.$message.success('Evaluación guardada correctamente');
         },
         async fetchData() {
-            if (!this.$route.params.id) return;
+            if (!this.$route.params.id) {
+                this.view.formNames.push(1);
+                return;
+            };
             const response = await client3B.format.get(this.$route.params.id)
                 .catch(error => errorHandler(error));
             if (!response) return;
@@ -245,7 +254,6 @@ export default {
             const format = response.data.result;
             this.formatfetched = format;
             this.formatId = format.id;
-            console.log('fetched', this.formatfetched);
             this.updateFormatForm({
                 id: format.id,
                 name: format.name,
@@ -254,13 +262,14 @@ export default {
             });
             format.sections.forEach((section) => {
                 this.view.steps.push({
-                    id: this.view.stepsUUID,
+                    id: section.id,
                     label: section.name,
                     name: section.name,
+                    section,
                 });
                 this.view.stepsUUID += 1;
             });
-
+            this.view.formNames.push(1);
             this.setLastStep(this.view.steps.length - 1);
         },
     },
