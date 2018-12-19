@@ -1,5 +1,3 @@
-const MAX_STEPS = 7;
-
 export default {
     state: {
         view: {
@@ -16,9 +14,7 @@ export default {
     mutations: {
         nextStep: (_state) => {
             const state = _state;
-            if (state.view.currentStep < MAX_STEPS) {
-                state.view.currentStep += 1;
-            }
+            state.view.currentStep += 1;
             state.view.lastStep = Math.max(state.view.currentStep, state.view.lastStep);
         },
         previousStep: (_state) => {

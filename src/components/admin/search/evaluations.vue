@@ -59,7 +59,7 @@
                     </a></p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
-                
+
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">

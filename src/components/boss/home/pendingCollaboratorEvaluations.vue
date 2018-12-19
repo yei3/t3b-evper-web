@@ -40,8 +40,8 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="action">
-                    <!-- <a-button 
-                        class="table-link-light" ghost                        
+                    <!-- <a-button
+                        class="table-link-light" ghost
                         :to="{ name: 'boss-assessments-apply' }"
                         v-show="transformStatus(action) !== 'Agendar revisión'"
                     >
@@ -55,7 +55,7 @@
                             {{transformStatus(action)}}
                         </router-link>
                     </div>
-                    <a-button 
+                    <a-button
                         class="table-link-light" ghost
                         @click="toggleScheduleReviewModal"
                         v-show="transformStatus(action) === 'Agendar revisión'"

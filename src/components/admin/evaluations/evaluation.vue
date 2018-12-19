@@ -52,11 +52,6 @@
                             {{ item.name }}
                         </a-select-option>
                     </a-select>
-                    <!-- <a-select placeholder="Formatos" name="format" v-model="formatSelected" style='width: 256px'>
-                        <a-select-option v-for="(item, index) in formats" v-bind:value="item.id" :key="index">
-                            {{ item.name }}
-                        </a-select-option>
-                    </a-select> -->
                 </a-col>
 
                 <a-col :span="8" style="padding-bottom: 15px;">
@@ -109,7 +104,6 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -128,7 +122,7 @@ export default {
                 areas: [],
                 startDate: null,
                 finishDate: null,
-            }
+            },
         };
     },
     created() {
@@ -166,13 +160,13 @@ export default {
                 organizationUnitIds: [...this.form.areas, ...this.form.regs],
                 startDate: this.form.startDate,
                 endDate: this.form.finishDate,
-            }).catch(error => errorHandler(error))
+            }).catch(error => errorHandler(error));
             if (response) {
                 this.$message.success('Evaluación aplicada correctamente.');
                 this.$router.push({ name: 'admin-evaluations' });
             }
         },
-    }
+    },
 };
 </script>
 

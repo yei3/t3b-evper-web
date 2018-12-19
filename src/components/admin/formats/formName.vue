@@ -83,7 +83,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import authService from '@/services/auth';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -92,7 +91,7 @@ export default {
         formatfetched: {
             type: Object,
             required: false,
-        }
+        },
     },
     data() {
         return {
@@ -100,9 +99,9 @@ export default {
                 loading: false,
             },
             evaluation: {
-                name: 'name',
-                description: 'description',
-                instructions: 'instructions',
+                name: '',
+                description: '',
+                instructions: '',
             },
         };
     },
@@ -136,7 +135,6 @@ export default {
             });
         },
         async createEvaluation() {
-            const user = authService.getUserData();
             const response = await client3B.format.create({
                 name: this.evaluation.name,
                 description: this.evaluation.description,
@@ -162,7 +160,6 @@ export default {
             }
         },
         async updateEvaluation() {
-            const user = authService.getUserData();
             const response = await client3B.format.update({
                 id: this.formatStored.id,
                 name: this.evaluation.name,

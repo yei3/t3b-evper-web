@@ -17,13 +17,13 @@ export default {
     body {
         background-color: #2f4050;
         font-size: 13px;
-    }    
+    }
     a:hover {
         color: white
     }
     .ant-tag {
         width: 84px;
-        color: #606060;        
+        color: #606060;
         text-align: center;
     }
     .ant-tag:hover {

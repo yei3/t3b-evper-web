@@ -38,11 +38,10 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
-                            <a-menu-item @click="test">
-                                <router-link
-                                    :to="{ name: 'update-format', params: { id: record.key}}">
+                            <a-menu-item>
+                                <a @click="gotToEditForm(record.key)">
                                     Editar
-                                </router-link>
+                                </a>
                             </a-menu-item>
                             <a-menu-item >
                                 <a-popconfirm
@@ -66,6 +65,7 @@
     </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -107,6 +107,13 @@ export default {
         $route: 'search',
     },
     methods: {
+        ...mapActions({
+            clearFormatForm: 'clearFormatForm',
+        }),
+        gotToEditForm(id) {
+            this.clearFormatForm();
+            this.$router.push({ name: 'update-format', params: { id } });
+        },
         async deleteFormat(id) {
             this.spin = true;
             try {
@@ -117,9 +124,6 @@ export default {
                 errorHandler(error);
             }
             await this.search();
-        },
-        test() {
-            console.log('works');
         },
         async search() {
             let response = null;

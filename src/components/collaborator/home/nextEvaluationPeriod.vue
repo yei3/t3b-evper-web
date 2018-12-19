@@ -3,7 +3,7 @@
         <a-collapse-panel header="Próximo periodo de evaluación" key="1" class="text-center">
             <h3 class="tittle-collapse">Periodo 2018-02</h3>
             <a-range-picker
-                :disabledDate="disabledDate()"
+                :disabledDate="disabledDate"
                 :defaultValue="[moment('2018-11-26', dateFormat), moment('2018-12-26', dateFormat)]"
             />
         </a-collapse-panel>
@@ -13,18 +13,19 @@
 
 <script>
 import moment from 'moment';
+
 export default {
-  data(){
-    this.dateFormat = 'YYYY-MM-DD'
-    return {}
-  },
-  methods: {
-    moment,
-    disabledDate(current) {
-      // Can not select days before today and today
-      return '2018-11-26' && '2018-11-26' < moment().endOf('day');
+    data() {
+        this.dateFormat = 'YYYY-MM-DD';
+        return {};
     },
-  }
+    methods: {
+        moment,
+        disabledDate(current) {
+            // Can not select days before today and today
+            return true;
+        },
+    },
 };
 </script>
 
@@ -32,7 +33,7 @@ export default {
 .collapse-mod {
     font-weight: 600;
     font-size: 14px;
-    border: none;    
+    border: none;
 }
 
 .collapse-mod >>> .ant-collapse-content {

@@ -165,20 +165,21 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red'; break;                
-                case 'Finalizado':
-                    return 'ant-tag-blue'; break;
-                case 'En revisión':
-                    return 'ant-tag-gray'; break;
-                case 'Completado':
-                    return 'ant-tag-green'; break;
-                case 'En proceso':
-                    return 'ant-tag-yellow'; break;
-                default:
-                    break;
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'Finalizado':
+                return 'ant-tag-blue';
+            case 'En revisión':
+                return 'ant-tag-gray';
+            case 'Completado':
+                return 'ant-tag-green';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            default:
+                break;
             }
-            
+
+            return 'ant-tag-red';
         },
     },
 };

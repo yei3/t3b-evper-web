@@ -9,7 +9,7 @@
             <a-col :lg="12" :sm="24">
                 <next-evaluation-period />
             </a-col>
-            
+
             <a-col :lg="6" :sm="24" style="text-align: center"></a-col>
         </a-row>
         <a-row style="margin-top: 30px;">
@@ -21,10 +21,10 @@
             </a-col>
             <a-col :span="24" style="padding: 16px 4px;">
                 <pending-auto-evaluations />
-            </a-col>            
+            </a-col>
             <a-col :span="24" style="padding: 16px 4px;">
                 <boss-evaluations />
-            </a-col>            
+            </a-col>
         </a-row>
     </div>
 </template>
