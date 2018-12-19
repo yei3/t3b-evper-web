@@ -1,0 +1,32 @@
+.ant-tag {
+    color: #fff;
+    font-weight: 600;
+    text-shadow: none;
+    font-size: 10px;
+}
+
+.ant-tag-red {
+    background: #ed5565;
+    border-color: #ffa39e;
+}
+
+.ant-tag-green {
+    background: #1ab394;
+    border-color: #1ab394;
+}
+
+.ant-tag-yellow {
+    background: #f8ac59;
+    border-color: #f8ac59;
+}
+
+.ant-tag-gray {
+    background: #d1dade;
+    border-color: #d1dade;
+    color: #666;
+}
+
+.ant-tag-blue {
+    background: #1c84c6;
+    border-color: #1c84c6;
+}

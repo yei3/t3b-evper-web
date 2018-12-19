@@ -1,0 +1,40 @@
+@import "tags.css";
+@import "tables.css";
+@import "collapses.css";
+@import "button.css";
+@import "modals.css";
+@import "breadcrumb.css";
+@import "forms.css";
+@import "tabs.css";
+@import "transitions.css";
+
+.main-content {
+    margin: 0px 30px;
+}
+
+h1 {
+    font-size: 26px;
+    font-weight: 100;
+    color: #676a6c;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 100;
+    color: #676a6c;
+}
+
+h3, h4, h5 {
+    margin-top: 5px;
+    font-weight: 600;
+    color: #676a6c;
+}
+
+h4 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+body {
+    min-width: 576px;
+}
