@@ -5,7 +5,7 @@
                 Mis evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right; color: #fff;">
-                
+
                 <a>
                     <a-icon
                         class="dropdown-icon"

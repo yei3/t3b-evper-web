@@ -319,7 +319,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
-import { timeout } from 'q';
 import { setTimeout } from 'timers';
 
 export default {
@@ -409,7 +408,7 @@ export default {
         }),
         loadData() {
             if (this.subsectionsFetched) {
-                this.subsections = this.subsectionsFetched.map((subs) => ({
+                this.subsections = this.subsectionsFetched.map(subs => ({
                     id: subs.id,
                     key: subs.id,
                     loading: false,
@@ -486,7 +485,8 @@ export default {
             this.addSubsectionModal.value = '';
             this.addSubsectionModal.loading = false;
         },
-        async updateSubsection(subsection) {
+        async updateSubsection(_subsection) {
+            const subsection = _subsection;
             subsection.loading = true;
             const response = await client3B.section.update({
                 id: subsection.key,
@@ -518,7 +518,8 @@ export default {
                 edited: true,
             });
         },
-        async removeQuestion(sectionId, question) {
+        async removeQuestion(sectionId, _question) {
+            const question = _question;
             question.loading = true;
             if (question.key) {
                 await this.deleteQuestion(sectionId, question);
@@ -532,12 +533,13 @@ export default {
                 }, 500);
             }
         },
-        async removeSubsection(subsection) {
+        async removeSubsection(_subsection) {
+            const subsection = _subsection;
             subsection.loading = true;
             const response = await client3B.section.delete({
                 id: subsection.key,
             }).catch(error => errorHandler(error));
-            if(!response) {
+            if (!response) {
                 subsection.loading = false;
                 return;
             }
@@ -552,7 +554,7 @@ export default {
                 evaluationTemplateId: this.format.id,
                 name: this.sectionModal.value,
             }).catch(error => errorHandler(error));
-            if(!response) {
+            if (!response) {
                 this.sectionModal.loading = false;
                 return;
             }
@@ -572,10 +574,12 @@ export default {
             }
             return 'question-row green-bar';
         },
-        setQuestionAsModify(question) {
+        setQuestionAsModify(_question) {
+            const question = _question;
             question.edited = true;
         },
-        async saveQuestion(sectionId, question) {
+        async saveQuestion(sectionId, _question) {
+            const question = _question;
             let validForm = true;
             question.form.validateFields((error) => {
                 if (error) validForm = false;
@@ -583,7 +587,7 @@ export default {
             if (!validForm) return;
 
             question.loading = true;
-            let response = null
+            let response = null;
 
             if (question.key) {
                 await this.deleteQuestion(sectionId, question);
@@ -593,7 +597,7 @@ export default {
             response = await client3B.question.create({
                 text: question.text,
                 questionType: question.answerType,
-                sectionId: sectionId,
+                sectionId,
                 relation: question.approvalRelationship,
                 expected: question.expectedValue,
             }, { objective: question.answerType === 3 })
@@ -601,8 +605,8 @@ export default {
 
             if (!response) {
                 question.loading = false;
-                return
-            };
+                return;
+            }
 
             question.key = response.data.result.id;
             question.edited = false;

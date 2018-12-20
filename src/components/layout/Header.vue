@@ -16,7 +16,7 @@
                             <a-icon type="bell" />
                         </a-badge> -->
                     </a-col>
-                    <a-col :span="7" style="text-align: right;">                        
+                    <a-col :span="7" style="text-align: right;">
                         <a-button
                             icon="logout"
                             style="border-style: none"
@@ -62,7 +62,7 @@ export default {
         padding: 2px 8px;
         text-align: center;
         background: #dddddd;
-        border-radius: 2px;        
+        border-radius: 2px;
     }
     .logout-buttom:hover {
         color: #000;

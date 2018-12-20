@@ -37,9 +37,9 @@
                 <span class="badged-text">Objectivos En procesos</span>
             </div>
         </a-row>
-        
+
     </div>
-    
+
 </template>
 
 

@@ -10,11 +10,8 @@
                         <router-link :to="{ name: 'admin-home' }"
                             class="breadcrumb-path"
                         >
-                            Home Administrador
+                            Formatos
                         </router-link>
-                    </a-breadcrumb-item>
-                    <a-breadcrumb-item>
-                        <strong class="breadcrumb-path">Formatos</strong>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
                         <strong class="breadcrumb-path-active"
@@ -33,14 +30,19 @@
             style="background-color: white;
             margin: 30px 30px;"
         >
-            <a-row class="steps">
+            <a-row v-show="spin">
+                <div style="text-align: center; margin-top: 20px;">
+                    <a-spin size="large" />
+                </div>
+            </a-row>
+            <a-row class="steps" v-show="!spin">
                 <span class="breadcrumb-header" style="font-weight: 400;">
                     {{format.name}}
                 </span>
                 <span style="font-size: 16px;">{{format.description}}</span>
             </a-row>
             <a-divider />
-            <a-row :gutter="16">
+            <a-row :gutter="16" v-show="!spin">
                 <a-col :sm="24" :md="6"
                     v-for="(step, index) in view.steps"
                     :key="index"
@@ -66,7 +68,7 @@
                     </div>
                 </a-col>
             </a-row>
-            <a-row>
+            <a-row v-show="!spin">
                 <a-col :sm="24" :md="12"
                     style="padding-top: 10px;"
                 >
@@ -99,7 +101,7 @@
                     </a-popconfirm>
                 </a-col>
             </a-row>
-            <a-row >
+            <a-row v-show="!spin">
                 <form-name
                     v-for="(_, index) in view.formNames"
                     :key="index"
@@ -158,6 +160,7 @@ export default {
     },
     data() {
         return {
+            spin: false,
             formatfetched: {},
             view: {
                 formNames: [],
@@ -243,13 +246,18 @@ export default {
             this.$message.success('Evaluación guardada correctamente');
         },
         async fetchData() {
+            this.spin = true;
             if (!this.$route.params.id) {
                 this.view.formNames.push(1);
+                this.spin = false;
                 return;
-            };
+            }
             const response = await client3B.format.get(this.$route.params.id)
                 .catch(error => errorHandler(error));
-            if (!response) return;
+            if (!response) {
+                this.spin = false;
+                return;
+            }
 
             const format = response.data.result;
             this.formatfetched = format;
@@ -271,6 +279,7 @@ export default {
             });
             this.view.formNames.push(1);
             this.setLastStep(this.view.steps.length - 1);
+            this.spin = false;
         },
     },
     computed: {

@@ -10,7 +10,7 @@
                         <router-link :to="{ name: 'admin-home' }"
                             class="breadcrumb-path"
                         >
-                            Home Administrador
+                            Formatos
                         </router-link>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
@@ -22,8 +22,6 @@
             </a-col>
         </a-row>
         <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
-            <h3 class="breadcrumb-header">Formatos</h3>
-            <a-divider />
             <a-row class="main-content" style="margin-top: 30px;">
                 <search-formats />
             </a-row>

@@ -23,7 +23,11 @@
                 <a-button shape="circle" icon="search" @click="search" />
             </a-col>
         </a-row> -->
-        
+        <a-row class="collapse-title" style="margin-top: 0px;">
+            <a-col :span="12">
+                <h1>Formatos</h1>
+            </a-col>
+        </a-row>
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin size="large" />
@@ -31,20 +35,13 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <span slot="format" slot-scope="format">
-                    <p><a class="table-link">
-                        {{format.title}}
-                    </a></p>
-                    <p><small>{{format.subtitle}}</small></p>
-                </span>
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
-                            <a-menu-item @click="test">
-                                <router-link
-                                    :to="{ name: 'update-format', params: { id: record.key}}">
+                            <a-menu-item>
+                                <a @click="gotToEditForm(record.key)">
                                     Editar
-                                </router-link>
+                                </a>
                             </a-menu-item>
                             <a-menu-item >
                                 <a-popconfirm
@@ -52,6 +49,7 @@
                                     @confirm="deleteFormat(record.key)"
                                     okText="SI"
                                     cancelText="No"
+                                    class="pop-confirm"
                                 >
                                     Eliminar
                                 </a-popconfirm>
@@ -67,14 +65,20 @@
     </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
-        dataIndex: 'format',
-        key: 'format',
-        scopedSlots: { customRender: 'format' },
+        title: 'Nombre',
+        dataIndex: 'format.title',
+        key: 'format.title',
+    },
+    {
+        title: 'Descripción',
+        dataIndex: 'format.subtitle',
+        key: 'format.subtitle',
     },
     {
         title: '',
@@ -103,6 +107,13 @@ export default {
         $route: 'search',
     },
     methods: {
+        ...mapActions({
+            clearFormatForm: 'clearFormatForm',
+        }),
+        gotToEditForm(id) {
+            this.clearFormatForm();
+            this.$router.push({ name: 'update-format', params: { id } });
+        },
         async deleteFormat(id) {
             this.spin = true;
             try {
@@ -113,9 +124,6 @@ export default {
                 errorHandler(error);
             }
             await this.search();
-        },
-        test() {
-            console.log('works');
         },
         async search() {
             let response = null;
@@ -174,6 +182,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.pop-confirm:hover {
+    color: white;
+}
 </style>
