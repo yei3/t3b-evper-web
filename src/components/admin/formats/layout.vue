@@ -257,7 +257,7 @@ export default {
             if (!response) {
                 this.spin = false;
                 return;
-            };
+            }
 
             const format = response.data.result;
             this.formatfetched = format;

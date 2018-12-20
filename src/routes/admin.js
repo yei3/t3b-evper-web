@@ -6,6 +6,7 @@ import CreateFormat from '@/components/admin/formats/layout.vue';
 import Evaluation from '@/components/admin/evaluations/layout.vue';
 import CreateEvaluation from '@/components/admin/evaluations/evaluation.vue';
 import Users from '@/components/admin/users/users.vue';
+import Organigram from '@/components/admin/organization/organigram.vue';
 
 export default [
     {
@@ -42,6 +43,12 @@ export default [
         path: 'admin/users',
         name: 'users',
         component: Users,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: 'admin/organigram',
+        name: 'admin-organigram',
+        component: Organigram,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
 ];

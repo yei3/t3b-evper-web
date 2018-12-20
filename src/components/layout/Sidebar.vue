@@ -161,7 +161,7 @@
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="10" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'admin-organigram' }">
                             <a-icon type="cluster" />
                             <span>Organigrama</span>
                         </router-link>
@@ -223,6 +223,7 @@ export default {
                 'boss-home': 3,
                 'admin-home': 8,
                 'admin-evaluations': 9,
+                'admin-organigram': 10,
             };
             const selectedkey = mapRouteItem[this.$route.name];
             if (selectedkey) {
