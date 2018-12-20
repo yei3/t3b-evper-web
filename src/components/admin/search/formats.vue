@@ -72,7 +72,6 @@ import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
-        title: 'Evaluación',
         dataIndex: 'format',
         key: 'format',
         scopedSlots: { customRender: 'format' },

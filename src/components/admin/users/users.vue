@@ -19,7 +19,7 @@
                     <span class="breadcrumb-header" style="font-weight: 400;">
                         Búsqueda
                     </span>
-                    <span style="font-size: 16px;">hola que hace</span>
+                    <span style="font-size: 16px;">de usuarios</span>
                 </a-row>
                 <a-divider />
                 <a-row :gutter="20">
@@ -47,46 +47,29 @@
                 </a-row>
             </div>
             <a-divider />
+            <!-- Edit form -->
             <div>
-                <a-row class="steps">
-                    <a-form 
-                        @submit="handleSubmit"
-                        :autoFormCreate="(form)=>{this.form = form}">
+                <a-row class="">
+                    <a-form @submit="handleSubmit" :autoFormCreate="(form)=>{this.form = form}">
                         <a-form-item
-                        label='Note'
-                        :labelCol="{ span: 5 }"
-                        :wrapperCol="{ span: 12 }"
+                            v-bind="formItemLayout"
+                            label='E-mail'
                         >
-                        <!-- <a-input
+                            <a-input
                             v-decorator="[
-                            'note',
-                            {rules: [{ required: true, message: 'Please input your note!' }]}
+                                'email',
+                                {
+                                rules: [{
+                                    type: 'email', message: 'The input is not valid E-mail!',
+                                }, {
+                                    required: true, message: 'Please input your E-mail!',
+                                }]
+                                }
                             ]"
-                        />
+                            />
                         </a-form-item>
-                        <a-form-item
-                        label='Gender'
-                        :labelCol="{ span: 5 }"
-                        :wrapperCol="{ span: 12 }"
-                        >
-                        <a-select
-                            v-decorator="[
-                            'gender',
-                            {rules: [{ required: true, message: 'Please select your gender!' }]}
-                            ]"
-                            placeholder='Select a option and change input text above'
-                            @change="this.handleSelectChange"
-                        >
-                            <a-select-option value='male'>male</a-select-option>
-                            <a-select-option value='female'>female</a-select-option>
-                        </a-select>
-                        </a-form-item>
-                        <a-form-item
-                        :wrapperCol="{ span: 12, offset: 5 }"
-                        > -->
-                        <a-button htmlType='submit' class="btn-green" :loading="view.loading">
-                            Guardar
-                        </a-button>
+                        <a-form-item v-bind="tailFormItemLayout">
+                            <a-button type='btn-green' htmlType='submit'>Guardar</a-button>
                         </a-form-item>
                     </a-form>
                 </a-row>
@@ -98,19 +81,19 @@
 /* eslint-disable */
 import client3B from '@/api/client3B';
 import { mapActions, mapGetters } from 'vuex';
-import errorHandler from '@/views/errorHandler';
 import Footer from '@/components/layout/Footer.vue';
 
 export default {
     components: {
         Footer,
     },
+    beforeCreate () {
+        this.form = this.$form.createForm(this)
+    },
     data() {
         return {
             spin: false,
             users: [],
-            formLayout: 'horizontal',
-            form: this.$form.createForm(this),
         };
     },
     created() {
@@ -125,7 +108,6 @@ export default {
             try {
                 response = await client3B.user.getAll();
                 this.users = response.data.result.items;
-                console.log(this.users);
             } catch (error) {
                 console.log(error);
             }
@@ -140,18 +122,13 @@ export default {
         onSearch (value) {
             console.log(value)
         },
-        handleSubmit (e) {
+        handleSubmit  (e) {
             e.preventDefault()
-            this.form.validateFields((err, values) => {
+            this.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
-                console.log('Received values of form: ', values)
+                    console.log('Received values of form: ', values)
                 }
-            })
-        },
-        handleSelectChange (value) {
-            console.log(value)
-            this.form.setFieldsValue({
-                note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
+                console.log(values);
             })
         },
     },

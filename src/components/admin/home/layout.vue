@@ -25,9 +25,7 @@
             <h3 class="breadcrumb-header">Formatos</h3>
             <a-divider />
             <a-row class="main-content" style="margin-top: 30px;">
-                <a-col :span="24" style="padding-bottom: 30px;">
-                    <search-formats />
-                </a-col>
+                <search-formats />
             </a-row>
         </div>
     </div>
