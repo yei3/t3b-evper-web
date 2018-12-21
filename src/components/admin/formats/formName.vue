@@ -148,32 +148,31 @@ export default {
             });
         },
         async createEvaluation() {
-            console.log(this.evaluation.isAutoEvaluation);
-            // const response = await client3B.format.create({
-            //     name: this.evaluation.name,
-            //     description: this.evaluation.description,
-            //     instructions: this.evaluation.instructions,
-            //     isAutoEvaluation: this.evaluation.isAutoEvaluation,
-            // }).catch((error) => {
-            //     errorHandler(this, error);
-            // });
+            const response = await client3B.format.create({
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
+                isAutoEvaluation: this.evaluation.isAutoEvaluation,
+            }).catch((error) => {
+                errorHandler(this, error);
+            });
 
-            // this.view.loading = false;
-            // if (!response) return;
+            this.view.loading = false;
+            if (!response) return;
 
-            // this.updateFormatForm({
-            //     id: response.data.result.id,
-            //     name: this.evaluation.name,
-            //     description: this.evaluation.description,
-            //     instructions: this.evaluation.instructions,
-            //     isAutoEvaluation: this.evaluation.isAutoEvaluation,
-            // });
-            // this.$message.success('Evaluación guardada correctamente');
-            // if (this.lastStep === 0) {
-            //     this.setLastStep(1);
-            // } else {
-            //     this.nextStep();
-            // }
+            this.updateFormatForm({
+                id: response.data.result.id,
+                name: this.evaluation.name,
+                description: this.evaluation.description,
+                instructions: this.evaluation.instructions,
+                isAutoEvaluation: this.evaluation.isAutoEvaluation,
+            });
+            this.$message.success('Evaluación guardada correctamente');
+            if (this.lastStep === 0) {
+                this.setLastStep(1);
+            } else {
+                this.nextStep();
+            }
         },
         async updateEvaluation() {
             const response = await client3B.format.update({
