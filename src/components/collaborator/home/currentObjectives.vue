@@ -295,42 +295,42 @@ export default {
                 enableButton: true,
             },
             data: [
-                {
-                    key: '1',
-                    status: 'No iniciado',
-                    objective: {
-                        title: 'Planes de sucesión en Barrientos',
-                        subtitle: 'Entregable: Documento con plan detallado',
-                    },
-                    endDate: '30/09/2018',
-                },
-                {
-                    key: '2',
-                    status: 'En proceso',
-                    objective: {
-                        title: 'Portal de Beneficios',
-                        subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                    },
-                    endDate: '15/10/2018',
-                },
-                {
-                    key: '3',
-                    status: 'Completado',
-                    objective: {
-                        title: 'Sistema de Evaluación de Desempeño',
-                        subtitle: 'Entregable: Sistema productivo',
-                    },
-                    endDate: '15/12/2018',
-                },
-                {
-                    key: '4',
-                    status: 'Validado',
-                    objective: {
-                        title: 'Plan de formación',
-                        subtitle: 'Entregable: Documento con plan detallado',
-                    },
-                    endDate: '15/12/2018',
-                },
+                // {
+                //     key: '1',
+                //     status: 'No iniciado',
+                //     objective: {
+                //         title: 'Planes de sucesión en Barrientos',
+                //         subtitle: 'Entregable: Documento con plan detallado',
+                //     },
+                //     endDate: '30/09/2018',
+                // },
+                // {
+                //     key: '2',
+                //     status: 'En proceso',
+                //     objective: {
+                //         title: 'Portal de Beneficios',
+                //         subtitle: 'Entregable: Sitio productivo con la información de beneficios',
+                //     },
+                //     endDate: '15/10/2018',
+                // },
+                // {
+                //     key: '3',
+                //     status: 'Completado',
+                //     objective: {
+                //         title: 'Sistema de Evaluación de Desempeño',
+                //         subtitle: 'Entregable: Sistema productivo',
+                //     },
+                //     endDate: '15/12/2018',
+                // },
+                // {
+                //     key: '4',
+                //     status: 'Validado',
+                //     objective: {
+                //         title: 'Plan de formación',
+                //         subtitle: 'Entregable: Documento con plan detallado',
+                //     },
+                //     endDate: '15/12/2018',
+                // },
             ],
             columns,
         };

@@ -66,6 +66,11 @@ export default {
         border-top: none;
         border-radius: 6px;
     }
+    .collapse-content {
+        margin: 16px 0 8px 0;
+        background: white;
+        padding: 8px 15px 16px;
+    }
     .ant-collapse-borderless > .ant-collapse-item {
         border-bottom: none;
     }
