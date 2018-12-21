@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
-                Cierre de mis evaluaciones realizadas por mi jefe
+                Cierre de mi evaluación
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>

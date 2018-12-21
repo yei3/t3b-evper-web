@@ -49,11 +49,17 @@
             <a-divider />
             <!-- Edit form -->
             <div>
+                <a-row class="steps">
+                    <span class="breadcrumb-header" style="font-weight: 400;">
+                        Editar
+                    </span>
+                    <span style="font-size: 16px;">información de usuario</span>
+                </a-row>
                 <a-row class="">
                     <a-form @submit="handleSubmit" :autoFormCreate="(form)=>{this.form = form}">
                         <a-form-item
                             v-bind="formItemLayout"
-                            label='E-mail'
+                            label='E-mail'                            
                         >
                             <a-input
                             v-decorator="[
@@ -63,6 +69,23 @@
                                     type: 'email', message: 'The input is not valid E-mail!',
                                 }, {
                                     required: true, message: 'Please input your E-mail!',
+                                }]
+                                }
+                            ]"
+                            />
+                        </a-form-item>
+                        <a-form-item
+                            v-bind="formItemLayout"
+                            label='Escolaridad'                            
+                        >
+                            <a-input
+                            v-decorator="[
+                                'escolaridad',
+                                {
+                                rules: [{
+                                    type: 'text', message: 'The input is not valid!',
+                                }, {
+                                    required: true, message: 'Por favor llena este campo',
                                 }]
                                 }
                             ]"

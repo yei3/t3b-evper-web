@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span="23">
-                Evaluaciones de Colaboradores En procesos
+                Mis evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>

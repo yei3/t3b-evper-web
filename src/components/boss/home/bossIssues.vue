@@ -1,6 +1,6 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Pendientes como jefe" key="1" style="
+        <a-collapse-panel header="Acciones por finalizar" key="1" style="
             font-weight: 600;
             font-size: 14px;"
         >

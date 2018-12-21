@@ -63,6 +63,17 @@
                         <a-textarea :rows="4" v-model="evaluation.instructions"/>
                     </a-form-item>
                 </a-col>
+                <a-col :span="24">
+                    <a-form-item
+                        fieldDecoratorId="isAutoEvaluation"
+                    >
+                        <a-checkbox
+                            v-model="evaluation.isAutoEvaluation"
+                        >
+                            Auto Evaluación
+                        </a-checkbox>
+                    </a-form-item>
+                </a-col>
             </a-row>
         </a-row>
         <a-row style="margin-bottom: 20px;">
@@ -102,6 +113,7 @@ export default {
                 name: '',
                 description: '',
                 instructions: '',
+                isAutoEvaluation: '',
             },
         };
     },
@@ -120,6 +132,7 @@ export default {
                 this.evaluation.name = this.formatfetched.name;
                 this.evaluation.description = this.formatfetched.description;
                 this.evaluation.instructions = this.formatfetched.instructions;
+                this.evaluation.isAutoEvaluation = this.formatfetched.isAutoEvaluation;
             }
         },
         handleForm(e) {
@@ -135,29 +148,32 @@ export default {
             });
         },
         async createEvaluation() {
-            const response = await client3B.format.create({
-                name: this.evaluation.name,
-                description: this.evaluation.description,
-                instructions: this.evaluation.instructions,
-            }).catch((error) => {
-                errorHandler(this, error);
-            });
+            console.log(this.evaluation.isAutoEvaluation);
+            // const response = await client3B.format.create({
+            //     name: this.evaluation.name,
+            //     description: this.evaluation.description,
+            //     instructions: this.evaluation.instructions,
+            //     isAutoEvaluation: this.evaluation.isAutoEvaluation,
+            // }).catch((error) => {
+            //     errorHandler(this, error);
+            // });
 
-            this.view.loading = false;
-            if (!response) return;
+            // this.view.loading = false;
+            // if (!response) return;
 
-            this.updateFormatForm({
-                id: response.data.result.id,
-                name: this.evaluation.name,
-                description: this.evaluation.description,
-                instructions: this.evaluation.instructions,
-            });
-            this.$message.success('Evaluación guardada correctamente');
-            if (this.lastStep === 0) {
-                this.setLastStep(1);
-            } else {
-                this.nextStep();
-            }
+            // this.updateFormatForm({
+            //     id: response.data.result.id,
+            //     name: this.evaluation.name,
+            //     description: this.evaluation.description,
+            //     instructions: this.evaluation.instructions,
+            //     isAutoEvaluation: this.evaluation.isAutoEvaluation,
+            // });
+            // this.$message.success('Evaluación guardada correctamente');
+            // if (this.lastStep === 0) {
+            //     this.setLastStep(1);
+            // } else {
+            //     this.nextStep();
+            // }
         },
         async updateEvaluation() {
             const response = await client3B.format.update({

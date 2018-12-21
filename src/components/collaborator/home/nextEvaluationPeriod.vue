@@ -1,6 +1,6 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Próximo periodo de evaluación" key="1" class="text-center">
+        <a-collapse-panel header="Periodo" key="1" class="text-center">
             <h3 class="tittle-collapse">Periodo 2018-02</h3>
             <a-range-picker
                 :disabledDate="disabledDate"

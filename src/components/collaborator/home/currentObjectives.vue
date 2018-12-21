@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
-                Seguimiento a mis objectivos actuales
+                Seguimiento
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
