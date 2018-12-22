@@ -11,28 +11,13 @@
             style="padding: 25px 0px 20px 15px; background-color: #ff0000"
             v-show="sidebarCollapsed"
         >
-            <a-dropdown >
-                <a-col class="ant-dropdown-link" v-show="sidebarCollapsed">
-                    <a-avatar
-                        shape="square"
-                        :size="48"
-                        src="/favicon.ico"
-                    />
-                </a-col>
-                <a-menu slot="overlay">
-                    <a-menu-item
-                        :key="arole"
-                        v-for="arole in user.roles"
-                        v-show="arole !== userCurrentRole"
-                    >
-                        <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                        <a @click="logout">Cerrar Sesión</a>
-                    </a-menu-item>
-                </a-menu>
-            </a-dropdown>
-
+            <a-col class="ant-dropdown-link">
+                <a-avatar
+                    shape="square"
+                    :size="48"
+                    src="/favicon.ico"
+                />
+            </a-col>
         </a-row>
         <a-row
             style="padding: 35px 25px 23px 25px; background-color: #ff0000;
@@ -86,6 +71,7 @@
                                 >
                                     <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
                                 </a-menu-item>
+                                <a-menu-divider/>
                                 <a-menu-item>
                                     <a @click="logout">Cerrar Sesión</a>
                                 </a-menu-item>
@@ -102,6 +88,26 @@
                     theme="dark"
                     :selectedKeys="selectedKeys"
                 >
+                    <a-sub-menu key="sub2" v-show="sidebarCollapsed">
+                        <span slot="title">
+                            <a-icon type="safety-certificate" />
+                            <span>Tipo de rol</span>
+                        </span>
+                        <a-menu-item
+                            :key="arole"
+                            v-for="arole in user.roles"
+                            v-show="arole !== userCurrentRole"
+                        >
+                            <a @click="setCurrentRole(arole)">
+                                <a-icon type="user" />
+                                {{roleToEs(arole)}}
+                            </a>
+                        </a-menu-item>
+                        <a-menu-divider style="background-color: #666;"/>
+                        <a-menu-item>
+                            <a @click="logout">Cerrar Sesión</a>
+                        </a-menu-item>
+                    </a-sub-menu>
                     <a-menu-item key="1" v-show="role == rolesAvailables.COLLABORATOR">
                         <router-link :to="{ name: 'collaborator-home' }">
                             <a-icon type="home" />
@@ -318,6 +324,7 @@ export default {
     background-color: #000;
 }
 
+.ant-menu-vertical .ant-menu-submenu-title,
 .ant-menu-inline .ant-menu-submenu-title {
     height: 40px;
     padding-top: 0px;
@@ -340,6 +347,7 @@ export default {
     margin-bottom: 0px;
 }
 
+/*
 .ant-menu-vertical.ant-menu-sub .ant-menu-item:first-child {
     margin-top: 15px;
 }
@@ -352,6 +360,7 @@ export default {
     margin-right: 15px;
     margin-left: 15px;
 }
+*/
 
 .ant-menu-vertical,
 .ant-menu-vertical .ant-menu-item,
