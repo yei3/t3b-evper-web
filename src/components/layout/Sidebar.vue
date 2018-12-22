@@ -191,7 +191,7 @@
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="14" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'admin-users' }">
                             <a-icon type="user" />
                             <span>Usuarios</span>
                         </router-link>

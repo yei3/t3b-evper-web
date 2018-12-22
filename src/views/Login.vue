@@ -135,6 +135,17 @@
                                                 Actualizar datos
                                             </a-button>
                                         </a-form-item>
+                                        <a-form-item>
+                                            <a-button
+                                                block
+                                                htmlType='submit'
+                                                class="login-buttom"
+                                                :loading="loading"
+                                                @click="returnLogin"
+                                            >
+                                                Cancelar
+                                            </a-button>
+                                        </a-form-item>
                                     </a-form>
                                 </a-col>
                             </a-row>
@@ -239,7 +250,9 @@ export default {
 
             this.redirectToHome();
         },
-
+        returnLogin () {
+            this.$router.push({ name: 'home' });
+        },
         async updatePassword() {
             this.loading = true;
             const update = {

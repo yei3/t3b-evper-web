@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span="23">
-                Seguimiento a Objetivos Actuales de Colaboradores
+                Seguimiento
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -242,132 +242,132 @@ export default {
                 enableButton: true,
             },
             data: [
-                {
-                    id: 1,
-                    name: 'Leonardo Juárez',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Silvia Sánchez',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'No iniciado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
-                {
-                    id: 3,
-                    name: 'Laura Alcántara',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
+                // {
+                //     id: 1,
+                //     name: 'Leonardo Juárez',
+                //     objectives: [
+                //         {
+                //             key: '1',
+                //             status: 'Validado',
+                //             objective: {
+                //                 title: 'Planes de sucesión en Barrientos',
+                //                 subtitle: 'Entregable: Documento con plan detallado ',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '2',
+                //             status: 'Validado',
+                //             objective: {
+                //                 title: 'Portal de Beneficios',
+                //                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '3',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Sistema de Evaluación de Desempeño',
+                //                 subtitle: 'Entregable: Sistema productivo',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '4',
+                //             status: 'Validado',
+                //             objective: {
+                //                 title: 'Plan de formación',
+                //                 subtitle: 'Entregable: Documento con plan detallado',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //     ],
+                // },
+                // {
+                //     id: 2,
+                //     name: 'Silvia Sánchez',
+                //     objectives: [
+                //         {
+                //             key: '1',
+                //             status: 'No iniciado',
+                //             objective: {
+                //                 title: 'Planes de sucesión en Barrientos',
+                //                 subtitle: 'Entregable: Documento con plan detallado ',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '2',
+                //             status: 'Validado',
+                //             objective: {
+                //                 title: 'Portal de Beneficios',
+                //                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '3',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Sistema de Evaluación de Desempeño',
+                //                 subtitle: 'Entregable: Sistema productivo',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '4',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Plan de formación',
+                //                 subtitle: 'Entregable: Documento con plan detallado',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //     ],
+                // },
+                // {
+                //     id: 3,
+                //     name: 'Laura Alcántara',
+                //     objectives: [
+                //         {
+                //             key: '1',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Planes de sucesión en Barrientos',
+                //                 subtitle: 'Entregable: Documento con plan detallado ',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '2',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Portal de Beneficios',
+                //                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '3',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Sistema de Evaluación de Desempeño',
+                //                 subtitle: 'Entregable: Sistema productivo',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //         {
+                //             key: '4',
+                //             status: 'Completado',
+                //             objective: {
+                //                 title: 'Plan de formación',
+                //                 subtitle: 'Entregable: Documento con plan detallado',
+                //             },
+                //             endDate: '13/07/2018',
+                //         },
+                //     ],
+                // },
             ],
         };
     },

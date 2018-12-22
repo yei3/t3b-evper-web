@@ -24,24 +24,21 @@
             </a-col>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <div class="badges-collaborator">
+            <a-col :span="8">
                 <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Auto-evaluaciones En procesos</span>
-            </div>
-            <div class="badges-collaborator">
+            </a-col>
+            <a-col :span="8">
                 <a-badge count="1" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Cierre de mis evaluaciones En procesos</span>
-            </div>
-            <div class="badges-collaborator" style="margin-bottom: 5px;">
+            </a-col>
+            <a-col :span="8">
                 <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Objectivos En procesos</span>
-            </div>
+            </a-col>
         </a-row>
-
     </div>
-
 </template>
-
 
 <script>
 export default {

@@ -1,28 +1,5 @@
 <template>
     <div>
-        <!-- <a-row :gutter="16">
-            <a-col :span="4">
-                <a-input placeholder="Nombre" />
-            </a-col>
-            <a-col :span="5">
-                <a-input placeholder="Area" />
-            </a-col>
-            <a-col :span="3">
-                <a-input placeholder="Evaluador" />
-            </a-col>
-            <a-col :span="3">
-                <a-input placeholder="Evaluado" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Inicio" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Fin" />
-            </a-col>
-            <a-col :span="1">
-                <a-button shape="circle" icon="search" @click="search" />
-            </a-col>
-        </a-row> -->
         <a-row class="collapse-title" style="margin-top: 0px;">
             <a-col :span="12">
                 <h1>Formatos</h1>

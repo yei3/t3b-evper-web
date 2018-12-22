@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span="23" class="text-center">
-                Cierre de las evaluaciones de Colaboradores
+                Cierre de evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -215,16 +215,16 @@ export default {
             },
             collapsed: false,
             data: [
-                {
-                    key: '1',
-                    status: 'En revisión',
-                    evaluation: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    reviewDate: '13/07/2018',
-                    endDate: '13/07/2017',
-                },
+                // {
+                //     key: '1',
+                //     status: 'En revisión',
+                //     evaluation: {
+                //         title: 'Período 2017-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     reviewDate: '13/07/2018',
+                //     endDate: '13/07/2017',
+                // },
             ],
             columns,
         };

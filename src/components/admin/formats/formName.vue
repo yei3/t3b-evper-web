@@ -63,6 +63,17 @@
                         <a-textarea :rows="4" v-model="evaluation.instructions"/>
                     </a-form-item>
                 </a-col>
+                <a-col :span="24">
+                    <a-form-item
+                        fieldDecoratorId="isAutoEvaluation"
+                    >
+                        <a-checkbox
+                            v-model="evaluation.isAutoEvaluation"
+                        >
+                            Auto Evaluación
+                        </a-checkbox>
+                    </a-form-item>
+                </a-col>
             </a-row>
         </a-row>
         <a-row style="margin-bottom: 20px;">
@@ -102,6 +113,7 @@ export default {
                 name: '',
                 description: '',
                 instructions: '',
+                isAutoEvaluation: '',
             },
         };
     },
@@ -120,6 +132,7 @@ export default {
                 this.evaluation.name = this.formatfetched.name;
                 this.evaluation.description = this.formatfetched.description;
                 this.evaluation.instructions = this.formatfetched.instructions;
+                this.evaluation.isAutoEvaluation = this.formatfetched.isAutoEvaluation;
             }
         },
         handleForm(e) {
@@ -139,6 +152,7 @@ export default {
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
+                isAutoEvaluation: this.evaluation.isAutoEvaluation,
             }).catch((error) => {
                 errorHandler(this, error);
             });
@@ -151,6 +165,7 @@ export default {
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
+                isAutoEvaluation: this.evaluation.isAutoEvaluation,
             });
             this.$message.success('Evaluación guardada correctamente');
             if (this.lastStep === 0) {

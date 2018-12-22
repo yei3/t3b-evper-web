@@ -3,6 +3,7 @@ import User from './modules/User';
 import Account from './modules/Account';
 import Session from './modules/Session';
 import Evaluation from './modules/Evaluation';
+import Dashboard from './modules/Dashboard';
 import Format from './modules/EvaluationTemplate';
 import Section from './modules/Section';
 import Question from './modules/Question';
@@ -22,6 +23,7 @@ class Client3B {
         this.format = new Format();
         this.question = new Question();
         this.section = new Section();
+        this.dashboard = new Dashboard();
         this.organizationUnit = new OrganizationUnit();
     }
 }

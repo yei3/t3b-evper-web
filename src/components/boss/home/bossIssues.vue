@@ -1,21 +1,43 @@
 <template>
-    <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Pendientes como jefe" key="1" style="
-            font-weight: 600;
-            font-size: 14px;"
-        >
-        <div class="badges-collaborator">
-            <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Evaluaciones de colaboradores En procesos</span>
-        </div>
-        <div class="badges-collaborator">
-            <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-            <span class="badged-text">Validación de objetivos de colaboradores En procesos</span>
-        </div>
-        </a-collapse-panel>
-    </a-collapse>
+    <div class="collapse">
+        <a-row class="collapse-title background--title">
+            <a-col :span="23" style="text-align: center;">
+                Acciones por finalizar
+            </a-col>
+            <a-col :span="1" style="text-align: right;">
+                <a>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
+                </a>
+                <a>
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
+                </a>
+            </a-col>
+        </a-row>
+        <a-row class="collapse-content" v-show="!collapsed">
+            <a-col :span="8">
+                <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <span class="badged-text">Evaluaciones de colaboradores En procesos</span>
+            </a-col>
+            <a-col :span="9">
+                <a-badge count="6" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <span class="badged-text">Validación de objetivos de colaboradores En procesos</span>
+            </a-col>
+            <a-col :span="7">
+                
+            </a-col>
+        </a-row>
+    </div>
 </template>
-
 
 <script>
 export default {

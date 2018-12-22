@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span="23">
-                Evaluaciones de Colaboradores En procesos
+                Mis evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -162,66 +162,66 @@ export default {
                 enableButton: false,
             },
             data: [
-                {
-                    key: '1',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '2',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Silvia Sánchez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '3',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Laura Alcántara',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '4',
-                    status: 'En proceso',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '5',
-                    status: 'En proceso',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Silvia Sánchez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '6',
-                    status: 'Finalizada',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                },
+                // {
+                //     key: '1',
+                //     status: 'No iniciado',
+                //     evaluation: {
+                //         title: 'Período 2018-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     collaborator: 'Leonardo Juárez',
+                //     endDate: '13/07/2018',
+                // },
+                // {
+                //     key: '2',
+                //     status: 'No iniciado',
+                //     evaluation: {
+                //         title: 'Período 2018-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     collaborator: 'Silvia Sánchez',
+                //     endDate: '13/07/2018',
+                // },
+                // {
+                //     key: '3',
+                //     status: 'No iniciado',
+                //     evaluation: {
+                //         title: 'Período 2018-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     collaborator: 'Laura Alcántara',
+                //     endDate: '13/07/2018',
+                // },
+                // {
+                //     key: '4',
+                //     status: 'En proceso',
+                //     evaluation: {
+                //         title: 'Período 2018-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     collaborator: 'Leonardo Juárez',
+                //     endDate: '13/07/2018',
+                // },
+                // {
+                //     key: '5',
+                //     status: 'En proceso',
+                //     evaluation: {
+                //         title: 'Período 2018-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     collaborator: 'Silvia Sánchez',
+                //     endDate: '13/07/2018',
+                // },
+                // {
+                //     key: '6',
+                //     status: 'Finalizada',
+                //     evaluation: {
+                //         title: 'Período 2018-1',
+                //         subtitle: 'Evaluación de Desempeño',
+                //     },
+                //     collaborator: 'Leonardo Juárez',
+                //     endDate: '13/07/2018',
+                // },
             ],
             columns,
         };
