@@ -217,6 +217,9 @@ export default {
     },
     created() {
         this.getSelectedItem();
+        setTimeout(() => {
+            this.sidebarCollapsed = false;
+        }, 10000);
     },
     watch: {
         $route: 'getSelectedItem',
