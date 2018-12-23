@@ -33,7 +33,7 @@
                 <span class="badged-text">Validación de objetivos de colaboradores En procesos</span>
             </a-col>
             <a-col :span="7">
-                
+
             </a-col>
         </a-row>
     </div>
@@ -41,7 +41,11 @@
 
 <script>
 export default {
-
+    data() {
+        return {
+            collapsed: false,
+        };
+    },
 };
 </script>
 
