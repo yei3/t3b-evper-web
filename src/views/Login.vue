@@ -85,7 +85,7 @@
                                     v-else
                                 >
                                     <a-form>
-                                        <a-form-item>
+                                        <a-form-item style="margin: 0px;">
                                             <label for="">
                                                 <h4 style="color: red; margin: 0px;">
                                                     Para continuar actualiza tus datos
@@ -124,7 +124,7 @@
                                                 placeholder="Confirma tu nueva Contraseña"
                                             />
                                         </a-form-item>
-                                        <a-form-item>
+                                        <a-form-item style="margin-bottom: 0px;">
                                             <a-button
                                                 block
                                                 htmlType='submit'
@@ -136,15 +136,12 @@
                                             </a-button>
                                         </a-form-item>
                                         <a-form-item>
-                                            <a-button
-                                                block
-                                                htmlType='submit'
-                                                class="login-buttom"
-                                                :loading="loading"
-                                                @click="returnLogin"
+                                            <a href="#"
+                                                style="color: #666; text-decoration: underline;"
+                                                @click="redirectToHome"
                                             >
                                                 Cancelar
-                                            </a-button>
+                                            </a>
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
@@ -200,16 +197,15 @@ export default {
             showFormConfirmPassword: false,
             loading: false,
             errors: [],
+            authData: null,
+            userData: null,
         };
     },
     methods: {
         redirectToHome() {
             this.loading = false;
-            setTimeout(() => {
-                this.$router.push({ name: 'home' });
-            }, 1000);
+            this.$router.push({ name: 'home' });
         },
-
         async login() {
             this.loading = true;
             this.errors = [];
@@ -226,9 +222,10 @@ export default {
                 this.loading = false;
                 return;
             }
-            const authData = response.data.result;
-            authService.storeAuthData(authData);
+            this.authData = response.data.result;
 
+            // Neccessary to get the session information
+            authService.storeAuthData(this.authData);
             try {
                 response = await client3B.session.getSession();
             } catch (error) {
@@ -236,22 +233,22 @@ export default {
                 this.loading = false;
                 return;
             }
-
-            const userData = response.data.result.user;
-            userData.roles = response.data.result.roles;
-            authService.storeUserData(userData);
-
-            if (authData.isFirstTimeLogin
-                && userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
+            authService.removeAuthData();
+            this.userData = response.data.result.user;
+            this.userData.roles = response.data.result.roles;
+            if (this.authData.isFirstTimeLogin
+                && this.userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
                 this.showFormConfirmPassword = true;
                 this.loading = false;
                 return;
             }
 
-            this.redirectToHome();
+            this.saveSession();
         },
-        returnLogin () {
-            this.$router.push({ name: 'home' });
+        saveSession() {
+            authService.storeAuthData(this.authData);
+            authService.storeUserData(this.userData);
+            this.redirectToHome();
         },
         async updatePassword() {
             this.loading = true;
@@ -261,7 +258,6 @@ export default {
                 password: this.user.newPassword,
                 confirmPassword: this.user.newPasswordConfirmation,
             };
-            console.log(update);
             try {
                 await client3B.account.firstTimeLogin(update);
             } catch (error) {
@@ -269,13 +265,11 @@ export default {
                 this.loading = false;
                 return;
             }
-            console.log(update);
-            this.redirectToHome();
+            this.saveSession();
         },
 
         handleError(error) {
             const time = 10;
-            console.log(error);
             this.errors = [];
             if (error.validationErrors) {
                 error.validationErrors.forEach((err) => {
