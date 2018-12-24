@@ -136,7 +136,7 @@
                                             </a-button>
                                         </a-form-item>
                                         <a-form-item>
-                                            <a href="#"
+                                            <a
                                                 style="color: #666; text-decoration: underline;"
                                                 @click="redirectToHome"
                                             >
@@ -204,7 +204,7 @@ export default {
     methods: {
         redirectToHome() {
             this.loading = false;
-            this.$router.push({ name: 'home' });
+            this.$router.go('/');
         },
         async login() {
             this.loading = true;
@@ -258,11 +258,13 @@ export default {
                 password: this.user.newPassword,
                 confirmPassword: this.user.newPasswordConfirmation,
             };
+            authService.storeAuthData(this.authData);
             try {
                 await client3B.account.firstTimeLogin(update);
             } catch (error) {
                 this.handleError(error.response.data.error);
                 this.loading = false;
+                authService.removeAuthData();
                 return;
             }
             this.saveSession();
