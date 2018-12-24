@@ -6,13 +6,11 @@
         <h3>{{index}}. {{questionText}}</h3>
         <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
             <div v-for="(text, index) in answersText" :key="index">
-                <a-form-item
-
-                    :fieldDecoratorId="'q-' + index"
-                    style="margin: 10px 0px;"
+                <a-form-item style="margin: 10px 0px;"
+                    :fieldDecoratorId="version + '-q-' + index"
                     :wrapperCol="{ xxl: 24, xl: 24, lg: 24, md: 24, sm: 24 }"
                     :fieldDecoratorOptions="{
-                        initialValue: text,
+                        initialValue: answersText[index],
                         rules: [
                             {
                                 required: true,
@@ -21,26 +19,22 @@
                         ]
                     }"
                 >
-                    <a-textarea placeholder="Respuesta"
-                        autosize
+                    <a-input placeholder="Respuesta"
+                        v-model="answersText[index]"
                         :disabled="onlyLecture"
                         @change="edited = true"
-                    />
-                </a-form-item>
-
-                <a-col :sm="24" :md="24" style="text-align: right; margin-top: 0px;">
-                    <a  class="link-delete-question form-icon"
-                        :disabled="loading"
-                        @click="removeAnswer(index)"
                     >
-                        <a-icon class='dynamic-delete-button form-icon' type="delete" />Eliminar
-                    </a>
-                </a-col>
+                        <a-icon class="input-delete"
+                            @click="removeAnswer(index)"
+                            slot="addonAfter"
+                            type="delete"
+                        />
+                    </a-input>
+                </a-form-item>
             </div>
 
-            <a-form-item
+            <a-form-item style="margin: 50px 0px 0 0px;"
                 fieldDecoratorId="comment"
-                style="margin: 50px 0px 0 0px;"
                 :wrapperCol="{ xxl: 24, xl: 24, lg: 24, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
                     rules: [
@@ -72,8 +66,7 @@
             >
                 <a-icon class='dynamic-delete-button form-icon' type="check" /> Guardar Respuesta
             </a>
-            <a-icon
-                v-show="loading"
+            <a-icon v-show="loading"
                 class='dynamic-delete-button form-icon'
                 type="loading"
                 style="padding-left: 2%;"
@@ -84,6 +77,7 @@
 
 <script >
 import errorHandler from '@/views/errorHandler';
+import client3B from '@/api/client3B';
 
 export default {
     props: {
@@ -117,6 +111,7 @@ export default {
     },
     data() {
         return {
+            version: 1,
             loading: false,
             edited: false,
             answersText: [],
@@ -128,7 +123,6 @@ export default {
         },
         parseAnswer() {
             if (this.answer.text) {
-                console.log(this.answer.text);
                 this.answersText = JSON.parse(this.answer.text);
             } else {
                 this.answersText = [''];
@@ -139,24 +133,47 @@ export default {
             this.answersText.push('');
         },
         removeAnswer(index) {
-            this.edited = true;
             this.answersText.splice(index, 1);
+            this.version += 1;
+            if (this.answersText.length === 0) {
+                setTimeout(() => {
+                    this.answersText = [''];
+                }, 200)
+            }
         },
         save() {
-            this.form.validateFields((error, values) => {
-                console.log(error, values);
-                if (error) {
-                    errorHandler(this, error);
+            this.form.validateFields((error) => {
+                if (error) return;
+                if (this.answer.id) {
+                    this.update();
                 } else {
-                    console.log(values);
+                    this.create();
                 }
             });
         },
-        create() {
-
+        async create() {
+            this.loading = true;
+            const text = JSON.stringify(this.answersText);
+            const response = await client3B.evaluation.answer.create({
+                evaluationQuestionId: this.questionId,
+                text,
+            }).catch(error => errorHandler(this, error));
+            this.loading = false;
+            this.edited = false;
+            if (!response) return;
+            this.answer.id = response.data.result.id;
+            this.answer.id = 256;
         },
-        update() {
-
+        async update() {
+            this.loading = true;
+            const text = JSON.stringify(this.answersText);
+            const response = await client3B.evaluation.answer.update({
+                id: this.answer.id,
+                evaluationQuestionId: this.questionId,
+                text,
+            }).catch(error => errorHandler(this, error));
+            this.loading = false;
+            this.edited = false;
         },
     },
     computed: {
@@ -171,3 +188,12 @@ export default {
 </script>
 
 <style src="@/assets/styles/evaluationForm.css" scoped></style>
+<style>
+.input-delete {
+    color: red;
+}
+.input-delete:hover {
+    color: #db0000;
+    cursor: pointer;
+}
+</style>
