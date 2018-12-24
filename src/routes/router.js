@@ -8,6 +8,7 @@ import adminRoutes from '@/routes/admin';
 import Layout from '@/components/layout/Layout.vue';
 import Login from '@/views/Login.vue';
 import NotFound from '@/views/404.vue';
+import onWork from '@/views/working.vue';
 
 import authService from '@/services/auth';
 
@@ -76,6 +77,11 @@ export default new Router({
         {
             path: '*',
             component: NotFound,
+        },
+        {
+            path: '/working',
+            name: 'onWork',
+            component: onWork,
         },
     ],
 });

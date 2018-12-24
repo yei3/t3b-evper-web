@@ -20,7 +20,7 @@
             </a-col>
         </a-row>
         <a-row
-            style="padding: 35px 25px 23px 25px; background-color: #ff0000;
+            style="padding: 35px 25px 23px 8px; background-color: #ff0000;
                    background-image: url('/img/header-profile-skin.png');"
             v-show="!sidebarCollapsed"
         >
@@ -32,8 +32,9 @@
                 >
                     <a-col>
                         <a-avatar
-                            :size="48"
+                            :size="60"
                             :src="imageUrl"
+                            class="avatar--border"
                         />
                     </a-col>
                 </a-row>
@@ -128,32 +129,23 @@
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="4" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'onWork' }">
                             <a-icon type="form" />
                             <span>Evaluaciones</span>
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="5" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'onWork' }">
                             <a-icon type="notification" />
                             <span>Avisos</span>
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="6" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'onWork' }">
                             <a-icon type="line-chart" />
                             <span>Resultados</span>
                         </router-link>
                     </a-menu-item>
-
-                    <!--
-                    <a-menu-item key="7" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="home" />
-                            <span>Home </span>
-                        </router-link>
-                    </a-menu-item>
-                    -->
                     <a-menu-item key="8" v-show="role == rolesAvailables.ADMINISTRATOR">
                         <router-link :to="{ name: 'admin-home' }">
                             <a-icon type="file-text" />
@@ -173,19 +165,19 @@
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="11" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'onWork' }">
                             <a-icon type="setting" />
                             <span>Configuración</span>
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="12" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'onWork' }">
                             <a-icon type="notification" />
                             <span>Avisos</span>
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="13" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
+                        <router-link :to="{ name: 'onWork' }">
                             <a-icon type="line-chart" />
                             <span>Resultados</span>
                         </router-link>
@@ -302,6 +294,11 @@ export default {
 
 
 <style>
+
+.avatar--border {
+    border: solid 2px;
+    background: #d83333;
+}
 
 .ant-layout-sider,
 .ant-menu,

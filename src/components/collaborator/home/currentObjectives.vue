@@ -254,6 +254,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -261,7 +264,7 @@ const columns = [
         key: 'status',
         scopedSlots: { customRender: 'status' },
     }, {
-        title: 'Objectivo',
+        title: 'Objectivos',
         dataIndex: 'objective',
         key: 'objective',
         scopedSlots: { customRender: 'objective' },
@@ -294,48 +297,35 @@ export default {
                 show: false,
                 enableButton: true,
             },
-            data: [
-                // {
-                //     key: '1',
-                //     status: 'No iniciado',
-                //     objective: {
-                //         title: 'Planes de sucesión en Barrientos',
-                //         subtitle: 'Entregable: Documento con plan detallado',
-                //     },
-                //     endDate: '30/09/2018',
-                // },
-                // {
-                //     key: '2',
-                //     status: 'En proceso',
-                //     objective: {
-                //         title: 'Portal de Beneficios',
-                //         subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                //     },
-                //     endDate: '15/10/2018',
-                // },
-                // {
-                //     key: '3',
-                //     status: 'Completado',
-                //     objective: {
-                //         title: 'Sistema de Evaluación de Desempeño',
-                //         subtitle: 'Entregable: Sistema productivo',
-                //     },
-                //     endDate: '15/12/2018',
-                // },
-                // {
-                //     key: '4',
-                //     status: 'Validado',
-                //     objective: {
-                //         title: 'Plan de formación',
-                //         subtitle: 'Entregable: Documento con plan detallado',
-                //     },
-                //     endDate: '15/12/2018',
-                // },
-            ],
+            data: [],
             columns,
         };
     },
+    created() {
+        this.getCurrentObjectives();
+    },
     methods: {
+        async getCurrentObjectives() {
+            let response = null;
+            try {
+                response = await client3B.dashboard.getCollaborator();
+                const items = response.data.result.objectiveSummary;
+                this.data = [];
+                for (let index = 0; index < items.length; index += 1) {
+                    this.data.push({
+                        key: index+1,
+                        status: this.selectStatusName(items[index].status),
+                        objective: {
+                            title: items[index].name,
+                            subtitle: 'sin descripción'
+                        },
+                        endDate: new Date(items[index].deliveryDate).toLocaleDateString()
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
         toggleRecordProgressModal() {
             this.recordProgressModal.show = !this.recordProgressModal.show;
         },
@@ -346,19 +336,30 @@ export default {
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado':
+                    return 'ant-tag-red';
+                case 'En proceso':
+                    return 'ant-tag-yellow';
+                case 'Completado':
+                    return 'ant-tag-green';
+                case 'Validado':
+                    return 'ant-tag-blue';
+                default:
+                    return 'ant-tag-gray';
             }
-            if (status === 'En proceso') {
-                return 'ant-tag-yellow';
+        },
+        selectStatusName(status) {
+            switch (status) {
+                case 1:
+                    return 'No iniciado';
+                case 2:
+                    return 'En proceso';
+                case 3:
+                    return 'Completado';
+                case 4:
+                    return 'Validado';
             }
-            if (status === 'Completado') {
-                return 'ant-tag-green';
-            }
-            if (status === 'Validado') {
-                return 'ant-tag-blue';
-            }
-            return 'ant-tag-gray';
         },
     },
 };

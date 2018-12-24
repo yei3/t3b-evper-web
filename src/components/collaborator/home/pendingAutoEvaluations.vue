@@ -61,6 +61,7 @@
 
 <script>
 import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
 
 const columns = [
     {
@@ -69,7 +70,7 @@ const columns = [
         key: 'status',
         scopedSlots: { customRender: 'status' },
     }, {
-        title: 'Evaluación',
+        title: 'Evaluaciones',
         dataIndex: 'evaluation',
         key: 'evaluation',
         scopedSlots: { customRender: 'evaluation' },
@@ -93,35 +94,7 @@ export default {
             collapsed: false,
             spin: false,
             evaluations: [],
-            data: [
-                // {
-                //     key: '1',
-                //     status: 'No iniciado',
-                //     evaluation: {
-                //         title: 'Período 2017-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     endDate: '13/07/2017',
-                // },
-                // {
-                //     key: '2',
-                //     status: 'En proceso',
-                //     evaluation: {
-                //         title: 'Período 2017-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     endDate: '13/07/2017',
-                // },
-                // {
-                //     key: '3',
-                //     status: 'Finalizado',
-                //     evaluation: {
-                //         title: 'Período 2017-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     endDate: '13/07/2017',
-                // },
-            ],
+            data: [],
             columns,
             
         };
@@ -129,7 +102,7 @@ export default {
     created() {
         // fetch the data when the view is created and the data is
         // already being observed        
-        this.getCurrentEvaluations();
+        // this.getCurrentEvaluations();
     },
     methods: {
         async getCurrentEvaluations() {
@@ -138,19 +111,19 @@ export default {
             try {
                 response = await client3B.dashboard.getCollaborator();
                 console.log(response.data.result);
-                // const items = response.data.result.autoEvaluationSummary;
-                // this.data = [];
-                // for (let index = 0; index < items.length; index += 1) {
-                //     this.data.push({
-                //         key: items[index].id,
-                //         status: this.getStatus(items[index].status),
-                //         evaluation: {
-                //             title: items[index].name,
-                //             subtitle: items[index].description,
-                //         },
-                //         endDate: items[index].endDate,
-                //     });
-                // }
+                const items = response.data.result.autoEvaluationSummary;
+                this.data = [];
+                for (let index = 0; index < items.length; index += 1) {
+                    this.data.push({
+                        key: items[index].id,
+                        status: this.getStatus(items[index].status),
+                        evaluation: {
+                            title: items[index].name,
+                            subtitle: items[index].description,
+                        },
+                        endDate: items[index].endDate,
+                    });
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -166,16 +139,18 @@ export default {
             return 'Iniciar';
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado':
+                    return 'ant-tag-red';
+                case 'En proceso':
+                    return 'ant-tag-yellow';
+                case 'Finalizado':
+                    return 'ant-tag-green';
+                case 'Validado':
+                    return 'ant-tag-blue';
+                default:
+                    return 'ant-tag-gray';
             }
-            if (status === 'En proceso') {
-                return 'ant-tag-yellow';
-            }
-            if (status === 'Finalizado') {
-                return 'ant-tag-green';
-            }
-            return 'ant-tag-gray';
         },
     },
 };

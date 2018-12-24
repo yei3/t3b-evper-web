@@ -141,13 +141,13 @@
                             rules: [
                                 {
                                     required: true,
-                                    message: 'Ingresa el valor numérico del objetivo'
+                                    message: 'Ingresa el valor del objetivo'
                                 }
                             ]
                         }"
                     >
                         <a-input style=""
-                            type="number"
+                            type="text"
                             v-model="question.expectedValue"
                             placeholder="Valor del Objetivo"
                             @change="setQuestionAsModify(question)"

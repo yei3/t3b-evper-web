@@ -144,7 +144,7 @@ export default {
             let response = null;
             this.spin = true;
             try {
-                response = await client3B.evaluation.getAll();
+                response = await client3B.evaluation.getAdminEvaluationSummary();
 
                 const items = response.data.result;
                 // console.log(items);

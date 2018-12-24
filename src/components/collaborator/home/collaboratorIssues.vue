@@ -25,15 +25,15 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-col :span="8">
-                <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge :count="autoEvaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Auto-evaluaciones En procesos</span>
             </a-col>
             <a-col :span="8">
-                <a-badge count="1" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge :count="evaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Cierre de mis evaluaciones En procesos</span>
             </a-col>
             <a-col :span="8">
-                <a-badge count="2" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge :count="objectives" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Objectivos En procesos</span>
             </a-col>
         </a-row>
@@ -41,12 +41,39 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 export default {
     data() {
         return {
             collapsed: false,
-        };
+            spin: false,
+            autoEvaluations: 0,
+            evaluations: 0,
+            objectives: 0,
+        }
     },
+    created() {
+        this.getToDoes();
+    },
+    methods: {
+        async getToDoes() {
+            this.spin = true;
+            let response = null;
+            try {
+                response = await client3B.dashboard.getCollaborator();
+
+                this.autoEvaluations = response.data.result.toDoesSummary.autoEvaluations;
+                this.evaluations = response.data.result.toDoesSummary.evaluations;
+                this.objectives = response.data.result.toDoesSummary.objectives;
+
+            } catch (error) {
+                console.log(error);
+            }
+            this.spin = false;
+        },
+    }
 };
 </script>
 

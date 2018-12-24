@@ -11,7 +11,7 @@
             <a-col :span="12">
                 <a-row>
                     <a-col :span="17" style="text-align: right;">
-                        <b class="beta-tag">B E T A</b>
+                        <b class="beta-tag">Version - 0.7.2</b>
                         <!--     <a-badge :count="5">
                             <a-icon type="bell" />
                         </a-badge> -->

@@ -107,6 +107,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -144,42 +147,68 @@ export default {
                 show: false,
                 enableButton: false,
             },
-            data: [
-                // {
-                //     key: '1',
-                //     status: 'En revisión',
-                //     evaluation: {
-                //         title: 'Período 2017-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     reviewDate: '13/07/2017',
-                //     endDate: '13/07/2017',
-                // },
-            ],
+            data: [],
             columns,
         };
     },
+    created() {
+        this.getRevisionSummary();
+    },
     methods: {
+        async getRevisionSummary() {
+            let response = null;
+            try {
+                response = await client3B.dashboard.getCollaborator();
+                const items = response.data.result.revisionSummary;
+                this.data = [];
+                for (let index = 0; index < items.length; index += 1) {
+                    this.data.push({
+                        key: index+1,
+                        status: this.selectStatusName(items[index].status),
+                        evaluation: {
+                            title: items[index].name,
+                            subtitle: 'sin descripción'
+                        },
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
+                        reviewDate:  new Date(items[index].revisionDateTime).toLocaleDateString()                        
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
         toggleCBEModal() {
             this.CBEModal.show = !this.CBEModal.show;
         },
         selectTagColor(status) {
             switch (status) {
-            case 'No iniciado':
-                return 'ant-tag-red';
-            case 'Finalizado':
-                return 'ant-tag-blue';
-            case 'En revisión':
-                return 'ant-tag-gray';
-            case 'Completado':
-                return 'ant-tag-green';
-            case 'En proceso':
-                return 'ant-tag-yellow';
-            default:
-                break;
+                case 'No iniciado':
+                    return 'ant-tag-red';
+                case 'En proceso':
+                    return 'ant-tag-yellow';
+                case 'Finalizado':
+                    return 'ant-tag-green';
+                case 'En revisión':
+                    return 'ant-tag-blue';
+                case 'Validado':
+                    return 'ant-tag-blue';
+                default:
+                    return 'ant-tag-gray';
             }
-
-            return 'ant-tag-red';
+        },
+        selectStatusName(status) {
+            switch (status) {
+                case 0:
+                    return 'No iniciado';
+                case 1:
+                    return 'En proceso';
+                case 2:
+                    return 'Finalizado';
+                case 3:
+                    return 'En revisión';
+                case 4:
+                    return 'Validado';
+            }
         },
     },
 };
