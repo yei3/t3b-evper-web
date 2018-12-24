@@ -320,6 +320,7 @@ import { mapActions, mapGetters } from 'vuex';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import { setTimeout } from 'timers';
+import { answerTypes } from '@/modules/evaluation';
 
 export default {
     props: {
@@ -359,28 +360,7 @@ export default {
                 value: '',
                 loading: false,
             },
-            answerTypes: [
-                {
-                    label: 'Objetivo',
-                    value: 3,
-                },
-                {
-                    label: 'Respuesta abierta',
-                    value: 0,
-                },
-                {
-                    label: 'Múltiples respuestas abiertas',
-                    value: 1,
-                },
-                {
-                    label: 'Selección de respuesta predefinida',
-                    value: 2,
-                },
-                {
-                    label: 'Si / No',
-                    value: 4,
-                },
-            ],
+            answerTypes,
             subsectionUUID: 0,
             subsections: [],
             userActions: {
@@ -629,49 +609,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.dynamic-delete-button {
-  cursor: pointer;
-  position: relative;
-  top: 0px;
-  font-size: 16px;
-  color: #777;
-  transition: all .3s;
-}
-.dynamic-delete-button:hover {
-  color: #777;
-}
-.link-delete-question {
-    color: #777;
-}
-.link-delete-question:hover {
-    color: #777;
-}
-
-.form-icon {
-    color: #777;
-}
-
-.form-icon:hover {
-    color: #333;
-}
-
-.add-button {
-    width: 90%;
-}
-.add-button:hover {
-    border-style: dashed;
-}
-.question-row {
-    margin: 30px 0px;
-    padding: 0px 10px;
-    border-left: 3px solid #1AB394;
-}
-.green-bar {
-    border-left: 3px solid #1AB394;
-}
-.orange-bar {
-    border-left: 3px solid #F57B22;
-}
-
-</style>
+<style src="@/assets/styles/evaluationForm.css" scoped></style>

@@ -19,7 +19,7 @@ export default [
         beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
     },
     {
-        path: 'collaborator/assessments/apply',
+        path: 'collaborator/assessments/:id/apply',
         name: 'collaborator-assessments-apply',
         component: applyPerformanceEvaluations,
         beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),

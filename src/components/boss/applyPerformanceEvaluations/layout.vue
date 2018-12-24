@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import makeEvaluation from '@/components/collaborator/applyPerformanceEvaluations/makeEvaluation.vue';
+import makeEvaluation from '@/components/boss/applyPerformanceEvaluations/makeEvaluation.vue';
 
 export default {
     components: {

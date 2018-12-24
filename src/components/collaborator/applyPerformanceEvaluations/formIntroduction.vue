@@ -8,9 +8,7 @@
         <a-row style="padding: 70px 10px;">
             <a-col :span="24">
                 <span>
-                    Lea cuidadosamente con el fin de evaluar su desempeño de manera objetiva.
-                    Analice su desempeño en el trabajo por el periodo completo que se califica.
-                    No base su evaluación en acontecimientos recientes o incidentes aislados.
+                    {{instructions}}
                 </span>
             </a-col>
         </a-row>
@@ -19,9 +17,11 @@
 
 <script>
 export default {
-    data() {
-        return {
-        };
+    props: {
+        instructions: {
+            type: String,
+            required: true,
+        },
     },
 };
 </script>
