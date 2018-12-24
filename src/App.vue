@@ -16,7 +16,7 @@ export default {
     }
     body {
         background-color: #2f4050;
-        font-size: 13px;
+        font-size: 14px;
     }
     a:hover {
         color: white
