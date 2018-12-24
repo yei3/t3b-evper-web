@@ -1,10 +1,10 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
         <a-collapse-panel header="Próximo periodo de evaluación" key="1" class="text-center">
-            <h3 class="tittle-collapse">Periodo 2018-02</h3>
+            <h3 class="tittle-collapse">Periodo 2019-01</h3>
             <a-range-picker
                 :disabledDate="disabledDate"
-                :defaultValue="[moment('2018-11-26', dateFormat), moment('2018-12-26', dateFormat)]"
+                :defaultValue="[moment('2018-12-24', dateFormat), moment('2019-06-21', dateFormat)]"
             />
         </a-collapse-panel>
     </a-collapse>

@@ -12,7 +12,7 @@ class Evaluation extends Http {
     /**
      * Request for the information for a evaluation
      *
-     * @param {String} UserId   Id for the user
+     * @param {String} evaluationId   Id for the user
      *
      * @return {Promise}        Http Response
      */
@@ -29,6 +29,16 @@ class Evaluation extends Http {
      */
     getAll() {
         const path = `${this.entityPath}/GetAll`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for the Admin Evaluation summary
+     *
+     * @return {Promise}        Http Response
+     */
+    getAdminEvaluationSummary() {
+        const path = `${this.entityPath}/GetAdministratorEvaluationSummary`;
         return this.request(path, this.methods.get, {});
     }
 

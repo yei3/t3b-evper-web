@@ -207,6 +207,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -241,154 +244,97 @@ export default {
                 show: false,
                 enableButton: true,
             },
+            collaborators: [],
             data: [
-                // {
-                //     id: 1,
-                //     name: 'Leonardo Juárez',
-                //     objectives: [
-                //         {
-                //             key: '1',
-                //             status: 'Validado',
-                //             objective: {
-                //                 title: 'Planes de sucesión en Barrientos',
-                //                 subtitle: 'Entregable: Documento con plan detallado ',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '2',
-                //             status: 'Validado',
-                //             objective: {
-                //                 title: 'Portal de Beneficios',
-                //                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '3',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Sistema de Evaluación de Desempeño',
-                //                 subtitle: 'Entregable: Sistema productivo',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '4',
-                //             status: 'Validado',
-                //             objective: {
-                //                 title: 'Plan de formación',
-                //                 subtitle: 'Entregable: Documento con plan detallado',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //     ],
-                // },
-                // {
-                //     id: 2,
-                //     name: 'Silvia Sánchez',
-                //     objectives: [
-                //         {
-                //             key: '1',
-                //             status: 'No iniciado',
-                //             objective: {
-                //                 title: 'Planes de sucesión en Barrientos',
-                //                 subtitle: 'Entregable: Documento con plan detallado ',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '2',
-                //             status: 'Validado',
-                //             objective: {
-                //                 title: 'Portal de Beneficios',
-                //                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '3',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Sistema de Evaluación de Desempeño',
-                //                 subtitle: 'Entregable: Sistema productivo',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '4',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Plan de formación',
-                //                 subtitle: 'Entregable: Documento con plan detallado',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //     ],
-                // },
-                // {
-                //     id: 3,
-                //     name: 'Laura Alcántara',
-                //     objectives: [
-                //         {
-                //             key: '1',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Planes de sucesión en Barrientos',
-                //                 subtitle: 'Entregable: Documento con plan detallado ',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '2',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Portal de Beneficios',
-                //                 subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '3',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Sistema de Evaluación de Desempeño',
-                //                 subtitle: 'Entregable: Sistema productivo',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //         {
-                //             key: '4',
-                //             status: 'Completado',
-                //             objective: {
-                //                 title: 'Plan de formación',
-                //                 subtitle: 'Entregable: Documento con plan detallado',
-                //             },
-                //             endDate: '13/07/2018',
-                //         },
-                //     ],
-                // },
+                {
+                    id: 1,
+                    name: 'Leonardo Juárez',
+                    objectives: [
+                        {
+                            key: '1',
+                            status: 'Validado',
+                            objective: {
+                                title: 'Planes de sucesión en Barrientos',
+                                subtitle: 'Entregable: Documento con plan detallado ',
+                            },
+                            endDate: '13/07/2018',
+                        },
+                        {
+                            key: '2',
+                            status: 'Validado',
+                            objective: {
+                                title: 'Portal de Beneficios',
+                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
+                            },
+                            endDate: '13/07/2018',
+                        },
+                        {
+                            key: '3',
+                            status: 'Completado',
+                            objective: {
+                                title: 'Sistema de Evaluación de Desempeño',
+                                subtitle: 'Entregable: Sistema productivo',
+                            },
+                            endDate: '13/07/2018',
+                        },
+                        {
+                            key: '4',
+                            status: 'Validado',
+                            objective: {
+                                title: 'Plan de formación',
+                                subtitle: 'Entregable: Documento con plan detallado',
+                            },
+                            endDate: '13/07/2018',
+                        },
+                    ],
+                },
             ],
         };
     },
+    created() {
+        // fetch the data when the view is created and the data is
+        // already being observed
+        this.getCollaboratorsObjectives();
+    },
     methods: {
+        async getCollaboratorsObjectives() {
+            let response = null;
+            // this.spin = true;
+            try {
+                response = await client3B.dashboard.getSupervisor();
+                console.log(response);
+            } catch (error) {
+            console.log(error);
+            }
+        },
         toggleViewProgressModal() {
             this.viewProgressModal.show = !this.viewProgressModal.show;
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado':
+                    return 'ant-tag-red';
+                case 'En proceso':
+                    return 'ant-tag-yellow';
+                case 'Completado':
+                    return 'ant-tag-green';
+                case 'Validado':
+                    return 'ant-tag-blue';
+                default:
+                    return 'ant-tag-gray';
             }
-            if (status === 'En proceso') {
-                return 'ant-tag-yellow';
+        },
+        selectStatusName(status) {
+            switch (status) {
+                case 1:
+                    return 'No iniciado';
+                case 2:
+                    return 'En proceso';
+                case 3:
+                    return 'Completado';
+                case 4:
+                    return 'Validado';
             }
-            if (status === 'Completado') {
-                return 'ant-tag-green';
-            }
-            if (status === 'Validado') {
-                return 'ant-tag-blue';
-            }
-            return 'ant-tag-gray';
         },
         objectivesCount(objectives) {
             let completed = 0;

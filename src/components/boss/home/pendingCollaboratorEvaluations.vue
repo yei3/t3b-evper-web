@@ -121,6 +121,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -162,94 +165,75 @@ export default {
                 enableButton: false,
             },
             data: [
-                // {
-                //     key: '1',
-                //     status: 'No iniciado',
-                //     evaluation: {
-                //         title: 'Período 2018-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     collaborator: 'Leonardo Juárez',
-                //     endDate: '13/07/2018',
-                // },
-                // {
-                //     key: '2',
-                //     status: 'No iniciado',
-                //     evaluation: {
-                //         title: 'Período 2018-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     collaborator: 'Silvia Sánchez',
-                //     endDate: '13/07/2018',
-                // },
-                // {
-                //     key: '3',
-                //     status: 'No iniciado',
-                //     evaluation: {
-                //         title: 'Período 2018-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     collaborator: 'Laura Alcántara',
-                //     endDate: '13/07/2018',
-                // },
-                // {
-                //     key: '4',
-                //     status: 'En proceso',
-                //     evaluation: {
-                //         title: 'Período 2018-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     collaborator: 'Leonardo Juárez',
-                //     endDate: '13/07/2018',
-                // },
-                // {
-                //     key: '5',
-                //     status: 'En proceso',
-                //     evaluation: {
-                //         title: 'Período 2018-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     collaborator: 'Silvia Sánchez',
-                //     endDate: '13/07/2018',
-                // },
-                // {
-                //     key: '6',
-                //     status: 'Finalizada',
-                //     evaluation: {
-                //         title: 'Período 2018-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     collaborator: 'Leonardo Juárez',
-                //     endDate: '13/07/2018',
-                // },
+                {
+                    key: '1',
+                    status: 'No iniciado',
+                    evaluation: {
+                        title: 'Período 2018-1',
+                        subtitle: 'Evaluación de Desempeño',
+                    },
+                    collaborator: 'Leonardo Juárez',
+                    endDate: '13/07/2018',
+                }
             ],
             columns,
         };
     },
+    created() {
+        this.getCollaboratorEvaluations();
+    },
     methods: {
+        async getCollaboratorEvaluations() {
+            let response = null;
+            try {
+                response = await client3B.dashboard.getSupervisor();
+                const items = response.data.result.collaboratorsObjectivesSummary;
+                this.data = [];
+                for (let index = 0; index < items.length; index += 1) {
+                    this.data.push({
+                        key: index++,
+                        status: this.selectStatusName(items[index].status),
+                        evaluation: {
+                            title: 'Periodo 2018',
+                            subtitle: 'sin descripción'
+                        },
+                        collaborator: items[index].collaboratorFullName,
+                        endDate:  '13/07/2018'//new Date(items[index].deliveryDate).toLocaleDateString()
+                    });
+                }
+                
+            } catch (error) {
+                console.log(error);
+            }
+        },
         toggleScheduleReviewModal() {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
-        transformStatus(status) {
-            if (status === 'En proceso') {
-                return 'Continuar';
-            }
-            if (status === 'Finalizada') {
-                return 'Agendar revisión';
-            }
-            return 'Iniciar';
-        },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado':
+                    return 'ant-tag-red';
+                case 'En proceso':
+                    return 'ant-tag-yellow';
+                case 'Completado':
+                    return 'ant-tag-green';
+                case 'Validado':
+                    return 'ant-tag-blue';
+                default:
+                    return 'ant-tag-gray';
             }
-            if (status === 'En proceso') {
-                return 'ant-tag-yellow';
+        },
+        selectStatusName(status) {
+            switch (status) {
+                case 0:
+                    return 'No iniciado';
+                case 1:
+                    return 'En proceso';
+                case 2:
+                    return 'Completado';
+                case 3:
+                    return 'Validado';
             }
-            if (status === 'Finalizada') {
-                return 'ant-tag-green';
-            }
-            return 'ant-tag-gray';
         },
     },
 };
