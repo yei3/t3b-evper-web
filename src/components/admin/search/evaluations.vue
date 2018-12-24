@@ -136,7 +136,7 @@ export default {
                     Id: id,
                 });
             } catch (error) {
-                errorHandler(error);
+                errorHandler(this, error);
             }
             await this.search();
         },

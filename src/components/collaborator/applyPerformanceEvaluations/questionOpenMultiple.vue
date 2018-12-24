@@ -30,7 +30,6 @@
 
                 <a-col :sm="24" :md="24" style="text-align: right; margin-top: 0px;">
                     <a  class="link-delete-question form-icon"
-                        style="padding-right: 2%;"
                         :disabled="loading"
                         @click="removeAnswer(index)"
                     >
@@ -145,10 +144,13 @@ export default {
         },
         save() {
             this.form.validateFields((error, values) => {
+                console.log(error, values);
                 if (error) {
-                    errorHandler(error);
+                    errorHandler(this, error);
+                } else {
+                    console.log(values);
                 }
-            })
+            });
         },
         create() {
 
@@ -164,7 +166,7 @@ export default {
             }
             return 'question-row green-bar';
         },
-    }
+    },
 };
 </script>
 

@@ -125,7 +125,7 @@ export default {
     methods: {
         async fetchEvaluation() {
             const response = await client3B.evaluation.get(this.$route.params.id)
-                .catch(error => errorHandler(error));
+                .catch(error => errorHandler(this, error));
             if (!response) return;
             console.log(response.data.result.questions);
             this.evaluation = response.data.result;

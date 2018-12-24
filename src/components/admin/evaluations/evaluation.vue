@@ -139,17 +139,17 @@ export default {
         async getAllFormats() {
             this.spin = true;
             const response = await client3B.format.getAll()
-                .catch(error => errorHandler(error));
+                .catch(error => errorHandler(this, error));
             this.formats = response.data.result.items;
         },
         async getAllRegions() {
             const response = await client3B.organizationUnit.getAllRegions()
-                .catch(error => errorHandler(error));
+                .catch(error => errorHandler(this, error));
             this.regions = response.data.result;
         },
         async getAllAreas() {
             const response = await client3B.organizationUnit.getAllAreas()
-                .catch(error => errorHandler(error));
+                .catch(error => errorHandler(this, error));
             this.areas = response.data.result;
             this.spin = false;
         },
@@ -160,7 +160,7 @@ export default {
                 organizationUnitIds: [...this.form.areas, ...this.form.regs],
                 startDate: this.form.startDate,
                 endDate: this.form.finishDate,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (response) {
                 this.$message.success('Evaluación aplicada correctamente.');
                 this.$router.push({ name: 'admin-evaluations' });

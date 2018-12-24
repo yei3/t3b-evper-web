@@ -434,7 +434,7 @@ export default {
                 evaluationTemplateId: this.format.id,
                 displayName: true,
                 parentId: this.sectionId,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.addSubsectionModal.loading = false;
                 return;
@@ -474,7 +474,7 @@ export default {
                 displayName: subsection.title.visible,
                 evaluationTemplateId: this.format.id,
                 parentId: this.sectionId,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 subsection.loading = false;
                 return;
@@ -518,7 +518,7 @@ export default {
             subsection.loading = true;
             const response = await client3B.section.delete({
                 id: subsection.key,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 subsection.loading = false;
                 return;
@@ -533,7 +533,7 @@ export default {
                 id: this.sectionId,
                 evaluationTemplateId: this.format.id,
                 name: this.sectionModal.value,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.sectionModal.loading = false;
                 return;

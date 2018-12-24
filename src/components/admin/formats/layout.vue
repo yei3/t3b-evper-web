@@ -253,7 +253,7 @@ export default {
                 return;
             }
             const response = await client3B.format.get(this.$route.params.id)
-                .catch(error => errorHandler(error));
+                .catch(error => errorHandler(this, error));
             if (!response) {
                 this.spin = false;
                 return;
