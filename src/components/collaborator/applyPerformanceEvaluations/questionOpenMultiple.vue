@@ -138,7 +138,7 @@ export default {
             if (this.answersText.length === 0) {
                 setTimeout(() => {
                     this.answersText = [''];
-                }, 200)
+                }, 200);
             }
         },
         save() {
@@ -162,18 +162,19 @@ export default {
             this.edited = false;
             if (!response) return;
             this.answer.id = response.data.result.id;
-            this.answer.id = 256;
+            this.$message.success('Evaluación guardada correctamente');
         },
         async update() {
             this.loading = true;
             const text = JSON.stringify(this.answersText);
-            const response = await client3B.evaluation.answer.update({
+            await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
                 text,
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             this.edited = false;
+            this.$message.success('Evaluación guardada correctamente');
         },
     },
     computed: {

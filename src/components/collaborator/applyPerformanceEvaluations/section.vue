@@ -19,8 +19,16 @@
                             :key="question.id"
                             style="padding: 10px 16px;"
                         >
-                            <questionOpenMultiple
+                            <question-open-multiple
                                 v-if="question.questionType == 1"
+                                :index="index + 1"
+                                :questionText="question.text"
+                                :questionId="question.id"
+                                :answerId="getAnswerId(question.id)"
+                                :answer="getAnswerValue(question.id, question.questionType)"
+                            />
+                            <question-boolean
+                                v-if="question.questionType == 4"
                                 :index="index + 1"
                                 :questionText="question.text"
                                 :questionId="question.id"
@@ -37,6 +45,7 @@
 
 <script>
 import questionOpenMultiple from '@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue';
+import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
 
 export default {
     props: {
@@ -55,6 +64,7 @@ export default {
     },
     components: {
         questionOpenMultiple,
+        questionBoolean,
     },
     methods: {
         getAnswerId(questionId) {
