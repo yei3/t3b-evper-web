@@ -1,4 +1,5 @@
 import Http from './Http';
+import Answer from './Answer';
 
 /**
  * Class to make operations to the Evaluation entity
@@ -7,6 +8,7 @@ class Evaluation extends Http {
     constructor() {
         super();
         this.entityPath = '/api/services/app/Evaluation';
+        this.answer = new Answer();
     }
 
     /**
