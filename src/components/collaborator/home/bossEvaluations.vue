@@ -23,6 +23,11 @@
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
                 <span slot="status" slot-scope="status">
@@ -142,6 +147,7 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
             CBEModal: {
                 show: false,
@@ -156,6 +162,7 @@ export default {
     },
     methods: {
         async getRevisionSummary() {
+            this.spin = true;
             let response = null;
             try {
                 response = await client3B.dashboard.getCollaborator();
@@ -175,7 +182,9 @@ export default {
                 }
             } catch (error) {
                 console.log(error);
-            }
+            } finally {
+                this.spin = false;
+            }                        
         },
         toggleCBEModal() {
             this.CBEModal.show = !this.CBEModal.show;

@@ -23,6 +23,11 @@
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
                 <span slot="status" slot-scope="status">
@@ -173,6 +178,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -205,15 +213,9 @@ const columns = [
 export default {
     data() {
         return {
-            scheduleReviewModal: {
-                show: false,
-                enableButton: false,
-            },
-            finishEvaluationModal: {
-                show: false,
-                enableButton: false,
-            },
+            spin: false,
             collapsed: false,
+            columns,
             data: [
                 // {
                 //     key: '1',
@@ -226,10 +228,46 @@ export default {
                 //     endDate: '13/07/2017',
                 // },
             ],
-            columns,
+            scheduleReviewModal: {
+                show: false,
+                enableButton: false,
+            },
+            finishEvaluationModal: {
+                show: false,
+                enableButton: false,
+            },            
         };
     },
+    created() {
+        this.getCollaboratorEvaluations();
+    },
     methods: {
+        async getCollaboratorEvaluations() {
+            this.spin = true;
+            let response = null;
+            try {
+                response = await client3B.dashboard.getSupervisor();
+                const items = response.data.result.collaboratorRevisionSummary;
+                this.data = [];
+                for (let index = 0; index < items.length; index += 1) {
+                    this.data.push({                        
+                        key: index++,
+                        id: items[index].id,
+                        status: this.selectStatusName(items[index].status),
+                        evaluation: {
+                            title: items[index].name,
+                            subtitle: items[index].description
+                        },
+                        collaborator: items[index].collaboratorName,
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
+                    });
+                }                
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.spin = false;
+            }
+        },
         toggleScheduleReviewModal() {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
