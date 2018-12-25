@@ -15,7 +15,7 @@
                     </a-col>
                     <a-col :span="24">
                         <a-row
-                            v-for="(question, index) in subsection.unmeasuredQuestions"
+                            v-for="(question, index) in getSubsectionQuestions(subsection)"
                             :key="question.id"
                             style="padding: 10px 16px;"
                         >
@@ -40,6 +40,14 @@
                                 :questionId="getQuestionId(question.id)"
                                 :answer="getAnswerValue(question.id, question.questionType)"
                             />
+                            <question-objective
+                                v-if="question.questionType == 3"
+                                :index="index + 1"
+                                :questionText="question.text"
+                                :questionId="getQuestionId(question.id)"
+                                :expected="question.expected"
+                                :answer="getAnswerValue(question.id, question.questionType)"
+                            />
                             <question-boolean
                                 v-if="question.questionType == 4"
                                 :index="index + 1"
@@ -60,6 +68,7 @@ import questionOpen from '@/components/collaborator/applyPerformanceEvaluations/
 import questionOpenMultiple from '@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue';
 import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
 import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
+import questionObjective from '@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue';
 
 export default {
     props: {
@@ -81,24 +90,29 @@ export default {
         questionOpenMultiple,
         questionOneSelect,
         questionBoolean,
+        questionObjective,
     },
     methods: {
-        getEvaluationQuestionId(questionId) {
-
-        },
         getQuestionId(questionId) {
+            console.log(questionId);
             const answer = this.answers.find(qst =>
                 qst.evaluationQuestionId === questionId);
+            console.log('answer', JSON.parse(JSON.stringify(answer)));
             return answer.id;
         },
         getAnswerValue(questionId, questionType) {
+            console.log(questionId, questionType);
             const answer = this.answers.find(qst =>
                 qst.evaluationQuestionId === questionId);
+            console.log('answer', JSON.parse(JSON.stringify(answer)));
             if (questionType === 3) {
                 return answer.measuredAnswer;
             }
             return answer.unmeasuredAnswer;
         },
+        getSubsectionQuestions(subsection) {
+            return [...subsection.unmeasuredQuestions, ...subsection.measuredQuestions];
+        }
     },
 };
 

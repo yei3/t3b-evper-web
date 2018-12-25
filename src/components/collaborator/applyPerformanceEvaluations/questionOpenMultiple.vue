@@ -3,7 +3,7 @@
         style="padding: 5px 15px 5px 15px; margin-bottom: 0px;"
         :class="answerStatus"
     >
-        <h3>{{index}}. {{questionText}}</h3>
+        <span class="question-label">{{index}}. {{questionText}}</span>
         <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
             <div v-for="(text, index) in answersText" :key="index">
                 <a-form-item style="margin: 10px 0px;"
@@ -32,27 +32,8 @@
                     </a-input>
                 </a-form-item>
             </div>
-
-            <a-form-item style="margin: 50px 0px 0 0px;"
-                fieldDecoratorId="comment"
-                :wrapperCol="{ xxl: 24, xl: 24, lg: 24, md: 24, sm: 24 }"
-                :fieldDecoratorOptions="{
-                    rules: [
-                        {
-                            required: false,
-                            message: 'Comentarios adicionales'
-                        }
-                    ]
-                }"
-            >
-                <a-textarea placeholder="Comentarios adicionales..."
-                    :autosize="{ minRows: 2 }"
-                    :disabled="onlyLecture"
-                    @change="edited = true"
-                />
-            </a-form-item>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 20px;">
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;">
             <a  class="link-delete-question form-icon"
                 :disabled="loading"
                 @click="addAnswer"

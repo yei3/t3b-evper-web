@@ -14,29 +14,14 @@
                 <span style="font-size: 14px; font-weight: 600" v-show="!value">
                     NO
                 </span>
-                <a-switch v-model="value" :disabled="loading" @change="edited = true"/>
+                <a-switch v-model="value" :disabled="loading" @change="save"/>
             </a-col>
-            <a-col :span="24" style="margin-top: 15px;">
-                <a-textarea placeholder="Comentarios adicionales..."
-                    :autosize="{ minRows: 2 }"
-                    :disabled="onlyLecture"
-                    @change="edited = true"
-                />
-            </a-col>
-            <a-col :sm="24" :md="24" style="text-align: center; margin-top: 20px;">
-                <a  class="link-delete-question form-icon"
-                    style="padding-left: 2%;"
-                    :disabled="loading"
-                    @click="save"
-                >
-                    <a-icon class='dynamic-delete-button form-icon' type="check" /> Guardar Respuesta
-                </a>
-                <a-icon v-show="loading"
-                    class='dynamic-delete-button form-icon'
-                    type="loading"
-                    style="padding-left: 2%;"
-                />
-            </a-col>
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
+            <a-icon class='dynamic-delete-button form-icon'
+                type="loading"
+                style="padding-left: 2%;"
+            /> Guardardando Respuesta
+        </a-col>
         </a-row>
     </a-col>
 </template>
@@ -90,6 +75,7 @@ export default {
             }
         },
         save(options) {
+            this.edited = true;
             this.loading = true;
             this.update(options);
         },

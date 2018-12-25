@@ -1,28 +1,30 @@
 <template>
     <a-col :span="24"
-        style="padding: 5px 15px 5px 15px; margin-bottom: 0px;"
+        style="padding: 5px 15px 0px 15px; margin-bottom: 0px;"
         :class="answerStatus"
     >
-        <span class="question-label">{{index}}. {{questionText}}</span>
+        <a-col :span="12">
+            <h3>{{`${index}. ${questionText}`}}</h3>
+        </a-col>
         <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
-            <a-form-item style="margin-bottom: 0px;"
-                fieldDecoratorId="q1"
-                :wrapperCol="{ xxl: 24, xl: 24, lg: 24, md: 24, sm: 24 }"
+            <a-form-item
+                fieldDecoratorId="e1"
+                style="text-align: left; margin-bottom: 0px;"
+                label='Esperado'
+                :labelCol="{ xxl: 8, xl: 16, lg: 10, md: 12, sm: 24 }"
+                :wrapperCol="{ xxl: 16, xl: 8, lg: 14, md: 12, sm: 24 }"
                 :fieldDecoratorOptions="{
-                    initialValue: value,
+                    initialValue: expectedValue,
                     rules: [
                         {
                             required: true,
-                            message: 'Ingresa tu respuesta'
+                            message: 'Selecciona una respuesta'
                         }
                     ]
                 }"
             >
-                <a-input placeholder="Respuesta"
-                    v-model="value"
-                    :disabled="onlyLecture"
-                    @keyup="kup"
-                    @keydown="kdown"
+                <a-input placeholder="Selecciona una respuesta"
+                    v-model="expectedValue"
                 />
             </a-form-item>
         </a-form>
@@ -38,9 +40,6 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
-
-let typingTimer;
-const doneTypingInterval = 3000;
 
 export default {
     props: {
@@ -60,6 +59,10 @@ export default {
             type: Number,
             required: true,
         },
+        expected: {
+            type: [String, Number],
+            required: true,
+        },
         answer: {
             type: Object,
             required: true,
@@ -69,46 +72,40 @@ export default {
         return {
             edited: false,
             loading: false,
-            value: '',
+            expectedValue: null,
+            value: null,
         };
     },
     mounted() {
         this.parseAnswer();
     },
     methods: {
-        kup(){
-            this.edited = true;
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(this.save, doneTypingInterval);
-        },
-        kdown(){
-            clearTimeout(typingTimer);
-        },
-        printValue() {
-            console.log(this.value);
-        },
         handleForm(e) {
             e.prevent();
         },
         parseAnswer() {
-            if (this.answer.text) {
-                this.value = this.answer.text;
-            } else {
+            if (this.answer.text == 0 && this.answer.real === 0) {
                 this.edited = true;
+            } if(this.answer.text == null) {
+                this.value = this.answer.real;
+            } else {
+                this.value = this.answer.text;
             }
         },
-        save() {
+        save(optionSelected) {
+            console.log('saved');
             this.form.validateFields((error) => {
                 if (error) return;
-                this.update();
+                this.update(optionSelected);
             });
         },
-        async update() {
+        async update(optionSelected) {
+            return;
             this.loading = true;
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
-                text: this.value,
+                text: optionSelected,
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;
@@ -128,12 +125,12 @@ export default {
 </script>
 
 <style src="@/assets/styles/evaluationForm.css" scoped></style>
-<style>
-.input-delete {
-    color: red;
+<style scoped>
+div >>> .ant-form-item-label {
+    text-align: left;
 }
-.input-delete:hover {
-    color: #db0000;
-    cursor: pointer;
+
+div >>> .ant-form-item-required {
+    font-size: 15px;
 }
 </style>
