@@ -45,13 +45,13 @@
                                 <div class="step-form step-form-current"
                                     v-show="data.currentStep === index"
                                 >
-                                    <span>{{index}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{step.label}}</span>
                                 </div>
 
                                 <div class="step-form step-form-not-done"
                                     v-show="data.lastStep < index"
                                 >
-                                    <span>{{index}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{step.label}}</span>
                                 </div>
                             </a-col>
                         </a-row>

@@ -21,7 +21,6 @@
                 }"
             >
                 <a-select
-                    v-model="value"
                     placeholder="Selecciona una respuesta"
                     @select="save"
                 >
@@ -34,7 +33,7 @@
                 </a-select>
             </a-form-item>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;" v-show="loading">
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
             <a-icon class='dynamic-delete-button form-icon'
                 type="loading"
                 style="padding-left: 2%;"
@@ -105,18 +104,18 @@ export default {
                 this.edited = true;
             }
         },
-        save() {
+        save(optionSelected) {
             this.form.validateFields((error) => {
                 if (error) return;
-                this.update();
+                this.update(optionSelected);
             });
         },
-        async update() {
+        async update(optionSelected) {
             this.loading = true;
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
-                text: this.value,
+                text: optionSelected,
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;
