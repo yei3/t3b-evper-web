@@ -43,8 +43,8 @@
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
-                <span slot="action" slot-scope="action">
-                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation()">
+                <span slot="action" slot-scope="action, record">
+                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation(record.id)">
                         {{transformStatus(action)}}
                     </a-button>
                     <!-- <router-link
@@ -69,12 +69,14 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         scopedSlots: { customRender: 'status' },
-    }, {
+    }, 
+    {
         title: 'Evaluaciones',
         dataIndex: 'evaluation',
         key: 'evaluation',
         scopedSlots: { customRender: 'evaluation' },
-    }, {
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -85,7 +87,7 @@ const columns = [
         dataIndex: 'status',
         scopedSlots: { customRender: 'action' },
         align: 'right',
-    },
+    }
 ];
 
 export default {
@@ -95,42 +97,39 @@ export default {
             spin: false,
             evaluations: [],
             data: [],
-            columns,
-            
+            columns            
         };
     },
     created() {
-        // fetch the data when the view is created and the data is
-        // already being observed        
-        // this.getCurrentEvaluations();
+        this.getAutoEvaluations();
     },
     methods: {
-        async getCurrentEvaluations() {
-            this.spin = true;
+        async getAutoEvaluations() {
             let response = null;
             try {
                 response = await client3B.dashboard.getCollaborator();
-                console.log(response.data.result);
                 const items = response.data.result.autoEvaluationSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index += 1) {
+                for (let index = 0; index < items.length; index++) {
                     this.data.push({
-                        key: items[index].id,
-                        status: this.getStatus(items[index].status),
+                        id: items[index].id,
+                        key: index+1,
+                        status: this.selectStatusName(items[index].status),
                         evaluation: {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
-                        endDate: items[index].endDate,
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
                     });
                 }
+                // console.log(this.data);
             } catch (error) {
                 console.log(error);
             }
-            this.spin = false;
         },
-        fillEvaluation() {
-            this.$router.push({ name: 'collaborator-assessments-apply' });
+        fillEvaluation(id) {
+            
+            this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
         },
         transformStatus(status) {
             if (status === 'En proceso' || status === 'Finalizado') {
@@ -150,6 +149,18 @@ export default {
                     return 'ant-tag-blue';
                 default:
                     return 'ant-tag-gray';
+            }
+        },
+        selectStatusName(status) {
+            switch (status) {
+                case 0:
+                    return 'No iniciado';
+                case 1:
+                    return 'En proceso';
+                case 2:
+                    return 'Completado';
+                case 3:
+                    return 'Validado';
             }
         },
     },
