@@ -4,19 +4,34 @@
         :class="answerStatus"
     >
         <a-row>
-            <a-col :xxl="8" :xl="16" :lg="12" :md="12" :sm="24">
-                <h3>{{index}}. {{questionText}}</h3>
+            <a-col :xxl="8" :xl="16" :lg="10" :md="12" :sm="24">
+                <span class="question-label">{{index}}. {{questionText}}</span>
             </a-col>
-            <a-col :xxl="8" :xl="8" :lg="12" :md="12" :sm="24">
+            <a-col :xxl="16" :xl="8" :lg="14" :md="12" :sm="24">
                 <span style="font-size: 14px; font-weight: 600" v-show="value">
                     SI
                 </span>
                 <span style="font-size: 14px; font-weight: 600" v-show="!value">
                     NO
                 </span>
-                <a-switch v-model="value" @change='save' :disabled="loading"/>
-                <a-icon
-                    v-show="loading"
+                <a-switch v-model="value" :disabled="loading" @change="edited = true"/>
+            </a-col>
+            <a-col :span="24" style="margin-top: 15px;">
+                <a-textarea placeholder="Comentarios adicionales..."
+                    :autosize="{ minRows: 2 }"
+                    :disabled="onlyLecture"
+                    @change="edited = true"
+                />
+            </a-col>
+            <a-col :sm="24" :md="24" style="text-align: center; margin-top: 20px;">
+                <a  class="link-delete-question form-icon"
+                    style="padding-left: 2%;"
+                    :disabled="loading"
+                    @click="save"
+                >
+                    <a-icon class='dynamic-delete-button form-icon' type="check" /> Guardar Respuesta
+                </a>
+                <a-icon v-show="loading"
                     class='dynamic-delete-button form-icon'
                     type="loading"
                     style="padding-left: 2%;"
@@ -48,10 +63,6 @@ export default {
             type: Number,
             required: true,
         },
-        answerId: {
-            type: Number,
-            required: true,
-        },
         answer: {
             type: Object,
             required: true,
@@ -62,6 +73,7 @@ export default {
     },
     data() {
         return {
+            edited: false,
             loading: false,
             value: false,
         };
@@ -74,28 +86,12 @@ export default {
             if (this.answer.text) {
                 this.value = this.answer.text === 'true';
             } else {
-                this.save({ showMessage: false });
+                this.edited = true;
             }
         },
         save(options) {
             this.loading = true;
-            if (this.answer.id) {
-                this.update(options);
-            } else {
-                this.create(options);
-            }
-        },
-        async create({ showMessage = true }) {
-            const response = await client3B.evaluation.answer.create({
-                evaluationQuestionId: this.questionId,
-                text: String(this.value),
-            }).catch(error => errorHandler(this, error));
-            this.loading = false;
-            if (!response) return;
-            this.answer.id = response.data.result.id;
-            if (showMessage) {
-                this.$message.success('Evaluación guardada correctamente');
-            }
+            this.update(options);
         },
         async update({ showMessage = true }) {
             const response = await client3B.evaluation.answer.update({
@@ -103,8 +99,9 @@ export default {
                 evaluationQuestionId: this.questionId,
                 text: String(this.value),
             }).catch(error => errorHandler(this, error));
-            if (!response) this.value = !this.value;
             this.loading = false;
+            if (!response) return;
+            this.edited = false;
             if (showMessage) {
                 this.$message.success('Evaluación guardada correctamente');
             }
@@ -112,7 +109,7 @@ export default {
     },
     computed: {
         answerStatus() {
-            if (this.loading) {
+            if (this.edited) {
                 return 'question-row orange-bar';
             }
             return 'question-row green-bar';

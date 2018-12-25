@@ -5,33 +5,25 @@
     >
         <h3>{{index}}. {{questionText}}</h3>
         <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
-            <div v-for="(text, index) in answersText" :key="index">
-                <a-form-item style="margin: 10px 0px;"
-                    :fieldDecoratorId="version + '-q-' + index"
-                    :wrapperCol="{ xxl: 24, xl: 24, lg: 24, md: 24, sm: 24 }"
-                    :fieldDecoratorOptions="{
-                        initialValue: answersText[index],
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Ingresa tu respuesta'
-                            }
-                        ]
-                    }"
-                >
-                    <a-input placeholder="Respuesta"
-                        v-model="answersText[index]"
-                        :disabled="onlyLecture"
-                        @change="edited = true"
-                    >
-                        <a-icon class="input-delete"
-                            @click="removeAnswer(index)"
-                            slot="addonAfter"
-                            type="delete"
-                        />
-                    </a-input>
-                </a-form-item>
-            </div>
+            <a-form-item style="margin: 10px 0px;"
+                fieldDecoratorId="q1"
+                :wrapperCol="{ xxl: 24, xl: 24, lg: 24, md: 24, sm: 24 }"
+                :fieldDecoratorOptions="{
+                    initialValue: value,
+                    rules: [
+                        {
+                            required: true,
+                            message: 'Ingresa tu respuesta'
+                        }
+                    ]
+                }"
+            >
+                <a-input placeholder="Respuesta"
+                    v-model="value"
+                    :disabled="onlyLecture"
+                    @change="edited = true"
+                />
+            </a-form-item>
 
             <a-form-item style="margin: 50px 0px 0 0px;"
                 fieldDecoratorId="comment"
@@ -53,12 +45,6 @@
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 20px;">
-            <a  class="link-delete-question form-icon"
-                :disabled="loading"
-                @click="addAnswer"
-            >
-                <a-icon class='dynamic-delete-button form-icon' type="plus" /> Agregar campo
-            </a>
             <a  class="link-delete-question form-icon"
                 style="padding-left: 2%;"
                 :disabled="loading"
@@ -107,10 +93,9 @@ export default {
     },
     data() {
         return {
-            version: 1,
-            loading: false,
             edited: false,
-            answersText: [],
+            loading: false,
+            value: '',
         };
     },
     methods: {
@@ -119,23 +104,9 @@ export default {
         },
         parseAnswer() {
             if (this.answer.text) {
-                this.answersText = JSON.parse(this.answer.text);
+                this.value = this.answer.text;
             } else {
                 this.edited = true;
-                this.answersText = [''];
-            }
-        },
-        addAnswer() {
-            this.edited = true;
-            this.answersText.push('');
-        },
-        removeAnswer(index) {
-            this.answersText.splice(index, 1);
-            this.version += 1;
-            if (this.answersText.length === 0) {
-                setTimeout(() => {
-                    this.answersText = [''];
-                }, 200);
             }
         },
         save() {
@@ -146,11 +117,10 @@ export default {
         },
         async update() {
             this.loading = true;
-            const text = JSON.stringify(this.answersText);
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
-                text,
+                text: this.value,
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;

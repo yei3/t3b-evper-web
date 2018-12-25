@@ -19,20 +19,32 @@
                             :key="question.id"
                             style="padding: 10px 16px;"
                         >
+                            <question-open
+                                v-if="question.questionType == 0"
+                                :index="index + 1"
+                                :questionText="question.text"
+                                :questionId="getQuestionId(question.id)"
+                                :answer="getAnswerValue(question.id, question.questionType)"
+                            />
                             <question-open-multiple
                                 v-if="question.questionType == 1"
                                 :index="index + 1"
                                 :questionText="question.text"
-                                :questionId="question.id"
-                                :answerId="getAnswerId(question.id)"
+                                :questionId="getQuestionId(question.id)"
+                                :answer="getAnswerValue(question.id, question.questionType)"
+                            />
+                            <question-one-select
+                                v-if="question.questionType == 2"
+                                :index="index + 1"
+                                :questionText="question.text"
+                                :questionId="getQuestionId(question.id)"
                                 :answer="getAnswerValue(question.id, question.questionType)"
                             />
                             <question-boolean
                                 v-if="question.questionType == 4"
                                 :index="index + 1"
                                 :questionText="question.text"
-                                :questionId="question.id"
-                                :answerId="getAnswerId(question.id)"
+                                :questionId="getQuestionId(question.id)"
                                 :answer="getAnswerValue(question.id, question.questionType)"
                             />
                         </a-row>
@@ -44,7 +56,9 @@
 </template>
 
 <script>
+import questionOpen from '@/components/collaborator/applyPerformanceEvaluations/questionOpen.vue';
 import questionOpenMultiple from '@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue';
+import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
 import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
 
 export default {
@@ -63,11 +77,16 @@ export default {
         },
     },
     components: {
+        questionOpen,
         questionOpenMultiple,
+        questionOneSelect,
         questionBoolean,
     },
     methods: {
-        getAnswerId(questionId) {
+        getEvaluationQuestionId(questionId) {
+
+        },
+        getQuestionId(questionId) {
             const answer = this.answers.find(qst =>
                 qst.evaluationQuestionId === questionId);
             return answer.id;
@@ -76,9 +95,9 @@ export default {
             const answer = this.answers.find(qst =>
                 qst.evaluationQuestionId === questionId);
             if (questionType === 3) {
-                return answer.measuredAnswer || {};
+                return answer.measuredAnswer;
             }
-            return answer.unmeasuredAnswer || {};
+            return answer.unmeasuredAnswer;
         },
     },
 };

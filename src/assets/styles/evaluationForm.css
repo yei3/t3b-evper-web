@@ -1,14 +1,14 @@
 .dynamic-delete-button {
-  cursor: pointer;
-  position: relative;
-  top: 0px;
-  font-size: 16px;
-  color: #777;
-  transition: all .3s;
+    cursor: pointer;
+    position: relative;
+    top: 0px;
+    font-size: 16px;
+    color: #777;
+    transition: all .3s;
 }
 
 .dynamic-delete-button:hover {
-  color: #777;
+    color: #777;
 }
 
 .link-delete-question {
@@ -46,4 +46,8 @@
 }
 .orange-bar {
     border-left: 3px solid #F57B22;
+}
+
+.question-label {
+    font-size: 15px;
 }

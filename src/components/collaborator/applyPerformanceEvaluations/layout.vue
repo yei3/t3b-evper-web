@@ -159,6 +159,7 @@ export default {
             if (!this.evaluation) return '';
 
             this.evaluation.template.sections.forEach((section) => {
+                if (section.parentId !== null) return;
                 steps.push({
                     id: section.id,
                     label: section.name,
@@ -170,7 +171,7 @@ export default {
         },
         evaluationSections() {
             if (!this.evaluation) return [];
-            return this.evaluation.template.sections;
+            return this.evaluation.template.sections.filter(section => section.parentId === null);
         },
         evaluationName() {
             if (!this.evaluation) return '';
