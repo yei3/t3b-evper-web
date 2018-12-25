@@ -297,7 +297,7 @@ export default {
 
 .avatar--border {
     border: solid 2px;
-    background: #d83333;
+    background: #565656;;
 }
 
 .ant-layout-sider,

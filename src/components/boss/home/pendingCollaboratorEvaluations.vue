@@ -164,18 +164,7 @@ export default {
                 show: false,
                 enableButton: false,
             },
-            data: [
-                {
-                    key: '1',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                }
-            ],
+            data: [],
             columns,
         };
     },
@@ -187,18 +176,18 @@ export default {
             let response = null;
             try {
                 response = await client3B.dashboard.getSupervisor();
-                const items = response.data.result.collaboratorsObjectivesSummary;
+                const items = response.data.result.collaboratorRevisionSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
                         key: index++,
                         status: this.selectStatusName(items[index].status),
                         evaluation: {
-                            title: 'Periodo 2018',
-                            subtitle: 'sin descripción'
+                            title: items[index].name,
+                            subtitle: items[index].description
                         },
                         collaborator: items[index].collaboratorFullName,
-                        endDate:  '13/07/2018'//new Date(items[index].deliveryDate).toLocaleDateString()
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
                     });
                 }
                 
@@ -208,6 +197,12 @@ export default {
         },
         toggleScheduleReviewModal() {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+        },
+        transformStatus(status) {
+            if (status === 'En proceso' || status === 'Finalizado') {
+                return 'Continuar';
+            }
+            return 'Iniciar';
         },
         selectTagColor(status) {
             switch (status) {

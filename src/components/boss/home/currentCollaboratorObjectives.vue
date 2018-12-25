@@ -244,56 +244,10 @@ export default {
                 show: false,
                 enableButton: true,
             },
-            collaborators: [],
-            data: [
-                {
-                    id: 1,
-                    name: 'Leonardo Juárez',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
-            ],
+            data: []
         };
     },
     created() {
-        // fetch the data when the view is created and the data is
-        // already being observed
         this.getCollaboratorsObjectives();
     },
     methods: {
@@ -302,7 +256,29 @@ export default {
             // this.spin = true;
             try {
                 response = await client3B.dashboard.getSupervisor();
-                console.log(response);
+                const items = response.data.result.collaboratorsObjectivesSummary;
+                // console.log(response.data.result.collaboratorsObjectivesSummary);
+                this.data = [];
+                for (let index = 0; index < items.length; index++) {
+                    const objectives = [];
+                    const objectivesAux = items[index].objectivesSummary;
+                    for (let jndex = 0; jndex < objectivesAux.length; jndex++) {
+                        objectives.push({
+                            key: jndex+1,
+                            status: this.selectStatusName(objectivesAux[jndex].status),
+                            objective: {
+                                title: objectivesAux[jndex].name,
+                            },
+                            endDate: objectivesAux[jndex].deliveryDate
+                        });                        
+                    }
+                    this.data.push({
+                        key: index+1,
+                        name: items[index].collaboratorFullName,
+                        objectives: objectives,
+                        totalPendingObjectives: items[index].totalPendingObjectives
+                    });
+                }
             } catch (error) {
             console.log(error);
             }
@@ -326,13 +302,13 @@ export default {
         },
         selectStatusName(status) {
             switch (status) {
-                case 1:
+                case 0:
                     return 'No iniciado';
-                case 2:
+                case 1:
                     return 'En proceso';
-                case 3:
+                case 2:
                     return 'Completado';
-                case 4:
+                case 3:
                     return 'Validado';
             }
         },
