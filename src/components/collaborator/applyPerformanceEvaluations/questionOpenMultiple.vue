@@ -22,7 +22,8 @@
                     <a-input placeholder="Respuesta"
                         v-model="answersText[index]"
                         :disabled="onlyLecture"
-                        @change="edited = true"
+                        @keyup="edited=true"
+                        @keypress.enter.prevent="save"
                     >
                         <a-icon class="input-delete"
                             @click="removeAnswer(index)"

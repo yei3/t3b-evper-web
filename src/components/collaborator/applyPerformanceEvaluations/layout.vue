@@ -30,7 +30,7 @@
                     </a-row>
                     <div class="collapse-content" v-show="!collapsed">
                         <a-row :gutter="16">
-                            <a-col :span="6"
+                            <a-col :xxl="4" :xl="6" :lg="8" :md="12" :sm="24"
                                 v-for="(step, index) in viewSteps"
                                 :key="step.id"
                             >

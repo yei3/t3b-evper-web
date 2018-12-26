@@ -43,7 +43,7 @@
             </a-row>
             <a-divider />
             <a-row :gutter="16" v-show="!spin">
-                <a-col :sm="24" :md="6"
+                <a-col :xxl="4" :xl="6" :lg="8" :md="12" :sm="24"
                     v-for="(step, index) in view.steps"
                     :key="index"
                 >

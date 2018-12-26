@@ -3,18 +3,15 @@
         style="padding: 5px 15px 0px 15px; margin-bottom: 0px;"
         :class="answerStatus"
     >
-        <a-col :span="12">
-            <h3>{{`${index}. ${questionText}`}}</h3>
+        <a-col :span="24">
+            <h4>{{`${index}. ${questionText}`}}</h4>
         </a-col>
-        <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
+        <a-form layout='inline' @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
             <a-form-item
                 fieldDecoratorId="e1"
-                style="text-align: left; margin-bottom: 0px;"
-                label='Esperado'
-                :labelCol="{ xxl: 8, xl: 16, lg: 10, md: 12, sm: 24 }"
-                :wrapperCol="{ xxl: 16, xl: 8, lg: 14, md: 12, sm: 24 }"
+                label='Valor esperado'
                 :fieldDecoratorOptions="{
-                    initialValue: expectedValue,
+                    initialValue: expected,
                     rules: [
                         {
                             required: true,
@@ -23,9 +20,42 @@
                     ]
                 }"
             >
-                <a-input placeholder="Selecciona una respuesta"
-                    v-model="expectedValue"
-                />
+                <a-input v-model="expectedValue"
+                    style="width: 200px;"
+                    @keyup="edited=true"
+                    @keypress.enter.prevent="save"
+                >
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                    />
+                </a-input>
+            </a-form-item>
+            <a-form-item
+                fieldDecoratorId="q1"
+                label='Valor real'
+                :fieldDecoratorOptions="{
+                    initialValue: value,
+                    rules: [
+                        {
+                            required: true,
+                            message: 'Selecciona una respuesta'
+                        }
+                    ]
+                }"
+            >
+                <a-input v-model="value"
+                    style="width: 200px;"
+                    @keyup="edited=true"
+                    @keypress.enter.prevent="save"
+                >
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                    />
+                </a-input>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
@@ -77,7 +107,8 @@ export default {
             edited: false,
             loading: false,
             expectedValue: null,
-            value: null,
+            value: 0,
+            numeric: false,
         };
     },
     mounted() {
@@ -88,30 +119,46 @@ export default {
             e.prevent();
         },
         parseAnswer() {
+            this.expectedValue = this.expected;
+            if (Number(this.expected)) {
+                this.numeric = true;
+                this.value = 0;
+            } else {
+                this.value = '';
+            }
             if (this.questionStatus === 1) {
                 this.edited = true;
             }
-            if (this.answer.text == null) {
-                this.value = this.answer.real;
-            } else {
+
+            if (this.answer.text !== null) {
                 this.value = this.answer.text;
+            } else if (this.answer.real !== 0) {
+                this.value = this.answer.real;
             }
         },
-        save(optionSelected) {
-            console.log('saved');
+        save() {
             this.form.validateFields((error) => {
                 if (error) return;
-                this.update(optionSelected);
+                const number = Number(this.value);
+                if (Number(this.expected)  && isNaN(number)) { // eslint-disable-line
+                    errorHandler(this, 'Se espera un valor numérico');
+                    return;
+                }
+                this.update();
             });
         },
-        async update(optionSelected) {
-            return;
+        async update() {
             this.loading = true;
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
-                text: optionSelected,
-            }).catch(error => errorHandler(this, error));
+                text: Number(this.expected) ? null : this.value,
+                real: Number(this.expected) ? this.value : 0,
+                isActive: true,
+                evaluationUnmeasuredQuestion: {
+                    status: 2,
+                },
+            }, { measured: true }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;
             this.edited = false;
@@ -137,5 +184,14 @@ div >>> .ant-form-item-label {
 
 div >>> .ant-form-item-required {
     font-size: 15px;
+}
+
+.input-save {
+    color: green;
+}
+
+.input-save:hover {
+    color: #005f00;
+    cursor: pointer;
 }
 </style>
