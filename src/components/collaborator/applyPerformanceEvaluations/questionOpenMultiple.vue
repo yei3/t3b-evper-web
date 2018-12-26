@@ -70,11 +70,15 @@ export default {
             type: Number,
             required: true,
         },
+        questionId: {
+            type: Number,
+            required: true,
+        },
         questionText: {
             type: String,
             required: true,
         },
-        questionId: {
+        questionStatus: {
             type: Number,
             required: true,
         },
@@ -91,7 +95,7 @@ export default {
             version: 1,
             loading: false,
             edited: false,
-            answersText: [],
+            answersText: [''],
         };
     },
     methods: {
@@ -101,9 +105,9 @@ export default {
         parseAnswer() {
             if (this.answer.text) {
                 this.answersText = JSON.parse(this.answer.text);
-            } else {
+            }
+            if (this.questionStatus === 1) {
                 this.edited = true;
-                this.answersText = [''];
             }
         },
         addAnswer() {
@@ -132,6 +136,9 @@ export default {
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
                 text,
+                evaluationUnmeasuredQuestion: {
+                    status: 2,
+                },
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;

@@ -64,7 +64,7 @@
                                 v-for="(section, index) in evaluationSections"
                                 :key="section.id"
                                 :section="section"
-                                :answers="getAnswers()"
+                                :questions="getQuestions()"
                                 v-show="(index + 1) == data.currentStep"
                             />
                         </a-row>
@@ -130,7 +130,7 @@ export default {
             console.log(response.data.result.questions);
             this.evaluation = response.data.result;
         },
-        getAnswers() {
+        getQuestions() {
             if (!this.evaluation) return [];
             return this.evaluation.questions;
         },

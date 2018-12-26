@@ -56,11 +56,15 @@ export default {
             type: Number,
             required: true,
         },
+        questionId: {
+            type: Number,
+            required: true,
+        },
         questionText: {
             type: String,
             required: true,
         },
-        questionId: {
+        questionStatus: {
             type: Number,
             required: true,
         },
@@ -100,7 +104,8 @@ export default {
         parseAnswer() {
             if (this.answer.text) {
                 this.value = this.answer.text;
-            } else {
+            }
+            if (this.questionStatus === 1) {
                 this.edited = true;
             }
         },
@@ -111,11 +116,15 @@ export default {
             });
         },
         async update(optionSelected) {
+            this.edited = true;
             this.loading = true;
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
                 text: optionSelected,
+                evaluationUnmeasuredQuestion: {
+                    status: 2,
+                },
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;
