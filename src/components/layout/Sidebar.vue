@@ -112,15 +112,21 @@
                     <a-menu-item key="1" v-show="role == rolesAvailables.COLLABORATOR">
                         <router-link :to="{ name: 'collaborator-home' }">
                             <a-icon type="home" />
-                            <span>Home Evaluado</span>
+                            <span>Home</span>
                         </router-link>
                     </a-menu-item>
                     <a-menu-item key="2" v-show="role == rolesAvailables.COLLABORATOR">
+                        <router-link :to="{ name: 'collaborator-reports' }" >
+                            <a-icon type="line-chart" />
+                            <span>Resultados</span>
+                        </router-link>
+                    </a-menu-item>
+                    <!-- <a-menu-item key="2" v-show="role == rolesAvailables.COLLABORATOR">
                         <router-link :to="{ name: 'collaborator-assessments' }" >
                             <a-icon type="form" />
                             <span>Evaluaciones</span>
                         </router-link>
-                    </a-menu-item>
+                    </a-menu-item> -->
 
                     <a-menu-item key="3" v-show="role == rolesAvailables.SUPERVISOR">
                         <router-link :to="{ name: 'boss-home' }">
