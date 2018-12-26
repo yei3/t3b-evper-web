@@ -22,7 +22,10 @@
         </a-row>
         <a-row class="main-content" style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
-                <div class="collapse">
+                <div class="collapse" v-show="spin" style="text-align: center; padding: 50px;">
+                    <a-spin tip="Cargando..." size="large" />
+                </div>
+                <div class="collapse" v-show="!spin">
                     <a-row class="collapse-title">
                         <a-col :span="12">
                             <h1>{{evaluationName}}</h1>
@@ -111,6 +114,7 @@ export default {
     },
     data() {
         return {
+            spin: false,
             collapsed: false,
             evaluation: null,
             data: {
@@ -124,11 +128,16 @@ export default {
     },
     methods: {
         async fetchEvaluation() {
+            this.spin = true;
             const response = await client3B.evaluation.get(this.$route.params.id)
-                .catch(error => errorHandler(this, error));
+                .catch((error) => {
+                    this.spin = false;
+                    errorHandler(this, error)
+                });
             if (!response) return;
-            console.log(response.data.result.questions);
+            this.spin = false;
             this.evaluation = response.data.result;
+            this.data.lastStep = this.evaluationSections.length;
         },
         getQuestions() {
             if (!this.evaluation) return [];
