@@ -52,11 +52,15 @@ export default {
             type: Number,
             required: true,
         },
+        questionId: {
+            type: Number,
+            required: true,
+        },
         questionText: {
             type: String,
             required: true,
         },
-        questionId: {
+        questionStatus: {
             type: Number,
             required: true,
         },
@@ -76,12 +80,12 @@ export default {
         this.parseAnswer();
     },
     methods: {
-        kup(){
+        kup() {
             this.edited = true;
             clearTimeout(typingTimer);
             typingTimer = setTimeout(this.save, doneTypingInterval);
         },
-        kdown(){
+        kdown() {
             clearTimeout(typingTimer);
         },
         printValue() {
@@ -93,7 +97,8 @@ export default {
         parseAnswer() {
             if (this.answer.text) {
                 this.value = this.answer.text;
-            } else {
+            }
+            if (this.questionStatus === 1) {
                 this.edited = true;
             }
         },
@@ -109,6 +114,9 @@ export default {
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
                 text: this.value,
+                evaluationUnmeasuredQuestion: {
+                    status: 2,
+                },
             }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;

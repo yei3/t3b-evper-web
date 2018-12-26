@@ -51,11 +51,15 @@ export default {
             type: Number,
             required: true,
         },
+        questionId: {
+            type: Number,
+            required: true,
+        },
         questionText: {
             type: String,
             required: true,
         },
-        questionId: {
+        questionStatus: {
             type: Number,
             required: true,
         },
@@ -84,9 +88,10 @@ export default {
             e.prevent();
         },
         parseAnswer() {
-            if (this.answer.text == 0 && this.answer.real === 0) {
+            if (this.questionStatus === 1) {
                 this.edited = true;
-            } if(this.answer.text == null) {
+            }
+            if (this.answer.text == null) {
                 this.value = this.answer.real;
             } else {
                 this.value = this.answer.text;

@@ -11,49 +11,56 @@
                     :key="subsection.id"
                 >
                     <a-col :span="24" class="form-section-tittle" v-show="subsection.displayName">
-                        <h2 style="margin-bottom:  0px;">{{subsection.name}}</h2>
+                        <h2 style="margin: 20px 0px 0px 0px; font-size: 20px;">
+                            {{subsection.name}}
+                        </h2>
                     </a-col>
                     <a-col :span="24">
                         <a-row
-                            v-for="(question, index) in getSubsectionQuestions(subsection)"
-                            :key="question.id"
+                            v-for="(qstTemplate, index) in getSubsectionQuestions(subsection)"
+                            :key="qstTemplate.id"
                             style="padding: 10px 16px;"
                         >
                             <question-open
-                                v-if="question.questionType == 0"
+                                v-if="qstTemplate.questionType == 0"
                                 :index="index + 1"
-                                :questionText="question.text"
-                                :questionId="getQuestionId(question.id)"
-                                :answer="getAnswerValue(question.id, question.questionType)"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
                             <question-open-multiple
-                                v-if="question.questionType == 1"
+                                v-if="qstTemplate.questionType == 1"
                                 :index="index + 1"
-                                :questionText="question.text"
-                                :questionId="getQuestionId(question.id)"
-                                :answer="getAnswerValue(question.id, question.questionType)"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
                             <question-one-select
-                                v-if="question.questionType == 2"
+                                v-if="qstTemplate.questionType == 2"
                                 :index="index + 1"
-                                :questionText="question.text"
-                                :questionId="getQuestionId(question.id)"
-                                :answer="getAnswerValue(question.id, question.questionType)"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
                             <question-objective
-                                v-if="question.questionType == 3"
+                                v-if="qstTemplate.questionType == 3"
                                 :index="index + 1"
-                                :questionText="question.text"
-                                :questionId="getQuestionId(question.id)"
-                                :expected="question.expected"
-                                :answer="getAnswerValue(question.id, question.questionType)"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :expected="qstTemplate.expected"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
                             <question-boolean
-                                v-if="question.questionType == 4"
+                                v-if="qstTemplate.questionType == 4"
                                 :index="index + 1"
-                                :questionText="question.text"
-                                :questionId="getQuestionId(question.id)"
-                                :answer="getAnswerValue(question.id, question.questionType)"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
                         </a-row>
                     </a-col>
@@ -76,7 +83,7 @@ export default {
             type: Object,
             required: true,
         },
-        answers: {
+        questions: {
             type: Array,
             required: true,
         },
@@ -93,18 +100,19 @@ export default {
         questionObjective,
     },
     methods: {
-        getQuestionId(questionId) {
-            console.log(questionId);
-            const answer = this.answers.find(qst =>
+        getQuestionStatus(questionId) {
+            const answer = this.questions.find(qst =>
                 qst.evaluationQuestionId === questionId);
-            console.log('answer', JSON.parse(JSON.stringify(answer)));
+            return answer.status;
+        },
+        getQuestionId(questionId) {
+            const answer = this.questions.find(qst =>
+                qst.evaluationQuestionId === questionId);
             return answer.id;
         },
-        getAnswerValue(questionId, questionType) {
-            console.log(questionId, questionType);
-            const answer = this.answers.find(qst =>
+        getAnswer(questionId, questionType) {
+            const answer = this.questions.find(qst =>
                 qst.evaluationQuestionId === questionId);
-            console.log('answer', JSON.parse(JSON.stringify(answer)));
             if (questionType === 3) {
                 return answer.measuredAnswer;
             }
@@ -112,7 +120,7 @@ export default {
         },
         getSubsectionQuestions(subsection) {
             return [...subsection.unmeasuredQuestions, ...subsection.measuredQuestions];
-        }
+        },
     },
 };
 

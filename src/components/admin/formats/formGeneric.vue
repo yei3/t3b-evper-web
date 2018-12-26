@@ -174,20 +174,11 @@
                             placeholder="Relación de aprobación del objetivo"
                             @select="setQuestionAsModify(question)"
                         >
-                            <a-select-option value="1">
-                                El valor real debe ser menor al del objetivo
-                            </a-select-option>
-                            <a-select-option value="2">
-                                El valor real debe ser menor o igual al del objetivo
-                            </a-select-option>
-                            <a-select-option value="3">
-                                El valor real debe ser igual al del objetivo
-                            </a-select-option>
-                            <a-select-option value="5">
-                                El valor real debe ser mayor o igual al del objetivo
-                            </a-select-option>
-                            <a-select-option value="4">
-                                El valor real debe ser mayor al del objetivo
+                            <a-select-option v-for="(item, index) in objectiveRelationships"
+                                :key="index"
+                                :value="item.value"
+                            >
+                                {{item.label}}
                             </a-select-option>
                         </a-select>
                     </a-form-item>
@@ -318,9 +309,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import client3B from '@/api/client3B';
+import { answerTypes } from '@/modules/evaluation';
 import errorHandler from '@/views/errorHandler';
 import { setTimeout } from 'timers';
-import { answerTypes } from '@/modules/evaluation';
 
 export default {
     props: {
@@ -363,18 +354,28 @@ export default {
             answerTypes,
             subsectionUUID: 0,
             subsections: [],
-            userActions: {
-                sections: {
-                    create: [],
-                    update: [],
-                    delete: [],
+            objectiveRelationships: [
+                {
+                    value: 1,
+                    label: 'El valor real debe ser menor al del objetivo',
                 },
-                questions: {
-                    create: [],
-                    update: [],
-                    delete: [],
+                {
+                    value: 2,
+                    label: 'El valor real debe ser menor o igual al del objetivo',
                 },
-            },
+                {
+                    value: 3,
+                    label: 'El valor real debe ser igual al del objetivo',
+                },
+                {
+                    value: 5,
+                    label: 'El valor real debe ser mayor o igual al del objetivo',
+                },
+                {
+                    value: 4,
+                    label: 'El valor real debe ser mayor al del objetivo',
+                },
+            ],
         };
     },
     mounted() {
