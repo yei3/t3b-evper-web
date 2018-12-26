@@ -23,6 +23,11 @@
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
                 <span slot="status" slot-scope="status">
@@ -37,7 +42,7 @@
                     </a></p>
                     <p><small>{{objective.subtitle}}</small></p>
                 </span>
-                <span slot="action" slot-scope="text, record">
+                <!-- <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
                             <a-menu-item key="1" @click="toggleRecordProgressModal">
@@ -55,10 +60,9 @@
                             ...
                         </a-button>
                     </a-dropdown>
-                </span>
-            </a-table>
-        </a-row>
-
+                </span> -->
+            </a-table>            
+        </a-row>        
         <a-modal
             v-model="recordProgressModal.show"
             onOk="toggleRecordProgressModal"
@@ -284,6 +288,7 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
             recordProgressModal: {
                 show: false,
@@ -306,6 +311,7 @@ export default {
     },
     methods: {
         async getCurrentObjectives() {
+            this.spin = true;
             let response = null;
             try {
                 response = await client3B.dashboard.getCollaborator();
@@ -325,6 +331,7 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+            this.spin = false;
         },
         toggleRecordProgressModal() {
             this.recordProgressModal.show = !this.recordProgressModal.show;

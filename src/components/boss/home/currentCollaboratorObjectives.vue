@@ -23,6 +23,11 @@
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin size="small" />
+            </div>
+        </a-row>
         <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">
             <a-row :key="collaborator.id" v-for="collaborator in data"
                 class="collapse-single-wrapper"
@@ -237,6 +242,7 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
             currentCollaborator: 0,
             columns,
@@ -252,8 +258,8 @@ export default {
     },
     methods: {
         async getCollaboratorsObjectives() {
+            this.spin = true;
             let response = null;
-            // this.spin = true;
             try {
                 response = await client3B.dashboard.getSupervisor();
                 const items = response.data.result.collaboratorsObjectivesSummary;
@@ -282,6 +288,7 @@ export default {
             } catch (error) {
             console.log(error);
             }
+            this.spin = false;
         },
         toggleViewProgressModal() {
             this.viewProgressModal.show = !this.viewProgressModal.show;

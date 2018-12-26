@@ -27,6 +27,11 @@
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
                 <span slot="status" slot-scope="status">
@@ -93,9 +98,8 @@ const columns = [
 export default {
     data() {
         return {
-            collapsed: false,
             spin: false,
-            evaluations: [],
+            collapsed: false,            
             data: [],
             columns            
         };
@@ -105,6 +109,7 @@ export default {
     },
     methods: {
         async getAutoEvaluations() {
+            this.spin = true;
             let response = null;
             try {
                 response = await client3B.dashboard.getCollaborator();
@@ -126,6 +131,7 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+            this.spin = false;
         },
         fillEvaluation(id) {
             
