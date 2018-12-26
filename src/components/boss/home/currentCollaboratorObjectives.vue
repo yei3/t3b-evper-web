@@ -25,7 +25,7 @@
         </a-row>
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
-                <a-spin size="small" />
+                <a-spin tip="Cargando..." size="small" />
             </div>
         </a-row>
         <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">

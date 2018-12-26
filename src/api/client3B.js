@@ -7,6 +7,7 @@ import Dashboard from './modules/Dashboard';
 import Format from './modules/EvaluationTemplate';
 import Section from './modules/Section';
 import Question from './modules/Question';
+import Reports from './modules/Reports';
 import OrganizationUnit from './modules/OrganizationUnit';
 
 
@@ -24,6 +25,7 @@ class Client3B {
         this.question = new Question();
         this.section = new Section();
         this.dashboard = new Dashboard();
+        this.report = new Reports();
         this.organizationUnit = new OrganizationUnit();
     }
 }

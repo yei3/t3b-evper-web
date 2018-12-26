@@ -1,4 +1,5 @@
 import collaboratorHome from '@/components/collaborator/home/layout.vue';
+import collaboratorReports from '@/components/collaborator/reports/layout.vue';
 import performanceEvaluations from '@/components/collaborator/performanceEvaluations/layout.vue';
 import performanceEvaluation from '@/components/collaborator/performanceEvaluation/layout.vue';
 import applyPerformanceEvaluations from '@/components/collaborator/applyPerformanceEvaluations/layout.vue';
@@ -10,6 +11,12 @@ export default [
         path: 'collaborator/home',
         name: 'collaborator-home',
         component: collaboratorHome,
+        beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
+    },
+    {
+        path: 'collaborator/results',
+        name: 'collaborator-reports',
+        component: collaboratorReports,
         beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
     },
     {

@@ -20,7 +20,7 @@
                 <a-button shape="circle" icon="search" @click="search" />
             </a-col>
         </a-row> -->
-        <a-row class="collapse-title" style="margin-top: 16px;">
+        <!-- <a-row class="collapse-title" style="margin-top: 16px;">
             <a-col :span="12">
                 Evaluaciones
             </a-col>
@@ -42,10 +42,10 @@
                     />
                 </a>
             </a-col>
-        </a-row>
+        </a-row> -->
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
-                <a-spin size="large" />
+                <a-spin tip="Cargando..." size="large" />
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
@@ -63,12 +63,12 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
-                            <a-menu-item>
+                            <!-- <a-menu-item>
                                 <router-link disabled
                                     :to="{ name: 'update-evaluation', params: { id: record.key}}">
                                     Editar
                                 </router-link>
-                            </a-menu-item>
+                            </a-menu-item> -->
                             <a-menu-item @click="deleteFormat(record.key)">
                                 Eliminar
                             </a-menu-item>
