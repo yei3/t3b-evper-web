@@ -43,7 +43,7 @@
                 </a-col>
 
                 <a-col :span="8" style="padding-bottom: 15px;">
-                    <a-select style="width: 100%" placeholder="Formatos"
+                    <a-select placeholder="Please select" style="width: 100%"
                         v-model="form.format"
                     >
                         <a-select-option v-for="(item, index) in formats" :key="index"
@@ -96,7 +96,7 @@
             </a-row>
             <a-row v-show="spin">
                 <div style="text-align: center; margin-top: 20px;">
-                    <a-spin size="large" />
+                    <a-spin tip="Cargando..." />
                 </div>
             </a-row>
         </div>

@@ -32,7 +32,7 @@
         >
             <a-row v-show="spin">
                 <div style="text-align: center; margin-top: 20px;">
-                    <a-spin size="large" />
+                    <a-spin tip="Cargando..." size="large" />
                 </div>
             </a-row>
             <a-row class="steps" v-show="!spin">
@@ -197,7 +197,9 @@ export default {
                 name: this.view.sectionModal.value,
                 evaluationTemplateId: this.format.id,
                 displayName: true,
-            }).catch(this.$message.success('Hubo un error al guardar la sección'));
+            }).catch(
+                // this.$message.success('Hubo un error al guardar la sección')
+            );
             if (!response) {
                 this.view.sectionModal.loading = false;
                 return;
@@ -234,7 +236,9 @@ export default {
             });
             const response = await client3B.section.delete({
                 id: section.id,
-            }).catch(this.$message.success('Hubo un error al eliminar la sección'));
+            }).catch(
+                // this.$message.success('Hubo un error al eliminar la sección')
+            );
             if (!response) {
                 this.view.loadingDelete = false;
                 return;
