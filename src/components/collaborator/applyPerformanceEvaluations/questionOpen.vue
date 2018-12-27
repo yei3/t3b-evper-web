@@ -21,9 +21,16 @@
                 <a-input placeholder="Respuesta"
                     v-model="value"
                     :disabled="onlyLecture"
-                    @keyup="kup"
-                    @keydown="kdown"
-                />
+                    @keyup="edited=true"
+                    @keypress.enter.prevent="save"
+                >
+
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                    />
+                </a-input>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
@@ -38,9 +45,6 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
-
-let typingTimer;
-const doneTypingInterval = 3000;
 
 export default {
     props: {
@@ -80,14 +84,6 @@ export default {
         this.parseAnswer();
     },
     methods: {
-        kup() {
-            this.edited = true;
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(this.save, doneTypingInterval);
-        },
-        kdown() {
-            clearTimeout(typingTimer);
-        },
         printValue() {
             console.log(this.value);
         },
@@ -137,11 +133,11 @@ export default {
 
 <style src="@/assets/styles/evaluationForm.css" scoped></style>
 <style>
-.input-delete {
-    color: red;
+.input-save {
+    color: green;
 }
-.input-delete:hover {
-    color: #db0000;
+.input-save:hover {
+    color: #005f00;
     cursor: pointer;
 }
 </style>
