@@ -113,7 +113,7 @@ export default {
             let response = null;
             try {
                 response = await client3B.dashboard.getCollaborator();
-                const items = response.data.result.autoEvaluationSummary;
+                const items = response.data.result.evaluationSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index++) {
                     this.data.push({

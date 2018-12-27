@@ -2,13 +2,13 @@
 <div>
     <a-row class="main-content">
         <h3 class="breadcrumb-header">Objetivos</h3>
-        <a-col :span="12" class="text-center">
+        <a-col v-if="loaded" :span="12" class="text-center">
             <p>2019-1</p>
             <div class="small">
                 <chart v-if="loaded" :chartdata="chartdata" :options="options"/>
             </div>
         </a-col>
-        <a-col :span="12" class="text-center">
+        <a-col v-if="loaded" :span="12" class="text-center">
             <p>2018-2</p>
             <div class="small">
                 <chart v-if="loaded" :chartdata="chartdata2" :options="options2"/>
@@ -149,6 +149,13 @@ export default {
                 response = await client3B.report.getCollaboratorReport();
                 
                 const results = response.data.result;
+
+                if (results.length < 2) {
+                    this.spin = false;
+                    this.$message.success('No hay información para obtener resultados');
+                    return;
+                }
+
                 let total = [results[0].total, results[1].total];
                 let finished = [results[0].finished, results[1].finished];
                 let beforeTerm = results[1].term;
