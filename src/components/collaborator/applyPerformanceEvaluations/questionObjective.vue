@@ -155,7 +155,7 @@ export default {
                 text: Number(this.expected) ? null : this.value,
                 real: Number(this.expected) ? this.value : 0,
                 isActive: true,
-                evaluationUnmeasuredQuestion: {
+                evaluationMeasuredQuestion: {
                     status: 2,
                 },
             }, { measured: true }).catch(error => errorHandler(this, error));
