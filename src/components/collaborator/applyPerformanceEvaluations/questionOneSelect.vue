@@ -22,6 +22,7 @@
             >
                 <a-select
                     placeholder="Selecciona una respuesta"
+                    v-model="value"
                     @select="save"
                 >
                     <a-select-option v-for="(option, index) in selectOptions"
@@ -77,8 +78,12 @@ export default {
         return {
             edited: false,
             loading: false,
-            value: undefined,
+            value: 'undefined',
             selectOptions: [
+                {
+                    value: 'undefined',
+                    label: 'Selecciona una opción',
+                },
                 {
                     value: '-70',
                     label: 'Insatisfactorio (<70%)',
@@ -111,7 +116,7 @@ export default {
         },
         save(optionSelected) {
             this.form.validateFields((error) => {
-                if (error) return;
+                if (error || optionSelected === 'undefined') return;
                 this.update(optionSelected);
             });
         },
