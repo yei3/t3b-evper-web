@@ -42,65 +42,67 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
 import { GChart } from 'vue-google-charts';
+import errorHandler from '@/views/errorHandler';
 
 export default {
     components: {
         GChart,
     },
-    data() {
-        return {
-            chartData: [
-                ['name', 'Manager', 'tooltip'],
-                [
-                    {
-                        v: 'Mike',
-                        f: '<div class="org-card"> <img src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Mike Mison</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    '',
-                    'The President',
-                ],
-                [
-                    {
-                        v: 'Jim',
-                        f: '<div class="org-card"> <img src="https://png2.kisspng.com/sh/4617a6c26e05df6ce8fe579da3a6b997/L0KzQYm3VsI3N6Z8i5H0aYP2gLBuTfF3aaVmip9Ac3X1PbT2jgB2fJZ3Rdtsb372PcT2hwR4aaNqRdZudnXvf8Hskr02amQ3T9VsOXPmQYbtV745P2M8SqkDMEG4Q4G3U8U1OGI9S6g3cH7q/kisspng-avatar-user-computer-icons-software-developer-5b327cc9cc15f7.872727801530035401836.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Jim Jimy</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Mike',
-                    'VP',
-                ],
-                [
-                    {
-                        v: 'Alice',
-                        f: '<div class="org-card"> <img src="https://png2.kisspng.com/sh/4617a6c26e05df6ce8fe579da3a6b997/L0KzQYm3VsI3N6Z8i5H0aYP2gLBuTfF3aaVmip9Ac3X1PbT2jgB2fJZ3Rdtsb372PcT2hwR4aaNqRdZudnXvf8Hskr02amQ3T9VsOXPmQYbtV745P2M8SqkDMEG4Q4G3U8U1OGI9S6g3cH7q/kisspng-avatar-user-computer-icons-software-developer-5b327cc9cc15f7.872727801530035401836.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Alice Alison</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Mike',
-                    '',
-                ],
-                [
-                    {
-                        v: 'Bob',
-                        f: '<div class="org-card"> <img src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Bob Esponge</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Jim',
-                    'Bob Sponge',
-                ],
-                [
-                    {
-                        v: 'Carol',
-                        f: '<div class="org-card"> <img src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Carol Caroline</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Mike',
-                    '',
-                ],
-            ],
-            chartOptions: {
-                allowHtml: true,
-                nodeClass: 'org-custom-node',
-                allowCollapse: true,
-            },
-        };
+    data: () => ({
+        chartData: null,
+        chartOptions: null,        
+    }),
+    async mounted () {
+        this.getOrganigram();
     },
+    methods: {
+        async getOrganigram() {
+            let response = null;
+            try {
+                response = await client3B.organizationUnit.getOrganigram();
+                const items = response.data.result;
+                const rrhh = items[6];
 
+                this.chartData = [
+                    ['name', 'Manager', 'tooltip'],
+                    // [
+                    //     {
+                    //         v: 'DIRECTOR DE RECURSOS HUMANOS',
+                    //         f: `<div class="org-card"><h2 class="org-user-name">Área de Recursos Humanos </h2><p class="org-user-title">RRHH</div>`
+                    //     },
+                    //     '',
+                    //     ''
+                    // ],
+                ];
+                for (let i = 0; i < rrhh.organizationUnitUsers.length; i++) {
+                    this.chartData.push(
+                    [
+                        {
+                            v: rrhh.organizationUnitUsers[i].jobDescription,
+                            f: `<div class="org-card"> <img src="https://t3b.blob.core.windows.net/t3b/images/profile/`
+                                +rrhh.organizationUnitUsers[i].userName+
+                                `.png" alt="John" class="org-user-img"> <h3 class="org-user-name">`
+                                +rrhh.organizationUnitUsers[i].fullName+
+                                `</h3> <p class="org-user-title">`+rrhh.organizationUnitUsers[i].jobDescription+`</div>`,
+                        },
+                        rrhh.organizationUnitUsers[i].immediateSupervisor,
+                        rrhh.organizationUnitUsers[i].fullName,
+                        
+                    ]
+                    );
+                }                
+                this.chartOptions = {
+                    allowHtml: true,
+                    nodeClass: 'org-custom-node',
+                    allowCollapse: true,
+                }                
+            } catch (error) {
+                
+            }
+        }
+    }
 };
 </script>
 
@@ -119,7 +121,7 @@ export default {
 
 .org-user-title {
     color: grey;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .org-custom-node {
@@ -131,6 +133,6 @@ export default {
 }
 
 .org-user-name {
-    font-size: 18px;
+    font-size: 14px;
 }
 </style>
