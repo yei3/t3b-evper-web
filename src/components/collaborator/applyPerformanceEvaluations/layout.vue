@@ -132,7 +132,7 @@ export default {
             const response = await client3B.evaluation.get(this.$route.params.id)
                 .catch((error) => {
                     this.spin = false;
-                    errorHandler(this, error)
+                    errorHandler(this, error);
                 });
             if (!response) return;
             this.spin = false;
