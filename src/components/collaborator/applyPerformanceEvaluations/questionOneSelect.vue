@@ -24,6 +24,7 @@
                     placeholder="Selecciona una respuesta"
                     v-model="value"
                     @select="save"
+                    :disabled="onlyLecture"
                 >
                     <a-select-option v-for="(option, index) in selectOptions"
                         :key="index"
@@ -115,6 +116,7 @@ export default {
             }
         },
         save(optionSelected) {
+            if (this.onlyLecture) return;
             this.form.validateFields((error) => {
                 if (error || optionSelected === 'undefined') return;
                 this.update(optionSelected);

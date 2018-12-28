@@ -29,6 +29,7 @@
                         @click="save"
                         slot="addonAfter"
                         type="save"
+                        v-if="!onlyLecture"
                     />
                 </a-input>
             </a-form-item>
@@ -99,6 +100,7 @@ export default {
             }
         },
         save() {
+            if (this.onlyLecture) return;
             this.form.validateFields((error) => {
                 if (error) return;
                 this.update();

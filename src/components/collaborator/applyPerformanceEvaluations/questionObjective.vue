@@ -24,6 +24,7 @@
                     style="width: 200px;"
                     @keyup="edited=true"
                     @keypress.enter.prevent="save"
+                    :disabled="onlyLecture"
                 >
                     <a-icon class="input-save"
                         @click="save"
@@ -49,6 +50,7 @@
                     style="width: 200px;"
                     @keyup="edited=true"
                     @keypress.enter.prevent="save"
+                    :disabled="onlyLecture"
                 >
                     <a-icon class="input-save"
                         @click="save"
@@ -137,6 +139,7 @@ export default {
             }
         },
         save() {
+            if (this.onlyLecture) return;
             this.form.validateFields((error) => {
                 if (error) return;
                 const number = Number(this.value);

@@ -24,6 +24,7 @@
                             <question-open
                                 v-if="qstTemplate.questionType == 0"
                                 :index="index + 1"
+                                :onlyLecture="onlyLecture"
                                 :questionText="qstTemplate.text"
                                 :questionId="getQuestionId(qstTemplate.id)"
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
@@ -32,6 +33,7 @@
                             <question-open-multiple
                                 v-if="qstTemplate.questionType == 1"
                                 :index="index + 1"
+                                :onlyLecture="onlyLecture"
                                 :questionText="qstTemplate.text"
                                 :questionId="getQuestionId(qstTemplate.id)"
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
@@ -40,6 +42,7 @@
                             <question-one-select
                                 v-if="qstTemplate.questionType == 2"
                                 :index="index + 1"
+                                :onlyLecture="onlyLecture"
                                 :questionText="qstTemplate.text"
                                 :questionId="getQuestionId(qstTemplate.id)"
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
@@ -48,6 +51,7 @@
                             <question-objective
                                 v-if="qstTemplate.questionType == 3"
                                 :index="index + 1"
+                                :onlyLecture="onlyLecture"
                                 :questionText="qstTemplate.text"
                                 :questionId="getQuestionId(qstTemplate.id)"
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
@@ -57,6 +61,7 @@
                             <question-boolean
                                 v-if="qstTemplate.questionType == 4"
                                 :index="index + 1"
+                                :onlyLecture="onlyLecture"
                                 :questionText="qstTemplate.text"
                                 :questionId="getQuestionId(qstTemplate.id)"
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"

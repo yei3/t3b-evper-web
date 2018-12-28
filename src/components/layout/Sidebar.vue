@@ -253,6 +253,7 @@ export default {
                 'admin-home': 8,
                 'admin-evaluations': 9,
                 'admin-organigram': 10,
+                'admin-users': 14,
             };
             const selectedkey = mapRouteItem[this.$route.name];
             if (selectedkey) {
