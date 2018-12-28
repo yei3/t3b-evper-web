@@ -42,7 +42,6 @@ export default {
             toggleSidebar: 'toggleSideBar',
         }),
         logout() {
-            console.log('logout');
             authService.removeAuthData();
             authService.removeUserData();
             this.$router.push({ name: 'login' });
