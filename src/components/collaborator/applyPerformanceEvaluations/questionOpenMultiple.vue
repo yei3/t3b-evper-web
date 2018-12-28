@@ -29,12 +29,13 @@
                             @click="removeAnswer(index)"
                             slot="addonAfter"
                             type="delete"
+                            v-if="!onlyLecture"
                         />
                     </a-input>
                 </a-form-item>
             </div>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;">
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;" v-if="!onlyLecture">
             <a  class="link-delete-question form-icon"
                 :disabled="loading"
                 @click="addAnswer"
@@ -125,6 +126,7 @@ export default {
             }
         },
         save() {
+            if (this.onlyLecture) return;
             this.form.validateFields((error) => {
                 if (error) return;
                 this.update();

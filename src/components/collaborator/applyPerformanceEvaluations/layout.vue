@@ -63,12 +63,12 @@
                                 v-show="data.currentStep == 0"
                                 :instructions="evaluationInstructions"
                             />
-                            <evaluation-section
+                            <evaluation-section v-show="(index + 1) == data.currentStep"
                                 v-for="(section, index) in evaluationSections"
                                 :key="section.id"
                                 :section="section"
                                 :questions="getQuestions()"
-                                v-show="(index + 1) == data.currentStep"
+                                :onlyLecture="onlyLecture"
                             />
                         </a-row>
                         <a-row style="margin-bottom: 20px;">
@@ -108,6 +108,12 @@ import evaluationSection from '@/components/collaborator/applyPerformanceEvaluat
 
 
 export default {
+    props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
+    },
     components: {
         formIntroduction,
         evaluationSection,

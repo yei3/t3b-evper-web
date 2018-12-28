@@ -14,7 +14,7 @@
                 <span style="font-size: 14px; font-weight: 600" v-show="!value">
                     NO
                 </span>
-                <a-switch v-model="value" :disabled="loading" @change="save"/>
+                <a-switch v-model="value" :disabled="loading || onlyLecture" @change="save"/>
             </a-col>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
             <a-icon class='dynamic-delete-button form-icon'
@@ -82,6 +82,7 @@ export default {
         save(options) {
             this.edited = true;
             this.loading = true;
+            if (this.onlyLecture) return;
             this.update(options);
         },
         async update({ showMessage = true }) {
