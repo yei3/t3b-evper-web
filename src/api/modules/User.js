@@ -31,6 +31,16 @@ class User extends Http {
         const path = `${this.entityPath}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
+
+    /**
+     * Request for update Scholarship and E-mail for the logged Account
+     *
+     * @return {Promise}        Http Response
+     */
+    updateScholarshipAndEmail(data) {
+        const path = `${this.entityPath}/UpdateScholarshipAndEmailAddress`;
+        return this.request(path, this.methods.put, data);
+    }
 }
 
 export default User;
