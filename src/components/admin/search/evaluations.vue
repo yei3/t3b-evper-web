@@ -77,6 +77,7 @@
                                     cancelText="No"
                                     class="pop-confirm"
                                 >
+                                    <a-icon type="delete" />
                                     Eliminar
                                 </a-popconfirm>
                             </a-menu-item>

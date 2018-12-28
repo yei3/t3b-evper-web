@@ -17,6 +17,7 @@
                         <a-menu slot="overlay">
                             <a-menu-item>
                                 <a @click="gotToEditForm(record.key)">
+                                    <a-icon type="edit" />
                                     Editar
                                 </a>
                             </a-menu-item>
@@ -28,6 +29,7 @@
                                     cancelText="No"
                                     class="pop-confirm"
                                 >
+                                    <a-icon type="delete" />
                                     Eliminar
                                 </a-popconfirm>
                             </a-menu-item>
