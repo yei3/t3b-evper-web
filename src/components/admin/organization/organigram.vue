@@ -32,8 +32,7 @@
                         :settings="{ packages: ['orgchart'] }"
                         type="OrgChart"
                         version="current"
-                        :data="chartData"
-                        :options="chartOptions"
+                        @ready="onChartReady"
                     />
                 </a-col>
             </a-row>
@@ -50,59 +49,40 @@ export default {
     components: {
         GChart,
     },
-    data: () => ({
-        chartData: null,
-        chartOptions: null,        
-    }),
-    async mounted () {
-        this.getOrganigram();
-    },
     methods: {
-        async getOrganigram() {
-            let response = null;
-            try {
-                response = await client3B.organizationUnit.getOrganigram();
-                const items = response.data.result;
-                const rrhh = items[6];
+        async onChartReady(chart, google) {
+            const response = await client3B.organizationUnit.getOrganigram()
+                .catch(error => errorHandler(this, error));
+            if (!response) return;
 
-                this.chartData = [
-                    ['name', 'Manager', 'tooltip'],
-                    // [
-                    //     {
-                    //         v: 'DIRECTOR DE RECURSOS HUMANOS',
-                    //         f: `<div class="org-card"><h2 class="org-user-name">Área de Recursos Humanos </h2><p class="org-user-title">RRHH</div>`
-                    //     },
-                    //     '',
-                    //     ''
-                    // ],
-                ];
-                for (let i = 0; i < rrhh.organizationUnitUsers.length; i++) {
-                    this.chartData.push(
-                    [
-                        {
-                            v: rrhh.organizationUnitUsers[i].jobDescription,
-                            f: `<div class="org-card"> <img src="https://t3b.blob.core.windows.net/t3b/images/profile/`
-                                +rrhh.organizationUnitUsers[i].userName+
-                                `.png" alt="John" class="org-user-img"> <h3 class="org-user-name">`
-                                +rrhh.organizationUnitUsers[i].fullName+
-                                `</h3> <p class="org-user-title">`+rrhh.organizationUnitUsers[i].jobDescription+`</div>`,
-                        },
-                        rrhh.organizationUnitUsers[i].immediateSupervisor,
-                        rrhh.organizationUnitUsers[i].fullName,
-                        
-                    ]
-                    );
-                }                
-                this.chartOptions = {
-                    allowHtml: true,
-                    nodeClass: 'org-custom-node',
-                    allowCollapse: true,
-                }                
-            } catch (error) {
-                
-            }
-        }
-    }
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'name');
+            data.addColumn('string', 'manager');
+            data.addColumn('string', 'tooltip');
+
+            const items = response.data.result;
+            items.forEach((area) => {
+                area.organizationUnitUsers.forEach((user) => {
+                    data.addRows([
+                        [
+                            {
+                                v: user.jobDescription,
+                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_PROFILES_IMG_URL}/${user.userName}.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${user.fullName} </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
+                            },
+                            user.immediateSupervisor,
+                            user.fullName,
+                        ],
+                    ]);
+                });
+            });
+
+            chart.draw(data, {
+                allowHtml: true,
+                nodeClass: 'org-custom-node',
+                allowCollapse: true,
+            });
+        },
+    },
 };
 </script>
 
