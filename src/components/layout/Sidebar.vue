@@ -254,9 +254,7 @@ export default {
         logout() {
             authService.removeAuthData();
             authService.removeUserData();
-            console.log('logout');
             this.$router.push({ name: 'login' });
-            console.log('end logout');
         },
         roleToEs(role) {
             if (role === authService.ROLES.ADMINISTRATOR) {

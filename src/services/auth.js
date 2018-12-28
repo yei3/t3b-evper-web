@@ -83,12 +83,11 @@ function validateAccessToken() {
     const now = new Date();
     const auth = getAuthData();
 
-    auth.expiration = new Date(auth.expiration);
-
     if (!auth.expiration) {
         return false;
     }
 
+    auth.expiration = new Date(auth.expiration);
     if (auth.expiration <= now) {
         return false;
     }
