@@ -67,14 +67,6 @@ export default {
 
                 this.chartData = [
                     ['name', 'Manager', 'tooltip'],
-                    // [
-                    //     {
-                    //         v: 'DIRECTOR DE RECURSOS HUMANOS',
-                    //         f: `<div class="org-card"><h2 class="org-user-name">Área de Recursos Humanos </h2><p class="org-user-title">RRHH</div>`
-                    //     },
-                    //     '',
-                    //     ''
-                    // ],
                 ];
                 for (let i = 0; i < rrhh.organizationUnitUsers.length; i++) {
                     this.chartData.push(
