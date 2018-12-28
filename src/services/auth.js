@@ -80,14 +80,16 @@ function getAccessToken() {
  * Returns True if the accessToken is not expired
  */
 function validateAccessToken() {
-    const auth = getAuthData();
     const now = new Date();
+    const auth = getAuthData();
+
+    auth.expiration = new Date(auth.expiration);
 
     if (!auth.expiration) {
         return false;
     }
 
-    if (auth.expiration >= now) {
+    if (auth.expiration <= now) {
         return false;
     }
 
