@@ -27,13 +27,15 @@
                 <a-divider />
             </a-row>
             <a-row style="overflow-x: scroll;">
-                <a-col span="24">
+                <div class="collapse" v-show="spin" style="text-align: center; padding: 50px;">
+                    <a-spin tip="Cargando..." size="large" />
+                </div>
+                <a-col span="24" v-show="!spin">
                     <GChart
                         :settings="{ packages: ['orgchart'] }"
                         type="OrgChart"
                         version="current"
-                        :data="chartData"
-                        :options="chartOptions"
+                        @ready="onChartReady"
                     />
                 </a-col>
             </a-row>
@@ -42,7 +44,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
 import { GChart } from 'vue-google-charts';
+import errorHandler from '@/views/errorHandler';
 
 export default {
     components: {
@@ -50,57 +54,47 @@ export default {
     },
     data() {
         return {
-            chartData: [
-                ['name', 'Manager', 'tooltip'],
-                [
-                    {
-                        v: 'Mike',
-                        f: '<div class="org-card"> <img src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Mike Mison</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    '',
-                    'The President',
-                ],
-                [
-                    {
-                        v: 'Jim',
-                        f: '<div class="org-card"> <img src="https://png2.kisspng.com/sh/4617a6c26e05df6ce8fe579da3a6b997/L0KzQYm3VsI3N6Z8i5H0aYP2gLBuTfF3aaVmip9Ac3X1PbT2jgB2fJZ3Rdtsb372PcT2hwR4aaNqRdZudnXvf8Hskr02amQ3T9VsOXPmQYbtV745P2M8SqkDMEG4Q4G3U8U1OGI9S6g3cH7q/kisspng-avatar-user-computer-icons-software-developer-5b327cc9cc15f7.872727801530035401836.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Jim Jimy</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Mike',
-                    'VP',
-                ],
-                [
-                    {
-                        v: 'Alice',
-                        f: '<div class="org-card"> <img src="https://png2.kisspng.com/sh/4617a6c26e05df6ce8fe579da3a6b997/L0KzQYm3VsI3N6Z8i5H0aYP2gLBuTfF3aaVmip9Ac3X1PbT2jgB2fJZ3Rdtsb372PcT2hwR4aaNqRdZudnXvf8Hskr02amQ3T9VsOXPmQYbtV745P2M8SqkDMEG4Q4G3U8U1OGI9S6g3cH7q/kisspng-avatar-user-computer-icons-software-developer-5b327cc9cc15f7.872727801530035401836.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Alice Alison</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Mike',
-                    '',
-                ],
-                [
-                    {
-                        v: 'Bob',
-                        f: '<div class="org-card"> <img src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Bob Esponge</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Jim',
-                    'Bob Sponge',
-                ],
-                [
-                    {
-                        v: 'Carol',
-                        f: '<div class="org-card"> <img src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="John" class="org-user-img"> <h2 class="org-user-name">Carol Caroline</h2> <p class="org-user-title">CEO & Founder</div>',
-                    },
-                    'Mike',
-                    '',
-                ],
-            ],
-            chartOptions: {
+            spin: true,
+        };
+    },
+    mounted() {
+        this.spin = true;
+    },
+    methods: {
+        async onChartReady(chart, google) {
+            const response = await client3B.organizationUnit.getOrganigram()
+                .catch(error => errorHandler(this, error));
+            if (!response) return;
+
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'name');
+            data.addColumn('string', 'manager');
+            data.addColumn('string', 'tooltip');
+
+            const items = response.data.result;
+            items.forEach((area) => {
+                area.organizationUnitUsers.forEach((user) => {
+                    data.addRows([
+                        [
+                            {
+                                v: user.jobDescription,
+                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_PROFILES_IMG_URL}/${user.userName}.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${user.fullName} </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
+                            },
+                            user.immediateSupervisor,
+                            user.fullName,
+                        ],
+                    ]);
+                });
+            });
+
+            chart.draw(data, {
                 allowHtml: true,
                 nodeClass: 'org-custom-node',
                 allowCollapse: true,
-            },
-        };
+            });
+            this.spin = false;
+        },
     },
-
 };
 </script>
 
@@ -119,7 +113,7 @@ export default {
 
 .org-user-title {
     color: grey;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .org-custom-node {
@@ -131,6 +125,6 @@ export default {
 }
 
 .org-user-name {
-    font-size: 18px;
+    font-size: 14px;
 }
 </style>

@@ -43,7 +43,12 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-button size="small" class="btn--close-evaluations" @click="toggleCBEModal()">
+                    <a-button 
+                        size="small"
+                        class="btn--close-evaluations"
+                        @click="toggleCBEModal()"
+                        :disabled="disableButton(record.status)"
+                    >
                         Cerrar
                     </a-button>
                 </span>
@@ -188,6 +193,12 @@ export default {
         },
         toggleCBEModal() {
             this.CBEModal.show = !this.CBEModal.show;
+        },
+        disableButton (status) {
+            if (status === 'No iniciado' || status === 'En proceso') {
+                return true;
+            }
+            return false;
         },
         selectTagColor(status) {
             switch (status) {

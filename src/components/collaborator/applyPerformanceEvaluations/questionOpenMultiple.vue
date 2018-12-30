@@ -29,12 +29,21 @@
                             @click="removeAnswer(index)"
                             slot="addonAfter"
                             type="delete"
+                            v-if="!onlyLecture"
                         />
                     </a-input>
                 </a-form-item>
             </div>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;">
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
+            Calificable <a-switch
+                v-model="configurable"
+                size="small"
+                :disabled="loading || onlyLecture"
+                @change="save"
+            />
+        </a-col>
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;" v-if="!onlyLecture">
             <a  class="link-delete-question form-icon"
                 :disabled="loading"
                 @click="addAnswer"
@@ -60,6 +69,7 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
+import { mapMutations } from 'vuex';
 
 export default {
     props: {
@@ -97,9 +107,13 @@ export default {
             loading: false,
             edited: false,
             answersText: [''],
+            configurable: true,
         };
     },
     methods: {
+        ...mapMutations([
+            'evaluationSetQuestionsAsAnswered',
+        ]),
         handleForm(e) {
             e.prevent();
         },
@@ -125,6 +139,7 @@ export default {
             }
         },
         save() {
+            if (this.onlyLecture) return;
             this.form.validateFields((error) => {
                 if (error) return;
                 this.update();
@@ -144,6 +159,7 @@ export default {
             this.loading = false;
             if (!response) return;
             this.edited = false;
+            this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success('Evaluación guardada correctamente');
         },
     },

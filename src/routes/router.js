@@ -6,6 +6,7 @@ import bossRoutes from '@/routes/boss';
 import adminRoutes from '@/routes/admin';
 
 import Layout from '@/components/layout/Layout.vue';
+import Profile from '@/components/profile/layout.vue';
 import Login from '@/views/Login.vue';
 import NotFound from '@/views/404.vue';
 import onWork from '@/views/working.vue';
@@ -68,11 +69,22 @@ export default new Router({
             component: Login,
             beforeEnter: (to, from, next) => {
                 // Validate that the user is not login
-                if (authService.validateAccessToken()) {
-                    return next({ name: 'home' });
+                if (!authService.validateAccessToken()) {
+                    return next({ name: 'login' });
                 }
                 return next();
             },
+        },
+        {
+            path: '/',            
+            component: Layout,
+            children: [
+                {
+                    path: '/update',
+                    name: 'update-profile',
+                    component: Profile
+                }
+            ]            
         },
         {
             path: '*',

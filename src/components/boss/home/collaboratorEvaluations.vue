@@ -43,19 +43,22 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="review" slot-scope="review">
-                    <a
+                    <!-- <a
                         class="table-link-light"
                         @click="toggleScheduleReviewModal"
-                    >
+                    > -->
                         {{review}}
-                    </a>
+                    <!-- </a> -->
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a
-                        class="table-link-light"
-                        @click="toggleFinishEvaluationModal">
+                    <a-button 
+                        size="small"
+                        class="btn--close-evaluations"
+                        @click="toggleFinishEvaluationModal()"
+                        :disabled="disableButton(record.status)"
+                    >
                         Cerrar
-                    </a>
+                    </a-button>
                 </span>
             </a-table>
         </a-row>
@@ -88,7 +91,7 @@
                     <a-textarea placeholder="Comentarios..." :rows="6"/>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                     <a-checkbox @change="
+                    <a-checkbox @change="
                         finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton
                     ">
                         <strong style="font-size: 13px;">
@@ -251,7 +254,7 @@ export default {
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({                        
-                        key: index++,
+                        key: index+1,
                         id: items[index].id,
                         status: this.selectStatusName(items[index].status),
                         evaluation: {
@@ -259,7 +262,8 @@ export default {
                             subtitle: items[index].description
                         },
                         collaborator: items[index].collaboratorName,
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
+                        reviewDate: new Date(items[index].revisionDateTime).toLocaleDateString(),
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }                
             } catch (error) {
@@ -274,6 +278,12 @@ export default {
         toggleFinishEvaluationModal() {
             this.finishEvaluationModal.show = !this.finishEvaluationModal.show;
         },
+        disableButton (status) {
+            if (status === 'No iniciado' || status === 'En proceso') {
+                return true;
+            }
+            return false;
+        },
         selectTagColor(status) {
             if (status === 'No iniciado') {
                 return 'ant-tag-red';
@@ -286,10 +296,32 @@ export default {
             }
             return 'ant-tag-gray';
         },
+        selectStatusName(status) {
+            switch (status) {
+                case 0:
+                    return 'No iniciado';
+                case 1:
+                    return 'En proceso';
+                case 2:
+                    return 'Completado';
+                case 3:
+                    return 'Validado';
+            }
+        },
     },
 };
 </script>
 
 <style scoped>
-
+    .btn--close-evaluations {
+        border: none;
+        background: #00d5af;
+        color: #000;
+        font-size: 11px;
+        width: 82px;
+    }
+    .btn--start-evaluations:hover {
+        background: #00af8f;
+        color: #fff;
+    }
 </style>

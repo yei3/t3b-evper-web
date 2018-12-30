@@ -14,6 +14,16 @@ class OrganizationUnit extends Http {
      *
      * @return {Promise}        Http Response
      */
+    getOrganigram() {
+        const path = `${this.entityPath}/GetAllOrganizationUnits`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for AllRegionsOrganizationUnits
+     *
+     * @return {Promise}        Http Response
+     */
     getAllRegions() {
         const path = `${this.entityPath}/GetAllRegionsOrganizationUnits`;
         return this.request(path, this.methods.get, {});

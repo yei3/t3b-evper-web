@@ -1,10 +1,13 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title background--title">
-            <a-col :span="23" style="text-align: center;">
+            <a-col :span=18 class="text-padding">
                 Seguimiento
             </a-col>
-            <a-col :span="1" style="text-align: right;">
+            <a-col :span=5>
+                <a-progress :percent="0" size="small" />
+            </a-col>
+            <a-col :span=1 style="text-align: right;">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -373,5 +376,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .text-padding {
+        padding: 0 0 0 18em;
+    }
 </style>
