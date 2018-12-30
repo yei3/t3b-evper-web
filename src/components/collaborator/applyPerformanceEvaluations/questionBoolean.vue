@@ -16,11 +16,18 @@
                 </span>
                 <a-switch v-model="value" :disabled="loading || onlyLecture" @change="save"/>
             </a-col>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
-            <a-icon class='dynamic-delete-button form-icon'
+        <a-col :sm="24" :md="24" style="text-align: left; margin-top: 5px;">
+            Calificable <a-switch
+                v-model="configurable"
+                size="small"
+                :disabled="loading || onlyLecture"
+                @change="save"
+            />
+            <a-icon v-show="loading"
+                class='dynamic-delete-button form-icon'
                 type="loading"
-                style="padding-left: 2%;"
-            /> Guardardando Respuesta
+                style="padding-left: 30px;"
+            /> <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
         </a-row>
     </a-col>
@@ -65,6 +72,7 @@ export default {
             edited: false,
             loading: false,
             value: false,
+            configurable: true,
         };
     },
     methods: {
@@ -79,13 +87,13 @@ export default {
                 this.edited = true;
             }
         },
-        save(options) {
+        save() {
             this.edited = true;
             this.loading = true;
             if (this.onlyLecture) return;
-            this.update(options);
+            this.update();
         },
-        async update({ showMessage = true }) {
+        async update() {
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
@@ -97,9 +105,7 @@ export default {
             this.loading = false;
             if (!response) return;
             this.edited = false;
-            if (showMessage) {
-                this.$message.success('Evaluación guardada correctamente');
-            }
+            this.$message.success('Evaluación guardada correctamente');
         },
     },
     computed: {

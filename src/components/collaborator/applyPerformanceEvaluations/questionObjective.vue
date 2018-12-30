@@ -60,10 +60,17 @@
                 </a-input>
             </a-form-item>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
+        <a-col :sm="24" :md="24" style="text-align: left; margin-top: 5px;">
+            Calificable <a-switch
+                v-model="configurable"
+                size="small"
+                :disabled="loading || onlyLecture"
+                @change="save"
+            />
             <a-icon class='dynamic-delete-button form-icon'
                 type="loading"
-                style="padding-left: 2%;"
+                style="padding-left: 30px;"
+                v-show="loading"
             /> Guardardando Respuesta
         </a-col>
     </a-col>
@@ -111,6 +118,7 @@ export default {
             expectedValue: null,
             value: 0,
             numeric: false,
+            configurable: true,
         };
     },
     mounted() {
