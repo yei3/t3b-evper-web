@@ -69,6 +69,7 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
+import { mapMutations } from 'vuex';
 
 export default {
     props: {
@@ -110,6 +111,9 @@ export default {
         };
     },
     methods: {
+        ...mapMutations([
+            'evaluationSetQuestionsAsAnswered',
+        ]),
         handleForm(e) {
             e.prevent();
         },
@@ -155,6 +159,7 @@ export default {
             this.loading = false;
             if (!response) return;
             this.edited = false;
+            this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success('Evaluación guardada correctamente');
         },
     },
