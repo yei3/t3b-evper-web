@@ -30,9 +30,9 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <span slot="status" slot-scope="status">
+                <a-col :span=3 slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                </span>
+                </a-col>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
                         <router-link
@@ -44,22 +44,15 @@
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
-                <span slot="action" slot-scope="action">
-                    <!-- <a-button
-                        class="table-link-light" ghost
-                        :to="{ name: 'boss-assessments-apply' }"
-                        v-show="transformStatus(action) !== 'Agendar revisión'"
+                <span slot="action" slot-scope="action, record">
+                    <a-button 
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="fillEvaluation(record.id)"
+                        :disabled="disableButton(record.status)"
                     >
                         {{transformStatus(action)}}
-                    </a-button> -->
-                    <div v-show="transformStatus(action) !== 'Agendar revisión'">
-                        <router-link
-                            class="table-link-light"
-                            :to="{ name: 'boss-assessments-apply' }"
-                        >
-                            {{transformStatus(action)}}
-                        </router-link>
-                    </div>
+                    </a-button>
                     <a-button
                         class="table-link-light" ghost
                         @click="toggleScheduleReviewModal"
@@ -185,16 +178,17 @@ export default {
                 response = await client3B.dashboard.getSupervisor();
                 const items = response.data.result.collaboratorRevisionSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index += 1) {
+                for (let i = 0; i < items.length; i += 1) {
                     this.data.push({
-                        key: index++,
-                        status: this.selectStatusName(items[index].status),
+                        id: items[i].evaluationId,
+                        key: i+1,
+                        status: this.selectStatusName(items[i].status),
                         evaluation: {
-                            title: items[index].name,
-                            subtitle: items[index].description
+                            title: items[i].name,
+                            subtitle: items[i].description
                         },
-                        collaborator: items[index].collaboratorFullName,
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
+                        collaborator: items[i].collaboratorFullName,
+                        endDate: new Date(items[i].endDateTime).toLocaleDateString()
                     });
                 }
                 
@@ -205,6 +199,15 @@ export default {
         },
         toggleScheduleReviewModal() {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+        },
+        fillEvaluation(id) {
+            this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+        },
+        disableButton (status) {
+            if (status !== 'No iniciado' && status !== 'En proceso') {
+                return true;
+            }
+            return false;
         },
         transformStatus(status) {
             if (status === 'En proceso' || status === 'Finalizado') {
@@ -243,5 +246,15 @@ export default {
 </script>
 
 <style scoped>
-
+    .btn--start-evaluations {
+        border: none;
+        background: #00d5af;
+        color: #000;
+        font-size: 11px;
+        width: 82px;
+    }
+    .btn--start-evaluations:hover {
+        background: #00af8f;
+        color: #fff;
+    }
 </style>

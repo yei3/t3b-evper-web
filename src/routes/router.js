@@ -6,6 +6,7 @@ import bossRoutes from '@/routes/boss';
 import adminRoutes from '@/routes/admin';
 
 import Layout from '@/components/layout/Layout.vue';
+import Profile from '@/components/profile/layout.vue';
 import Login from '@/views/Login.vue';
 import NotFound from '@/views/404.vue';
 import onWork from '@/views/working.vue';
@@ -73,6 +74,17 @@ export default new Router({
                 }
                 return next();
             },
+        },
+        {
+            path: '/',            
+            component: Layout,
+            children: [
+                {
+                    path: '/update',
+                    name: 'update-profile',
+                    component: Profile
+                }
+            ]            
         },
         {
             path: '*',

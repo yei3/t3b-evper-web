@@ -69,8 +69,17 @@
                                     Editar
                                 </router-link>
                             </a-menu-item> -->
-                            <a-menu-item @click="deleteFormat(record.key)">
-                                Eliminar
+                            <a-menu-item>
+                                <a-popconfirm
+                                    title="¿Está seguro de eliminar el Formato de Evaluación?"
+                                    @confirm="deleteFormat(record.key)"
+                                    okText="SI"
+                                    cancelText="No"
+                                    class="pop-confirm"
+                                >
+                                    <a-icon type="delete" />
+                                    Eliminar
+                                </a-popconfirm>
                             </a-menu-item>
                         </a-menu>
                         <a-button class="ant-btn-small">

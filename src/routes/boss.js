@@ -2,6 +2,7 @@ import beforeEnter from '@/routes/guards/globals';
 import authService from '@/services/auth';
 
 import bossHome from '@/components/boss/home/home.vue';
+import bossReports from '@/components/boss/reports/layout.vue';
 import performanceEvaluations from '@/components/boss/performanceEvaluations/layout.vue';
 import performanceEvaluation from '@/components/boss/performanceEvaluation/layout.vue';
 import applyPerformanceEvaluations from '@/components/boss/applyPerformanceEvaluations/layout.vue';
@@ -12,6 +13,12 @@ export default [
         name: 'boss-home',
         component: bossHome,
         beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
+    },
+    {
+        path: 'boss/results',
+        name: 'boss-reports',
+        component: bossReports,
+        beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
     },
     {
         path: 'boss/assessments',

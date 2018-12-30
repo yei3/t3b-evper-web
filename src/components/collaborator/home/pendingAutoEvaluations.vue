@@ -1,11 +1,8 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title background--title">
-            <a-col :span=18 class="text-padding">
+            <a-col :span=23>
                 Mis evaluaciones
-            </a-col>
-            <a-col :span=5>
-                <a-progress :percent="0" size="small" />
             </a-col>
             <a-col :span=1 style="text-align: right; color: #fff;">
 
@@ -49,7 +46,12 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation(record.id)">
+                    <a-button 
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="fillEvaluation(record.id)"
+                        :disabled="disableButton(record.status)"
+                    >
                         {{transformStatus(action)}}
                     </a-button>
                     <!-- <router-link
@@ -133,12 +135,17 @@ export default {
             }
             this.spin = false;
         },
-        fillEvaluation(id) {
-            
+        fillEvaluation(id) {            
             this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
         },
+        disableButton (status) {
+            if (status === 'Validado' || status === 'Completado') {
+                return true;
+            }
+            return false;
+        },
         transformStatus(status) {
-            if (status === 'En proceso' || status === 'Finalizado') {
+            if (status === 'En proceso' || status === 'Completado') {
                 return 'Continuar';
             }
             return 'Iniciar';
@@ -174,9 +181,6 @@ export default {
 </script>
 
 <style scoped>
-    .text-padding {
-        padding: 0 0 0 16em;
-    }
     .btn--start-evaluations {
         border: none;
         background: #00d5af;

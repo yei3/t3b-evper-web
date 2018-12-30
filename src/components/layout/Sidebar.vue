@@ -65,16 +65,28 @@
                                 {{roleEs}} <a-icon type="down" />
                             </a>
                             <a-menu slot="overlay">
+                                <a-menu-item>
+                                    <a @click="updateProfile">
+                                        <a-icon type="form" />
+                                        Editar perfil
+                                    </a>
+                                </a-menu-item>
                                 <a-menu-item
                                     :key="arole"
                                     v-for="arole in user.roles"
                                     v-show="arole !== userCurrentRole"
                                 >
-                                    <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
+                                    <a @click="setCurrentRole(arole)">
+                                        <a-icon type="user" />
+                                        {{roleToEs(arole)}}
+                                    </a>
                                 </a-menu-item>
                                 <a-menu-divider/>
                                 <a-menu-item>
-                                    <a @click="logout">Cerrar Sesión</a>
+                                    <a @click="logout">
+                                        <a-icon type="logout" />
+                                        Cerrar Sesión
+                                    </a>
                                 </a-menu-item>
                             </a-menu>
                         </a-dropdown>
@@ -94,6 +106,12 @@
                             <a-icon type="safety-certificate" />
                             <span>Tipo de rol</span>
                         </span>
+                        <a-menu-item>                            
+                            <a @click="updateProfile">
+                                <a-icon type="form" />
+                                Editar perfil
+                            </a>
+                        </a-menu-item>
                         <a-menu-item
                             :key="arole"
                             v-for="arole in user.roles"
@@ -106,7 +124,10 @@
                         </a-menu-item>
                         <a-menu-divider style="background-color: #666;"/>
                         <a-menu-item>
-                            <a @click="logout">Cerrar Sesión</a>
+                            <a @click="logout">
+                                <a-icon type="logout" />
+                                Cerrar Sesión
+                            </a>
                         </a-menu-item>
                     </a-sub-menu>
                     <a-menu-item key="1" v-show="role == rolesAvailables.COLLABORATOR">
@@ -140,14 +161,14 @@
                             <span>Evaluaciones</span>
                         </router-link>
                     </a-menu-item>
-                    <a-menu-item key="5" v-show="role == rolesAvailables.SUPERVISOR">
+                    <!-- <a-menu-item key="5" v-show="role == rolesAvailables.SUPERVISOR">
                         <router-link :to="{ name: 'onWork' }">
                             <a-icon type="notification" />
                             <span>Avisos</span>
                         </router-link>
-                    </a-menu-item>
+                    </a-menu-item> -->
                     <a-menu-item key="6" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link :to="{ name: 'onWork' }">
+                        <router-link :to="{ name: 'boss-reports' }">
                             <a-icon type="line-chart" />
                             <span>Resultados</span>
                         </router-link>
@@ -170,7 +191,7 @@
                             <span>Organigrama</span>
                         </router-link>
                     </a-menu-item>
-                    <a-menu-item key="11" v-show="role == rolesAvailables.ADMINISTRATOR">
+                    <!-- <a-menu-item key="11" v-show="role == rolesAvailables.ADMINISTRATOR">
                         <router-link :to="{ name: 'onWork' }">
                             <a-icon type="setting" />
                             <span>Configuración</span>
@@ -181,7 +202,7 @@
                             <a-icon type="notification" />
                             <span>Avisos</span>
                         </router-link>
-                    </a-menu-item>
+                    </a-menu-item> -->
                     <a-menu-item key="13" v-show="role == rolesAvailables.ADMINISTRATOR">
                         <router-link :to="{ name: 'onWork' }">
                             <a-icon type="line-chart" />
@@ -228,6 +249,7 @@ export default {
                 'collaborator-home': 1,
                 'collaborator-assessments': 2,
                 'boss-home': 3,
+                'boss-reports': 6,
                 'admin-home': 8,
                 'admin-evaluations': 9,
                 'admin-organigram': 10,
@@ -245,6 +267,9 @@ export default {
             } else {
                 this.openKeys = latestOpenKey ? [latestOpenKey] : [];
             }
+        },
+        updateProfile() {
+            this.$router.push({ name: 'update-profile' });
         },
         setCurrentRole(role) {
             authService.setCurrentRole(role);
