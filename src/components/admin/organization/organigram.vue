@@ -27,7 +27,10 @@
                 <a-divider />
             </a-row>
             <a-row style="overflow-x: scroll;">
-                <a-col span="24">
+                <div class="collapse" v-show="spin" style="text-align: center; padding: 50px;">
+                    <a-spin tip="Cargando..." size="large" />
+                </div>
+                <a-col span="24" v-show="!spin">
                     <GChart
                         :settings="{ packages: ['orgchart'] }"
                         type="OrgChart"
@@ -48,6 +51,14 @@ import errorHandler from '@/views/errorHandler';
 export default {
     components: {
         GChart,
+    },
+    data() {
+        return {
+            spin: true,
+        };
+    },
+    mounted() {
+        this.spin = true;
     },
     methods: {
         async onChartReady(chart, google) {
@@ -81,6 +92,7 @@ export default {
                 nodeClass: 'org-custom-node',
                 allowCollapse: true,
             });
+            this.spin = false;
         },
     },
 };
