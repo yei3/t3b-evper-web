@@ -4,11 +4,38 @@ import Answer from './Answer';
 /**
  * Class to make operations to the Evaluation entity
  */
+class Revision extends Http {
+    constructor() {
+        super();
+        this.entityPath = '/api/services/app/Revision';
+        this.answer = new Answer();
+    }
+
+    /**
+     * Request for the evaluation finalization
+     *
+     * @param {String} evaluationId   Id for the user
+     *
+     * @return {Promise}        Http Response
+     */
+    finish(evaluationId) {
+        const path = `${this.entityPath}/FinishEvaluation`;
+        return this.request(path, this.methods.post, {
+            $qs: { evaluationId },
+        });
+    }
+}
+
+
+/**
+ * Class to make operations to the Evaluation entity
+ */
 class Evaluation extends Http {
     constructor() {
         super();
         this.entityPath = '/api/services/app/Evaluation';
         this.answer = new Answer();
+        this.revision = new Revision();
     }
 
     /**

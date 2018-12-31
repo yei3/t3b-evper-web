@@ -37,7 +37,10 @@ class HttpRequest {
         if (accessToken) {
             options.headers.authorization = `Bearer ${accessToken}`;
         }
-        if (method === this.methods.get || method === this.methods.delete) {
+        if (params.$qs || params.$data) {
+            options.params = params.$qs;
+            options.data = params.$data;
+        } else if (method === this.methods.get || method === this.methods.delete) {
             options.params = params;
         } else if (method !== this.methods.delete) {
             options.data = params;

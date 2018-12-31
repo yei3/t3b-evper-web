@@ -35,11 +35,18 @@
                 </a-select>
             </a-form-item>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
-            <a-icon class='dynamic-delete-button form-icon'
+        <a-col :sm="24" :md="24" style="text-align: left; margin-top: 5px;">
+            Calificable <a-switch
+                v-model="configurable"
+                size="small"
+                :disabled="loading || onlyLecture"
+                @change="save(value)"
+            />
+            <a-icon v-show="loading"
+                class='dynamic-delete-button form-icon'
                 type="loading"
-                style="padding-left: 2%;"
-            /> Guardardando Respuesta
+                style="padding-left: 30px;"
+            /> <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>
 </template>
@@ -47,6 +54,7 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
+import { mapMutations } from 'vuex';
 
 export default {
     props: {
@@ -79,12 +87,9 @@ export default {
         return {
             edited: false,
             loading: false,
-            value: 'undefined',
+            value: undefined,
+            configurable: true,
             selectOptions: [
-                {
-                    value: 'undefined',
-                    label: 'Selecciona una opción',
-                },
                 {
                     value: '-70',
                     label: 'Insatisfactorio (<70%)',
@@ -104,6 +109,9 @@ export default {
         this.parseAnswer();
     },
     methods: {
+        ...mapMutations([
+            'evaluationSetQuestionsAsAnswered',
+        ]),
         handleForm(e) {
             e.prevent();
         },
@@ -116,14 +124,19 @@ export default {
             }
         },
         save(optionSelected) {
-            if (this.onlyLecture) return;
-            this.form.validateFields((error) => {
-                if (error || optionSelected === 'undefined') return;
-                this.update(optionSelected);
-            });
+            setTimeout(() => {
+                if (this.onlyLecture) return;
+                this.edited = true;
+                this.form.validateFields((error) => {
+                    console.log(optionSelected);
+                    console.log(error);
+                    if (error || optionSelected === 'undefined') return;
+                    console.log('updating');
+                    this.update(optionSelected);
+                });
+            }, 200);
         },
         async update(optionSelected) {
-            this.edited = true;
             this.loading = true;
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
@@ -136,6 +149,7 @@ export default {
             this.loading = false;
             if (!response) return;
             this.edited = false;
+            this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success('Evaluación guardada correctamente');
         },
     },

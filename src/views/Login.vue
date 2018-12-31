@@ -33,7 +33,7 @@
                             <a-row>
                                 <a-col style="text-align: center;">
                                     <label style="font-size: 30px; font-weight: 900; color: black;">
-                                        Evaluación de Desempeño
+                                        Evaluación de desempeño
                                     </label>
                                     <a-divider />
                                 </a-col>
