@@ -34,11 +34,18 @@
                 </a-input>
             </a-form-item>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;" v-show="loading">
-            <a-icon class='dynamic-delete-button form-icon'
+        <a-col :sm="24" :md="24" style="text-align: left; margin-top: 5px;">
+            Calificable <a-switch
+                v-model="configurable"
+                size="small"
+                :disabled="loading || onlyLecture"
+                @change="save"
+            />
+            <a-icon v-show="loading"
+                class='dynamic-delete-button form-icon'
                 type="loading"
-                style="padding-left: 2%;"
-            /> Guardardando Respuesta
+                style="padding-left: 30px;"
+            /> <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>
 </template>
@@ -46,6 +53,7 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
+import { mapMutations } from 'vuex';
 
 export default {
     props: {
@@ -79,15 +87,16 @@ export default {
             edited: false,
             loading: false,
             value: '',
+            configurable: true,
         };
     },
     mounted() {
         this.parseAnswer();
     },
     methods: {
-        printValue() {
-            console.log(this.value);
-        },
+        ...mapMutations([
+            'evaluationSetQuestionsAsAnswered',
+        ]),
         handleForm(e) {
             e.prevent();
         },
@@ -119,6 +128,7 @@ export default {
             this.loading = false;
             if (!response) return;
             this.edited = false;
+            this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success('Evaluación guardada correctamente');
         },
     },

@@ -27,8 +27,18 @@
                 </div>
                 <div class="collapse" v-show="!spin">
                     <a-row class="collapse-title">
-                        <a-col :span="12">
+                        <a-col :sm="24" :md="12">
                             <h1>{{evaluationName}}</h1>
+                        </a-col>
+                        <a-col :sm="24" :md="12"
+                            style="text-align: right; padding-right: 31px; padding-top: 5px;"
+                        >
+                            <a-button class="btn-blue"
+                                @click="finishEvaluation"
+                                :loading="loading"
+                            >
+                                Finalizar Evaluación
+                            </a-button>
                         </a-col>
                     </a-row>
                     <div class="collapse-content" v-show="!collapsed">
@@ -85,11 +95,11 @@
                                 >
                                     Siguiente
                                 </a-button>
-                                <a-button @click="nextStep"
+                                <a-button @click="$router.push({ name: 'home' })"
                                     class="btn-green"
                                     v-show="data.currentStep === viewSteps.length - 1"
                                 >
-                                    Finalizar
+                                    Finalizar edición
                                 </a-button>
                             </a-col>
                         </a-row>
@@ -105,6 +115,7 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import formIntroduction from '@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue';
 import evaluationSection from '@/components/collaborator/applyPerformanceEvaluations/section.vue';
+import { mapMutations, mapGetters } from 'vuex';
 
 
 export default {
@@ -121,6 +132,7 @@ export default {
     data() {
         return {
             spin: false,
+            loading: false,
             collapsed: false,
             evaluation: null,
             data: {
@@ -129,10 +141,14 @@ export default {
             },
         };
     },
-    created() {
-        this.fetchEvaluation();
+    async created() {
+        await this.fetchEvaluation();
+        this.setQuestionsStatus();
     },
     methods: {
+        ...mapMutations([
+            'evaluationSetQuestions',
+        ]),
         async fetchEvaluation() {
             this.spin = true;
             const response = await client3B.evaluation.get(this.$route.params.id)
@@ -161,8 +177,41 @@ export default {
             }
             this.data.lastStep = Math.max(this.data.currentStep, this.data.lastStep);
         },
+        setQuestionsStatus() {
+            const questions = this.getQuestions();
+            const statuses = questions.map((qst) => {
+                return {
+                    id: qst.id,
+                    answered: qst.status !== 1,
+                };
+            });
+            this.evaluationSetQuestions(statuses);
+        },
+        isEvaluationCompleted() {
+            for (let i = 0; i < this.questionsStatuses.length; i +=1) {
+                if (this.questionsStatuses[i].answered === false) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        async finishEvaluation() {
+            if (!this.isEvaluationCompleted()) {
+                errorHandler(this, 'Responde todas las pregunas para poder finalizar la evaluación');
+                return;
+            }
+            this.loading = true;
+            await client3B.evaluation.revision.finish(this.$route.params.id)
+                .catch(error => errorHandler(this, error));
+            this.loading = false;
+            this.$message.success('La evaluación ha sido finalizada correctamente');
+            this.$router.push({ name : 'home' });
+        },
     },
     computed: {
+        ...mapGetters({
+            questionsStatuses: 'questions',
+        }),
         viewSteps() {
             const steps = [
                 {
