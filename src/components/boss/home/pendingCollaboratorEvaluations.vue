@@ -30,19 +30,24 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <a-col :span=3 slot="status" slot-scope="status">
+                <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                </a-col>
+                </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                        <router-link
+                        <!-- <router-link
                             class="table-link"
                             :to="{name: 'boss-assessments-apply' }"
-                        >
+                        > -->
                             {{evaluation.title}}
-                        </router-link>
+                        <!-- </router-link> -->
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
+                </span>
+                <span slot="autoEvaluation" slot-scope="autoEvaluation">
+                    <a-checkbox
+                        :checked="autoEvaluation"
+                    />
                 </span>
                 <span slot="action" slot-scope="action, record">
                     <a-button 
@@ -51,14 +56,14 @@
                         @click="fillEvaluation(record.id)"
                         :disabled="disableButton(record.status)"
                     >
-                        {{transformStatus(action)}}
+                        {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                     <a-button
                         class="table-link-light" ghost
                         @click="toggleScheduleReviewModal"
                         v-show="transformStatus(action) === 'Agendar revisión'"
                     >
-                        {{transformStatus(action)}}
+                        {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                 </span>
             </a-table>
@@ -141,6 +146,12 @@ const columns = [
         key: 'collaborator',
     },
     {
+        title: 'Auto Evaluación',
+        dataIndex: 'autoEvaluation',
+        key: 'autoEvaluation',
+        scopedSlots: { customRender: 'autoEvaluation' },
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -187,6 +198,7 @@ export default {
                             title: items[i].name,
                             subtitle: items[i].description
                         },
+                        autoEvaluation: items[i].isAutoEvaluation,
                         collaborator: items[i].collaboratorFullName,
                         endDate: new Date(items[i].endDateTime).toLocaleDateString()
                     });
@@ -209,11 +221,16 @@ export default {
             }
             return false;
         },
-        transformStatus(status) {
-            if (status === 'En proceso' || status === 'Finalizado') {
-                return 'Continuar';
-            }
-            return 'Iniciar';
+        transformStatus(status, autoEvaluation) {
+            
+            if (autoEvaluation === true) {
+                return 'Ver'
+            } else {
+                if (status === 'En proceso') {
+                    return 'Continuar';
+                }
+                return 'Iniciar';
+            }            
         },
         selectTagColor(status) {
             switch (status) {

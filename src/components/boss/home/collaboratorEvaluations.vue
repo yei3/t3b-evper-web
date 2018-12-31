@@ -42,6 +42,9 @@
                     </a></p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
+                <span slot="collaborator" slot-scope="collaborator">
+                    {{collaborator}}
+                </span>
                 <span slot="review" slot-scope="review">
                     <!-- <a
                         class="table-link-light"
@@ -57,7 +60,7 @@
                         @click="toggleFinishEvaluationModal()"
                         :disabled="disableButton(record.status)"
                     >
-                        Cerrar
+                        Validar
                     </a-button>
                 </span>
             </a-table>
@@ -190,12 +193,20 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         scopedSlots: { customRender: 'status' },
-    }, {
+    },
+    {
         title: 'Evaluación',
         dataIndex: 'evaluation',
         key: 'evaluation',
         scopedSlots: { customRender: 'evaluation' },
-    }, {
+    },
+    {
+        title: 'Colaborador',
+        dataIndex: 'collaborator',
+        key: 'collaborator',
+        scopedSlots: { customRender: 'collaborator' },
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -219,18 +230,7 @@ export default {
             spin: false,
             collapsed: false,
             columns,
-            data: [
-                // {
-                //     key: '1',
-                //     status: 'En revisión',
-                //     evaluation: {
-                //         title: 'Período 2017-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     reviewDate: '13/07/2018',
-                //     endDate: '13/07/2017',
-                // },
-            ],
+            data: [],
             scheduleReviewModal: {
                 show: false,
                 enableButton: false,
@@ -261,7 +261,7 @@ export default {
                             title: items[index].name,
                             subtitle: items[index].description
                         },
-                        collaborator: items[index].collaboratorName,
+                        collaborator: items[index].collaboratorFullName,
                         reviewDate: new Date(items[index].revisionDateTime).toLocaleDateString(),
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
