@@ -44,7 +44,7 @@
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
-                <span slot="autoEvaluation" slot-scope="autoEvaluation">
+                <span slot="autoEvaluation" slot-scope="autoEvaluation" class="text-center">
                     <a-checkbox
                         :checked="autoEvaluation"
                     />
@@ -150,6 +150,7 @@ const columns = [
         dataIndex: 'autoEvaluation',
         key: 'autoEvaluation',
         scopedSlots: { customRender: 'autoEvaluation' },
+        align: 'center',
     },
     {
         title: 'Fecha fin',

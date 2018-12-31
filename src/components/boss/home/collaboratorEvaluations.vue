@@ -45,13 +45,13 @@
                 <span slot="collaborator" slot-scope="collaborator">
                     {{collaborator}}
                 </span>
-                <span slot="review" slot-scope="review">
-                    <!-- <a
+                <span slot="review" slot-scope="review, record">
+                    <a
                         class="table-link-light"
-                        @click="toggleScheduleReviewModal"
-                    > -->
+                        @click="toggleScheduleReviewModal(record.evaluation.title, record.collaborator)"
+                    >
                         {{review}}
-                    <!-- </a> -->
+                    </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
                     <a-button 
@@ -141,7 +141,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Agendar revisión</h1>
-                        <small>(Nombre de la evaluacion) - (Nombre del colaborador)</small>
+                        <small>{{scheduleReviewModal.evaluationName}} - {{scheduleReviewModal.collaboratorName}} </small>
                     </a-col>
                 </a-row>
             </template>
@@ -149,7 +149,7 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                         Seleecione la fecha de la revisón:
+                         Seleecione la fecha y hora de la revisón:
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
@@ -234,6 +234,8 @@ export default {
             scheduleReviewModal: {
                 show: false,
                 enableButton: false,
+                evaluationName: '',
+                collaboratorName: '',
             },
             finishEvaluationModal: {
                 show: false,
@@ -272,7 +274,9 @@ export default {
                 this.spin = false;
             }
         },
-        toggleScheduleReviewModal() {
+        toggleScheduleReviewModal(evaluationTitle, collaborator) {
+            this.scheduleReviewModal.evaluationName = evaluationTitle;
+            this.scheduleReviewModal.collaboratorName = collaborator;
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
         toggleFinishEvaluationModal() {

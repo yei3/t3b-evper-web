@@ -34,7 +34,7 @@
             >
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
-                        <a-avatar shape="square" icon="user" />
+                        <a-avatar shape="square" :src="collaboratorImgUrl(collaborator.number)" />
                         <a class="table-link" style="margin-left: 5px;"
                             @click="currentCollaborator = (collaborator.id !== currentCollaborator)?
                                 collaborator.id:0">
@@ -281,6 +281,7 @@ export default {
                     this.data.push({
                         key: index+1,
                         name: items[index].collaboratorFullName,
+                        number: items[index].collaboratorNumber,
                         objectives: objectives,
                         totalPendingObjectives: items[index].totalPendingObjectives
                     });
@@ -337,6 +338,9 @@ export default {
                 }
             });
             return (completed * 100) / objectives.length;
+        },
+        collaboratorImgUrl(employeeNumber) {
+            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${employeeNumber}.png`;
         },
     },
 };

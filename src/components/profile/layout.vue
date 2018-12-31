@@ -91,15 +91,6 @@
 </template>
 <script>
 import client3B from '@/api/client3B';
-import {
-  Aborter,
-  BlobURL,
-  BlockBlobURL,
-  ContainerURL,
-  ServiceURL,
-  StorageURL,
-  SharedKeyCredential
-} from "@azure/storage-blob";
 import Footer from '@/components/layout/Footer.vue';
 
 export default {
@@ -121,43 +112,8 @@ export default {
         };
     },
     created() {
-        // this.azure();
     },
     methods: {
-        async azure() {
-            // Enter your storage account name and shared key
-            const account = "t3b";
-            const accountKey = "hjy+tUTxIMcLudFZY/MX4De1w1iOEGgKSANRUyEwWKr6H1VEaZTcSIRiv+FFE0h9b0V+82zM0DwLErN49gFFSA==";
-
-            // Use SharedKeyCredential with storage account and account key
-            const sharedKeyCredential = new SharedKeyCredential(account, accountKey);
-
-            const pipeline = StorageURL.newPipeline(sharedKeyCredential);
-
-            // List containers
-            const serviceURL = new ServiceURL(
-                // When using AnonymousCredential, following url should include a valid SAS or support public access
-                `https://${account}.blob.core.windows.net`,
-                pipeline
-            );
-
-            console.log(serviceURL)
-
-            // Create a blob
-            // const content = "hello";
-            // const blobName = "newblob" + new Date().getTime();
-            // const blobURL = 'https://t3b.blob.core.windows.net/t3b';
-            // const blockBlobURL = BlockBlobURL.fromBlobURL(blobURL);
-            // const uploadBlobResponse = await blockBlobURL.upload(
-            //     Aborter.none,
-            //     content,
-            //     content.length
-            // );
-            console.log(
-                `Upload block blob ${blobName} successfully`,
-                uploadBlobResponse.requestId
-            );
-        },
         handleChange(info) {
 
             console.log(info.file)

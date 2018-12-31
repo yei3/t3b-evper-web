@@ -9,8 +9,7 @@
         "test:unit": "vue-cli-service test:unit"
     },
     "dependencies": {
-        "@azure/storage-blob": "^10.3.0",
-        "ant-design-vue": "^1.2.3",
+        "ant-design-vue": "^1.2.4",
         "axios": "^0.18.0",
         "chart.js": "^2.7.3",
         "jsonwebtoken": "^8.4.0",
