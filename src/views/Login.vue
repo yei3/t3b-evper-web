@@ -224,7 +224,6 @@ import client3B from '@/api/client3B';
 import authService from '@/services/auth';
 
 export default {
-    mixins: [print],
     components: {
         Footer,
     },
