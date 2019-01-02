@@ -38,7 +38,7 @@
                                     <a-divider />
                                 </a-col>
                             </a-row>
-                            <a-row type="flex" justify="center" align="middle" >
+                            <a-row type="flex" justify="center" align="middle">
                                 <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
                                     v-if="!showFormConfirmPassword && !showRecovPass"
                                 >
@@ -224,6 +224,7 @@ import client3B from '@/api/client3B';
 import authService from '@/services/auth';
 
 export default {
+    mixins: [print],
     components: {
         Footer,
     },
