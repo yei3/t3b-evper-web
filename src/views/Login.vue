@@ -38,13 +38,9 @@
                                     <a-divider />
                                 </a-col>
                             </a-row>
-                            <a-row
-                                type="flex"
-                                justify="center"
-                                align="middle"
-                            >
+                            <a-row type="flex" justify="center" align="middle" >
                                 <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
-                                    v-if="!showFormConfirmPassword"
+                                    v-if="!showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
                                         <a-form-item
@@ -82,7 +78,7 @@
                                     </a-form>
                                 </a-col>
                                 <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
-                                    v-else
+                                    v-if="showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
                                         <a-form-item style="margin: 0px;">
@@ -100,6 +96,7 @@
                                                 v-model="user.email"
                                                 class="form-input"
                                                 placeholder="Email de la empresa"
+                                                type="email"
                                             />
                                         </a-form-item>
                                         <a-form-item
@@ -145,11 +142,56 @@
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
+                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="showRecovPass" >
+                                    <a-form>
+                                        <a-form-item
+                                            hasFeedback
+                                            :validateStatus="errors.length? 'error': ''"
+                                        >
+                                            <a-input
+                                                v-model="user.id"
+                                                class="form-input"
+                                                placeholder="Número de Empleado"
+                                            />
+                                        </a-form-item>
+                                        <a-form-item
+                                            hasFeedback
+                                            :validateStatus="errors.length? 'error': ''"
+                                        >
+                                            <a-input
+                                                type="email"
+                                                v-model="user.email"
+                                                class="form-input"
+                                                placeholder="Correo Eletrónico"
+                                            />
+                                        </a-form-item>
+                                        <a-form-item>
+                                            <a-button
+                                                block
+                                                htmlType='submit'
+                                                class="login-buttom"
+                                                :loading="loading"
+                                                @click="passwordRecovery"
+                                            >
+                                                Enviar correo de recuperación
+                                            </a-button>
+                                        </a-form-item>
+                                    </a-form>
+                                </a-col>
                             </a-row>
-                            <a-row v-show="!showFormConfirmPassword">
+                            <a-row v-show="!showFormConfirmPassword && !showRecovPass">
                                 <a-col>
-                                    <a href="#" style="color: #666; text-decoration: underline;">
-                                        ¿Olvidó su número de empleado o contraseña?
+                                    <a @click="showRecovPass = true"
+                                        style="color: #666; text-decoration: underline;">
+                                        ¿Olvidó su contraseña?
+                                    </a>
+                                </a-col>
+                            </a-row>
+                            <a-row v-show="showRecovPass">
+                                <a-col>
+                                    <a @click="showRecovPass = false"
+                                        style="color: #666; text-decoration: underline;">
+                                        Iniciar Sesión
                                     </a>
                                 </a-col>
                             </a-row>
@@ -195,6 +237,7 @@ export default {
                 newPasswordConfirmation: '',
             },
             showFormConfirmPassword: false,
+            showRecovPass: false,
             loading: false,
             errors: [],
             authData: null,
@@ -269,11 +312,23 @@ export default {
             }
             this.saveSession();
         },
-
+        async passwordRecovery() {
+            this.loading = true;
+            const response = await client3B.user.recoverPassword({
+                employeeNumber: this.user.id,
+                emailAddress: this.user.email,
+            }).catch(error => this.handleError(error));
+            this.loading = false;
+            if (!response) return;
+            this.showRecovPass = false;
+            this.$message.success('Se ha enviado el correo de recuperación');
+        },
         handleError(error) {
             const time = 10;
             this.errors = [];
-            if (error.validationErrors) {
+            if (error.response) {
+                this.handleError(error.response.data.error);
+            } if (error.validationErrors) {
                 error.validationErrors.forEach((err) => {
                     this.$message.error(err.message, time);
                     this.errors.push(err.message);

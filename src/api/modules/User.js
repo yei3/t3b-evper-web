@@ -31,6 +31,11 @@ class User extends Http {
         const path = `${this.entityPath}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
+
+    recoverPassword(data) {
+        const path = `${this.entityPath}/RecoverPassword`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default User;
