@@ -135,7 +135,8 @@ export default {
             }
             this.spin = false;
         },
-        fillEvaluation(id) {            
+        fillEvaluation(id) {
+            console.log(id)
             this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
         },
         disableButton (status) {
