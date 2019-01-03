@@ -11,6 +11,11 @@
             <a-col :span="6">
                 <a-row>
                    <a-col  style="text-align: right;">
+                    <a-button>
+                        <a-badge :count="1">
+                            <a-icon type="bell" theme="filled" style="font-size: 25px;" />
+                        </a-badge>
+                    </a-button>
                     <a-button @click="showModalPanel"><notification-bell
                         :size="30"
                         :count="2"
@@ -43,14 +48,14 @@
         </a-row>
         <a-modal
             v-model="showModal"
-           
+
             width="600px"
         >
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-header">
                         <h1>Notificaciones</h1>
-                        
+
                     </a-col>
                 </a-row>
             </template>
@@ -60,14 +65,14 @@
                     {{ data }}
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    
+
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                     
+
                 </a-col>
                 <a-col class="modal-content-seccion-bottom">
                     <span>
-                        
+
                     </span>
                 </a-col>
             </a-row>
@@ -79,11 +84,11 @@
                 >
                     Cerrar
                 </a-button>
-                
+
             </template>
         </a-modal>
     </a-layout-header>
-    
+
 </template>
 
 <script>
@@ -128,7 +133,7 @@ export default {
                 const items = response.data.result.collaboratorRevisionSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    this.data.push({                        
+                    this.data.push({
                         key: index++,
                         id: items[index].id,
                         status: 'OK',
@@ -139,7 +144,7 @@ export default {
                         collaborator: items[index].collaboratorName,
                         endDate: new Date(items[index].endDateTime).toLocaleDateString()
                     });
-                }                
+                }
             } catch (error) {
                 console.log(error);
             } finally {
