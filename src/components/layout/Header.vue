@@ -8,32 +8,14 @@
                     @click="toggleSidebar"
                 />
             </a-col>
-            <a-col :span="6">
+            <a-col :span="12">
                 <a-row>
                    <a-col  style="text-align: right;">
-                    <a-button>
-                        <a-badge :count="1">
-                            <a-icon type="bell" theme="filled" style="font-size: 25px;" />
-                        </a-badge>
-                    </a-button>
-                    <a-button @click="showModalPanel"><notification-bell
-                        :size="30"
-                        :count="2"
-                        counterLocation="upperRight"
-                        counterStyle="round"
-                        counterBackgroundColor="#FF0000"
-                        counterTextColor="#FFFFFF"
-                        iconColor="#808080"
-                        :prefixPlus="true"
-                        counterPadding="2px"
-                    />
-                    </a-button>
-                </a-col>
-                </a-row>
-            </a-col>
-            <a-col :span="6">
-                <a-row>
-                   <a-col  style="text-align: right;">
+                       <a-button @click="showModalPanel">
+                            <a-badge :count="1">
+                                <a-icon type="bell" theme="filled" style="font-size: 25px;" />
+                            </a-badge>
+                        </a-button>
                        <a-button
                             icon="logout"
                             style="border-style: none"

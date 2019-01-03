@@ -35,13 +35,7 @@
                 </a-select>
             </a-form-item>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: left; margin-top: 5px;">
-            Calificable <a-switch
-                v-model="configurable"
-                size="small"
-                :disabled="loading || onlyLecture"
-                @change="save(value)"
-            />
+        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
             <a-icon v-show="loading"
                 class='dynamic-delete-button form-icon'
                 type="loading"
