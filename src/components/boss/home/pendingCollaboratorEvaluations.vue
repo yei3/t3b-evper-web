@@ -53,7 +53,7 @@
                     <a-button 
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id)"
+                        @click="fillEvaluation(record.id, record.autoEvaluation)"
                         :disabled="disableButton(record.status)"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
@@ -213,8 +213,14 @@ export default {
         toggleScheduleReviewModal() {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
-        fillEvaluation(id) {
-            this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+        fillEvaluation(id, autoEvaluation) {
+            if (autoEvaluation === true) {
+                this.$router.push({ name: 'collaborator-assessment', params: { id } });
+            }
+            else {
+                this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+            }
+            
         },
         disableButton (status) {
             if (status !== 'No iniciado' && status !== 'En proceso') {

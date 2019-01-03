@@ -102,7 +102,7 @@
             <a-row class="modal-content">
                 <a-col :span="24"  style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item color="gray" class="timeline-item">
+                        <!-- <a-timeline-item color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
@@ -111,7 +111,7 @@
                             <p style="padding-left: 20px; padding-top: 5px">
                                 Se han definido las características del producto.
                             </p>
-                        </a-timeline-item>
+                        </a-timeline-item> -->
                         
                     </a-timeline>
                 </a-col>
