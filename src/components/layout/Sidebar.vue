@@ -65,12 +65,6 @@
                                 {{roleEs}} <a-icon type="down" />
                             </a>
                             <a-menu slot="overlay">
-                                <a-menu-item>
-                                    <a @click="updateProfile">
-                                        <a-icon type="form" />
-                                        Editar perfil
-                                    </a>
-                                </a-menu-item>
                                 <a-menu-item
                                     :key="arole"
                                     v-for="arole in user.roles"
@@ -79,6 +73,13 @@
                                     <a @click="setCurrentRole(arole)">
                                         <a-icon type="user" />
                                         {{roleToEs(arole)}}
+                                    </a>
+                                </a-menu-item>
+                                <a-menu-divider/>
+                                <a-menu-item>                            
+                                    <a @click="updateProfile">
+                                        <a-icon type="form" />
+                                        Editar perfil
                                     </a>
                                 </a-menu-item>
                                 <a-menu-divider/>
@@ -106,12 +107,7 @@
                             <a-icon type="safety-certificate" />
                             <span>Tipo de rol</span>
                         </span>
-                        <a-menu-item>                            
-                            <a @click="updateProfile">
-                                <a-icon type="form" />
-                                Editar perfil
-                            </a>
-                        </a-menu-item>
+                        
                         <a-menu-item
                             :key="arole"
                             v-for="arole in user.roles"
@@ -120,6 +116,13 @@
                             <a @click="setCurrentRole(arole)">
                                 <a-icon type="user" />
                                 {{roleToEs(arole)}}
+                            </a>
+                        </a-menu-item>
+                        <a-menu-divider style="background-color: #666;"/>
+                        <a-menu-item>                            
+                            <a @click="updateProfile">
+                                <a-icon type="form" />
+                                Editar perfil
                             </a>
                         </a-menu-item>
                         <a-menu-divider style="background-color: #666;"/>

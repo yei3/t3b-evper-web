@@ -32,6 +32,16 @@ class User extends Http {
         return this.request(path, this.methods.get, {});
     }
 
+    /**
+     * Request for update Scholarship and E-mail for the logged Account
+     *
+     * @return {Promise}        Http Response
+     */
+    updateScholarshipAndEmail(data) {
+        const path = `${this.entityPath}/UpdateScholarshipAndEmailAddress`;
+        return this.request(path, this.methods.put, data);
+    }
+    
     recoverPassword(data) {
         const path = `${this.entityPath}/RecoverPassword`;
         return this.request(path, this.methods.post, data);

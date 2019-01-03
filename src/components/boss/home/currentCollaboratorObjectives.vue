@@ -34,7 +34,7 @@
             >
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
-                        <a-avatar shape="square" icon="user" />
+                        <a-avatar shape="square" :src="collaboratorImgUrl(collaborator.number)" />
                         <a class="table-link" style="margin-left: 5px;"
                             @click="currentCollaborator = (collaborator.id !== currentCollaborator)?
                                 collaborator.id:0">
@@ -71,7 +71,7 @@
                         <span slot="action" slot-scope="text, record">
                             <a-dropdown>
                                 <a-menu slot="overlay">
-                                    <a-menu-item key="1" @click="toggleViewProgressModal">
+                                    <a-menu-item key="1" @click="toggleViewProgressModal(record)">
                                         Ver avances
                                     </a-menu-item>
                                 </a-menu>
@@ -102,7 +102,7 @@
             <a-row class="modal-content">
                 <a-col :span="24"  style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item color="gray" class="timeline-item">
+                        <!-- <a-timeline-item color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
@@ -111,89 +111,8 @@
                             <p style="padding-left: 20px; padding-top: 5px">
                                 Se han definido las características del producto.
                             </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se han revisado propuestas de 3 proveedores,
-                                se están revisando actualmente.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha seleccionado el proveedor, ya contamos con a
-                                muestra del producto.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha revisado el producto, se procede a la compra.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1ab394"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha completado el objetivo, ya
-                                contamos con el producto en operación.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #ed5565"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha reabierto el objetivo, falta documentación.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1ab394"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha completado el objetivo,
-                                se envia documentación.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1c84c6"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha validado el objetivo, todo funciona correctamente.
-                            </p>
-                        </a-timeline-item>
+                        </a-timeline-item> -->
+                        
                     </a-timeline>
                 </a-col>
             </a-row>
@@ -249,6 +168,7 @@ export default {
             viewProgressModal: {
                 show: false,
                 enableButton: true,
+
             },
             data: []
         };
@@ -281,6 +201,7 @@ export default {
                     this.data.push({
                         key: index+1,
                         name: items[index].collaboratorFullName,
+                        number: items[index].collaboratorEmployeeNumber,
                         objectives: objectives,
                         totalPendingObjectives: items[index].totalPendingObjectives
                     });
@@ -337,6 +258,9 @@ export default {
                 }
             });
             return (completed * 100) / objectives.length;
+        },
+        collaboratorImgUrl(employeeNumber) {
+            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${employeeNumber}.png`;
         },
     },
 };

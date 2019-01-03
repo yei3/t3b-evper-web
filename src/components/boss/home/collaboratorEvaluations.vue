@@ -42,13 +42,16 @@
                     </a></p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
-                <span slot="review" slot-scope="review">
-                    <!-- <a
+                <span slot="collaborator" slot-scope="collaborator">
+                    {{collaborator}}
+                </span>
+                <span slot="reviewDate" slot-scope="reviewDate, record">
+                    <a
                         class="table-link-light"
-                        @click="toggleScheduleReviewModal"
-                    > -->
-                        {{review}}
-                    <!-- </a> -->
+                        @click="toggleScheduleReviewModal(record)"
+                    >
+                        {{reviewDate}}
+                    </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
                     <a-button 
@@ -57,7 +60,7 @@
                         @click="toggleFinishEvaluationModal()"
                         :disabled="disableButton(record.status)"
                     >
-                        Cerrar
+                        Validar
                     </a-button>
                 </span>
             </a-table>
@@ -138,7 +141,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Agendar revisión</h1>
-                        <small>(Nombre de la evaluacion) - (Nombre del colaborador)</small>
+                        <small>{{scheduleReviewModal.evaluationName}} - {{scheduleReviewModal.collaboratorName}} </small>
                     </a-col>
                 </a-row>
             </template>
@@ -146,7 +149,7 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                         Seleecione la fecha de la revisón:
+                         Seleecione la fecha y hora de la revisón:
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
@@ -170,7 +173,9 @@
                     class="modal-button-ok"
                     key="submit"
                     type="primary"
+                    :loading="loading"
                     @click="toggleScheduleReviewModal"
+                    @change="onSelectDate(scheduleReviewModal.evaluationId)"
                 >
                     Agendar revisión
                 </a-button>
@@ -190,12 +195,20 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         scopedSlots: { customRender: 'status' },
-    }, {
+    },
+    {
         title: 'Evaluación',
         dataIndex: 'evaluation',
         key: 'evaluation',
         scopedSlots: { customRender: 'evaluation' },
-    }, {
+    },
+    {
+        title: 'Colaborador',
+        dataIndex: 'collaborator',
+        key: 'collaborator',
+        scopedSlots: { customRender: 'collaborator' },
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -204,7 +217,7 @@ const columns = [
         title: 'Fecha de revisión',
         key: 'reviewDate',
         dataIndex: 'reviewDate',
-        scopedSlots: { customRender: 'review' },
+        scopedSlots: { customRender: 'reviewDate' },
     },
     {
         title: '',
@@ -217,23 +230,16 @@ export default {
     data() {
         return {
             spin: false,
+            loading: false,
             collapsed: false,
             columns,
-            data: [
-                // {
-                //     key: '1',
-                //     status: 'En revisión',
-                //     evaluation: {
-                //         title: 'Período 2017-1',
-                //         subtitle: 'Evaluación de Desempeño',
-                //     },
-                //     reviewDate: '13/07/2018',
-                //     endDate: '13/07/2017',
-                // },
-            ],
+            data: [],
             scheduleReviewModal: {
                 show: false,
                 enableButton: false,
+                evaluationId: 0,
+                evaluationName: '',
+                collaboratorName: '',                
             },
             finishEvaluationModal: {
                 show: false,
@@ -245,6 +251,21 @@ export default {
         this.getCollaboratorEvaluations();
     },
     methods: {
+        async onSelectDate(id,date, dateString) {
+            let response = null;
+            this.loading = true;
+            console.log(id, date, dateString);
+            // await client3B.evaluation.revision.updateRevisionDate
+            // (
+            //     {
+            //         evaluationId: id,
+            //         revisionTime: dateString,
+            //     }
+            // ).catch(error => errorHandler(this, error));
+            // this.loading = false;
+            // this.$message.success('La fecha de revisión se ha guardado correctamente');
+            
+        },
         async getCollaboratorEvaluations() {
             this.spin = true;
             let response = null;
@@ -261,8 +282,11 @@ export default {
                             title: items[index].name,
                             subtitle: items[index].description
                         },
-                        collaborator: items[index].collaboratorName,
-                        reviewDate: new Date(items[index].revisionDateTime).toLocaleDateString(),
+                        collaborator: items[index].collaboratorFullName,
+                        reviewDate: new Date(items[index].revisionDateTime).toLocaleString(
+                            [], 
+                            {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit'}
+                        ),
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }                
@@ -272,7 +296,10 @@ export default {
                 this.spin = false;
             }
         },
-        toggleScheduleReviewModal() {
+        toggleScheduleReviewModal(record) {
+            this.scheduleReviewModal.evaluationId = record.id;
+            this.scheduleReviewModal.evaluationName = record.evaluation.title;
+            this.scheduleReviewModal.collaboratorName = record.collaborator;
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
         toggleFinishEvaluationModal() {

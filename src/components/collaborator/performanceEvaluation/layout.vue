@@ -1,5 +1,5 @@
 <template>
-    <layout />
+    <layout :onlyLecture="true" />
 </template>
 
 <script>
