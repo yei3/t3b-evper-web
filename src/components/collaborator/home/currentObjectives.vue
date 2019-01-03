@@ -123,7 +123,7 @@
                 <a-row>
                     <a-col :span="24" class="modal-header" style="margin-top: 25px;">
                         <h1>Ver avances</h1>
-                        <small>(Nombre del Objetivo)</small>
+                        <small>{{viewProgressModal.objectiveName}}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -141,57 +141,7 @@
                                 Se han definido las características del producto.
                             </p>
                         </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se han revisado propuestas de 3 proveedores,
-                                se están revisando actualmente.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha seleccionado el proveedor, ya contamos
-                                con a muestra del producto.
-                            </p>
-                        </a-timeline-item >
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit"
-                                style="font-size: 20px; backgroud: #f8fafb"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small"
-                                    src="/user.jpg"
-                                /> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha revisado el producto, se procede a la compra.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1ab394"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small"
-                                    src="/user.jpg"
-                                /> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha completado el objetivo, ya contamos con
-                                el producto en operación.
-                            </p>
-                        </a-timeline-item>
+                        
                     </a-timeline>
                 </a-col>
             </a-row>
@@ -300,6 +250,7 @@ export default {
             viewProgressModal: {
                 show: false,
                 enableButton: true,
+                objectiveName: '',
             },
             finishObjectiveModal: {
                 show: false,
