@@ -188,11 +188,11 @@ export default {
             let response = null;
             try {
                 response = await client3B.dashboard.getSupervisor();
-                const items = response.data.result.collaboratorRevisionSummary;
+                const items = response.data.result.collaboratorsEvaluationSummary;
                 this.data = [];
                 for (let i = 0; i < items.length; i += 1) {
                     this.data.push({
-                        id: items[i].evaluationId,
+                        id: items[i].id,
                         key: i+1,
                         status: this.selectStatusName(items[i].status),
                         evaluation: {
@@ -215,12 +215,11 @@ export default {
         },
         fillEvaluation(id, autoEvaluation) {
             if (autoEvaluation === true) {
-                this.$router.push({ name: 'collaborator-assessment', params: { id } });
+                this.$router.push({ name: 'boss-assessment', params: { id } });
             }
             else {
-                this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+                this.$router.push({ name: 'boss-assessments-apply', params: { id } });
             }
-            
         },
         disableButton (status) {
             if (status !== 'No iniciado' && status !== 'En proceso') {

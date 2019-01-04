@@ -27,7 +27,7 @@ export default [
         beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
     },
     {
-        path: 'boss/assessments/apply',
+        path: 'boss/assessments/:id/apply',
         name: 'boss-assessments-apply',
         component: applyPerformanceEvaluations,
         beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),

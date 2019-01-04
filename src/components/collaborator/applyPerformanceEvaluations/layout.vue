@@ -11,7 +11,7 @@
                             class="breadcrumb-path"
                             :to="{ name: 'collaborator-home' }"
                         >
-                            Home Colaborador
+                            Home
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
