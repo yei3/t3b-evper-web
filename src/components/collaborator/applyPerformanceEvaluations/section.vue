@@ -55,8 +55,9 @@
                                 :questionText="qstTemplate.text"
                                 :questionId="getQuestionId(qstTemplate.id)"
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
-                                :expected="qstTemplate.expected"
+                                :expected="qstTemplate.expectedText || qstTemplate.expected"
                                 :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
+                                :templateQuestion="qstTemplate"
                             />
                             <question-boolean
                                 v-if="qstTemplate.questionType == 4"
@@ -106,18 +107,15 @@ export default {
     },
     methods: {
         getQuestionStatus(questionId) {
-            const answer = this.questions.find(qst =>
-                qst.evaluationQuestionId === questionId);
+            const answer = this.questions.find(qst => qst.evaluationQuestionId === questionId);
             return answer.status;
         },
         getQuestionId(questionId) {
-            const answer = this.questions.find(qst =>
-                qst.evaluationQuestionId === questionId);
+            const answer = this.questions.find(qst => qst.evaluationQuestionId === questionId);
             return answer.id;
         },
         getAnswer(questionId, questionType) {
-            const answer = this.questions.find(qst =>
-                qst.evaluationQuestionId === questionId);
+            const answer = this.questions.find(qst => qst.evaluationQuestionId === questionId);
             if (questionType === 3) {
                 return answer.measuredAnswer;
             }
