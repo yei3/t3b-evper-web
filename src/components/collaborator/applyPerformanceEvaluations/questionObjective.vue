@@ -170,9 +170,18 @@ export default {
             this.edited = false;
             this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success('Evaluación guardada correctamente');
+            await this.updateExpectedValue();
         },
         async updateExpectedValue() {
+            const templateQuestion = JSON.parse(JSON.stringify(this.templateQuestion));
+            if (this.numeric) {
+                templateQuestion.expected = this.expectedValue;
+            } else {
+                templateQuestion.expectedText = this.expectedValue;
+            }
 
+            await client3B.question.update(templateQuestion, { objective: true })
+                .catch(error => errorHandler(this, error));
         },
     },
     computed: {
