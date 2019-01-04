@@ -105,6 +105,10 @@ export default {
             type: Object,
             required: true,
         },
+        templateQuestion: {
+            type: Object,
+            required: true,
+        },
     },
     data() {
         return {
@@ -128,28 +132,21 @@ export default {
         },
         parseAnswer() {
             this.expectedValue = this.expected;
-            if (Number(this.expected)) {
+            if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
-                this.value = 0;
+                this.value = this.answer.real || 0;
             } else {
-                this.value = '';
+                this.value = this.answer.text || '';
             }
             if (this.questionStatus === 1) {
                 this.edited = true;
-            }
-
-            if (this.answer.text !== null) {
-                this.value = this.answer.text;
-            } else if (this.answer.real !== 0) {
-                this.value = this.answer.real;
             }
         },
         save() {
             if (this.onlyLecture) return;
             this.form.validateFields((error) => {
                 if (error) return;
-                const number = Number(this.value);
-                if (Number(this.expected)  && isNaN(number)) { // eslint-disable-line
+                if (this.numeric && Number.isNaN(Number(this.value))) {
                     errorHandler(this, 'Se espera un valor numérico');
                     return;
                 }
@@ -161,8 +158,8 @@ export default {
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
-                text: Number(this.expected) ? null : this.value,
-                real: Number(this.expected) ? this.value : 0,
+                text: this.numeric ? null : this.value,
+                real: this.numeric ? this.value : 0,
                 isActive: true,
                 evaluationMeasuredQuestion: {
                     status: 2,
@@ -173,6 +170,9 @@ export default {
             this.edited = false;
             this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success('Evaluación guardada correctamente');
+        },
+        async updateExpectedValue() {
+
         },
     },
     computed: {
