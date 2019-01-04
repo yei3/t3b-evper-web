@@ -81,8 +81,8 @@
                         :fieldDecoratorId="'question-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Pregunta'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.text,
                             rules: [
@@ -104,8 +104,8 @@
                         :fieldDecoratorId="'answer-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Tipo de Respuesta'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.answerType,
                             rules: [
@@ -134,8 +134,8 @@
                         :fieldDecoratorId="'expectedValue-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Valor del Objetivo'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.expectedValue,
                             rules: [
@@ -158,8 +158,8 @@
                         label='Relación de aprobación del objetivo'
                         :fieldDecoratorId="`approvalRship-${subsection.id}-${question.id}`"
                         style="margin: 10px 0px;"
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.approvalRelationship,
                             rules: [
