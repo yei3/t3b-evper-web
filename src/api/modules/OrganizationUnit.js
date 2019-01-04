@@ -28,6 +28,7 @@ class OrganizationUnit extends Http {
         const path = `${this.entityPath}/GetAllRegionsOrganizationUnits`;
         return this.request(path, this.methods.get, {});
     }
+
     /**
      * Request for the information for AllRegionsOrganizationUnits
      *

@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -112,7 +112,7 @@
                                 Se han definido las características del producto.
                             </p>
                         </a-timeline-item> -->
-                        
+
                     </a-timeline>
                 </a-col>
             </a-row>
@@ -170,7 +170,7 @@ export default {
                 enableButton: true,
 
             },
-            data: []
+            data: [],
         };
     },
     created() {
@@ -190,24 +190,24 @@ export default {
                     const objectivesAux = items[index].objectivesSummary;
                     for (let jndex = 0; jndex < objectivesAux.length; jndex++) {
                         objectives.push({
-                            key: jndex+1,
+                            key: jndex + 1,
                             status: this.selectStatusName(objectivesAux[jndex].status),
                             objective: {
                                 title: objectivesAux[jndex].name,
                             },
-                            endDate: objectivesAux[jndex].deliveryDate
-                        });                        
+                            endDate: objectivesAux[jndex].deliveryDate,
+                        });
                     }
                     this.data.push({
-                        key: index+1,
+                        key: index + 1,
                         name: items[index].collaboratorFullName,
                         number: items[index].collaboratorEmployeeNumber,
-                        objectives: objectives,
-                        totalPendingObjectives: items[index].totalPendingObjectives
+                        objectives,
+                        totalPendingObjectives: items[index].totalPendingObjectives,
                     });
                 }
             } catch (error) {
-            console.log(error);
+                console.log(error);
             }
             this.spin = false;
         },
@@ -216,28 +216,28 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Completado':
-                    return 'ant-tag-green';
-                case 'Validado':
-                    return 'ant-tag-blue';
-                default:
-                    return 'ant-tag-gray';
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            case 'Completado':
+                return 'ant-tag-green';
+            case 'Validado':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Completado';
-                case 3:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Completado';
+            case 3:
+                return 'Validado';
             }
         },
         objectivesCount(objectives) {

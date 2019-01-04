@@ -18,6 +18,7 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Collaborator`;
         return this.request(path, this.methods.get, {});
     }
+
     /**
      * Request for the information for a Supervisor
      *

@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -54,7 +54,7 @@
                     </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-button 
+                    <a-button
                         size="small"
                         class="btn--close-evaluations"
                         @click="toggleFinishEvaluationModal()"
@@ -239,20 +239,20 @@ export default {
                 enableButton: false,
                 evaluationId: 0,
                 evaluationName: '',
-                collaboratorName: '',                
+                collaboratorName: '',
             },
             finishEvaluationModal: {
                 show: false,
                 enableButton: false,
-            },            
+            },
         };
     },
     created() {
         this.getCollaboratorEvaluations();
     },
     methods: {
-        async onSelectDate(id,date, dateString) {
-            let response = null;
+        async onSelectDate(id, date, dateString) {
+            const response = null;
             this.loading = true;
             console.log(id, date, dateString);
             // await client3B.evaluation.revision.updateRevisionDate
@@ -264,7 +264,6 @@ export default {
             // ).catch(error => errorHandler(this, error));
             // this.loading = false;
             // this.$message.success('La fecha de revisión se ha guardado correctamente');
-            
         },
         async getCollaboratorEvaluations() {
             this.spin = true;
@@ -274,22 +273,24 @@ export default {
                 const items = response.data.result.collaboratorRevisionSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    this.data.push({                        
-                        key: index+1,
+                    this.data.push({
+                        key: index + 1,
                         id: items[index].id,
                         status: this.selectStatusName(items[index].status),
                         evaluation: {
                             title: items[index].name,
-                            subtitle: items[index].description
+                            subtitle: items[index].description,
                         },
                         collaborator: items[index].collaboratorFullName,
                         reviewDate: new Date(items[index].revisionDateTime).toLocaleString(
-                            [], 
-                            {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit'}
+                            [],
+                            {
+                                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                            },
                         ),
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
-                }                
+                }
             } catch (error) {
                 console.log(error);
             } finally {
@@ -305,7 +306,7 @@ export default {
         toggleFinishEvaluationModal() {
             this.finishEvaluationModal.show = !this.finishEvaluationModal.show;
         },
-        disableButton (status) {
+        disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {
                 return true;
             }
@@ -325,14 +326,14 @@ export default {
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Completado';
-                case 3:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Completado';
+            case 3:
+                return 'Validado';
             }
         },
     },

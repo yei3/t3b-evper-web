@@ -161,7 +161,7 @@ export default {
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
-                        key: index+1,
+                        key: index + 1,
                         id: items[index].id,
                         status: this.getStatus(items[index].status),
                         evaluation: {

@@ -76,15 +76,15 @@ export default new Router({
             },
         },
         {
-            path: '/',            
+            path: '/',
             component: Layout,
             children: [
                 {
                     path: '/update',
                     name: 'update-profile',
-                    component: Profile
-                }
-            ]            
+                    component: Profile,
+                },
+            ],
         },
         {
             path: '*',

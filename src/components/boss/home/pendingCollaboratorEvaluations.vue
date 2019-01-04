@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -50,7 +50,7 @@
                     />
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button 
+                    <a-button
                         size="small"
                         class="btn--start-evaluations"
                         @click="fillEvaluation(record.id, record.autoEvaluation)"
@@ -193,18 +193,17 @@ export default {
                 for (let i = 0; i < items.length; i += 1) {
                     this.data.push({
                         id: items[i].id,
-                        key: i+1,
+                        key: i + 1,
                         status: this.selectStatusName(items[i].status),
                         evaluation: {
                             title: items[i].name,
-                            subtitle: items[i].description
+                            subtitle: items[i].description,
                         },
                         autoEvaluation: items[i].isAutoEvaluation,
                         collaborator: items[i].collaboratorFullName,
-                        endDate: new Date(items[i].endDateTime).toLocaleDateString()
+                        endDate: new Date(items[i].endDateTime).toLocaleDateString(),
                     });
                 }
-                
             } catch (error) {
                 console.log(error);
             }
@@ -216,52 +215,49 @@ export default {
         fillEvaluation(id, autoEvaluation) {
             if (autoEvaluation === true) {
                 this.$router.push({ name: 'boss-assessment', params: { id } });
-            }
-            else {
+            } else {
                 this.$router.push({ name: 'boss-assessments-apply', params: { id } });
             }
         },
-        disableButton (status) {
+        disableButton(status) {
             if (status !== 'No iniciado' && status !== 'En proceso') {
                 return true;
             }
             return false;
         },
         transformStatus(status, autoEvaluation) {
-            
             if (autoEvaluation === true) {
-                return 'Ver'
-            } else {
-                if (status === 'En proceso') {
-                    return 'Continuar';
-                }
-                return 'Iniciar';
-            }            
+                return 'Ver';
+            }
+            if (status === 'En proceso') {
+                return 'Continuar';
+            }
+            return 'Iniciar';
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Completado':
-                    return 'ant-tag-green';
-                case 'Validado':
-                    return 'ant-tag-blue';
-                default:
-                    return 'ant-tag-gray';
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            case 'Completado':
+                return 'ant-tag-green';
+            case 'Validado':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Completado';
-                case 3:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Completado';
+            case 3:
+                return 'Validado';
             }
         },
     },
