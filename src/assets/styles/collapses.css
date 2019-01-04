@@ -19,6 +19,10 @@
     border-bottom-color: #e7eaec;
 }
 
+.collapse-title >>> .dropdown-icon {
+    color: #fff;
+}
+
 .collapse-tittle-link {
     font-style: normal;
     color: #7e8082;
@@ -28,7 +32,7 @@
 }
 
 .dropdown-icon {
-    color: #7e8082;
+    color: white;
 }
 
 .collapse-single-header {
