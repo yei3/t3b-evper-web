@@ -113,7 +113,7 @@ export default {
                 name: '',
                 description: '',
                 instructions: '',
-                isAutoEvaluation: '',
+                isAutoEvaluation: false,
             },
         };
     },
@@ -156,7 +156,7 @@ export default {
             }).catch((error) => {
                 errorHandler(this, error);
             });
-
+            
             this.view.loading = false;
             if (!response) return;
 
@@ -180,6 +180,7 @@ export default {
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
+                isAutoEvaluation: this.evaluation.isAutoEvaluation,
             }).catch((error) => {
                 errorHandler(this, error);
             });
@@ -192,6 +193,7 @@ export default {
                 name: this.evaluation.name,
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
+                isAutoEvaluation: this.evaluation.isAutoEvaluation,
             });
             this.$message.success('Evaluación guardada correctamente');
             this.nextStep();

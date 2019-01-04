@@ -38,7 +38,7 @@
                     <p>
                         <router-link
                             class="table-link"
-                            :to="{name: 'collaborator-assessments-apply' }"
+                            :to="{name: 'collaborator-assessments-apply', params: { id } }"
                         >
                             {{evaluation.title}}
                         </router-link>
@@ -136,7 +136,6 @@ export default {
             this.spin = false;
         },
         fillEvaluation(id) {
-            console.log(id)
             this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
         },
         disableButton (status) {

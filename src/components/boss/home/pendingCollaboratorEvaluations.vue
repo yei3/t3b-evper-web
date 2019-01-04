@@ -200,7 +200,7 @@ export default {
                             subtitle: items[i].description
                         },
                         autoEvaluation: items[i].isAutoEvaluation,
-                        collaborator: items[i].collaboratorFullName,
+                        collaborator: items[i].collaboratorName,
                         endDate: new Date(items[i].endDateTime).toLocaleDateString()
                     });
                 }
