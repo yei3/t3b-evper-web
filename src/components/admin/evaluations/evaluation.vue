@@ -32,18 +32,18 @@
         >
             <a-row class="collapse-title" style="margin: 16px 0;">
                 <a-col :span="24">
-                    Programar nueva Evaluación
+                    <h2>Programar nueva Evaluación</h2>
                 </a-col>
 
             </a-row>
             <a-row :gutter="16">
 
-                <a-col :span="8">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-input v-model="form.name" placeholder="Nombre" />
                 </a-col>
 
-                <a-col :span="8" style="padding-bottom: 15px;">
-                    <a-select placeholder="Please select" style="width: 100%"
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-select placeholder="Formato" style="width: 100%"
                         v-model="form.format"
                     >
                         <a-select-option v-for="(item, index) in formats" :key="index"
@@ -54,8 +54,8 @@
                     </a-select>
                 </a-col>
 
-                <a-col :span="8" style="padding-bottom: 15px;">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Regions"
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Regiones"
                         v-model="form.regs"
                     >
                         <a-select-option v-for="(item, index) in regions" :key="index"
@@ -65,8 +65,8 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="8" style="padding-bottom: 15px;">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Areas"
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Áreas"
                         v-model="form.areas"
                     >
                         <a-select-option v-for="(item, index) in areas" :key="index"
@@ -76,13 +76,13 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-date-picker placeholder="Fecha Inicio"
                         style="width: 100%"
                         v-model="form.startDate"
                     />
                 </a-col>
-                <a-col :span="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-date-picker placeholder="Fecha Fin"
                         style="width: 100%"
                         v-model="form.finishDate"
@@ -90,8 +90,8 @@
                 </a-col>
             </a-row>
             <a-row class="text-right" style="padding: 16px 0;">
-                <a-button class="btn-green" @click="applyEvaluation()">
-                    Programar <a-icon type="plus" />
+                <a-button class="btn-green" @click="applyEvaluation()" :loading="loading">
+                    Programar
                 </a-button>
             </a-row>
             <a-row v-show="spin">
@@ -110,6 +110,7 @@ import errorHandler from '@/views/errorHandler';
 export default {
     data() {
         return {
+            loading: false,
             spin: false,
             data: [],
             formats: [],
@@ -117,7 +118,7 @@ export default {
             areas: [],
             form: {
                 name: null,
-                format: null,
+                format: undefined,
                 regs: [],
                 areas: [],
                 startDate: null,
@@ -154,6 +155,7 @@ export default {
             this.spin = false;
         },
         async applyEvaluation() {
+            this.loading = true;
             const response = await client3B.evaluation.apply({
                 name: this.form.name,
                 evaluationTemplateId: this.form.format,
@@ -165,6 +167,7 @@ export default {
                 this.$message.success('Evaluación aplicada correctamente.');
                 this.$router.push({ name: 'admin-evaluations' });
             }
+            this.loading = false;
         },
     },
 };
