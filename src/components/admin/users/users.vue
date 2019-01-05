@@ -59,7 +59,7 @@
                     <a-form @submit="handleSubmit" :autoFormCreate="(form)=>{this.form = form}">
                         <a-form-item
                             v-bind="formItemLayout"
-                            label='E-mail'                            
+                            label='E-mail'
                         >
                             <a-input
                             v-decorator="[
@@ -76,7 +76,7 @@
                         </a-form-item>
                         <a-form-item
                             v-bind="formItemLayout"
-                            label='Escolaridad'                            
+                            label='Escolaridad'
                         >
                             <a-input
                             v-decorator="[
@@ -97,7 +97,7 @@
                     </a-form>
                 </a-row>
             </div>
-        </div>        
+        </div>
     </div>
 </template>
 <script>

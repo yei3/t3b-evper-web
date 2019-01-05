@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -54,7 +54,7 @@
                     </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-button 
+                    <a-button
                         size="small"
                         class="btn--close-evaluations"
                         @click="toggleFinishEvaluationModal(record)"
@@ -246,7 +246,7 @@ export default {
                 enableButton: false,
                 evaluationId: 0,
                 evaluationName: '',
-                collaboratorName: '',                
+                collaboratorName: '',
             },
             finishEvaluationModal: {
                 show: false,
@@ -302,16 +302,18 @@ export default {
                         status: this.selectStatusName(2), //this.selectStatusName(items[index].status),
                         evaluation: {
                             title: items[index].name,
-                            subtitle: items[index].description
+                            subtitle: items[index].description,
                         },
                         collaborator: items[index].collaboratorFullName,
                         reviewDate: new Date(items[index].revisionDateTime).toLocaleString(
-                            [], 
-                            {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit'}
+                            [],
+                            {
+                                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                            },
                         ),
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
-                }                
+                }
             } catch (error) {
                 console.log(error);
             } finally {

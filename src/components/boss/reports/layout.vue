@@ -11,7 +11,7 @@
                 <h2 class="breadcrumb-header">{{username}}</h2>
                 <p class="results-subtitle">Informe de Evaluación de desempeño</p>
                 <p class="results-period">Periodo 2019-1</p>
-            </a-row>            
+            </a-row>
             <a-divider />
             <report />
         </div>
@@ -27,15 +27,15 @@ export default {
         user: authService.getUserData(),
     }),
     components: {
-        report
+        report,
     },
     computed: {
         username() {
             // return `${this.user.name}`;
             return `${this.user.name} ${this.user.surname}`;
         },
-    }    
-  }
+    },
+};
 </script>
 <style>
     .results-header{
@@ -44,7 +44,7 @@ export default {
     .results-subtitle {
         color: #ff1515;
         font-weight: 600;
-        
+
     }
     .results-period {
         color: black;
@@ -52,5 +52,3 @@ export default {
         font-size: 13px;
     }
 </style>
-
-

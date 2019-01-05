@@ -11,7 +11,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -19,7 +19,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -46,7 +46,7 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button 
+                    <a-button
                         size="small"
                         class="btn--start-evaluations"
                         @click="fillEvaluation(record.id)"
@@ -76,7 +76,7 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         scopedSlots: { customRender: 'status' },
-    }, 
+    },
     {
         title: 'Evaluaciones',
         dataIndex: 'evaluation',
@@ -94,16 +94,16 @@ const columns = [
         dataIndex: 'status',
         scopedSlots: { customRender: 'action' },
         align: 'right',
-    }
+    },
 ];
 
 export default {
     data() {
         return {
             spin: false,
-            collapsed: false,            
+            collapsed: false,
             data: [],
-            columns            
+            columns,
         };
     },
     created() {
@@ -120,13 +120,13 @@ export default {
                 for (let index = 0; index < items.length; index++) {
                     this.data.push({
                         id: items[index].id,
-                        key: index+1,
+                        key: index + 1,
                         status: this.selectStatusName(items[index].status),
                         evaluation: {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }
                 // console.log(this.data);
@@ -138,7 +138,7 @@ export default {
         fillEvaluation(id) {
             this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
         },
-        disableButton (status) {
+        disableButton(status) {
             if (status === 'Validado' || status === 'Completado') {
                 return true;
             }
@@ -152,28 +152,28 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Finalizado':
-                    return 'ant-tag-green';
-                case 'Validado':
-                    return 'ant-tag-blue';
-                default:
-                    return 'ant-tag-gray';
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            case 'Finalizado':
+                return 'ant-tag-green';
+            case 'Validado':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Completado';
-                case 3:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Completado';
+            case 3:
+                return 'Validado';
             }
         },
     },

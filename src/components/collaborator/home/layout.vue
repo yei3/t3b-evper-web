@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
     .dropdown-icon {
         color: #fff;
     }

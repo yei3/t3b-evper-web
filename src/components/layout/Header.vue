@@ -11,9 +11,9 @@
             <a-col :span="12">
                 <a-row>
                    <a-col  style="text-align: right;">
-                       <a-button @click="showModalPanel">
+                       <a-button @click="showModalPanel" style="border: none;">
                             <a-badge :count="1">
-                                <a-icon type="bell" theme="filled" style="font-size: 25px;" />
+                                <a-icon type="bell" theme="filled" style="font-size: 20px;" />
                             </a-badge>
                         </a-button>
                        <a-button
@@ -78,8 +78,6 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import { mapActions, mapGetters } from 'vuex';
 import authService from '@/services/auth';
-// Importing Component
-import NotificationBell from 'vue-notification-bell';
 
 export default {
     data() {
@@ -87,10 +85,10 @@ export default {
             countNotif: 10,
             showModal: false,
             enableButton: false,
-            data: []
-            }
+            data: [],
+        };
     },
-    created(){
+    created() {
         this.getNotifications();
     },
     methods: {
@@ -102,10 +100,9 @@ export default {
             authService.removeUserData();
             this.$router.push({ name: 'login' });
         },
-        showModalPanel(){
+        showModalPanel() {
             console.log('show modal');
             this.showModal = true;
-            enableButton: true;
         },
         async getNotifications() {
             console.log('getNotifications');
@@ -116,15 +113,15 @@ export default {
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
-                        key: index++,
+                        key: index + 1,
                         id: items[index].id,
                         status: 'OK',
                         evaluation: {
                             title: items[index].name,
-                            subtitle: items[index].description
+                            subtitle: items[index].description,
                         },
                         collaborator: items[index].collaboratorName,
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString()
+                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -132,16 +129,13 @@ export default {
             } finally {
                 this.spin = false;
             }
-        }
+        },
     },
     computed: {
         ...mapGetters({
             sidebarCollapsed: 'sidebarCollapsed',
         }),
     },
-    components: {
-    NotificationBell // Registering Component
-  }
 };
 </script>
 

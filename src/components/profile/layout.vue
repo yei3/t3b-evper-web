@@ -44,7 +44,7 @@
                 <a-col :sm="{ span:24 }" :md="{ span:18 }" :lg="{ span:12 }">
                     <a-form >
                         <a-form-item
-                            label='E-mail'                            
+                            label='E-mail'
                         >
                             <a-input
                                 v-model="user.email"
@@ -59,7 +59,7 @@
                             />
                         </a-form-item>
                         <a-form-item
-                            label='Escolaridad'                            
+                            label='Escolaridad'
                         >
                             <a-input
                                 v-model="user.scholarship"
@@ -74,7 +74,7 @@
                             />
                         </a-form-item>
                         <a-form-item style="text-align: right">
-                            <a-button 
+                            <a-button
                                 class="btn--start-evaluations"
                                 htmlType='submit'
                                 :loading="loading"
@@ -97,8 +97,8 @@ export default {
     components: {
         Footer,
     },
-    beforeCreate () {
-        this.form = this.$form.createForm(this)
+    beforeCreate() {
+        this.form = this.$form.createForm(this);
     },
     data() {
         return {
@@ -115,11 +115,10 @@ export default {
     },
     methods: {
         handleChange(info) {
-
-            console.log(info.file)
+            console.log(info.file);
 
             // if (status === 'done') {
-                this.$message.success(`${info.file.name} file uploaded successfully.`);
+            this.$message.success(`${info.file.name} file uploaded successfully.`);
             // } else if (status === 'error') {
             //     this.$message.error(`${info.file.name} file upload failed.`);
             // }
@@ -136,7 +135,6 @@ export default {
             } catch (error) {
                 this.handleError(error.response.data.error);
                 this.loading = false;
-                return;
             }
         },
         handleError(error) {
@@ -165,7 +163,7 @@ export default {
 <style>
     .collapse-content {
         margin: 32px;
-        background: white;        
+        background: white;
     }
     .btn--start-evaluations {
         border: none;

@@ -8,6 +8,10 @@
     color: #676a6c;
 }
 
+.ant-btn:active, .ant-btn:focus {
+    color: #676a6c;
+}
+
 .ant-input:focus, .ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
     border-color: #1ab394;
     -webkit-box-shadow: none;
