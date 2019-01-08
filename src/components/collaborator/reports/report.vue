@@ -72,7 +72,7 @@ export default {
         compentecesOptions: null,
     }),
     async mounted() {
-        this.getCollaboratorObjectives();
+        await this.getCollaboratorObjectives();
     },
     methods: {
         async getCollaboratorCompetences(

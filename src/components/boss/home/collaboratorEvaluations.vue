@@ -333,7 +333,6 @@ export default {
             }
         },
         async toggleScheduleReviewModal(input) {
-
             if (!this.scheduleReviewModal.show) {
                 this.scheduleReviewModal.evaluationId = input.id;
                 this.scheduleReviewModal.evaluationName = input.evaluation.title;
@@ -345,7 +344,6 @@ export default {
                 this.getCollaboratorEvaluations();
             }            
         },
-        
         disableButton (status) {
             if (status === 'No iniciado' || status === 'En proceso') {
                 return true;
