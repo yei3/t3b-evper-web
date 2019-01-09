@@ -8,20 +8,12 @@
                     @click="toggleSidebar"
                 />
             </a-col>
-            <a-col :span="9" style="text-align: right;">
-                <a-button @click="showDrawer">
-                    <a-badge :count="countNotif">
-                        <a-icon type="bell" theme="filled" style="font-size: 25px;" />
-                    </a-badge>
-                </a-button>
-            </a-col>
-            
-            <a-col :span="3">
+            <a-col :span="12">
                 <a-row>
                    <a-col  style="text-align: right;">
-                       <a-button @click="showModalPanel" style="border: none;">
-                            <a-badge :count="1">
-                                <a-icon type="bell" theme="filled" style="font-size: 20px;" />
+                       <a-button @click="showDrawer">
+                            <a-badge :count="countNotif">
+                                <a-icon type="bell" theme="filled" style="font-size: 25px;" />
                             </a-badge>
                         </a-button>
                        <a-button
@@ -66,7 +58,6 @@ export default {
     data() {
         return {
             countNotif: 0,
-            showModal: false,
             enableButton: false,
             visible: false,
             data: []
@@ -83,10 +74,6 @@ export default {
             authService.removeAuthData();
             authService.removeUserData();
             this.$router.push({ name: 'login' });
-        },
-        showModalPanel() {
-            console.log('show modal');
-            this.showModal = true;
         },
         showDrawer() {
             this.visible = true
