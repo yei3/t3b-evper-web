@@ -1,10 +1,10 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title background--title">
-            <a-col :span=18 class="text-padding">
-                Seguimiento
+            <a-col :xs="12" :sm="14" :md="16" :lg="18" class="text-padding">
+                <span>Seguimiento</span>
             </a-col>
-            <a-col :span=5>
+            <a-col :xs="11" :sm="9" :md="7" :lg="5">
                 <a-progress :percent="0" size="small" />
             </a-col>
             <a-col :span=1 style="text-align: right;">
@@ -13,7 +13,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -21,7 +21,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -32,7 +32,7 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
+            <a-table :columns="columns" :dataSource="data" :pagination="false">
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
@@ -64,8 +64,8 @@
                         </a-button>
                     </a-dropdown>
                 </span> -->
-            </a-table>            
-        </a-row>        
+            </a-table>
+        </a-row>
         <a-modal
             v-model="recordProgressModal.show"
             onOk="toggleRecordProgressModal"
@@ -123,7 +123,7 @@
                 <a-row>
                     <a-col :span="24" class="modal-header" style="margin-top: 25px;">
                         <h1>Ver avances</h1>
-                        <small>(Nombre del Objetivo)</small>
+                        <small>{{viewProgressModal.objectiveName}}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -141,57 +141,7 @@
                                 Se han definido las características del producto.
                             </p>
                         </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se han revisado propuestas de 3 proveedores,
-                                se están revisando actualmente.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha seleccionado el proveedor, ya contamos
-                                con a muestra del producto.
-                            </p>
-                        </a-timeline-item >
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit"
-                                style="font-size: 20px; backgroud: #f8fafb"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small"
-                                    src="/user.jpg"
-                                /> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha revisado el producto, se procede a la compra.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1ab394"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small"
-                                    src="/user.jpg"
-                                /> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha completado el objetivo, ya contamos con
-                                el producto en operación.
-                            </p>
-                        </a-timeline-item>
+
                     </a-timeline>
                 </a-col>
             </a-row>
@@ -300,6 +250,7 @@ export default {
             viewProgressModal: {
                 show: false,
                 enableButton: true,
+                objectiveName: '',
             },
             finishObjectiveModal: {
                 show: false,
@@ -322,13 +273,13 @@ export default {
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
-                        key: index+1,
+                        key: index + 1,
                         status: this.selectStatusName(items[index].status),
                         objective: {
                             title: items[index].name,
-                            subtitle: 'sin descripción'
+                            subtitle: 'sin descripción',
                         },
-                        endDate: new Date(items[index].deliveryDate).toLocaleDateString()
+                        endDate: new Date(items[index].deliveryDate).toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -347,28 +298,28 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Completado':
-                    return 'ant-tag-green';
-                case 'Validado':
-                    return 'ant-tag-blue';
-                default:
-                    return 'ant-tag-gray';
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            case 'Completado':
+                return 'ant-tag-green';
+            case 'Validado':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 1:
-                    return 'No iniciado';
-                case 2:
-                    return 'En proceso';
-                case 3:
-                    return 'Completado';
-                case 4:
-                    return 'Validado';
+            case 1:
+                return 'No iniciado';
+            case 2:
+                return 'En proceso';
+            case 3:
+                return 'Completado';
+            case 4:
+                return 'Validado';
             }
         },
     },
@@ -376,7 +327,10 @@ export default {
 </script>
 
 <style scoped>
-    .text-padding {
-        padding: 0 0 0 18em;
+    @media only screen and (max-width: 660px) {
+        .text-padding {
+            text-align: center;
+            padding: 0px;
+        }
     }
 </style>

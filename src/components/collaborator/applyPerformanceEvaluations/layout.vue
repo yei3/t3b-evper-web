@@ -11,7 +11,7 @@
                             class="breadcrumb-path"
                             :to="{ name: 'collaborator-home' }"
                         >
-                            Home Colaborador
+                            Home
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
@@ -179,16 +179,14 @@ export default {
         },
         setQuestionsStatus() {
             const questions = this.getQuestions();
-            const statuses = questions.map((qst) => {
-                return {
-                    id: qst.id,
-                    answered: qst.status !== 1,
-                };
-            });
+            const statuses = questions.map(qst => ({
+                id: qst.id,
+                answered: qst.status !== 1,
+            }));
             this.evaluationSetQuestions(statuses);
         },
         isEvaluationCompleted() {
-            for (let i = 0; i < this.questionsStatuses.length; i +=1) {
+            for (let i = 0; i < this.questionsStatuses.length; i += 1) {
                 if (this.questionsStatuses[i].answered === false) {
                     return false;
                 }
@@ -205,7 +203,7 @@ export default {
                 .catch(error => errorHandler(this, error));
             this.loading = false;
             this.$message.success('La evaluación ha sido finalizada correctamente');
-            this.$router.push({ name : 'home' });
+            this.$router.push({ name: 'home' });
         },
     },
     computed: {
@@ -249,7 +247,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .dropdown-icon {
     color: #aaa;
 }

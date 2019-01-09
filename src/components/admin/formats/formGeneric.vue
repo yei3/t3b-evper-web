@@ -81,8 +81,8 @@
                         :fieldDecoratorId="'question-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Pregunta'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.text,
                             rules: [
@@ -104,8 +104,8 @@
                         :fieldDecoratorId="'answer-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Tipo de Respuesta'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.answerType,
                             rules: [
@@ -134,8 +134,8 @@
                         :fieldDecoratorId="'expectedValue-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Valor del Objetivo'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.expectedValue,
                             rules: [
@@ -158,8 +158,8 @@
                         label='Relación de aprobación del objetivo'
                         :fieldDecoratorId="`approvalRship-${subsection.id}-${question.id}`"
                         style="margin: 10px 0px;"
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.approvalRelationship,
                             rules: [
@@ -183,9 +183,15 @@
                         </a-select>
                     </a-form-item>
                     <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
+                        <a-switch :checked="question.qualifiable"
+                            @change='question.qualifiable = !question.qualifiable;
+                                     setQuestionAsModify(question);'
+                            size="small"
+                            :disabled="question.loading"
+                        /> Calificable
                         <a @click="removeQuestion(subsection.key, question)"
                             class="link-delete-question form-icon"
-                            style="padding-right: 2%;"
+                            style="padding-right: 2%; padding-left: 4%;"
                             :disabled="question.loading"
                         >
                             <a-icon
@@ -409,6 +415,7 @@ export default {
                             answerType: qst.questionType,
                             lastAnswerType: qst.questionType,
                             edited: false,
+                            qualifiable: qst.isQualifiable,
                         })),
                         ...subs.measuredQuestions.map(qst => ({
                             id: qst.id,
@@ -419,7 +426,8 @@ export default {
                             lastAnswerType: qst.questionType,
                             edited: false,
                             approvalRelationship: qst.relation,
-                            expectedValue: qst.expected,
+                            expectedValue: qst.expectedText || qst.expected,
+                            qualifiable: qst.isQualifiable,
                         })),
                     ],
                 }));
@@ -460,6 +468,7 @@ export default {
                     answerType: null,
                     lastAnswerType: null,
                     edited: true,
+                    qualifiable: true,
                 }],
             });
             this.addSubsectionModal.visible = false;
@@ -497,6 +506,7 @@ export default {
                 answerType: null,
                 lastAnswerType: null,
                 edited: true,
+                qualifiable: true,
             });
         },
         async removeQuestion(sectionId, _question) {
@@ -524,8 +534,7 @@ export default {
                 subsection.loading = false;
                 return;
             }
-            this.subsections = this.subsections.filter(sbt =>
-                sbt.id !== subsection.id);
+            this.subsections = this.subsections.filter(sbt => sbt.id !== subsection.id);
             subsection.loading = false;
         },
         async handleSectionTitleInput() {
@@ -569,20 +578,37 @@ export default {
 
             question.loading = true;
             let response = null;
+            const data = {
+                text: question.text,
+                questionType: question.answerType,
+                sectionId,
+                relation: question.approvalRelationship,
+                isQualifiable: question.qualifiable,
+            };
+
+            // Verificar si es texto
+            if (question.answerType === 3) { // Es tipo objetivo
+                console.log(question.expectedValue);
+                if (Number.isNaN(Number(question.expectedValue)) && data.relation === 3) {
+                    data.expectedText = question.expectedValue;
+                } else if (Number.isNaN(Number(question.expectedValue))) {
+                    const msg = 'Los Objetivos tipo texto solo son permitidos con la relación de igualdad';
+                    errorHandler(this, msg);
+                    question.loading = false;
+                    return;
+                } else {
+                    data.expected = question.expectedValue;
+                }
+            }
 
             if (question.key) {
                 await this.deleteQuestion(sectionId, question);
                 question.key = null;
             }
 
-            response = await client3B.question.create({
-                text: question.text,
-                questionType: question.answerType,
-                sectionId,
-                relation: question.approvalRelationship,
-                expected: question.expectedValue,
-            }, { objective: question.answerType === 3 })
-                .catch(error => errorHandler(this, error));
+            response = await client3B.question.create(data, {
+                objective: question.answerType === 3,
+            }).catch(error => errorHandler(this, error));
 
             if (!response) {
                 question.loading = false;

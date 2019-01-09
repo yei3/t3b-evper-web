@@ -19,6 +19,11 @@
             <a-col :span="3">
                 <a-row>
                    <a-col  style="text-align: right;">
+                       <a-button @click="showModalPanel" style="border: none;">
+                            <a-badge :count="1">
+                                <a-icon type="bell" theme="filled" style="font-size: 20px;" />
+                            </a-badge>
+                        </a-button>
                        <a-button
                             icon="logout"
                             style="border-style: none"
@@ -48,7 +53,7 @@
             
         </a-drawer>
     </a-layout-header>
-    
+
 </template>
 
 <script>
@@ -56,8 +61,6 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import { mapActions, mapGetters } from 'vuex';
 import authService from '@/services/auth';
-// Importing Component
-import NotificationBell from 'vue-notification-bell';
 
 export default {
     data() {
@@ -69,7 +72,7 @@ export default {
             data: []
             }
     },
-    created(){
+    created() {
         this.getNotifications();
     },
     methods: {
@@ -81,10 +84,9 @@ export default {
             authService.removeUserData();
             this.$router.push({ name: 'login' });
         },
-        showModalPanel(){
+        showModalPanel() {
             console.log('show modal');
             this.showModal = true;
-            enableButton: true;
         },
         showDrawer() {
             this.visible = true
@@ -114,22 +116,19 @@ export default {
                         collaborator: items[index].userId,
                         endDate: new Date(items[index].notification.creationTime).toLocaleDateString()
                     });
-                }                
+                }
             } catch (error) {
                 console.log(error);
             } finally {
                 this.spin = false;
             }
-        }
+        },
     },
     computed: {
         ...mapGetters({
             sidebarCollapsed: 'sidebarCollapsed',
         }),
     },
-    components: {
-    NotificationBell // Registering Component
-  }
 };
 </script>
 

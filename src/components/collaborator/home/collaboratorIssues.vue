@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse">
+    <div class="collapse" style="margin-bottom: 35px;" >
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
                 Acciones por finalizar
@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,21 +18,21 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-col :span="8">
+            <a-col :span="8" style="padding-right: 6px;">
                 <a-badge :count="autoEvaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Auto-evaluaciones en procesos</span>
             </a-col>
-            <a-col :span="8">
+            <a-col :span="8" style="padding: 0px 3px 0px 3px;">
                 <a-badge :count="evaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Cierre de mis evaluaciones en procesos</span>
             </a-col>
-            <a-col :span="8">
+            <a-col :span="8" style="padding-left: 6px;">
                 <a-badge :count="objectives" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">Objectivos en procesos</span>
             </a-col>
@@ -52,7 +52,7 @@ export default {
             autoEvaluations: 0,
             evaluations: 0,
             objectives: 0,
-        }
+        };
     },
     created() {
         this.getToDoes();
@@ -67,13 +67,12 @@ export default {
                 this.autoEvaluations = response.data.result.toDoesSummary.autoEvaluations;
                 this.evaluations = response.data.result.toDoesSummary.evaluations;
                 this.objectives = response.data.result.toDoesSummary.objectives;
-
             } catch (error) {
                 console.log(error);
             }
             this.spin = false;
         },
-    }
+    },
 };
 </script>
 

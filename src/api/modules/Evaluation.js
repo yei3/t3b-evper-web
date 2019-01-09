@@ -12,6 +12,32 @@ class Revision extends Http {
     }
 
     /**
+     * Request for the evaluation revision
+     *
+     * @param {String} evaluationId   Id for the user
+     *
+     * @return {Promise}        Http Response
+     */
+    revise(evaluationId) {
+        const path = `${this.entityPath}/ReviseEvaluation`;
+        return this.request(path, this.methods.post, {
+            $qs: { evaluationId },
+        });
+    }
+
+    /**
+     * Request for the update evaluation revision date
+     *
+     * @param {Object} data     Data to update revision date
+     *
+     * @return {Promise}        Http Response
+     */
+    updateRevisionDate(data) {
+        const path = `${this.entityPath}/UpdateRevisionDate`;
+        return this.request(path, this.methods.put, data);
+    }
+
+    /**
      * Request for the evaluation finalization
      *
      * @param {String} evaluationId   Id for the user

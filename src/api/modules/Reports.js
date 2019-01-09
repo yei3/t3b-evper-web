@@ -13,7 +13,7 @@ class Reports extends Http {
      * Request for the information for a User Reports
      *
      * @return {Promise}        Http Response
-    **/
+    * */
     getCollaboratorReport() {
         const path = `${this.entityPath}/GetEvaluationCollaboratorResults`;
         return this.request(path, this.methods.get, {});
@@ -23,14 +23,14 @@ class Reports extends Http {
      * Request for the information for a User Reports
      *
      * @return {Promise}        Http Response
-    **/
+    * */
     GetCollaboratorEvaluationComparision(
         currentTemplateId,
         currentTerm,
         currrentDays,
         beforeTemplateId,
-        beforeTerm, 
-        beforeDays
+        beforeTerm,
+        beforeDays,
     ) {
         const path = `${this.entityPath}/GetCollaboratorEvaluationComparision`;
         const params = {
@@ -39,21 +39,21 @@ class Reports extends Http {
             LeftEvaluationDayOfYear: currrentDays,
             RightEvaluationTemplateId: beforeTemplateId,
             RightEvaluationTerm: beforeTerm,
-            RightEvaluationYear: beforeDays
+            RightEvaluationYear: beforeDays,
         };
         return this.request(path, this.methods.get, params);
     }
-    
+
     /**
      * Request for the information for a User Reports
      *
      * @return {Promise}        Http Response
-    **/
+    * */
     getSupervisorReports() {
         const path = `${this.entityPath}/GetEvaluationResults`;
         return this.request(path, this.methods.get, {});
     }
-    
+
     /**
      * Request for the information for a User Reports Details
      *

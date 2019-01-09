@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -47,7 +47,7 @@ export default {
             spin: false,
             pendingEvaluations: 0,
             objectivesValidationPending: 0,
-        }
+        };
     },
     created() {
         this.getToDoes();
@@ -61,13 +61,12 @@ export default {
 
                 this.pendingEvaluations = response.data.result.supervisorToDoes.collaboratorsPendingEvaluations;
                 this.objectivesValidationPending = response.data.result.supervisorToDoes.collaboratorsObjectivesValidationPending;
-                
             } catch (error) {
                 console.log(error);
             }
             this.spin = false;
         },
-    }
+    },
 };
 </script>
 

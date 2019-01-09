@@ -61,18 +61,18 @@
                 </span>
 
                 <span slot="action" slot-scope="text, record">
-                    <a-dropdown>
+                    <!-- <a-dropdown>
                         <a-menu slot="overlay">
-                            <!-- <a-menu-item>
+                            <a-menu-item>
                                 <router-link disabled
-                                    :to="{ name: 'update-evaluation', params: { id: record.key}}">
+                                    :to="{ name: 'update-evaluation', params: { id: record.id}}">
                                     Editar
                                 </router-link>
-                            </a-menu-item> -->
+                            </a-menu-item>
                             <a-menu-item>
                                 <a-popconfirm
-                                    title="¿Está seguro de eliminar el Formato de Evaluación?"
-                                    @confirm="deleteFormat(record.key)"
+                                    title="¿Está seguro de eliminar la Evaluación?"
+                                    @confirm="deleteEvaluation(record.id)"
                                     okText="SI"
                                     cancelText="No"
                                     class="pop-confirm"
@@ -85,7 +85,7 @@
                         <a-button class="ant-btn-small">
                             ...
                         </a-button>
-                    </a-dropdown>
+                    </a-dropdown> -->
                 </span>
             </a-table>
         </a-row>
@@ -138,12 +138,13 @@ export default {
         $route: 'search',
     },
     methods: {
-        async deleteFormat(id) {
+        async deleteEvaluation(id) {
             this.spin = true;
+            console.log(id);
             try {
-                await client3B.Evaluation.delete({
-                    Id: id,
-                });
+                // await client3B.Evaluation.delete({
+                //     Id: id,
+                // });
             } catch (error) {
                 errorHandler(this, error);
             }
@@ -160,7 +161,8 @@ export default {
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
-                        key: items[index].id,
+                        key: index + 1,
+                        id: items[index].id,
                         status: this.getStatus(items[index].status),
                         evaluation: {
                             title: items[index].name,

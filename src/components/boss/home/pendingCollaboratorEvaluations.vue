@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -30,35 +30,40 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-table :columns="columns" :dataSource="data" :pagination=false>
-                <a-col :span=3 slot="status" slot-scope="status">
+                <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
-                </a-col>
+                </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                        <router-link
+                        <!-- <router-link
                             class="table-link"
                             :to="{name: 'boss-assessments-apply' }"
-                        >
+                        > -->
                             {{evaluation.title}}
-                        </router-link>
+                        <!-- </router-link> -->
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
+                <span slot="autoEvaluation" slot-scope="autoEvaluation" class="text-center">
+                    <a-checkbox
+                        :checked="autoEvaluation"
+                    />
+                </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button 
+                    <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id)"
+                        @click="fillEvaluation(record.id, record.autoEvaluation)"
                         :disabled="disableButton(record.status)"
                     >
-                        {{transformStatus(action)}}
+                        {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                     <a-button
                         class="table-link-light" ghost
                         @click="toggleScheduleReviewModal"
                         v-show="transformStatus(action) === 'Agendar revisión'"
                     >
-                        {{transformStatus(action)}}
+                        {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                 </span>
             </a-table>
@@ -141,6 +146,13 @@ const columns = [
         key: 'collaborator',
     },
     {
+        title: 'Auto Evaluación',
+        dataIndex: 'autoEvaluation',
+        key: 'autoEvaluation',
+        scopedSlots: { customRender: 'autoEvaluation' },
+        align: 'center',
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -176,22 +188,22 @@ export default {
             let response = null;
             try {
                 response = await client3B.dashboard.getSupervisor();
-                const items = response.data.result.collaboratorRevisionSummary;
+                const items = response.data.result.collaboratorsEvaluationSummary;
                 this.data = [];
                 for (let i = 0; i < items.length; i += 1) {
                     this.data.push({
-                        id: items[i].evaluationId,
-                        key: i+1,
+                        id: items[i].id,
+                        key: i + 1,
                         status: this.selectStatusName(items[i].status),
                         evaluation: {
                             title: items[i].name,
-                            subtitle: items[i].description
+                            subtitle: items[i].description,
                         },
-                        collaborator: items[i].collaboratorFullName,
+                        autoEvaluation: items[i].isAutoEvaluation,
+                        collaborator: items[i].collaboratorName,
                         endDate: new Date(items[i].endDateTime).toLocaleDateString()
                     });
                 }
-                
             } catch (error) {
                 console.log(error);
             }
@@ -200,45 +212,52 @@ export default {
         toggleScheduleReviewModal() {
             this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
         },
-        fillEvaluation(id) {
-            this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+        fillEvaluation(id, autoEvaluation) {
+            if (autoEvaluation === true) {
+                this.$router.push({ name: 'boss-assessment', params: { id } });
+            } else {
+                this.$router.push({ name: 'boss-assessments-apply', params: { id } });
+            }
         },
-        disableButton (status) {
+        disableButton(status) {
             if (status !== 'No iniciado' && status !== 'En proceso') {
                 return true;
             }
             return false;
         },
-        transformStatus(status) {
-            if (status === 'En proceso' || status === 'Finalizado') {
+        transformStatus(status, autoEvaluation) {
+            if (autoEvaluation === true) {
+                return 'Ver';
+            }
+            if (status === 'En proceso') {
                 return 'Continuar';
             }
             return 'Iniciar';
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Completado':
-                    return 'ant-tag-green';
-                case 'Validado':
-                    return 'ant-tag-blue';
-                default:
-                    return 'ant-tag-gray';
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            case 'Completado':
+                return 'ant-tag-green';
+            case 'Validado':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Completado';
-                case 3:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Completado';
+            case 3:
+                return 'Validado';
             }
         },
     },

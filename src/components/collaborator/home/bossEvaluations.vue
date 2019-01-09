@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,7 +18,7 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
@@ -43,7 +43,7 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-button 
+                    <a-button
                         size="small"
                         class="btn--close-evaluations"
                         @click="toggleCBEModal()"
@@ -175,26 +175,31 @@ export default {
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
-                        key: index+1,
+                        key: index + 1,
                         status: this.selectStatusName(items[index].status),
                         evaluation: {
                             title: items[index].name,
-                            subtitle: 'sin descripción'
+                            subtitle: 'sin descripción',
                         },
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
-                        reviewDate:  new Date(items[index].revisionDateTime).toLocaleDateString()                        
+                        reviewDate: new Date(items[index].revisionDateTime).toLocaleString(
+                            [],
+                            {
+                                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                            },
+                        ),
                     });
                 }
             } catch (error) {
                 console.log(error);
             } finally {
                 this.spin = false;
-            }                        
+            }
         },
         toggleCBEModal() {
             this.CBEModal.show = !this.CBEModal.show;
         },
-        disableButton (status) {
+        disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {
                 return true;
             }
@@ -202,32 +207,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Finalizado':
-                    return 'ant-tag-green';
-                case 'En revisión':
-                    return 'ant-tag-blue';
-                case 'Validado':
-                    return 'ant-tag-blue';
-                default:
-                    return 'ant-tag-gray';
+            case 'No iniciado':
+                return 'ant-tag-red';
+            case 'En proceso':
+                return 'ant-tag-yellow';
+            case 'Finalizado':
+                return 'ant-tag-green';
+            case 'En revisión':
+                return 'ant-tag-blue';
+            case 'Validado':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Finalizado';
-                case 3:
-                    return 'En revisión';
-                case 4:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Finalizado';
+            case 3:
+                return 'En revisión';
+            case 4:
+                return 'Validado';
             }
         },
     },

@@ -29,7 +29,7 @@
             </div>
         </a-row>
         <a-col :span="8" class="text-left">
-            <a-list                
+            <a-list
                 itemLayout="horizontal"
                 :dataSource="subseccions"
             >
@@ -42,7 +42,7 @@
             <div class="radar--size">
                 <radar-chart v-if="loaded2" :chartdata="compentecesData" :options="compentecesOptions"/>
             </div>
-        </a-col>        
+        </a-col>
     </a-row>
 </div>
 </template>
@@ -56,24 +56,23 @@ export default {
     name: 'Objectives',
     components: { Chart, RadarChart },
     data: () => ({
-        
+
         spin: false,
         loaded: false,
         loaded2: false,
 
         chartdata: null,
         options: null,
-        
+
         chartdata2: null,
         options2: null,
 
         subseccions: [],
         compentecesData: null,
-        compentecesOptions: null
+        compentecesOptions: null,
     }),
-    async mounted () {
-        this.getCollaboratorObjectives()
-        
+    async mounted() {
+        this.getCollaboratorObjectives();
     },
     methods: {
         async getCollaboratorCompetences(
@@ -81,16 +80,15 @@ export default {
             currentTerm,
             currrentDays,
             beforeTemplateId,
-            beforeTerm, 
-            beforeDays
-        ){
-            
+            beforeTerm,
+            beforeDays,
+        ) {
             this.loaded2 = false;
 
-            let labels = [];
+            const labels = [];
             let response = null;
-            let beforeData = [];
-            let currrentData = [];                        
+            const beforeData = [];
+            const currrentData = [];
 
             try {
                 response = await client3B.report.GetCollaboratorEvaluationComparision(
@@ -98,56 +96,56 @@ export default {
                     currentTerm,
                     currrentDays,
                     beforeTemplateId,
-                    beforeTerm, 
-                    beforeDays
+                    beforeTerm,
+                    beforeDays,
                 );
-                
+
                 const beforeEvaluation = response.data.result.rightEvaluation;
                 const currentEvaluation = response.data.result.leftEvaluation;
-                
+
                 for (let i = 0; i < currentEvaluation.sections.length; i++) {
                     labels.push(currentEvaluation.sections[i].name);
-                    this.subseccions.push({title: currentEvaluation.sections[i].name});
+                    this.subseccions.push({ title: currentEvaluation.sections[i].name });
                     beforeData.push(beforeEvaluation.sections[i].finishedQuestions);
-                    currrentData.push(currentEvaluation.sections[i].finishedQuestions);                    
+                    currrentData.push(currentEvaluation.sections[i].finishedQuestions);
                 }
 
                 this.compentecesData = {
-                    labels: labels,
+                    labels,
                     datasets: [
                         {
-                            label: "2019-1",
+                            label: '2019-1',
                             data: currrentData,
                             borderWidth: 2,
                             borderColor: '#00b880',
-                            backgroundColor: '#00b88088'
+                            backgroundColor: '#00b88088',
                         },
                         {
-                            label: "2018-2",
+                            label: '2018-2',
                             data: beforeData,
                             borderWidth: 2,
                             borderColor: '#b6b6b6',
-                            backgroundColor: '#b6b6b688'
-                        }
-                    ]
+                            backgroundColor: '#b6b6b688',
+                        },
+                    ],
                 },
                 this.compentecesOptions = {
                     responsive: true,
-                    maintainAspectRatio: true
-                }
+                    maintainAspectRatio: true,
+                };
                 this.loaded2 = true;
             } catch (error) {
-                
+
             }
         },
-        async getCollaboratorObjectives (){
+        async getCollaboratorObjectives() {
             this.spin = true;
-            this.loaded = false;            
+            this.loaded = false;
             let response = null;
 
             try {
                 response = await client3B.report.getCollaboratorReport();
-                
+
                 const results = response.data.result;
 
                 if (results.length < 2) {
@@ -156,72 +154,71 @@ export default {
                     return;
                 }
 
-                let total = [results[0].total, results[1].total];
-                let finished = [results[0].finished, results[1].finished];
-                let beforeTerm = results[1].term;
-                let currentTerm = results[0].term;
-                let beforeDays = this.getYearDays(results[1].creationTime);
-                let currrentDays = this.getYearDays(results[0].creationTime);
-                let beforeTemplateId = results[1].evaluationTemplateId;
-                let currentTemplateId = results[0].evaluationTemplateId;
+                const total = [results[0].total, results[1].total];
+                const finished = [results[0].finished, results[1].finished];
+                const beforeTerm = results[1].term;
+                const currentTerm = results[0].term;
+                const beforeDays = this.getYearDays(results[1].creationTime);
+                const currrentDays = this.getYearDays(results[0].creationTime);
+                const beforeTemplateId = results[1].evaluationTemplateId;
+                const currentTemplateId = results[0].evaluationTemplateId;
 
-                await this.getCollaboratorCompetences (
+                await this.getCollaboratorCompetences(
                     currentTemplateId,
                     currentTerm,
                     currrentDays,
                     beforeTemplateId,
                     beforeTerm,
-                    beforeDays
+                    beforeDays,
                 );
-                
-                this.chartdata = {                
-                    datasets: [{                
-                        data: [finished[0], total[0]-finished[0]],
+
+                this.chartdata = {
+                    datasets: [{
+                        data: [finished[0], total[0] - finished[0]],
                         backgroundColor: [
                             '#00b880',
-                            '#ff3b3b'
-                        ]
+                            '#ff3b3b',
+                        ],
                     }],
                     labels: ['Cumplidos', 'No cumplidos'],
                 },
                 this.options = {
                     display: true,
                     labels: {
-                        fontColor: 'rgb(255, 99, 132)'
+                        fontColor: 'rgb(255, 99, 132)',
                     },
                     responsive: true,
-                    maintainAspectRatio: true
+                    maintainAspectRatio: true,
                 },
-                this.chartdata2 = {                
-                    datasets: [{                
-                        data: [finished[1], total[1]-finished[1]],
+                this.chartdata2 = {
+                    datasets: [{
+                        data: [finished[1], total[1] - finished[1]],
                         backgroundColor: [
                             '#00b880',
-                            '#ff3b3b'
-                        ]
+                            '#ff3b3b',
+                        ],
                     }],
                     labels: ['Cumplidos', 'No cumplidos'],
                 },
                 this.options2 = {
                     responsive: true,
-                    maintainAspectRatio: true
-                }
-                this.spin = false
-                this.loaded = true
-                
+                    maintainAspectRatio: true,
+                };
+                this.spin = false;
+                this.loaded = true;
             } catch (e) {
-                console.error(e)
+                console.error(e);
             }
         },
         getYearDays(dateString) {
-            let inputDate = new Date(dateString);
-            let startDate = new Date(inputDate.getFullYear(), 0 ,0);
-            let diff = inputDate - startDate;
-            let oneDay = 1000 * 60 * 60 * 24;
+            const inputDate = new Date(dateString);
+            const startDate = new Date(inputDate.getFullYear(), 0, 0);
+            const diff = inputDate - startDate;
+            const oneDay = 1000 * 60 * 60 * 24;
             return Math.floor(diff / oneDay);
-        }
-    }
-}
+        },
+    },
+};
 </script>
 <style>
     .small {
@@ -230,7 +227,5 @@ export default {
     }
     .radar--size {
         color: #b6b6b688;
-    }    
+    }
 </style>
-
-

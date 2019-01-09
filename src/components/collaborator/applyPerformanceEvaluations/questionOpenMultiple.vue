@@ -35,14 +35,6 @@
                 </a-form-item>
             </div>
         </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            Calificable <a-switch
-                v-model="configurable"
-                size="small"
-                :disabled="loading || onlyLecture"
-                @change="save"
-            />
-        </a-col>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;" v-if="!onlyLecture">
             <a  class="link-delete-question form-icon"
                 :disabled="loading"
