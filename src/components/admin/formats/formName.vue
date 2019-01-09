@@ -156,7 +156,7 @@ export default {
             }).catch((error) => {
                 errorHandler(this, error);
             });
-            
+
             this.view.loading = false;
             if (!response) return;
 
