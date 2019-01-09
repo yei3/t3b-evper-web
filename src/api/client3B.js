@@ -9,6 +9,7 @@ import Section from './modules/Section';
 import Question from './modules/Question';
 import Reports from './modules/Reports';
 import OrganizationUnit from './modules/OrganizationUnit';
+import Notifications from './modules/Notifications';
 
 
 /**
@@ -27,6 +28,7 @@ class Client3B {
         this.dashboard = new Dashboard();
         this.report = new Reports();
         this.organizationUnit = new OrganizationUnit();
+        this.notifications = new Notifications();
     }
 }
 
