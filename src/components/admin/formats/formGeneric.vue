@@ -58,17 +58,24 @@
                     <a-modal title="Título de la Subsección" v-model="subsection.showModal">
                         <a-input
                             v-model="subsection.title.lastValue"
+                            addonBefore="Título"
                             @keyup.enter.native="updateSubsection(subsection)"
                         />
                         <template slot="footer">
-                            <a-button class="" @click="subsection.showModal = false;">
-                                Cancelar
-                            </a-button>
-                            <a-button class="btn-green" @click="updateSubsection(subsection)"
-                                :loading="subsection.loading"
-                            >
-                                Aceptar
-                            </a-button>
+                            <a-row>
+                                <a-col :span="12" style="text-align: left;">
+                                    <a-button class="" @click="subsection.showModal = false;">
+                                        Cancelar
+                                    </a-button>
+                                </a-col>
+                                <a-col :span="12" style="text-align: right;">
+                                    <a-button class="btn-green" @click="updateSubsection(subsection)"
+                                        :loading="subsection.loading"
+                                    >
+                                        Aceptar
+                                    </a-button>
+                                </a-col>
+                            </a-row>
                         </template>
                     </a-modal>
                 </a-col></a-row>
@@ -245,19 +252,26 @@
                 >
                     <a-input
                         v-model="sectionModal.value"
+                        addonBefore="Título"
                         @keyup.enter.native="handleSectionTitleInput"
                     />
                     <template slot="footer">
-                        <a-button @click="sectionModal.visible = false;
-                            sectionModal.value = '';">
-                            Cancelar
-                        </a-button>
-                        <a-button class="btn-green"
-                            @click="handleSectionTitleInput"
-                            :loading="sectionModal.loading"
-                        >
-                            Aceptar
-                        </a-button>
+                        <a-row>
+                            <a-col :span="12" style="text-align: left;">
+                                <a-button @click="sectionModal.visible = false;
+                                    sectionModal.value = '';">
+                                    Cancelar
+                                </a-button>
+                            </a-col>
+                            <a-col :span="12" style="text-align: right;">
+                                <a-button class="btn-green"
+                                    @click="handleSectionTitleInput"
+                                    :loading="sectionModal.loading"
+                                >
+                                    Aceptar
+                                </a-button>
+                            </a-col>
+                        </a-row>
                     </template>
                 </a-modal>
                 <a-modal
@@ -265,20 +279,27 @@
                     v-model="addSubsectionModal.visible"
                 >
                     <a-input
+                        addonBefore="Título"
                         v-model="addSubsectionModal.value"
                         @keyup.enter.native="addSubsection(addSubsectionModal.value)"
                     />
                     <template slot="footer">
-                        <a-button @click="addSubsectionModal.visible = false;
-                            addSubsectionModal.value = '';">
-                            Cancelar
-                        </a-button>
-                        <a-button class="btn-green"
-                            @click="addSubsection(addSubsectionModal.value)"
-                            :loading="addSubsectionModal.loading"
-                        >
-                            Aceptar
-                        </a-button>
+                        <a-row>
+                            <a-col :span="12" style="text-align: left;">
+                                <a-button @click="addSubsectionModal.visible = false;
+                                    addSubsectionModal.value = '';">
+                                    Cancelar
+                                </a-button>
+                            </a-col>
+                            <a-col :span="12" style="text-align: right;">
+                                <a-button class="btn-green"
+                                    @click="addSubsection(addSubsectionModal.value)"
+                                    :loading="addSubsectionModal.loading"
+                                >
+                                    Aceptar
+                                </a-button>
+                            </a-col>
+                        </a-row>
                     </template>
                 </a-modal>
             </a-row>
