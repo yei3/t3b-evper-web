@@ -6,10 +6,12 @@
         <a-col :span="24">
             <h4>{{`${index}. ${questionText}`}}</h4>
         </a-col>
-        <a-form layout='inline' @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
+        <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
             <a-form-item
                 fieldDecoratorId="e1"
                 label='Valor esperado'
+                :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
                     initialValue: expected,
                     rules: [
@@ -36,6 +38,8 @@
             <a-form-item
                 fieldDecoratorId="q1"
                 label='Valor real'
+                :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
                     initialValue: value,
                     rules: [
@@ -58,6 +62,28 @@
                         type="save"
                     />
                 </a-input>
+            </a-form-item>
+            <a-form-item
+                fieldDecoratorId="o1"
+                label='Observaciones'
+                :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
+                :fieldDecoratorOptions="{
+                    initialValue: '',
+                    rules: [
+                        {
+                            required: false,
+                            message: 'Observaciones'
+                        }
+                    ]
+                }"
+            >
+                <a-textarea :autosize="{ minRows: 2, maxRows: 6 }"
+                    placeholder="Observaciones..."
+                    @keyup="edited=true"
+                    @keypress.enter.prevent="save"
+                    :disabled="onlyLecture"
+                />
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
@@ -203,6 +229,10 @@ div >>> .ant-form-item-label {
 
 div >>> .ant-form-item-required {
     font-size: 15px;
+}
+
+div >>> .ant-form-item {
+    margin-bottom: 5px;
 }
 
 .input-save {
