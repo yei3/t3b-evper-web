@@ -124,6 +124,12 @@ export default {
                     text: 'Resultados',
                 },
                 {
+                    role: authService.ROLES.COLLABORATOR,
+                    to: 'collaborator-evaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial de evaluaciones',
+                },
+                {
                     role: authService.ROLES.SUPERVISOR,
                     to: 'boss-home',
                     icon: 'home',

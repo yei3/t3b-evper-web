@@ -36,6 +36,7 @@
                             <a-button class="btn-blue"
                                 @click="finishEvaluation"
                                 :loading="loading"
+                                v-show="!onlyLecture"
                             >
                                 Finalizar Evaluación
                             </a-button>
@@ -97,9 +98,15 @@
                                 </a-button>
                                 <a-button @click="$router.push({ name: 'home' })"
                                     class="btn-green"
-                                    v-show="data.currentStep === viewSteps.length - 1"
+                                    v-show="(data.currentStep === viewSteps.length - 1) && !onlyLecture"
                                 >
                                     Finalizar edición
+                                </a-button>
+                                <a-button @click="$router.push({ name: 'collaborator-evaluationsHistory' })"
+                                    class="btn-green"
+                                    v-show="(data.currentStep === viewSteps.length - 1) && onlyLecture"
+                                >
+                                    Finalizar revisión
                                 </a-button>
                             </a-col>
                         </a-row>
