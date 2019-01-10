@@ -28,6 +28,16 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Supervisor`;
         return this.request(path, this.methods.get, {});
     }
+
+    /**
+     * Request for the information for Evaluations History
+     *
+     * @return {Promise}        Http Response
+     */
+    getEvaluationsHistory() {
+        const path = `${this.entityPath}/EvaluationsHistory`;
+        return this.request(path, this.methods.get, {});
+    }
 }
 
 export default Dashboard;

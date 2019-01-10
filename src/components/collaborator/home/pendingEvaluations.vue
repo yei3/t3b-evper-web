@@ -88,7 +88,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getCollaborator();
+                response = await client3B.dashboard.getEvaluationsHistory();
                 const items = response.data.result.evaluationSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index++) {
