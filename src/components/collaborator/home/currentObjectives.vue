@@ -53,7 +53,7 @@
                             <a-menu-item key="1" @click="toggleRecordProgressModal(record)">
                                 Registrar avances
                             </a-menu-item>
-                            <a-menu-item key="2" @click="toggleViewProgressModal(record.id)">
+                            <a-menu-item key="2" @click="toggleViewProgressModal(record)">
                                 Ver avances
                             </a-menu-item>
                             <!-- <a-menu-divider />
@@ -124,33 +124,32 @@
                 <a-row>
                     <a-col :span="24" class="modal-header" style="margin-top: 25px;">
                         <h1>Ver avances</h1>
-                        <small>{{viewProgressModal.objectiveName}}</small>
+                        <small>{{ viewProgressModal.objectiveName }}</small>
                     </a-col>
                 </a-row>
             </template>
 
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
-                    <a-timeline>
-                        <a-timeline-item color="gray" class="timeline-item">
+                    <a-timeline mode="alternate">
+                        <a-timeline-item v-for="(item, index) in binnacle" :key="index" color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
+                                {{username}}
+                                <small>{{ item.created }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
-                                Se han definido las características del producto.
+                                {{ item.message }}
                             </p>
-                        </a-timeline-item>
-                        
+                        </a-timeline-item>                        
                     </a-timeline>
                 </a-col>
-            </a-row>
-
-            <template slot="footer">
+            </a-row>            <template slot="footer">
                 <a-button
                     key="back"
                     @click="toggleViewProgressModal"
+                    :v-bind="false"
                 >
                     Cerrar
                 </a-button>
@@ -244,7 +243,12 @@ export default {
         return {
             spin: false,
             collapsed: false,
+            loaded: false,
+            data: [],
+            columns,
             message: '',
+            username: '',
+            binnacle: [],
             recordProgressModal: {
                 show: false,
                 enableButton: true,
@@ -261,23 +265,40 @@ export default {
                 show: false,
                 enableButton: true,
             },
-            data: [],
-            columns,
+            
         };
     },
-    created() {
-        this.getCurrentObjectives();
+    async created() {
+        await this.getCurrentObjectives();
     },
     methods: {
+        async getBinnacle(objectiveId) {
+            this.loaded = false;
+            let response = null;
+            try {
+                response = await client3B.binnacle.getBinnacle({ evaluationMeasuredQuestionId: objectiveId, });
+                this.binnacle = [];
+                const items = response.data.result.items;
+
+                for (let i = 0; i < items.length; i++) {
+                    this.binnacle.push({
+                        message: items[i].text,
+                        created: new Date(items[i].creationTime).toLocaleDateString(),
+                    });
+                }
+                // this.loaded = true;
+            } catch (error) {
+                console.log(error);
+            }            
+        },
         async addObjetiveMessage(objectiveId, message) {
-            console.log(objectiveId, message);
-            // await client3B.binnacle.createMessage
-            // (
-            //     {
-            //         evaluationMeasuredQuestionId: objectiveId,
-            //         text: message,
-            //     }
-            // ).catch(error => errorHandler(this, error));
+            await client3B.binnacle.createMessage
+            (
+                {
+                    evaluationMeasuredQuestionId: objectiveId,
+                    text: message,
+                }
+            ).catch(error => errorHandler(this, error));
             this.message = '';
             this.$message.success('El mensaje se ha guardado correctamente');
         },
@@ -306,17 +327,26 @@ export default {
             this.spin = false;
         },
         async toggleRecordProgressModal(input) {
-            if (!this.recordProgressModal.show) {
+            
+            if (!this.recordProgressModal.show) {                
                 this.recordProgressModal.objectiveId = input.id;
                 this.recordProgressModal.objectiveName = input.objective.title;
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
-                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message)
+                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
-            }            
+            }
         },
-        toggleViewProgressModal() {
-            this.viewProgressModal.show = !this.viewProgressModal.show;
+        async toggleViewProgressModal(input) {
+            if (!this.viewProgressModal.show) {                
+                this.viewProgressModal.objectiveName = input.objective.title;
+                await this.getBinnacle(input.id);
+                this.viewProgressModal.show = !this.viewProgressModal.show;
+            }
+            else {
+                // this.loaded = true;
+                this.viewProgressModal.show = !this.viewProgressModal.show;
+            }    
         },
         toggleFinishObjectiveModal() {
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;

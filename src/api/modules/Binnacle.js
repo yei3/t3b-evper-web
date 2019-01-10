@@ -12,15 +12,13 @@ class Binnacle extends Http {
     /**
      * Request for the information for a Binnacle
      * 
-     * @param {String} binnacleId   Id for the Binnacle
+     * @param {Object} data   Id for the Binnacle
      *
      * @return {Promise}        Http Response
      */
-    getBinnacle(binnacleId) {
-        const path = `${this.entityPath}/Get`;
-        return this.request(path, this.methods.get, {
-            $qs: { evaluationId },
-        });
+    getBinnacle(data) {
+        const path = `${this.entityPath}/GetAll`;
+        return this.request(path, this.methods.get, data);
     }
 
     /**

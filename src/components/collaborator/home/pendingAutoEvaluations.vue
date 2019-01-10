@@ -129,7 +129,6 @@ export default {
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }
-                // console.log(this.data);
             } catch (error) {
                 console.log(error);
             }
