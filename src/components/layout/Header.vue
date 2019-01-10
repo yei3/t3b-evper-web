@@ -92,7 +92,7 @@ export default {
                     this.data.push({                        
                         key: index,
                         id: items[index].notification.data.senderUserName,
-                        status: items[index].notification.data.friendshipMessage,
+                        status: items[index].notification.data.generalMessage,
                         evaluation: {
                             title: items[index].userId,
                             subtitle: items[index].state
