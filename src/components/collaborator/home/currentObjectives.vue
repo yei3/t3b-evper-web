@@ -37,33 +37,35 @@
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
                 <span slot="objective" slot-scope="objective">
-                    <p><a
+                    <p>
+                    <!-- <a
                         class="table-link"
                         @click="toggleViewProgressModal"
-                    >
+                    > -->
                         {{objective.title}}
-                    </a></p>
+                    <!-- </a> -->
+                    </p>
                     <p><small>{{objective.subtitle}}</small></p>
                 </span>
-                <!-- <span slot="action" slot-scope="text, record">
+                <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
-                            <a-menu-item key="1" @click="toggleRecordProgressModal">
+                            <a-menu-item key="1" @click="toggleRecordProgressModal(record)">
                                 Registrar avances
                             </a-menu-item>
-                            <a-menu-item key="2" @click="toggleViewProgressModal">
+                            <a-menu-item key="2" @click="toggleViewProgressModal(record)">
                                 Ver avances
                             </a-menu-item>
-                            <a-menu-divider />
+                            <!-- <a-menu-divider />
                             <a-menu-item key="3" @click="toggleFinishObjectiveModal">
                                 Completar objectivo
-                            </a-menu-item>
+                            </a-menu-item> -->
                         </a-menu>
                         <a-button class="ant-btn-small">
                             ...
                         </a-button>
                     </a-dropdown>
-                </span> -->
+                </span>
             </a-table>
         </a-row>
         <a-modal
@@ -78,7 +80,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Registrar avance</h1>
-                        <small>(Nombre del Objetivo)</small>
+                        <small>{{recordProgressModal.objectiveName}}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -91,10 +93,9 @@
                     </span>
                 </a-col>
                 <a-col :span="24" modal-content-seccion-bottom>
-                    <a-textarea placeholder="Avance del objetivo..." :rows="6"/>
+                    <a-textarea placeholder="Avance del objetivo..." :rows="6" v-model="message"/>
                 </a-col>
             </a-row>
-
             <template slot="footer">
                 <a-button
                     key="back"
@@ -123,33 +124,32 @@
                 <a-row>
                     <a-col :span="24" class="modal-header" style="margin-top: 25px;">
                         <h1>Ver avances</h1>
-                        <small>{{viewProgressModal.objectiveName}}</small>
+                        <small>{{ viewProgressModal.objectiveName }}</small>
                     </a-col>
                 </a-row>
             </template>
 
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
-                    <a-timeline>
-                        <a-timeline-item color="gray" class="timeline-item">
+                    <a-timeline mode="alternate">
+                        <a-timeline-item v-for="(item, index) in binnacle" :key="index" color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
+                                {{username}}
+                                <small>{{ item.created }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
-                                Se han definido las características del producto.
+                                {{ item.message }}
                             </p>
-                        </a-timeline-item>
-
+                        </a-timeline-item>                        
                     </a-timeline>
                 </a-col>
-            </a-row>
-
-            <template slot="footer">
+            </a-row>            <template slot="footer">
                 <a-button
                     key="back"
                     @click="toggleViewProgressModal"
+                    :v-bind="false"
                 >
                     Cerrar
                 </a-button>
@@ -243,27 +243,65 @@ export default {
         return {
             spin: false,
             collapsed: false,
+            loaded: false,
+            data: [],
+            columns,
+            message: '',
+            username: '',
+            binnacle: [],
             recordProgressModal: {
                 show: false,
                 enableButton: true,
+                objectiveId: 0,
+                objectiveName: ''
             },
             viewProgressModal: {
                 show: false,
                 enableButton: true,
+                objectiveId: 0,
                 objectiveName: '',
             },
             finishObjectiveModal: {
                 show: false,
                 enableButton: true,
             },
-            data: [],
-            columns,
+            
         };
     },
-    created() {
-        this.getCurrentObjectives();
+    async created() {
+        await this.getCurrentObjectives();
     },
     methods: {
+        async getBinnacle(objectiveId) {
+            this.loaded = false;
+            let response = null;
+            try {
+                response = await client3B.binnacle.getBinnacle({ evaluationMeasuredQuestionId: objectiveId, });
+                this.binnacle = [];
+                const items = response.data.result.items;
+
+                for (let i = 0; i < items.length; i++) {
+                    this.binnacle.push({
+                        message: items[i].text,
+                        created: new Date(items[i].creationTime).toLocaleDateString(),
+                    });
+                }
+                // this.loaded = true;
+            } catch (error) {
+                console.log(error);
+            }            
+        },
+        async addObjetiveMessage(objectiveId, message) {
+            await client3B.binnacle.createMessage
+            (
+                {
+                    evaluationMeasuredQuestionId: objectiveId,
+                    text: message,
+                }
+            ).catch(error => errorHandler(this, error));
+            this.message = '';
+            this.$message.success('El mensaje se ha guardado correctamente');
+        },
         async getCurrentObjectives() {
             this.spin = true;
             let response = null;
@@ -274,6 +312,7 @@ export default {
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
                         key: index + 1,
+                        id: items[index].id,
                         status: this.selectStatusName(items[index].status),
                         objective: {
                             title: items[index].name,
@@ -287,11 +326,27 @@ export default {
             }
             this.spin = false;
         },
-        toggleRecordProgressModal() {
-            this.recordProgressModal.show = !this.recordProgressModal.show;
+        async toggleRecordProgressModal(input) {
+            
+            if (!this.recordProgressModal.show) {                
+                this.recordProgressModal.objectiveId = input.id;
+                this.recordProgressModal.objectiveName = input.objective.title;
+                this.recordProgressModal.show = !this.recordProgressModal.show;
+            } else {
+                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message);
+                this.recordProgressModal.show = !this.recordProgressModal.show;
+            }
         },
-        toggleViewProgressModal() {
-            this.viewProgressModal.show = !this.viewProgressModal.show;
+        async toggleViewProgressModal(input) {
+            if (!this.viewProgressModal.show) {                
+                this.viewProgressModal.objectiveName = input.objective.title;
+                await this.getBinnacle(input.id);
+                this.viewProgressModal.show = !this.viewProgressModal.show;
+            }
+            else {
+                // this.loaded = true;
+                this.viewProgressModal.show = !this.viewProgressModal.show;
+            }    
         },
         toggleFinishObjectiveModal() {
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;

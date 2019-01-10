@@ -1,29 +1,6 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
-            <a-col :span=23>
-                Mis evaluaciones
-            </a-col>
-            <a-col :span=1 style="text-align: right; color: #fff;">
-
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-            </a-col>
-        </a-row>
+        
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin tip="Cargando..." size="small" />
@@ -36,12 +13,9 @@
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                        <router-link
-                            class="table-link"
-                            :to="{name: 'collaborator-assessments-apply', params: { id } }"
-                        >
-                            {{evaluation.title}}
-                        </router-link>
+                    <strong>    
+                    {{evaluation.title}}
+                    </strong>
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
@@ -114,7 +88,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getCollaborator();
+                response = await client3B.dashboard.getEvaluationsHistory();
                 const items = response.data.result.evaluationSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index++) {
@@ -129,25 +103,24 @@ export default {
                         endDate: new Date(items[index].endDateTime).toLocaleDateString(),
                     });
                 }
+                // console.log(this.data);
             } catch (error) {
                 console.log(error);
             }
             this.spin = false;
         },
         fillEvaluation(id) {
-            this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+            this.$router.push({ name: 'collaborator-assessment', params: { id } });
         },
         disableButton(status) {
-            if (status === 'Validado' || status === 'Completado') {
+            if (status === 'No iniciado'  || status === 'En proceso' ) {
                 return true;
             }
             return false;
         },
         transformStatus(status) {
-            if (status === 'En proceso' || status === 'Completado') {
-                return 'Continuar';
-            }
-            return 'Iniciar';
+            
+            return 'Ver';
         },
         selectTagColor(status) {
             switch (status) {
