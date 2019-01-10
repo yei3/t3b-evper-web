@@ -82,13 +82,10 @@ export default {
             this.visible = false
         },
         async getNotifications() {
-            console.log('getNotifications');
             let response = null;
             try {
                 response = await client3B.notifications.getAllNotifications();
-                console.log('getNotifications ');
                 const items = response.data.result;
-                console.log('items: '+ items.length);
                 this.countNotif = items.length;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
