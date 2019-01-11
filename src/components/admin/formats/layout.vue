@@ -123,18 +123,36 @@
             v-model="view.sectionModal.show"
         >
             <a-input
+                placeholder="Nombre de la sección"
+                addonBefore="Nombre"
                 v-model="view.sectionModal.value"
                 @keyup.enter.native="addSection"
             />
+            <a-input type="number"
+                style="margin-top: 20px;"
+                addonBefore="Porcentaje"
+                addonAfter="%"
+                placeholder="0 a 100"
+                min="1"
+                max="100"
+            />
             <template slot="footer">
-                <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
-                <a-button key="submit"
-                    class="btn-green"
-                    @click="addSection"
-                    :loading="view.sectionModal.loading"
-                >
-                    Agregar
-                </a-button>
+                <a-row>
+                    <a-col :span="12" style="text-align: left;">
+                        <a-button key="back" @click="cancelAddSection">
+                            Cancelar
+                        </a-button>
+                    </a-col>
+                    <a-col :span="12" style="text-align: right;">
+                        <a-button key="submit"
+                            class="btn-green"
+                            @click="addSection"
+                            :loading="view.sectionModal.loading"
+                        >
+                            Agregar
+                        </a-button>
+                    </a-col>
+                </a-row>
             </template>
         </a-modal>
     </div>

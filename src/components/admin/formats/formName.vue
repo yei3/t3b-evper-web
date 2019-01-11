@@ -63,7 +63,7 @@
                         <a-textarea :rows="4" v-model="evaluation.instructions"/>
                     </a-form-item>
                 </a-col>
-                <a-col :span="24">
+                <a-col :md="6" :sm="24">
                     <a-form-item
                         fieldDecoratorId="isAutoEvaluation"
                     >
@@ -71,6 +71,15 @@
                             v-model="evaluation.isAutoEvaluation"
                         >
                             Auto Evaluación
+                        </a-checkbox>
+                    </a-form-item>
+                </a-col>
+                <a-col :md="6" :sm="24">
+                    <a-form-item
+                        fieldDecoratorId="loadPreviousObjetives"
+                    >
+                        <a-checkbox>
+                            Cargar objetivos anteriores
                         </a-checkbox>
                     </a-form-item>
                 </a-col>
