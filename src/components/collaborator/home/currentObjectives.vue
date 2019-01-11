@@ -318,7 +318,7 @@ export default {
                             title: items[index].name,
                             subtitle: 'sin descripción',
                         },
-                        endDate: new Date(items[index].deliveryDate).toLocaleDateString(),
+                        endDate: new Date(items[index].deliveryDate).toLocaleString(),
                     });
                 }
             } catch (error) {

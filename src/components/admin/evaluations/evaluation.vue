@@ -77,6 +77,17 @@
                     </a-select>
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-select mode="multiple" style="width: 100%" placeholder="Puestos"
+                        v-model="form.employments"
+                    >
+                        <a-select-option v-for="(item, index) in employments" :key="index"
+                            :value="item"
+                        >
+                            {{ item }}
+                        </a-select-option>
+                    </a-select>
+                </a-col>
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-date-picker placeholder="Fecha Inicio"
                         style="width: 100%"
                         v-model="form.startDate"
@@ -116,11 +127,13 @@ export default {
             formats: [],
             regions: [],
             areas: [],
+            employments: [],
             form: {
                 name: null,
                 format: undefined,
                 regs: [],
                 areas: [],
+                employments: [],
                 startDate: null,
                 finishDate: null,
             },
@@ -132,6 +145,7 @@ export default {
         this.getAllFormats();
         this.getAllRegions();
         this.getAllAreas();
+        this.getAllEmployments();
     },
     components: {
 
@@ -154,12 +168,19 @@ export default {
             this.areas = response.data.result;
             this.spin = false;
         },
+        async getAllEmployments() {
+            const response = await client3B.user.getAllEmployments()
+                .catch(error => errorHandler(this, error));
+            this.employments = response.data.result;
+            this.spin = false;
+        },
         async applyEvaluation() {
             this.loading = true;
             const response = await client3B.evaluation.apply({
                 name: this.form.name,
                 evaluationTemplateId: this.form.format,
                 organizationUnitIds: [...this.form.areas, ...this.form.regs],
+                jobDescriptions: [...this.form.employments],
                 startDate: this.form.startDate,
                 endDate: this.form.finishDate,
             }).catch(error => errorHandler(this, error));
