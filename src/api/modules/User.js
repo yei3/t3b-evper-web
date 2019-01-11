@@ -46,6 +46,16 @@ class User extends Http {
         const path = `${this.entityPath}/RecoverPassword`;
         return this.request(path, this.methods.post, data);
     }
+
+    /**
+     * Request for the information for AllEmployments
+     *
+     * @return {Promise}        Http Response
+     */
+    getAllEmployments() {
+        const path = `${this.entityPath}/GetAllJobDescriptions`;
+        return this.request(path, this.methods.get, {});
+    }
 }
 
 export default User;
