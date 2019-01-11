@@ -37,8 +37,8 @@ export default {
             setTimeout(() => {
                 WinPrint.document.close();
                 WinPrint.focus();
-                // WinPrint.print();
-                // WinPrint.close();
+                WinPrint.print();
+                WinPrint.close();
             }, 1000);
         },
     },
