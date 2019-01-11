@@ -82,6 +82,7 @@ import questionOpenMultiple from '@/components/collaborator/applyPerformanceEval
 import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
 import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
 import questionObjective from '@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue';
+import questionGoal from '@/components/collaborator/applyPerformanceEvaluations/questionGoal.vue';
 
 export default {
     props: {
@@ -104,6 +105,7 @@ export default {
         questionOneSelect,
         questionBoolean,
         questionObjective,
+        questionGoal,
     },
     methods: {
         getQuestionStatus(questionId) {
