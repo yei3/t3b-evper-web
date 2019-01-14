@@ -9,12 +9,16 @@ class Answer extends Http {
         this.entityPath = {
             measured: '/api/services/app/EvaluationObjectives',
             unmeasured: '/api/services/app/UnmeasuredAnswer',
+            goal: '/api/services/app/NotEvaluableAnswer',
         };
     }
 
-    getEntityPath(measured) {
+    getEntityPath({ measured = false, goal = false }) {
         if (measured) {
             return this.entityPath.measured;
+        }
+        if (goal) {
+            return this.entityPath.goal;
         }
         return this.entityPath.unmeasured;
     }
@@ -26,8 +30,8 @@ class Answer extends Http {
      *
      * @return {Promise}        Http Response
      */
-    get(answerId, { measured = false } = {}) {
-        const path = `${this.getEntityPath(measured)}/Get`;
+    get(answerId, options = {}) {
+        const path = `${this.getEntityPath(options)}/Get`;
         const params = { Id: answerId };
         return this.request(path, this.methods.get, params);
     }
@@ -37,8 +41,8 @@ class Answer extends Http {
      *
      * @return {Promise}        Http Response
      */
-    getAll({ measured = false } = {}) {
-        const path = `${this.getEntityPath(measured)}/GetAll`;
+    getAll(options = {}) {
+        const path = `${this.getEntityPath(options)}/GetAll`;
         return this.request(path, this.methods.get, {});
     }
 
@@ -48,8 +52,8 @@ class Answer extends Http {
      *
      * @return {Promise}        Http Response
      */
-    create(data, { measured = false } = {}) {
-        const path = `${this.getEntityPath(measured)}/Create`;
+    create(data, options = {}) {
+        const path = `${this.getEntityPath(options)}/Create`;
         return this.request(path, this.methods.post, data);
     }
 
@@ -59,8 +63,8 @@ class Answer extends Http {
      *
      * @return {Promise}        Http Response
      */
-    update(data, { measured = false } = {}) {
-        const path = `${this.getEntityPath(measured)}/Update`;
+    update(data, options = {}) {
+        const path = `${this.getEntityPath(options)}/Update`;
         return this.request(path, this.methods.put, data);
     }
 
@@ -70,8 +74,8 @@ class Answer extends Http {
      *
      * @return {Promise}        Http Response
      */
-    delete(data, { measured = false } = {}) {
-        const path = `${this.getEntityPath(measured)}/Delete`;
+    delete(data, options = {}) {
+        const path = `${this.getEntityPath(options)}/Delete`;
         return this.request(path, this.methods.delete, data);
     }
 }

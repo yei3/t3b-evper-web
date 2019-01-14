@@ -53,7 +53,7 @@
                                     :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
                                     :wrapperCol="{ xxl: 19, xl: 16, lg: 14, md: 24, sm: 24 }"
                                     :fieldDecoratorOptions="{
-                                        initialValue: question.answerType,
+                                        initialValue: question.deriverable,
                                         rules: [
                                             {
                                                 required: true,
@@ -84,12 +84,18 @@
                                     }"
                                 >
                                     <a-date-picker
+                                        :defaultValue="moment(question.deliverDate, 'YYYY/MM/DD')"
+                                        :format="'YYYY/MM/DD'"
                                         placeholder="Fecha de Entrega"
+                                        @change="(moment, _) => {
+                                            question.deliverDate = moment;
+                                            question.edited = true;
+                                        }"
                                     />
                                 </a-form-item>
                             </a-form>
                             <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
-                                <a @click="deleteQuestion(question.id, index)"
+                                <a @click="deleteQuestion(question, index)"
                                     class="link-delete-question form-icon"
                                     style="padding-right: 2%; padding-left: 4%;"
                                     :disabled="question.loading"
@@ -137,6 +143,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import questionGoal from '@/components/collaborator/applyPerformanceEvaluations/questionGoal.vue';
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
@@ -145,6 +152,10 @@ let questionUUID = 0;
 
 export default {
     props: {
+        evaluationId: {
+            type: Number,
+            required: true,
+        },
         section: {
             type: Object,
             required: true,
@@ -169,11 +180,21 @@ export default {
     },
     mounted() {
         this.init();
-        console.log(JSON.stringify(this.section));
     },
     methods: {
+        moment,
         init() {
-            this.questions$ = this.questions;
+            this.questions$ = this.questions.map(qst => ({
+                id: qst.id,
+                key: qst.id,
+                text: qst.text,
+                deliverDate: qst.notEvaluableAnswer.commitmentTime || new Date(),
+                deriverable: qst.notEvaluableAnswer.text,
+                answerId: qst.notEvaluableAnswer.id,
+                edited: false,
+                form: null,
+                loading: false,
+            }));
             if (this.questions$.length === 0) {
                 this.addQuestion();
             }
@@ -185,8 +206,9 @@ export default {
                 id: null,
                 key: questionUUID,
                 text: '',
-                deliverDate: undefined,
+                deliverDate: new Date(),
                 deriverable: '',
+                answerId: null,
                 edited: true,
                 form: null,
                 loading: false,
@@ -195,7 +217,7 @@ export default {
         async save(_question) {
             const question = _question;
             let validForm = true;
-            question.loading = true
+            question.loading = true;
             question.form.validateFields((error) => {
                 if (error) {
                     question.loading = false;
@@ -207,26 +229,29 @@ export default {
 
             let response = null;
             if (question.id) {
-                response = await updateQuestion(question);
+                response = await this.updateQuestion(question);
             } else {
-                response = await createQuestion(question);
+                response = await this.createQuestion(question);
             }
 
             if (response) {
                 question.id = response.data.result.id;
+                if (response.data.result.notEvaluableAnswer) {
+                    question.answerId = response.data.result.notEvaluableAnswer.id;
+                }
+                await this.updateAnswer(question);
                 question.edited = false;
+                this.$message.success('Evaluación guardada correctamente');
             }
             question.loading = false;
-            this.$message.success('Evaluación guardada correctamente');
         },
         async createQuestion(question) {
             const response = await client3B.question.create({
+                evaluationId: this.evaluationId,
                 sectionId: this.subsectionId,
                 text: question.text,
-                // entregable
-                // fecha
             }, {
-                goal: true
+                goal: true,
             }).catch(error => errorHandler(this, error));
 
             return response;
@@ -234,26 +259,48 @@ export default {
         async updateQuestion(question) {
             const response = await client3B.question.update({
                 id: question.id,
+                evaluationId: this.evaluationId,
                 sectionId: this.subsectionId,
                 text: question.text,
-                // entregable
-                // fecha
             }, {
-                goal: true
+                goal: true,
             }).catch(error => errorHandler(this, error));
 
             return response;
         },
-        async deleteQuestion(question, index) {
-            const response = await client3B.question.delete({
-                id: question.id,
-            }, {
-                goal: true
-            }).catch(error => errorHandler(this, error));
-            if (!response) return;
+        async deleteQuestion(_question, index) {
+            const question = _question;
+            question.loading = true;
+            console.log(question.id);
+            if (question.id) {
+                const response = await client3B.question.delete({
+                    id: question.id,
+                }, {
+                    goal: true,
+                }).catch(error => errorHandler(this, error));
+                question.loading = false;
+                if (!response) return;
+
+                this.$message.success('Evaluación guardada correctamente');
+            }
 
             this.questions$.splice(index, 1);
-            this.$message.success('Evaluación guardada correctamente');
+
+            if (this.questions$.length === 0) {
+                setTimeout(() => {
+                    this.addQuestion();
+                }, 300);
+            }
+        },
+        async updateAnswer(question) {
+            const response = await client3B.evaluation.answer.update({
+                id: question.answerId,
+                evaluationQuestionId: question.id,
+                commitmentTime: question.deliverDate,
+                text: question.deriverable,
+            }, { goal: true }).catch(error => errorHandler(error));
+
+            return response;
         },
     },
 };

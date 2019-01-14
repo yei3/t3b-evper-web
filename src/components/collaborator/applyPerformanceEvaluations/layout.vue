@@ -78,6 +78,7 @@
                                 <evaluation-section-next-objectives
                                     v-if="isSectionNextObjetives(section)"
                                     v-show="(index + 1) == data.currentStep"
+                                    :evaluationId="evaluation.id"
                                     :section="section"
                                     :questions="notEvaluableQuestions"
                                     :onlyLecture="onlyLecture"
@@ -127,7 +128,6 @@
                 </div>
             </a-col>
         </a-row>
-        {{ notEvaluableQuestions }}
     </div>
 </template>
 
@@ -203,7 +203,8 @@ export default {
         },
         setQuestionsStatus() {
             const questions = this.getQuestions();
-            const statuses = questions.map(qst => ({
+            // Ignorar objetivos no evaluables, tienen status == 0
+            const statuses = questions.filter(qst => qst.status !== 0).map(qst => ({
                 id: qst.id,
                 answered: qst.status !== 1,
             }));

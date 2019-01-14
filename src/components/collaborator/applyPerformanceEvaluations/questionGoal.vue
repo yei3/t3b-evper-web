@@ -121,8 +121,7 @@ export default {
         },
         answer: {
             type: Object,
-            required: false,
-            default: {},
+            required: true,
         },
         templateQuestion: {
             type: Object,
