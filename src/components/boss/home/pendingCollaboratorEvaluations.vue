@@ -45,9 +45,8 @@
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="autoEvaluation" slot-scope="autoEvaluation" class="text-center">
-                    <a-checkbox
-                        :checked="autoEvaluation"
-                    />
+                    <a-icon type="check" v-if="autoEvaluation"/>
+                    <a-icon type="minus" v-if="!autoEvaluation"/>
                 </span>
                 <span slot="action" slot-scope="action, record">
                     <a-button

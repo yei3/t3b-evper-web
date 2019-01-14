@@ -81,13 +81,22 @@
                                 v-show="data.currentStep == 0"
                                 :instructions="evaluationInstructions"
                             />
-                            <evaluation-section v-show="(index + 1) == data.currentStep"
-                                v-for="(section, index) in evaluationSections"
-                                :key="section.id"
-                                :section="section"
-                                :questions="getQuestions()"
-                                :onlyLecture="onlyLecture"
-                            />
+                            <div v-for="(section, index) in evaluationSections" :key="section.id">
+                                <evaluation-section-next-objectives
+                                    v-if="isSectionNextObjetives(section)"
+                                    v-show="(index + 1) == data.currentStep"
+                                    :evaluationId="evaluation.id"
+                                    :section="section"
+                                    :questions="notEvaluableQuestions"
+                                    :onlyLecture="onlyLecture"
+                                />
+                                <evaluation-section v-else
+                                    v-show="(index + 1) == data.currentStep"
+                                    :section="section"
+                                    :questions="getQuestions()"
+                                    :onlyLecture="onlyLecture"
+                                />
+                            </div>
                         </a-row>
                         <a-row style="margin-bottom: 20px;">
                             <a-col :span="24" style="text-align: right;">
@@ -105,13 +114,18 @@
                                 </a-button>
                                 <a-button @click="$router.push({ name: 'home' })"
                                     class="btn-green"
-                                    v-show="(data.currentStep === viewSteps.length - 1) && !onlyLecture"
+                                    v-show="(data.currentStep === viewSteps.length - 1)
+                                        && !onlyLecture"
                                 >
                                     Finalizar edición
                                 </a-button>
-                                <a-button @click="$router.push({ name: 'collaborator-evaluationsHistory' })"
+                                <a-button
+                                    @click="$router.push({
+                                        name: 'collaborator-evaluationsHistory'
+                                    })"
                                     class="btn-green"
-                                    v-show="(data.currentStep === viewSteps.length - 1) && onlyLecture"
+                                    v-show="(data.currentStep === viewSteps.length - 1)
+                                        && onlyLecture"
                                 >
                                     Finalizar revisión
                                 </a-button>
@@ -129,8 +143,10 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import formIntroduction from '@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue';
 import evaluationSection from '@/components/collaborator/applyPerformanceEvaluations/section.vue';
+import evaluationSectionNextObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue';
 import { mapMutations, mapGetters } from 'vuex';
 
+const PROX_OBJETIVES_NAME = 'próximos objetivos';
 
 export default {
     props: {
@@ -142,6 +158,7 @@ export default {
     components: {
         formIntroduction,
         evaluationSection,
+        evaluationSectionNextObjectives,
     },
     data() {
         return {
@@ -193,7 +210,8 @@ export default {
         },
         setQuestionsStatus() {
             const questions = this.getQuestions();
-            const statuses = questions.map(qst => ({
+            // Ignorar objetivos no evaluables, tienen status == 0
+            const statuses = questions.filter(qst => qst.status !== 0).map(qst => ({
                 id: qst.id,
                 answered: qst.status !== 1,
             }));
@@ -222,6 +240,9 @@ export default {
         async printEvaluation() {
             let id = this.$route.params.id;
             this.$router.push({ name: 'collaborator-assessment-print', params: { id } })
+        },
+        isSectionNextObjetives(section) {
+            return section.name === PROX_OBJETIVES_NAME;
         },
     },
     computed: {
@@ -260,6 +281,10 @@ export default {
         evaluationInstructions() {
             if (!this.evaluation) return '';
             return this.evaluation.template.instructions;
+        },
+        notEvaluableQuestions() {
+            if (!this.evaluation) return [];
+            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null);
         },
     },
 };
