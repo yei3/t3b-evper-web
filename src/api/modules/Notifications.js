@@ -18,6 +18,7 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/getAll`;
         return this.request(path, this.methods.get, {});
     }
+
     /**
      * Request for the information for a count of notifications
      *
@@ -27,9 +28,10 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/getNotifCount`;
         return this.request(path, this.methods.get, {});
     }
+
     /**
      * Request for send notifications to multple users
-     * @param {Object} data 
+     * @param {Object} data
      *
      * @return {Promise}        Http Response
      */
