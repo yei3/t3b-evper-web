@@ -41,7 +41,18 @@
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-input v-model="form.name" placeholder="Nombre" />
                 </a-col>
-
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-date-picker placeholder="Fecha Inicio"
+                        style="width: 100%"
+                        v-model="form.startDate"
+                    />
+                </a-col>
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-date-picker placeholder="Fecha Fin"
+                        style="width: 100%"
+                        v-model="form.finishDate"
+                    />
+                </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-select placeholder="Formato" style="width: 100%"
                         v-model="form.format"
@@ -86,19 +97,7 @@
                             {{ item }}
                         </a-select-option>
                     </a-select>
-                </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-date-picker placeholder="Fecha Inicio"
-                        style="width: 100%"
-                        v-model="form.startDate"
-                    />
-                </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-date-picker placeholder="Fecha Fin"
-                        style="width: 100%"
-                        v-model="form.finishDate"
-                    />
-                </a-col>
+                </a-col>                
             </a-row>
             <a-row class="text-right" style="padding: 16px 0;">
                 <a-button class="btn-green" @click="applyEvaluation()" :loading="loading">

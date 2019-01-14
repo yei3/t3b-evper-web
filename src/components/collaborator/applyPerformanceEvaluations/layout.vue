@@ -40,6 +40,13 @@
                             >
                                 Finalizar Evaluación
                             </a-button>
+                            <a-button class="btn-blue"
+                                @click="printEvaluation"
+                                :loading="loading"
+                                v-show="onlyLecture"
+                            >
+                                Imprimir Evaluación
+                            </a-button>
                         </a-col>
                     </a-row>
                     <div class="collapse-content" v-show="!collapsed">
@@ -211,6 +218,10 @@ export default {
             this.loading = false;
             this.$message.success('La evaluación ha sido finalizada correctamente');
             this.$router.push({ name: 'home' });
+        },
+        async printEvaluation() {
+            let id = this.$route.params.id;
+            this.$router.push({ name: 'collaborator-assessment-print', params: { id } })
         },
     },
     computed: {

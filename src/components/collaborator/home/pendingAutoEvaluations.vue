@@ -49,7 +49,7 @@
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id)"
+                        @click="fillEvaluation(record.id, record.status)"
                         :disabled="disableButton(record.status)"
                     >
                         {{transformStatus(action)}}
@@ -134,17 +134,27 @@ export default {
             }
             this.spin = false;
         },
-        fillEvaluation(id) {
-            this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+        fillEvaluation(id, status) {
+            
+            if (status === 'Finalizada') {
+                console.log(status)
+                this.$router.push({ name: 'collaborator-assessment', params: { id } });
+            }
+            else {
+                this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+            }            
         },
         disableButton(status) {
-            if (status === 'Validado' || status === 'Completado') {
+            if (status === 'Validado') {
                 return true;
             }
             return false;
         },
         transformStatus(status) {
-            if (status === 'En proceso' || status === 'Completado') {
+            if (status === 'Finalizada') {
+                return 'Ver';
+            }
+            if (status === 'En proceso') {
                 return 'Continuar';
             }
             return 'Iniciar';
@@ -155,7 +165,7 @@ export default {
                 return 'ant-tag-red';
             case 'En proceso':
                 return 'ant-tag-yellow';
-            case 'Finalizado':
+            case 'Finalizada':
                 return 'ant-tag-green';
             case 'Validado':
                 return 'ant-tag-blue';
@@ -170,7 +180,7 @@ export default {
             case 1:
                 return 'En proceso';
             case 2:
-                return 'Completado';
+                return 'Finalizada';
             case 3:
                 return 'Validado';
             }
