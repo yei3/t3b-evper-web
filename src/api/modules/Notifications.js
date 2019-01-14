@@ -18,6 +18,7 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/getAll`;
         return this.request(path, this.methods.get, {});
     }
+
     /**
      * Request for the information for a count of notifications
      *
@@ -26,6 +27,17 @@ class Dashboard extends Http {
     getNotifCount() {
         const path = `${this.entityPath}/getNotifCount`;
         return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for send notifications to multple users
+     * @param {Object} data
+     *
+     * @return {Promise}        Http Response
+     */
+    publishGeneralMessageToMultipleUsers(data) {
+        const path = `${this.entityPath}/Publish_SentGeneralMultipleUserNotification`;
+        return this.request(path, this.methods.post, data);
     }
 }
 

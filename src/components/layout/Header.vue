@@ -35,22 +35,20 @@
             @close="onClose"
             :visible="visible"
             >
-            <li v-for="item in data">
-                {{ item.id  }}:  {{ item.status }}
+            <li v-for="item in data" :key="item.id">
+                <strong>{{ item.id  }}</strong>
+                <br>
+                {{ item.status }}
             </li>
-            </br></br>
+            <br><br>
             <div  class="text-lg-right">
                 <a-button @click="onClose">Cerrar</a-button>
             </div>
-            
         </a-drawer>
     </a-layout-header>
-
 </template>
-
 <script>
 import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
 import { mapActions, mapGetters } from 'vuex';
 import authService from '@/services/auth';
 
@@ -60,8 +58,8 @@ export default {
             countNotif: 0,
             enableButton: false,
             visible: false,
-            data: []
-            }
+            data: [],
+        };
     },
     created() {
         this.getNotifications();
@@ -76,10 +74,10 @@ export default {
             this.$router.push({ name: 'login' });
         },
         showDrawer() {
-            this.visible = true
+            this.visible = true;
         },
         onClose() {
-            this.visible = false
+            this.visible = false;
         },
         async getNotifications() {
             let response = null;
@@ -89,16 +87,17 @@ export default {
                 this.countNotif = items.length;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    this.data.push({                        
+                    this.data.push({
                         key: index,
                         id: items[index].notification.data.senderUserName,
                         status: items[index].notification.data.generalMessage,
                         evaluation: {
                             title: items[index].userId,
-                            subtitle: items[index].state
+                            subtitle: items[index].state,
                         },
                         collaborator: items[index].userId,
-                        endDate: new Date(items[index].notification.creationTime).toLocaleDateString()
+                        endDate: new Date(items[index].notification.creationTime)
+                            .toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -115,7 +114,6 @@ export default {
     },
 };
 </script>
-
 <style>
     .beta-tag {
         font-size: 10px;

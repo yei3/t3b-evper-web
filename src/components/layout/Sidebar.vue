@@ -135,6 +135,7 @@ export default {
                     icon: 'home',
                     text: 'Home',
                 },
+                /*
                 {
                     role: authService.ROLES.SUPERVISOR,
                     to: 'onWork',
@@ -147,6 +148,7 @@ export default {
                     icon: 'line-chart',
                     text: 'Resultados',
                 },
+                */
                 {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: 'admin-home',
@@ -165,17 +167,25 @@ export default {
                     icon: 'cluster',
                     text: 'Organigrama',
                 },
+                /*
                 {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: 'onWork',
                     icon: 'line-chart',
                     text: 'Resultados',
                 },
+                */
                 {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: 'admin-users',
                     icon: 'user',
                     text: 'Usuarios',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-notifications',
+                    icon: 'bell',
+                    text: 'Avisos',
                 },
             ],
         };
