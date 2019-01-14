@@ -68,6 +68,15 @@
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
                                 :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
+                            <question-goal
+                                v-if="qstTemplate.questionType == 5"
+                                :index="index + 1"
+                                :onlyLecture="onlyLecture"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
+                            />
                         </a-row>
                     </a-col>
                 </a-row>

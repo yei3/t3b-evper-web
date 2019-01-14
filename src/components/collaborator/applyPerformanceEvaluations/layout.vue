@@ -74,13 +74,21 @@
                                 v-show="data.currentStep == 0"
                                 :instructions="evaluationInstructions"
                             />
-                            <evaluation-section v-show="(index + 1) == data.currentStep"
-                                v-for="(section, index) in evaluationSections"
-                                :key="section.id"
-                                :section="section"
-                                :questions="getQuestions()"
-                                :onlyLecture="onlyLecture"
-                            />
+                            <div v-for="(section, index) in evaluationSections" :key="section.id">
+                                <evaluation-section-next-objectives
+                                    v-if="isSectionNextObjetives(section)"
+                                    v-show="(index + 1) == data.currentStep"
+                                    :section="section"
+                                    :questions="notEvaluableQuestions"
+                                    :onlyLecture="onlyLecture"
+                                />
+                                <evaluation-section v-else
+                                    v-show="(index + 1) == data.currentStep"
+                                    :section="section"
+                                    :questions="getQuestions()"
+                                    :onlyLecture="onlyLecture"
+                                />
+                            </div>
                         </a-row>
                         <a-row style="margin-bottom: 20px;">
                             <a-col :span="24" style="text-align: right;">
@@ -98,13 +106,18 @@
                                 </a-button>
                                 <a-button @click="$router.push({ name: 'home' })"
                                     class="btn-green"
-                                    v-show="(data.currentStep === viewSteps.length - 1) && !onlyLecture"
+                                    v-show="(data.currentStep === viewSteps.length - 1)
+                                        && !onlyLecture"
                                 >
                                     Finalizar edición
                                 </a-button>
-                                <a-button @click="$router.push({ name: 'collaborator-evaluationsHistory' })"
+                                <a-button
+                                    @click="$router.push({
+                                        name: 'collaborator-evaluationsHistory'
+                                    })"
                                     class="btn-green"
-                                    v-show="(data.currentStep === viewSteps.length - 1) && onlyLecture"
+                                    v-show="(data.currentStep === viewSteps.length - 1)
+                                        && onlyLecture"
                                 >
                                     Finalizar revisión
                                 </a-button>
@@ -114,6 +127,7 @@
                 </div>
             </a-col>
         </a-row>
+        {{ notEvaluableQuestions }}
     </div>
 </template>
 
@@ -122,8 +136,10 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import formIntroduction from '@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue';
 import evaluationSection from '@/components/collaborator/applyPerformanceEvaluations/section.vue';
+import evaluationSectionNextObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue';
 import { mapMutations, mapGetters } from 'vuex';
 
+const PROX_OBJETIVES_NAME = 'próximos objetivos';
 
 export default {
     props: {
@@ -135,6 +151,7 @@ export default {
     components: {
         formIntroduction,
         evaluationSection,
+        evaluationSectionNextObjectives,
     },
     data() {
         return {
@@ -212,6 +229,9 @@ export default {
             this.$message.success('La evaluación ha sido finalizada correctamente');
             this.$router.push({ name: 'home' });
         },
+        isSectionNextObjetives(section) {
+            return section.name === PROX_OBJETIVES_NAME;
+        },
     },
     computed: {
         ...mapGetters({
@@ -249,6 +269,10 @@ export default {
         evaluationInstructions() {
             if (!this.evaluation) return '';
             return this.evaluation.template.instructions;
+        },
+        notEvaluableQuestions() {
+            if (!this.evaluation) return [];
+            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null);
         },
     },
 };

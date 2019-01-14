@@ -10,6 +10,7 @@ class Question extends Http {
         this.entityPath = {
             default: '/api/services/app/Question',
             objective: '/api/services/app/Objective',
+            goal: '/api/services/app/NotEvaluableQuestion',
         };
     }
 
@@ -20,9 +21,12 @@ class Question extends Http {
      *
      * @return {Promise}        Http Response
      */
-    getPath({ objective = false }) {
+    getPath({ objective = false, goal = false }) {
         if (objective) {
             return this.entityPath.objective;
+        }
+        if (goal) {
+            return this.entityPath.goal;
         }
         return this.entityPath.default;
     }

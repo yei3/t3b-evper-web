@@ -78,7 +78,9 @@
                     <a-form-item
                         fieldDecoratorId="loadPreviousObjetives"
                     >
-                        <a-checkbox>
+                        <a-checkbox
+                            v-model="evaluation.includePastObjectives"
+                        >
                             Cargar objetivos anteriores
                         </a-checkbox>
                     </a-form-item>
@@ -123,6 +125,7 @@ export default {
                 description: '',
                 instructions: '',
                 isAutoEvaluation: false,
+                includePastObjectives: true,
             },
         };
     },
@@ -162,6 +165,7 @@ export default {
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
                 isAutoEvaluation: this.evaluation.isAutoEvaluation,
+                includePastObjectives: this.evaluation.includePastObjectives,
             }).catch((error) => {
                 errorHandler(this, error);
             });
@@ -175,6 +179,7 @@ export default {
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
                 isAutoEvaluation: this.evaluation.isAutoEvaluation,
+                includePastObjectives: this.evaluation.includePastObjectives,
             });
             this.$message.success('Evaluación guardada correctamente');
             if (this.lastStep === 0) {
@@ -190,6 +195,7 @@ export default {
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
                 isAutoEvaluation: this.evaluation.isAutoEvaluation,
+                includePastObjectives: this.evaluation.includePastObjectives,
             }).catch((error) => {
                 errorHandler(this, error);
             });
@@ -203,6 +209,7 @@ export default {
                 description: this.evaluation.description,
                 instructions: this.evaluation.instructions,
                 isAutoEvaluation: this.evaluation.isAutoEvaluation,
+                includePastObjectives: this.evaluation.includePastObjectives,
             });
             this.$message.success('Evaluación guardada correctamente');
             this.nextStep();

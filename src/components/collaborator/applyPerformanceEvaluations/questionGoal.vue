@@ -106,23 +106,23 @@ export default {
         },
         questionId: {
             type: Number,
-            required: true,
+            required: false,
+            default: null,
         },
         questionText: {
             type: String,
-            required: true,
+            required: false,
+            default: '',
         },
         questionStatus: {
             type: Number,
-            required: true,
-        },
-        expected: {
-            type: [String, Number],
-            required: true,
+            required: false,
+            default: 1,
         },
         answer: {
             type: Object,
-            required: true,
+            required: false,
+            default: {},
         },
         templateQuestion: {
             type: Object,
