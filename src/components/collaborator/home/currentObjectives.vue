@@ -48,7 +48,7 @@
                     <p><small>{{objective.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-dropdown>
+                    <a-dropdown >
                         <a-menu slot="overlay">
                             <a-menu-item key="1" @click="toggleRecordProgressModal(record)">
                                 Registrar avances
@@ -57,7 +57,7 @@
                                 Ver avances
                             </a-menu-item>
                             <a-menu-divider />
-                            <a-menu-item key="3" @click="toggleFinishObjectiveModal(record.id)">
+                            <a-menu-item key="3" @click="toggleFinishObjectiveModal(record)">
                                 Completar objectivo
                             </a-menu-item>
                         </a-menu>
@@ -136,7 +136,7 @@
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
-                                {{ username }}
+                                {{ item.username }}
                                 <small>{{ item.created }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
@@ -280,13 +280,14 @@ export default {
             this.loaded = false;
             let response = null;
             try {
-                response = await client3B.binnacle.getBinnacle({ evaluationQuestionId: objectiveId, });
+                response = await client3B.binnacle.getBinnacle({ evaluationMeasuredQuestionId: objectiveId, });
                 this.binnacle = [];
                 const items = response.data.result.items;
 
                 for (let i = 0; i < items.length; i++) {
                     this.binnacle.push({
                         message: items[i].text,
+                        username: items[i].userName,
                         created: new Date(items[i].creationTime).toLocaleDateString(),
                     });
                 }
@@ -310,7 +311,7 @@ export default {
             await client3B.binnacle.createMessage
             (
                 {
-                    evaluationMeasuredQuestionId: objectiveId,
+                    evaluationQuestionId: objectiveId,
                     text: message,
                 }
             ).catch(error => errorHandler(this, error));
