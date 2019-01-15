@@ -34,7 +34,7 @@
             >
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
-                        <a-avatar shape="square" :src="collaboratorImgUrl(collaborator.number)" />
+                        <a-avatar shape="circle" :src="collaboratorImgUrl(collaborator.number)" />
                         <a class="table-link" style="margin-left: 5px;"
                             @click="currentCollaborator = (collaborator.id !== currentCollaborator)?
                                 collaborator.id:0">

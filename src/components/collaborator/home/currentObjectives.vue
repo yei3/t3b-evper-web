@@ -136,7 +136,7 @@
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
-                                {{username}}
+                                {{ username }}
                                 <small>{{ item.created }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
@@ -168,7 +168,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Completar Objetivo</h1>
-                        <small>(Nombre del Objetivo)</small>
+                        <small>{{ finishObjectiveModal.objectiveName }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -366,6 +366,7 @@ export default {
         async toggleFinishObjectiveModal(input) {
             if (!this.finishObjectiveModal.show) {
                 this.finishObjectiveModal.objectiveId = input.id;
+                this.finishObjectiveModal.objectiveName = input.objective.title;
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 await this.completeObjective(this.finishObjectiveModal.objectiveId);
