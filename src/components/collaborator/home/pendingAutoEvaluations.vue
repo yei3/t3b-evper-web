@@ -36,12 +36,12 @@
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                        <router-link
+                        <!-- <router-link
                             class="table-link"
                             :to="{name: 'collaborator-assessments-apply', params: { id } }"
-                        >
+                        > -->
                             {{evaluation.title}}
-                        </router-link>
+                        <!-- </router-link> -->
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>

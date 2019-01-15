@@ -1,7 +1,7 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
         <a-collapse-panel header="Periodo" key="1" class="text-center">
-            <h3 class="tittle-collapse">Periodo 2019-01</h3>
+            <h3 class="tittle-collapse">Periodo 2018-02</h3>
             <a-range-picker
                 disabled
                 :defaultValue="[moment('2018-08-01', dateFormat), moment('2019-01-31', dateFormat)]"

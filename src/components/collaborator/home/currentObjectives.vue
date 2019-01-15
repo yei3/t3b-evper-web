@@ -56,10 +56,10 @@
                             <a-menu-item key="2" @click="toggleViewProgressModal(record)">
                                 Ver avances
                             </a-menu-item>
-                            <!-- <a-menu-divider />
-                            <a-menu-item key="3" @click="toggleFinishObjectiveModal">
+                            <a-menu-divider />
+                            <a-menu-item key="3" @click="toggleFinishObjectiveModal(record.id)">
                                 Completar objectivo
-                            </a-menu-item> -->
+                            </a-menu-item>
                         </a-menu>
                         <a-button class="ant-btn-small">
                             ...
@@ -220,12 +220,14 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         scopedSlots: { customRender: 'status' },
-    }, {
-        title: 'Objectivos',
+    },
+    {
+        title: 'Objetivos',
         dataIndex: 'objective',
         key: 'objective',
         scopedSlots: { customRender: 'objective' },
-    }, {
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -264,6 +266,8 @@ export default {
             finishObjectiveModal: {
                 show: false,
                 enableButton: true,
+                objectiveId: 0,
+                objectiveName: '',
             },
             
         };
@@ -276,7 +280,7 @@ export default {
             this.loaded = false;
             let response = null;
             try {
-                response = await client3B.binnacle.getBinnacle({ evaluationMeasuredQuestionId: objectiveId, });
+                response = await client3B.binnacle.getBinnacle({ evaluationQuestionId: objectiveId, });
                 this.binnacle = [];
                 const items = response.data.result.items;
 
@@ -290,6 +294,17 @@ export default {
             } catch (error) {
                 console.log(error);
             }            
+        },
+        async completeObjective(objectiveId) {
+            // this.loaded = false;
+            await client3B.objective.updateStatus
+            (
+                {
+                    id: objectiveId,
+                    status: 3,
+                }
+            ).catch(error => errorHandler(this, error));
+            this.$message.success('El objetivo se ha completado correctamente'); 
         },
         async addObjetiveMessage(objectiveId, message) {
             await client3B.binnacle.createMessage
@@ -348,8 +363,14 @@ export default {
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             }    
         },
-        toggleFinishObjectiveModal() {
-            this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+        async toggleFinishObjectiveModal(input) {
+            if (!this.finishObjectiveModal.show) {
+                this.finishObjectiveModal.objectiveId = input.id;
+                this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+            } else {
+                await this.completeObjective(this.finishObjectiveModal.objectiveId);
+                this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+            }            
         },
         selectTagColor(status) {
             switch (status) {
@@ -367,6 +388,8 @@ export default {
         },
         selectStatusName(status) {
             switch (status) {
+            case 0:
+                return 'No iniciado';
             case 1:
                 return 'No iniciado';
             case 2:

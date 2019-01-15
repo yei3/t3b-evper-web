@@ -34,7 +34,7 @@
             </a-col>
             <a-col :span="8" style="padding-left: 6px;">
                 <a-badge :count="objectives" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-                <span class="badged-text">Objectivos en procesos</span>
+                <span class="badged-text">Objetivos en procesos</span>
             </a-col>
         </a-row>
     </div>

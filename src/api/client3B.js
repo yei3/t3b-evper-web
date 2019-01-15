@@ -11,6 +11,7 @@ import Question from './modules/Question';
 import Reports from './modules/Reports';
 import OrganizationUnit from './modules/OrganizationUnit';
 import Notifications from './modules/Notifications';
+import Objective from './modules/Objective';
 
 
 /**
@@ -29,6 +30,7 @@ class Client3B {
         this.section = new Section();
         this.dashboard = new Dashboard();
         this.report = new Reports();
+        this.objective = new Objective();
         this.organizationUnit = new OrganizationUnit();
         this.notifications = new Notifications();
     }
