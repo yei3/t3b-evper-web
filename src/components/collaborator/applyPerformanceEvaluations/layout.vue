@@ -82,6 +82,13 @@
                                 :instructions="evaluationInstructions"
                             />
                             <div v-for="(section, index) in evaluationSections" :key="section.id">
+                                <evaluation-section-objectives
+                                    v-if="isSectionObjetives(section)"
+                                    v-show="(index + 1) == data.currentStep"
+                                    :evaluationId="evaluation.id"
+                                    :section="section"
+                                    :onlyLecture="onlyLecture"
+                                />
                                 <evaluation-section-next-objectives
                                     v-if="isSectionNextObjetives(section)"
                                     v-show="(index + 1) == data.currentStep"
@@ -90,7 +97,7 @@
                                     :questions="notEvaluableQuestions"
                                     :onlyLecture="onlyLecture"
                                 />
-                                <evaluation-section v-else
+                                <evaluation-section v-if="isGenericSection(section)"
                                     v-show="(index + 1) == data.currentStep"
                                     :section="section"
                                     :questions="getQuestions()"
@@ -144,9 +151,11 @@ import errorHandler from '@/views/errorHandler';
 import formIntroduction from '@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue';
 import evaluationSection from '@/components/collaborator/applyPerformanceEvaluations/section.vue';
 import evaluationSectionNextObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue';
+import evaluationSectionObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue';
 import { mapMutations, mapGetters } from 'vuex';
 
-const PROX_OBJETIVES_NAME = 'próximos objetivos';
+const SECTION_PROX_OBJETIVES_NAME = 'Próximos objetivos';
+const SECTION_OBJETIVES_NAME = 'Objetivos';
 
 export default {
     props: {
@@ -159,6 +168,7 @@ export default {
         formIntroduction,
         evaluationSection,
         evaluationSectionNextObjectives,
+        evaluationSectionObjectives,
     },
     data() {
         return {
@@ -190,6 +200,16 @@ export default {
             if (!response) return;
             this.spin = false;
             this.evaluation = response.data.result;
+            /*
+            this.evaluation.template.sections.push({
+                name: "Objetivos",
+                displayName: true,
+                evaluationTemplateId: 3,
+                parentId: null,
+                unmeasuredQuestions: [],
+                measuredQuestions: [],
+            });
+            */
             this.data.lastStep = this.evaluationSections.length;
         },
         getQuestions() {
@@ -242,8 +262,14 @@ export default {
             this.$router.push({ name: 'collaborator-assessment-print', params: { id } })
         },
         isSectionNextObjetives(section) {
-            return section.name === PROX_OBJETIVES_NAME;
+            return section.name === SECTION_PROX_OBJETIVES_NAME;
         },
+        isSectionObjetives(section) {
+            return section.name === SECTION_OBJETIVES_NAME;
+        },
+        isGenericSection(section) {
+            return !this.isSectionNextObjetives(section) && !this.isSectionObjetives(section)
+        }
     },
     computed: {
         ...mapGetters({

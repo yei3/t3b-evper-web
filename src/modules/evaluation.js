@@ -5,10 +5,6 @@ module.exports = {
             value: 3,
         },
         {
-            label: 'Objetivo no evaluable',
-            value: 5,
-        },
-        {
             label: 'Respuesta abierta',
             value: 0,
         },

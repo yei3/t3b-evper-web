@@ -142,7 +142,7 @@
                             <p style="padding-left: 20px; padding-top: 5px">
                                 {{ item.message }}
                             </p>
-                        </a-timeline-item>                        
+                        </a-timeline-item>
                     </a-timeline>
                 </a-col>
             </a-row>            <template slot="footer">
@@ -269,7 +269,7 @@ export default {
                 objectiveId: 0,
                 objectiveName: '',
             },
-            
+
         };
     },
     async created() {
@@ -293,7 +293,7 @@ export default {
                 // this.loaded = true;
             } catch (error) {
                 console.log(error);
-            }            
+            }
         },
         async completeObjective(objectiveId) {
             // this.loaded = false;
@@ -304,7 +304,7 @@ export default {
                     status: 3,
                 }
             ).catch(error => errorHandler(this, error));
-            this.$message.success('El objetivo se ha completado correctamente'); 
+            this.$message.success('El objetivo se ha completado correctamente');
         },
         async addObjetiveMessage(objectiveId, message) {
             await client3B.binnacle.createMessage
@@ -342,8 +342,8 @@ export default {
             this.spin = false;
         },
         async toggleRecordProgressModal(input) {
-            
-            if (!this.recordProgressModal.show) {                
+
+            if (!this.recordProgressModal.show) {
                 this.recordProgressModal.objectiveId = input.id;
                 this.recordProgressModal.objectiveName = input.objective.title;
                 this.recordProgressModal.show = !this.recordProgressModal.show;
@@ -353,7 +353,7 @@ export default {
             }
         },
         async toggleViewProgressModal(input) {
-            if (!this.viewProgressModal.show) {                
+            if (!this.viewProgressModal.show) {
                 this.viewProgressModal.objectiveName = input.objective.title;
                 await this.getBinnacle(input.id);
                 this.viewProgressModal.show = !this.viewProgressModal.show;
@@ -361,7 +361,7 @@ export default {
             else {
                 // this.loaded = true;
                 this.viewProgressModal.show = !this.viewProgressModal.show;
-            }    
+            }
         },
         async toggleFinishObjectiveModal(input) {
             if (!this.finishObjectiveModal.show) {
@@ -370,7 +370,7 @@ export default {
             } else {
                 await this.completeObjective(this.finishObjectiveModal.objectiveId);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
-            }            
+            }
         },
         selectTagColor(status) {
             switch (status) {
