@@ -141,7 +141,7 @@ const columns = [
         key: 'status',
         scopedSlots: { customRender: 'status' },
     }, {
-        title: 'Objectivo',
+        title: 'Objetivo',
         dataIndex: 'objective',
         key: 'objective',
         scopedSlots: { customRender: 'objective' },

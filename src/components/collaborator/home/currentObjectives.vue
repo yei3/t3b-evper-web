@@ -58,7 +58,7 @@
                             </a-menu-item>
                             <a-menu-divider />
                             <a-menu-item key="3" @click="toggleFinishObjectiveModal(record)">
-                                Completar objectivo
+                                Completar objetivo
                             </a-menu-item>
                         </a-menu>
                         <a-button class="ant-btn-small">
@@ -371,6 +371,7 @@ export default {
                 this.finishObjectiveModal.objectiveName = input.objective.title;
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.');
                 await this.completeObjective(this.finishObjectiveModal.objectiveId);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             }
