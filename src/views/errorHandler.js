@@ -5,7 +5,7 @@
  */
 export default ((vm, error) => {
     const time = 10;
-    console.log(error);
+    console.error(error);
     if (error.validationErrors) {
         error.validationErrors.forEach((err) => {
             vm.$message.error(err.message, time);

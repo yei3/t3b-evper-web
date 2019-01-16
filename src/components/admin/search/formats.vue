@@ -123,7 +123,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },

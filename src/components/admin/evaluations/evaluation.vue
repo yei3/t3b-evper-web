@@ -97,7 +97,7 @@
                             {{ item }}
                         </a-select-option>
                     </a-select>
-                </a-col>                
+                </a-col>
             </a-row>
             <a-row class="text-right" style="padding: 16px 0;">
                 <a-button class="btn-green" @click="applyEvaluation()" :loading="loading">

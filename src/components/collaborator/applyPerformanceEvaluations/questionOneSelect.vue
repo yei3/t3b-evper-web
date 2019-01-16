@@ -122,10 +122,7 @@ export default {
                 if (this.onlyLecture) return;
                 this.edited = true;
                 this.form.validateFields((error) => {
-                    console.log(optionSelected);
-                    console.log(error);
                     if (error || optionSelected === 'undefined') return;
-                    console.log('updating');
                     this.update(optionSelected);
                 });
             }, 200);

@@ -185,10 +185,10 @@ export default {
                 const items = response.data.result.collaboratorsObjectivesSummary;
                 // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
-                for (let index = 0; index < items.length; index++) {
+                for (let index = 0; index < items.length; index += 1) {
                     const objectives = [];
                     const objectivesAux = items[index].objectivesSummary;
-                    for (let jndex = 0; jndex < objectivesAux.length; jndex++) {
+                    for (let jndex = 0; jndex < objectivesAux.length; jndex += 1) {
                         objectives.push({
                             key: jndex + 1,
                             status: this.selectStatusName(objectivesAux[jndex].status),
@@ -207,7 +207,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
@@ -238,6 +238,8 @@ export default {
                 return 'Completado';
             case 3:
                 return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
         objectivesCount(objectives) {

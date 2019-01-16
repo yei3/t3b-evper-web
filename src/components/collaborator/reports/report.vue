@@ -40,7 +40,10 @@
         </a-col>
         <a-col :span="12" class="text-center">
             <div class="radar--size">
-                <radar-chart v-if="loaded2" :chartdata="compentecesData" :options="compentecesOptions"/>
+                <radar-chart v-if="loaded2"
+                    :chartdata="compentecesData"
+                    :options="compentecesOptions"
+                />
             </div>
         </a-col>
     </a-row>
@@ -103,7 +106,7 @@ export default {
                 const beforeEvaluation = response.data.result.rightEvaluation;
                 const currentEvaluation = response.data.result.leftEvaluation;
 
-                for (let i = 0; i < currentEvaluation.sections.length; i++) {
+                for (let i = 0; i < currentEvaluation.sections.length; i += 1) {
                     labels.push(currentEvaluation.sections[i].name);
                     this.subseccions.push({ title: currentEvaluation.sections[i].name });
                     beforeData.push(beforeEvaluation.sections[i].finishedQuestions);
@@ -128,14 +131,14 @@ export default {
                             backgroundColor: '#b6b6b688',
                         },
                     ],
-                },
+                };
                 this.compentecesOptions = {
                     responsive: true,
                     maintainAspectRatio: true,
                 };
                 this.loaded2 = true;
             } catch (error) {
-
+                errorHandler(this, error);
             }
         },
         async getCollaboratorObjectives() {
@@ -181,7 +184,7 @@ export default {
                         ],
                     }],
                     labels: ['Cumplidos', 'No cumplidos'],
-                },
+                };
                 this.options = {
                     display: true,
                     labels: {
@@ -189,7 +192,7 @@ export default {
                     },
                     responsive: true,
                     maintainAspectRatio: true,
-                },
+                };
                 this.chartdata2 = {
                     datasets: [{
                         data: [finished[1], total[1] - finished[1]],
@@ -199,15 +202,15 @@ export default {
                         ],
                     }],
                     labels: ['Cumplidos', 'No cumplidos'],
-                },
+                };
                 this.options2 = {
                     responsive: true,
                     maintainAspectRatio: true,
                 };
                 this.spin = false;
                 this.loaded = true;
-            } catch (e) {
-                console.error(e);
+            } catch (error) {
+                errorHandler(this, error);
             }
         },
         getYearDays(dateString) {

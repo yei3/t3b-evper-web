@@ -60,19 +60,19 @@
                                             index !== data.currentStep"
                                     @click="data.currentStep = index"
                                 >
-                                    <span>{{index + 1}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
                                 </div>
 
                                 <div class="step-form step-form-current"
                                     v-show="data.currentStep === index"
                                 >
-                                    <span>{{index + 1}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
                                 </div>
 
                                 <div class="step-form step-form-not-done"
                                     v-show="data.lastStep < index"
                                 >
-                                    <span>{{index + 1}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
                                 </div>
                             </a-col>
                         </a-row>
@@ -156,6 +156,10 @@ import { mapMutations, mapGetters } from 'vuex';
 
 const SECTION_PROX_OBJETIVES_NAME = 'Próximos objetivos';
 const SECTION_OBJETIVES_NAME = 'Objetivos';
+
+function normalizeStr(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+}
 
 export default {
     props: {
@@ -257,19 +261,22 @@ export default {
             this.$message.success('La evaluación ha sido finalizada correctamente');
             this.$router.push({ name: 'home' });
         },
-        async printEvaluation() {
-            let id = this.$route.params.id;
-            this.$router.push({ name: 'collaborator-assessment-print', params: { id } })
+        printEvaluation() {
+            const { id } = this.$route.params;
+            this.$router.push({ name: 'collaborator-assessment-print', params: { id } });
         },
         isSectionNextObjetives(section) {
-            return section.name === SECTION_PROX_OBJETIVES_NAME;
+            return normalizeStr(section.name) === normalizeStr(SECTION_PROX_OBJETIVES_NAME);
         },
         isSectionObjetives(section) {
-            return section.name === SECTION_OBJETIVES_NAME;
+            return normalizeStr(section.name) === normalizeStr(SECTION_OBJETIVES_NAME);
         },
         isGenericSection(section) {
-            return !this.isSectionNextObjetives(section) && !this.isSectionObjetives(section)
-        }
+            return !this.isSectionNextObjetives(section) && !this.isSectionObjetives(section);
+        },
+        capitalize(str) {
+            return str.replace(/^\w/, c => c.toUpperCase());
+        },
     },
     computed: {
         ...mapGetters({

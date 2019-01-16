@@ -13,7 +13,7 @@
             <a-col :sm="12" :md="6">
                 {{(new Date(objective.deliveryDate)).toLocaleString()}}
             </a-col>
-            <a-col :sm="12" :md="3">
+            <a-col :sm="12" :md="3" style="text-align: right;">
                 <a-dropdown>
                     <a-menu slot="overlay">
                         <a-menu-item key="1"
@@ -27,7 +27,6 @@
                         </a-menu-item>
                         <a-menu-item key="2"
                             @click="modals.modalViewProgress.show = true"
-                            :disabled="objective.status === 3"
                         >
                             Ver avances
                         </a-menu-item>
@@ -47,7 +46,7 @@
                 </a-dropdown>
             </a-col>
         </a-row>
-        <a-divider style="margin-top: 10px;"/>
+        <a-divider style="margin-top: 10px; background: #d5d5d5;"/>
         <!-- Record Progress -->
         <a-modal v-model="modals.modalRecordProgress.show" width="600px" >
             <template slot="title">
@@ -197,7 +196,6 @@
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
-import { mapMutations } from 'vuex';
 import authService from '@/services/auth';
 
 export default {
@@ -213,7 +211,7 @@ export default {
         objective: {
             type: Object,
             required: true,
-        }
+        },
     },
     data() {
         return {
@@ -271,7 +269,7 @@ export default {
                 username: authService.getUserData().name,
             });
         },
-        async completeObjective(objectiveId) {
+        async completeObjective() {
             this.modals.modalFinish.loading = true;
             const response = await client3B.objective.updateStatus({
                 id: this.objective$.id,
@@ -279,7 +277,7 @@ export default {
             }).catch(error => errorHandler(this, error));
 
             this.modals.modalFinish.loading = false;
-            if(!response) return;
+            if (!response) return;
             this.modals.modalFinish.show = false;
             this.objective$.status = 3;
             this.$message.success('El objetivo se ha completado correctamente');
@@ -287,7 +285,7 @@ export default {
     },
     computed: {
         tagColorClass() {
-            const statuses ={
+            const statuses = {
                 0: 'ant-tag-red', // No status
                 1: 'ant-tag-red', // No iniciado
                 2: 'ant-tag-yellow', // En progreso
@@ -298,7 +296,7 @@ export default {
             return statuses[this.objective$.status];
         },
         objectiveStatus() {
-            const statuses ={
+            const statuses = {
                 0: 'No iniciado',
                 1: 'No iniciado',
                 2: 'En progreso',

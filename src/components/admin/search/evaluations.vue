@@ -140,11 +140,11 @@ export default {
     methods: {
         async deleteEvaluation(id) {
             this.spin = true;
-            console.log(id);
+
             try {
-                // await client3B.Evaluation.delete({
-                //     Id: id,
-                // });
+                await client3B.Evaluation.delete({
+                    Id: id,
+                });
             } catch (error) {
                 errorHandler(this, error);
             }
@@ -157,7 +157,6 @@ export default {
                 response = await client3B.evaluation.getAdminEvaluationSummary();
 
                 const items = response.data.result;
-                // console.log(items);
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
@@ -172,7 +171,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },

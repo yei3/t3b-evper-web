@@ -10,9 +10,13 @@
                 <p>{{ evaluation.template.description }}</p>
             </a-col>
             <a-col :span="5">
-                <b>Inicio: </b> <span style="font-weight: normal">{{ new Date(evaluation.startDateTime).toLocaleDateString() }} </span>
+                <b>Inicio: </b> <span style="font-weight: normal">
+                    {{ new Date(evaluation.startDateTime).toLocaleDateString() }}
+                </span>
                 <br>
-                <b>Fin: </b> <span style="font-weight: normal"> {{ new Date(evaluation.endDateTime).toLocaleDateString() }} </span>
+                <b>Fin: </b> <span style="font-weight: normal">
+                    {{ new Date(evaluation.endDateTime).toLocaleDateString() }}
+                </span>
             </a-col>
             <a-col :span="3">
                 <a-button class="btn-blue"
@@ -27,12 +31,12 @@
             <h2>Instrucciones</h2>
             <p>{{ evaluation.template.instructions }}</p>
             <br><br>
-            <a-row 
+            <a-row
                 v-for="(section, i) in sections" :key="i"
-            >            
+            >
                 <h3>{{ section.name }}</h3>
                 <span
-                    v-for="(subsection, j) in section.childSections" :key="j"                    
+                    v-for="(subsection, j) in section.childSections" :key="j"
                 >
                     <h4 class="left-padd__subsection">{{ subsection.name }}</h4>
                     <span
@@ -44,17 +48,17 @@
                     </span>
                     <span
                         :key="h"
-                        v-for="(question, h) in subsection.measuredQuestions" 
+                        v-for="(question, h) in subsection.measuredQuestions"
                     >
                         <p class="left-padd__question">
                             <b>Objetivo: </b>{{ question.text }}
-                            <b>Valor esperado: </b>{{ (question.expected === null) ? question.expectedText : question.expected }}
+                            <b>Valor esperado: </b> {{question.expected || question.expectedText}}
                             <b>Valor real: </b>
                         </p>
                     </span>
                     <!-- <span
                         :key="h"
-                        v-for="(question, h) in subsection.measuredQuestions" 
+                        v-for="(question, h) in subsection.measuredQuestions"
                     >
                         <p class="left-padd__question">{{ question.text }}</p>
                     </span> -->
@@ -105,7 +109,7 @@ export default {
             this.evaluation = response.data.result;
             this.sections = response.data.result.template.sections;
         },
-    }
+    },
 };
 </script>
 

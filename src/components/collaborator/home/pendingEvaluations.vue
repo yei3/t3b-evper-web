@@ -1,6 +1,6 @@
 <template>
     <div class="collapse">
-        
+
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin tip="Cargando..." size="small" />
@@ -13,7 +13,7 @@
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                    <strong>    
+                    <strong>
                     {{evaluation.title}}
                     </strong>
                     </p>
@@ -91,7 +91,7 @@ export default {
                 response = await client3B.dashboard.getEvaluationsHistory();
                 const items = response.data.result.evaluationSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index++) {
+                for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
                         id: items[index].id,
                         key: index + 1,
@@ -105,7 +105,7 @@ export default {
                 }
                 // console.log(this.data);
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
@@ -113,13 +113,12 @@ export default {
             this.$router.push({ name: 'collaborator-assessment', params: { id } });
         },
         disableButton(status) {
-            if (status === 'No iniciado'  || status === 'En proceso' ) {
+            if (status === 'No iniciado' || status === 'En proceso') {
                 return true;
             }
             return false;
         },
-        transformStatus(status) {
-            
+        transformStatus() {
             return 'Ver';
         },
         selectTagColor(status) {
@@ -146,6 +145,8 @@ export default {
                 return 'Completado';
             case 3:
                 return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
     },

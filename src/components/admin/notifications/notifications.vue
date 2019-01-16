@@ -127,13 +127,13 @@ export default {
                 employments: [],
                 users: [],
                 message: '',
-                
+
             },
         };
     },
     created() {
         // fetch the data when the view is created and the data is
-        // already being observed        
+        // already being observed
         this.getAllUsers();
         this.getAllRegions();
         this.getAllAreas();
@@ -147,7 +147,7 @@ export default {
                 response = await client3B.user.getAll();
                 this.users = response.data.result.items;
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
@@ -179,7 +179,7 @@ export default {
             }).catch(error => errorHandler(this, error.response.data.error));
             if (response) {
                 this.$message.success('Notificación enviada.');
-                
+
             }
             this.loading = false;
         },
@@ -190,6 +190,6 @@ export default {
 <style>
     .collapse-content {
         margin: 32px;
-        background: white;        
+        background: white;
     }
 </style>

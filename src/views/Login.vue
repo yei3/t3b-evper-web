@@ -261,7 +261,11 @@ export default {
             try {
                 response = await client3B.auth.authenticate(auth);
             } catch (error) {
-                this.handleError(error.response.data.error);
+                if (error.response) {
+                    this.handleError(error.response.data.error);
+                } else {
+                    this.handleError(error);
+                }
                 this.loading = false;
                 return;
             }
