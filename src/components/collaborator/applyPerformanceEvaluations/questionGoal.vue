@@ -258,10 +258,11 @@ export default {
 
             this.modals.modalRecordProgress.loading = false;
             this.modals.modalRecordProgress.show = false;
-            console.log('Response', response);
+
             if (!response) return;
-            console.log(response.data.result);
+
             this.$message.success('Evaluación guardada correctamente');
+            this.objective$.status = 2;
             this.objective$.binnacle.push({
                 id: response.data.result.id,
                 evaluationQuestionId: response.data.result.evaluationQuestionId,
