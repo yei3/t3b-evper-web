@@ -50,14 +50,23 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown >
                         <a-menu slot="overlay">
-                            <a-menu-item key="1" @click="toggleRecordProgressModal(record)">
+                            <a-menu-item 
+                                key="1"
+                                :disabled="record.status === 'Completado'"
+                                @click="toggleRecordProgressModal(record)">
                                 Registrar avances
                             </a-menu-item>
-                            <a-menu-item key="2" @click="toggleViewProgressModal(record)">
+                            <a-menu-item
+                                key="2"
+                                :disabled="record.status === 'Completado'"
+                                @click="toggleViewProgressModal(record)">
                                 Ver avances
                             </a-menu-item>
                             <a-menu-divider />
-                            <a-menu-item key="3" @click="toggleFinishObjectiveModal(record)">
+                            <a-menu-item
+                                key="3"
+                                :disabled="record.status === 'Completado'"
+                                @click="toggleFinishObjectiveModal(record)">
                                 Completar objetivo
                             </a-menu-item>
                         </a-menu>
