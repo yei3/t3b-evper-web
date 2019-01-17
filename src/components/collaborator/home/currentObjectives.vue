@@ -47,6 +47,10 @@
                     </p>
                     <p><small>{{objective.subtitle}}</small></p>
                 </span>
+                <span slot="evaluable" slot-scope="evaluable" class="text-center">
+                    <a-icon type="check" v-if="!evaluable"/>
+                    <a-icon type="minus" v-if="evaluable"/>
+                </span>
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown >
                         <a-menu slot="overlay">
@@ -240,6 +244,13 @@ const columns = [
         scopedSlots: { customRender: 'objective' },
     },
     {
+        title: 'Evaluable',
+        dataIndex: 'evaluable',
+        key: 'evaluable',
+        scopedSlots: { customRender: 'evaluable' },
+        align: 'center',
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -346,6 +357,7 @@ export default {
                             title: items[index].name,
                             subtitle: 'sin descripción',
                         },
+                        evaluable   : items[index].isNotEvaluable,
                         endDate: new Date(items[index].deliveryDate).toLocaleString(),
                     });
                 }
