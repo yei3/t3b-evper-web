@@ -38,6 +38,7 @@
                                 :loading="loading"
                                 v-show="!onlyLecture"
                             >
+                                <a-icon type="file-text" />
                                 Finalizar Evaluación
                             </a-button>
                             <a-button class="btn-blue"
@@ -45,6 +46,7 @@
                                 :loading="loading"
                                 v-show="onlyLecture"
                             >
+                                <a-icon type="printer" />
                                 Imprimir Evaluación
                             </a-button>
                         </a-col>
