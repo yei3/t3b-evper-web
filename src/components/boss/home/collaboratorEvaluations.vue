@@ -78,7 +78,10 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Cerrar evaluación</h1>
-                        <small>{{finishEvaluationModal.evaluationName}} - {{finishEvaluationModal.collaboratorName}}</small>
+                        <small>
+                            {{finishEvaluationModal.evaluationName}} -
+                            {{finishEvaluationModal.collaboratorName}}
+                        </small>
                     </a-col>
                 </a-row>
             </template>
@@ -141,7 +144,10 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Agendar revisión</h1>
-                        <small>{{scheduleReviewModal.evaluationName}} - {{scheduleReviewModal.collaboratorName}} </small>
+                        <small>
+                            {{scheduleReviewModal.evaluationName}} -
+                            {{scheduleReviewModal.collaboratorName}}
+                        </small>
                     </a-col>
                 </a-row>
             </template>
@@ -160,7 +166,7 @@
                         style="width: 100%"
                         @ok="onSelectDate"
                     />
-                        
+
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>
@@ -181,7 +187,7 @@
                     key="submit"
                     type="primary"
                     :loading="loading"
-                    @click="toggleScheduleReviewModal"                    
+                    @click="toggleScheduleReviewModal"
                 >
                     Agendar revisión
                 </a-button>
@@ -253,8 +259,8 @@ export default {
                 enableButton: false,
                 evaluationId: 0,
                 evaluationName: '',
-                collaboratorName: '', 
-            },            
+                collaboratorName: '',
+            },
         };
     },
     created() {
@@ -262,28 +268,26 @@ export default {
     },
     methods: {
         onSelectDate(value) {
-            this.dateString = new Date(value._d);
+            this.dateString = new Date(value._d); // eslint-disable-line
         },
         async scheduleReview(evaluationId, date) {
             this.loading = true;
-            await client3B.evaluation.revision.updateRevisionDate
-            (
+            await client3B.evaluation.revision.updateRevisionDate(
                 {
-                    evaluationId: evaluationId,
+                    evaluationId,
                     revisionTime: date.toISOString(),
-                }
+                },
             ).catch(error => errorHandler(this, error));
             this.loading = false;
             this.$message.success('La fecha de revisión se ha guardado correctamente');
         },
         async reviewEvaluation(evaluationId) {
             this.loading = true;
-            console.log(evaluationId)
-            await client3B.evaluation.revision.revise
-            (
+            console.log(evaluationId);
+            await client3B.evaluation.revision.revise(
                 {
-                    evaluationId: evaluationId,
-                }
+                    evaluationId,
+                },
             ).catch(error => errorHandler(this, error));
             this.loading = false;
             this.$message.success('La evaluación se ha validado correctamente');
@@ -296,10 +300,11 @@ export default {
                 const items = response.data.result.collaboratorRevisionSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    this.data.push({                        
-                        key: index+1,
+                    this.data.push({
+                        key: index + 1,
                         id: items[index].evaluationId,
-                        status: this.selectStatusName(2), //this.selectStatusName(items[index].status),
+                        // status: this.selectStatusName(items[index].status),
+                        status: this.selectStatusName(2),
                         evaluation: {
                             title: items[index].name,
                             subtitle: items[index].description,
@@ -315,7 +320,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             } finally {
                 this.spin = false;
             }
@@ -324,10 +329,10 @@ export default {
             if (!this.finishEvaluationModal.show) {
                 this.finishEvaluationModal.evaluationId = input.id;
                 this.finishEvaluationModal.collaboratorName = input.collaborator;
-                this.finishEvaluationModal.evaluationName = input.evaluation.title;                
+                this.finishEvaluationModal.evaluationName = input.evaluation.title;
                 this.finishEvaluationModal.show = !this.finishEvaluationModal.show;
             } else {
-                await this.reviewEvaluation(this.finishEvaluationModal.evaluationId);                
+                await this.reviewEvaluation(this.finishEvaluationModal.evaluationId);
                 this.finishEvaluationModal.show = !this.finishEvaluationModal.show;
                 this.getCollaboratorEvaluations();
             }
@@ -339,12 +344,12 @@ export default {
                 this.scheduleReviewModal.collaboratorName = input.collaborator;
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
             } else {
-                await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);                
+                await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
                 this.getCollaboratorEvaluations();
-            }            
+            }
         },
-        disableButton (status) {
+        disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {
                 return true;
             }
@@ -367,14 +372,16 @@ export default {
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return 'No iniciado';
-                case 1:
-                    return 'En proceso';
-                case 2:
-                    return 'Finalizado';
-                case 3:
-                    return 'Validado';
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Finalizado';
+            case 3:
+                return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
     },

@@ -11,7 +11,7 @@ class Binnacle extends Http {
 
     /**
      * Request for the information for a Binnacle
-     * 
+     *
      * @param {Object} data   Id for the Binnacle
      *
      * @return {Promise}        Http Response
@@ -23,7 +23,7 @@ class Binnacle extends Http {
 
     /**
      * Request for the information for a Create a msg
-     * 
+     *
      * @param {Object} data     Data to create a msg
      *
      * @return {Promise}        Http Response

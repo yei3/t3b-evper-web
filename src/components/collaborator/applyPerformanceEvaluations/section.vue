@@ -68,15 +68,6 @@
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
                                 :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
-                            <question-goal
-                                v-if="qstTemplate.questionType == 5"
-                                :index="index + 1"
-                                :onlyLecture="onlyLecture"
-                                :questionText="qstTemplate.text"
-                                :questionId="getQuestionId(qstTemplate.id)"
-                                :questionStatus="getQuestionStatus(qstTemplate.id)"
-                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
-                            />
                         </a-row>
                     </a-col>
                 </a-row>
@@ -91,7 +82,6 @@ import questionOpenMultiple from '@/components/collaborator/applyPerformanceEval
 import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
 import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
 import questionObjective from '@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue';
-import questionGoal from '@/components/collaborator/applyPerformanceEvaluations/questionGoal.vue';
 
 export default {
     props: {
@@ -114,7 +104,6 @@ export default {
         questionOneSelect,
         questionBoolean,
         questionObjective,
-        questionGoal,
     },
     methods: {
         getQuestionStatus(questionId) {

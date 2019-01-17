@@ -68,7 +68,7 @@ export default {
                 this.evaluations = response.data.result.toDoesSummary.evaluations;
                 this.objectives = response.data.result.toDoesSummary.objectives;
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },

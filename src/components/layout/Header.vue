@@ -51,6 +51,7 @@
 import client3B from '@/api/client3B';
 import { mapActions, mapGetters } from 'vuex';
 import authService from '@/services/auth';
+import errorHandler from '@/views/errorHandler';
 
 export default {
     data() {
@@ -101,7 +102,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             } finally {
                 this.spin = false;
             }

@@ -2,7 +2,7 @@
     <a-col class="form-autoevaluation">
         <a-row class="form-tittle">
             <a-col :span="24">
-                <h1>{{section.name}}</h1>
+                <h1>{{capitalize(section.name)}}</h1>
             </a-col>
             <a-col :span="24">
                 <a-row
@@ -199,6 +199,9 @@ export default {
                 this.addQuestion();
             }
             this.subsectionId = this.section.childSections[0].id;
+        },
+        capitalize(str) {
+            return str.replace(/^\w/, c => c.toUpperCase());
         },
         addQuestion() {
             questionUUID += 1;

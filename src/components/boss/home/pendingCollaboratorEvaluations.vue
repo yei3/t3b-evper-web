@@ -200,11 +200,11 @@ export default {
                         },
                         autoEvaluation: items[i].isAutoEvaluation,
                         collaborator: items[i].collaboratorName,
-                        endDate: new Date(items[i].endDateTime).toLocaleDateString()
+                        endDate: new Date(items[i].endDateTime).toLocaleDateString(),
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
@@ -257,6 +257,8 @@ export default {
                 return 'Completado';
             case 3:
                 return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
     },

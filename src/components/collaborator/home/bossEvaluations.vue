@@ -191,7 +191,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             } finally {
                 this.spin = false;
             }
@@ -233,6 +233,8 @@ export default {
                 return 'En revisión';
             case 4:
                 return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
     },

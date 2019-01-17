@@ -105,6 +105,7 @@
 import client3B from '@/api/client3B';
 import { mapActions, mapGetters } from 'vuex';
 import Footer from '@/components/layout/Footer.vue';
+import errorHandler from '@/views/errorHandler';
 
 export default {
     components: {
@@ -121,7 +122,7 @@ export default {
     },
     created() {
         // fetch the data when the view is created and the data is
-        // already being observed        
+        // already being observed
         this.getAllUsers();
     },
     methods: {
@@ -132,7 +133,7 @@ export default {
                 response = await client3B.user.getAll();
                 this.users = response.data.result.items;
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
@@ -161,6 +162,6 @@ export default {
 <style>
     .collapse-content {
         margin: 32px;
-        background: white;        
+        background: white;
     }
 </style>

@@ -38,6 +38,7 @@
                                 :loading="loading"
                                 v-show="!onlyLecture"
                             >
+                                <a-icon type="file-text" />
                                 Finalizar Evaluación
                             </a-button>
                             <a-button class="btn-blue"
@@ -45,6 +46,7 @@
                                 :loading="loading"
                                 v-show="onlyLecture"
                             >
+                                <a-icon type="printer" />
                                 Imprimir Evaluación
                             </a-button>
                         </a-col>
@@ -60,19 +62,19 @@
                                             index !== data.currentStep"
                                     @click="data.currentStep = index"
                                 >
-                                    <span>{{index + 1}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
                                 </div>
 
                                 <div class="step-form step-form-current"
                                     v-show="data.currentStep === index"
                                 >
-                                    <span>{{index + 1}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
                                 </div>
 
                                 <div class="step-form step-form-not-done"
                                     v-show="data.lastStep < index"
                                 >
-                                    <span>{{index + 1}}. {{step.label}}</span>
+                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
                                 </div>
                             </a-col>
                         </a-row>
@@ -82,6 +84,13 @@
                                 :instructions="evaluationInstructions"
                             />
                             <div v-for="(section, index) in evaluationSections" :key="section.id">
+                                <evaluation-section-objectives
+                                    v-if="isSectionObjetives(section)"
+                                    v-show="(index + 1) == data.currentStep"
+                                    :evaluationId="evaluation.id"
+                                    :section="section"
+                                    :onlyLecture="onlyLecture"
+                                />
                                 <evaluation-section-next-objectives
                                     v-if="isSectionNextObjetives(section)"
                                     v-show="(index + 1) == data.currentStep"
@@ -90,7 +99,7 @@
                                     :questions="notEvaluableQuestions"
                                     :onlyLecture="onlyLecture"
                                 />
-                                <evaluation-section v-else
+                                <evaluation-section v-if="isGenericSection(section)"
                                     v-show="(index + 1) == data.currentStep"
                                     :section="section"
                                     :questions="getQuestions()"
@@ -144,9 +153,15 @@ import errorHandler from '@/views/errorHandler';
 import formIntroduction from '@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue';
 import evaluationSection from '@/components/collaborator/applyPerformanceEvaluations/section.vue';
 import evaluationSectionNextObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue';
+import evaluationSectionObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue';
 import { mapMutations, mapGetters } from 'vuex';
 
-const PROX_OBJETIVES_NAME = 'próximos objetivos';
+const SECTION_PROX_OBJETIVES_NAME = 'Próximos objetivos';
+const SECTION_OBJETIVES_NAME = 'Objetivos';
+
+function normalizeStr(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+}
 
 export default {
     props: {
@@ -159,6 +174,7 @@ export default {
         formIntroduction,
         evaluationSection,
         evaluationSectionNextObjectives,
+        evaluationSectionObjectives,
     },
     data() {
         return {
@@ -190,6 +206,16 @@ export default {
             if (!response) return;
             this.spin = false;
             this.evaluation = response.data.result;
+            /*
+            this.evaluation.template.sections.push({
+                name: "Objetivos",
+                displayName: true,
+                evaluationTemplateId: 3,
+                parentId: null,
+                unmeasuredQuestions: [],
+                measuredQuestions: [],
+            });
+            */
             this.data.lastStep = this.evaluationSections.length;
         },
         getQuestions() {
@@ -237,12 +263,21 @@ export default {
             this.$message.success('La evaluación ha sido finalizada correctamente');
             this.$router.push({ name: 'home' });
         },
-        async printEvaluation() {
-            let id = this.$route.params.id;
-            this.$router.push({ name: 'collaborator-assessment-print', params: { id } })
+        printEvaluation() {
+            const { id } = this.$route.params;
+            this.$router.push({ name: 'collaborator-assessment-print', params: { id } });
         },
         isSectionNextObjetives(section) {
-            return section.name === PROX_OBJETIVES_NAME;
+            return normalizeStr(section.name) === normalizeStr(SECTION_PROX_OBJETIVES_NAME);
+        },
+        isSectionObjetives(section) {
+            return normalizeStr(section.name) === normalizeStr(SECTION_OBJETIVES_NAME);
+        },
+        isGenericSection(section) {
+            return !this.isSectionNextObjetives(section) && !this.isSectionObjetives(section);
+        },
+        capitalize(str) {
+            return str.replace(/^\w/, c => c.toUpperCase());
         },
     },
     computed: {

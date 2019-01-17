@@ -55,3 +55,7 @@
 .question-row {
     margin-top: 0px;
 }
+
+.ant-dropdown-menu-item:hover {
+    color: #fff;
+}

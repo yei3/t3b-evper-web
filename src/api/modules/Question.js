@@ -44,6 +44,12 @@ class Question extends Http {
         return this.request(path, this.methods.get, params);
     }
 
+    getObjetivesNotEvaluable(evaluationId) {
+        const path = `${this.getPath({ goal: true })}/GetSummary`;
+        const params = { evaluationId };
+        return this.request(path, this.methods.get, params);
+    }
+
     /**
      * Request for the information for all the questions
      *

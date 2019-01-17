@@ -69,7 +69,8 @@
                                     </a-button>
                                 </a-col>
                                 <a-col :span="12" style="text-align: right;">
-                                    <a-button class="btn-green" @click="updateSubsection(subsection)"
+                                    <a-button class="btn-green"
+                                        @click="updateSubsection(subsection)"
                                         :loading="subsection.loading"
                                     >
                                         Aceptar
@@ -609,7 +610,6 @@ export default {
 
             // Verificar si es texto
             if (question.answerType === 3) { // Es tipo objetivo
-                console.log(question.expectedValue);
                 if (Number.isNaN(Number(question.expectedValue)) && data.relation === 3) {
                     data.expectedText = question.expectedValue;
                 } else if (Number.isNaN(Number(question.expectedValue))) {

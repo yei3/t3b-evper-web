@@ -26,8 +26,14 @@
                             <p class="ant-upload-drag-icon">
                                 <a-icon type="cloud-upload" />
                             </p>
-                            <p class="ant-upload-text">Da click o arrastra tu selfie <a-icon type="camera" /> a esta área para subirla</p>
-                            <p class="ant-upload-hint">Estrictamente prohibido la carga de datos de la empresa u otros archivos maliciosos</p>
+                            <p class="ant-upload-text">
+                                Da click o arrastra tu selfie
+                                <a-icon type="camera" /> a esta área para subirla
+                            </p>
+                            <p class="ant-upload-hint">
+                                Estrictamente prohibido la carga de datos de
+                                la empresa u otros archivos maliciosos
+                            </p>
                         </a-upload-dragger>
                     </a-col>
                 </a-row>
@@ -52,7 +58,8 @@
                                     'email',
                                     {
                                     rules: [{
-                                        type: 'email', message: '¡Escribe un email válido, por favor!',
+                                        type: 'email',
+                                        message: '¡Escribe un email válido, por favor!',
                                     }]
                                     }
                                 ]"

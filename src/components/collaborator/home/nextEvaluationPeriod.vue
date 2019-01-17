@@ -21,7 +21,7 @@ export default {
     },
     methods: {
         moment,
-        disabledDate(current) {
+        disabledDate() {
             // Can not select days before today and today
             return true;
         },

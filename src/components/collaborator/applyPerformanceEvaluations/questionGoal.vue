@@ -1,98 +1,202 @@
 <template>
-    <a-col :span="24"
-        style="padding: 5px 15px 0px 15px; margin-bottom: 0px;"
-        :class="answerStatus"
-    >
-        <a-col :span="24">
-            <h4>{{`${index}. ${questionText}`}}</h4>
-        </a-col>
-        <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
-            <a-form-item
-                fieldDecoratorId="e1"
-                label='Objetivo'
-                :labelCol="{ xxl: 4, xl: 7, lg: 9, md: 24, sm: 24 }"
-                :wrapperCol="{ xxl: 20, xl: 17, lg: 15, md: 24, sm: 24 }"
-                :fieldDecoratorOptions="{
-                    initialValue: expected,
-                    rules: [
-                        {
-                            required: true,
-                            message: 'Selecciona una respuesta'
-                        }
-                    ]
-                }"
-            >
-                <a-input v-model="expectedValue"
-                    @keyup="edited=true"
-                    @keypress.enter.prevent="save"
-                    :disabled="onlyLecture"
-                >
-                    <a-icon class="input-save"
-                        @click="save"
-                        slot="addonAfter"
-                        type="save"
+    <a-col :span="24" style="padding: 5px 15px 0px 15px; margin-bottom: 0px;">
+        <a-row :gutter="16">
+            <a-col :sm="12" :md="3">
+                <a-tag :class="tagColorClass">{{objectiveStatus}}</a-tag>
+            </a-col>
+            <a-col :sm="12" :md="6">
+                <strong>{{objective.name}}</strong>
+            </a-col>
+            <a-col :sm="12" :md="6">
+                {{objective.deliverable}}
+            </a-col>
+            <a-col :sm="12" :md="6">
+                {{(new Date(objective.deliveryDate)).toLocaleString()}}
+            </a-col>
+            <a-col :sm="12" :md="3" style="text-align: right;">
+                <a-dropdown>
+                    <a-menu slot="overlay">
+                        <a-menu-item key="1"
+                            :disabled="objective.status === 3"
+                            @click="
+                                modals.modalRecordProgress.show = true;
+                                modals.modalRecordProgress.input = '';
+                            "
+                        >
+                            Registrar avances
+                        </a-menu-item>
+                        <a-menu-item key="2"
+                            @click="modals.modalViewProgress.show = true"
+                        >
+                            Ver avances
+                        </a-menu-item>
+                        <a-menu-divider />
+                        <a-menu-item key="3" @click="
+                            modals.modalFinish.show = true
+                            modals.modalFinish.input = ''
+                        "
+                            :disabled="objective.status === 3"
+                        >
+                            Completar objetivo
+                        </a-menu-item>
+                    </a-menu>
+                    <a-button class="ant-btn-small">
+                        ...
+                    </a-button>
+                </a-dropdown>
+            </a-col>
+        </a-row>
+        <a-divider style="margin-top: 10px; background: #d5d5d5;"/>
+        <!-- Record Progress -->
+        <a-modal v-model="modals.modalRecordProgress.show" width="600px" >
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="edit" class="modal-icon" />
+                    </a-col>
+                    <a-col :span="24" class="modal-header">
+                        <h1>Registrar avance</h1>
+                        <small>{{objective.name}}</small>
+                    </a-col>
+                </a-row>
+            </template>
+
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
+                    <span>
+                        Agregue un comentario referente a las acciones realizadas
+                        para cumplir el objetivo indicado.
+                    </span>
+                </a-col>
+                <a-col :span="24" modal-content-seccion-bottom>
+                    <a-textarea
+                        placeholder="Avance del objetivo..."
+                        :rows="6"
+                        v-model="modals.modalRecordProgress.input"
                     />
-                </a-input>
-            </a-form-item>
-            <a-form-item
-                fieldDecoratorId="q1"
-                label='Entregable'
-                :labelCol="{ xxl: 4, xl: 7, lg: 9, md: 24, sm: 24 }"
-                :wrapperCol="{ xxl: 20, xl: 17, lg: 15, md: 24, sm: 24 }"
-                :fieldDecoratorOptions="{
-                    initialValue: value,
-                    rules: [
-                        {
-                            required: true,
-                            message: 'Selecciona una respuesta'
-                        }
-                    ]
-                }"
-            >
-                <a-input v-model="value"
-                    @keyup="edited=true"
-                    @keypress.enter.prevent="save"
-                    :disabled="onlyLecture"
+                </a-col>
+            </a-row>
+            <template slot="footer">
+                <a-button
+                    key="back"
+                    @click="clearModalRecordProgress"
                 >
-                    <a-icon class="input-save"
-                        @click="save"
-                        slot="addonAfter"
-                        type="save"
+                    Cancelar
+                </a-button>
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="saveProgress"
+                    :loading="modals.modalRecordProgress.loading"
+                    :disabled="
+                        modals.modalRecordProgress.input === '' ||
+                        modals.modalRecordProgress.loading
+                    "
+                >
+                    Guardar
+                </a-button>
+            </template>
+        </a-modal>
+        <!-- View Progress -->
+        <a-modal v-model="modals.modalViewProgress.show" width="600px">
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24" class="modal-header" style="margin-top: 25px;">
+                        <h1>Ver avances</h1>
+                        <small>{{ objective$.name }}</small>
+                    </a-col>
+                </a-row>
+            </template>
+            <a-row class="modal-content">
+                <a-col :span="24" style="text-align: center;">
+                    <span v-if="objective$.binnacle.length === 0">No hay avances</span>
+                </a-col>
+                <a-col :span="24" style="padding: 0px 20px;">
+                    <a-timeline mode="alternate">
+                        <a-timeline-item v-for="(item, index) in objective$.binnacle"
+                            :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
+                                {{item.username}}
+                                <small>{{ item.creationTime }}</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                {{ item.text }}
+                            </p>
+                        </a-timeline-item>
+                    </a-timeline>
+                </a-col>
+            </a-row>
+            <template slot="footer">
+                <a-button key="back"
+                    @click="modals.modalViewProgress.show = false"
+                >
+                    Cerrar
+                </a-button>
+            </template>
+        </a-modal>
+        <!-- Finish Objetive -->
+        <a-modal v-model="modals.modalFinish.show" width="600px">
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="check-square" class="modal-icon" />
+                    </a-col>
+                    <a-col :span="24" class="modal-header">
+                        <h1>Completar Objetivo</h1>
+                        <small>{{objective.name}}</small>
+                    </a-col>
+                </a-row>
+            </template>
+
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
+                    <span>
+                        Agregue un comentario referente a las acciones
+                        realizadas para cumplir el objetivo indicado.
+                    </span>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion">
+                    <a-textarea placeholder="Comentarios..." :rows="6"
+                        v-model="modals.modalFinish.input"
                     />
-                </a-input>
-            </a-form-item>
-            <a-form-item
-                fieldDecoratorId="o1"
-                label='Fecha de entrega'
-                :labelCol="{ xxl: 4, xl: 7, lg: 9, md: 24, sm: 24 }"
-                :wrapperCol="{ xxl: 20, xl: 17, lg: 15, md: 24, sm: 24 }"
-                :fieldDecoratorOptions="{
-                    initialValue: '',
-                    rules: [
-                        {
-                            required: false,
-                            message: 'Observaciones'
-                        }
-                    ]
-                }"
-            >
-                <a-date-picker :disabled="onlyLecture" />
-            </a-form-item>
-        </a-form>
-        <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            <a-icon v-show="loading"
-                class='dynamic-delete-button form-icon'
-                type="loading"
-                style="padding-left: 30px;"
-            /> <span v-show="loading"> Guardardando Respuesta </span>
-        </a-col>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion-bottom">
+                     ¿Está seguro que desea completar el objetivo indicado?
+                </a-col>
+            </a-row>
+
+            <template slot="footer">
+                <a-button
+                    key="back"
+                    @click="modals.modalFinish.show = false"
+                >
+                    Cancelar
+                </a-button>
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    :loading="modals.modalFinish.loading"
+                    :disabled="modals.modalFinish.input === ''"
+                    @click="completeObjective"
+                >
+                    Si, completar objetivo
+                </a-button>
+            </template>
+        </a-modal>
     </a-col>
 </template>
 
 <script >
 import errorHandler from '@/views/errorHandler';
 import client3B from '@/api/client3B';
-import { mapMutations } from 'vuex';
+import authService from '@/services/auth';
 
 export default {
     props: {
@@ -104,110 +208,103 @@ export default {
             type: Number,
             required: true,
         },
-        questionId: {
-            type: Number,
-            required: false,
-            default: null,
-        },
-        questionText: {
-            type: String,
-            required: false,
-            default: '',
-        },
-        questionStatus: {
-            type: Number,
-            required: false,
-            default: 1,
-        },
-        answer: {
-            type: Object,
-            required: true,
-        },
-        templateQuestion: {
+        objective: {
             type: Object,
             required: true,
         },
     },
     data() {
         return {
-            edited: false,
-            loading: false,
-            expectedValue: null,
-            value: 0,
-            numeric: false,
-            configurable: true,
+            objective$: null,
+            modals: {
+                modalRecordProgress: {
+                    show: false,
+                    input: '',
+                    loading: false,
+                },
+                modalViewProgress: {
+                    show: false,
+                    input: '',
+                    loading: false,
+                },
+                modalFinish: {
+                    show: false,
+                    input: '',
+                    loading: false,
+                },
+            },
         };
     },
-    mounted() {
-        this.parseAnswer();
+    created() {
+        this.init();
     },
     methods: {
-        ...mapMutations([
-            'evaluationSetQuestionsAsAnswered',
-        ]),
-        handleForm(e) {
-            e.prevent();
+        init() {
+            this.objective$ = this.objective;
         },
-        parseAnswer() {
-            this.expectedValue = this.expected;
-            if (!Number.isNaN(Number(this.expected))) {
-                this.numeric = true;
-                this.value = this.answer.real || 0;
-            } else {
-                this.value = this.answer.text || '';
-            }
-            if (this.questionStatus === 1) {
-                this.edited = true;
-            }
+        clearModalRecordProgress() {
+            this.modals.modalRecordProgress.show = false;
+            this.modals.modalRecordProgress.input = '';
         },
-        save() {
-            if (this.onlyLecture) return;
-            this.form.validateFields((error) => {
-                if (error) return;
-                if (this.numeric && Number.isNaN(Number(this.value))) {
-                    errorHandler(this, 'Se espera un valor numérico');
-                    return;
-                }
-                this.update();
+        async saveProgress() {
+            this.modals.modalRecordProgress.loading = true;
+            const response = await client3B.binnacle.createMessage({
+                evaluationQuestionId: this.objective.id,
+                text: this.modals.modalRecordProgress.input,
+                // creationTime: new Date(),
+            }).catch(error => errorHandler(this, error));
+
+            this.modals.modalRecordProgress.loading = false;
+            this.modals.modalRecordProgress.show = false;
+
+            if (!response) return;
+
+            this.$message.success('Evaluación guardada correctamente');
+            this.objective$.status = 2;
+            this.objective$.binnacle.push({
+                id: response.data.result.id,
+                evaluationQuestionId: response.data.result.evaluationQuestionId,
+                text: response.data.result.text,
+                creationTime: response.data.result.creationTime,
+                username: authService.getUserData().name,
             });
         },
-        async update() {
-            this.loading = true;
-            const response = await client3B.evaluation.answer.update({
-                id: this.answer.id,
-                evaluationQuestionId: this.questionId,
-                text: this.numeric ? null : this.value,
-                real: this.numeric ? this.value : 0,
-                isActive: true,
-                evaluationMeasuredQuestion: {
-                    status: 2,
-                },
-            }, { measured: true }).catch(error => errorHandler(this, error));
-            this.loading = false;
-            if (!response) return;
-            this.edited = false;
-            this.evaluationSetQuestionsAsAnswered(this.questionId);
-            this.$message.success('Evaluación guardada correctamente');
-            await this.updateExpectedValue();
-        },
-        async updateExpectedValue() {
-            const templateQuestion = JSON.parse(JSON.stringify(this.templateQuestion));
-            if (this.numeric) {
-                templateQuestion.expected = this.expectedValue;
-            } else {
-                templateQuestion.expectedText = this.expectedValue;
-            }
+        async completeObjective() {
+            this.modals.modalFinish.loading = true;
+            const response = await client3B.objective.updateStatus({
+                id: this.objective$.id,
+                status: 3,
+            }).catch(error => errorHandler(this, error));
 
-            await client3B.question.update(templateQuestion, { objective: true })
-                .catch(error => errorHandler(this, error));
+            this.modals.modalFinish.loading = false;
+            if (!response) return;
+            this.modals.modalFinish.show = false;
+            this.objective$.status = 3;
+            this.$message.success('El objetivo se ha completado correctamente');
         },
     },
     computed: {
-        answerStatus() {
-            if (this.edited) {
-                return 'question-row orange-bar';
-            }
-            return 'question-row green-bar';
+        tagColorClass() {
+            const statuses = {
+                0: 'ant-tag-red', // No status
+                1: 'ant-tag-red', // No iniciado
+                2: 'ant-tag-yellow', // En progreso
+                3: 'ant-tag-green', // Completado
+                4: 'ant-tag-blue', // Validado
+            };
+
+            return statuses[this.objective$.status];
+        },
+        objectiveStatus() {
+            const statuses = {
+                0: 'No iniciado',
+                1: 'No iniciado',
+                2: 'En progreso',
+                3: 'Completado',
+                4: 'Validado',
+            };
+
+            return statuses[this.objective$.status];
         },
     },
 };

@@ -117,7 +117,7 @@ export default {
                 response = await client3B.dashboard.getCollaborator();
                 const items = response.data.result.evaluationSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index++) {
+                for (let index = 0; index < items.length; index += 1) {
                     this.data.push({
                         id: items[index].id,
                         key: index + 1,
@@ -130,19 +130,16 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
         fillEvaluation(id, status) {
-            
             if (status === 'Finalizada') {
-                console.log(status)
                 this.$router.push({ name: 'collaborator-assessment', params: { id } });
-            }
-            else {
+            } else {
                 this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
-            }            
+            }
         },
         disableButton(status) {
             if (status === 'Validado') {
@@ -183,6 +180,8 @@ export default {
                 return 'Finalizada';
             case 3:
                 return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
     },

@@ -58,7 +58,7 @@
                             </a-menu-item>
                             <a-menu-divider />
                             <a-menu-item key="3" @click="toggleFinishObjectiveModal(record)">
-                                Completar objectivo
+                                Completar objetivo
                             </a-menu-item>
                         </a-menu>
                         <a-button class="ant-btn-small">
@@ -132,7 +132,10 @@
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline mode="alternate">
-                        <a-timeline-item v-for="(item, index) in binnacle" :key="index" color="gray" class="timeline-item">
+                        <a-timeline-item v-for="(item, index) in binnacle" :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
@@ -142,7 +145,7 @@
                             <p style="padding-left: 20px; padding-top: 5px">
                                 {{ item.message }}
                             </p>
-                        </a-timeline-item>                        
+                        </a-timeline-item>
                     </a-timeline>
                 </a-col>
             </a-row>            <template slot="footer">
@@ -255,7 +258,7 @@ export default {
                 show: false,
                 enableButton: true,
                 objectiveId: 0,
-                objectiveName: ''
+                objectiveName: '',
             },
             viewProgressModal: {
                 show: false,
@@ -269,7 +272,7 @@ export default {
                 objectiveId: 0,
                 objectiveName: '',
             },
-            
+
         };
     },
     async created() {
@@ -280,11 +283,13 @@ export default {
             this.loaded = false;
             let response = null;
             try {
-                response = await client3B.binnacle.getBinnacle({ evaluationMeasuredQuestionId: objectiveId, });
+                response = await client3B.binnacle.getBinnacle({
+                    evaluationMeasuredQuestionId: objectiveId,
+                });
                 this.binnacle = [];
-                const items = response.data.result.items;
+                const { items } = response.data.result;
 
-                for (let i = 0; i < items.length; i++) {
+                for (let i = 0; i < items.length; i += 1) {
                     this.binnacle.push({
                         message: items[i].text,
                         username: items[i].userName,
@@ -293,27 +298,25 @@ export default {
                 }
                 // this.loaded = true;
             } catch (error) {
-                console.log(error);
-            }            
+                errorHandler(this, error);
+            }
         },
         async completeObjective(objectiveId) {
             // this.loaded = false;
-            await client3B.objective.updateStatus
-            (
+            await client3B.objective.updateStatus(
                 {
                     id: objectiveId,
                     status: 3,
-                }
+                },
             ).catch(error => errorHandler(this, error));
-            this.$message.success('El objetivo se ha completado correctamente'); 
+            this.$message.success('El objetivo se ha completado correctamente');
         },
         async addObjetiveMessage(objectiveId, message) {
-            await client3B.binnacle.createMessage
-            (
+            await client3B.binnacle.createMessage(
                 {
                     evaluationQuestionId: objectiveId,
                     text: message,
-                }
+                },
             ).catch(error => errorHandler(this, error));
             this.message = '';
             this.$message.success('El mensaje se ha guardado correctamente');
@@ -338,13 +341,12 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },
         async toggleRecordProgressModal(input) {
-            
-            if (!this.recordProgressModal.show) {                
+            if (!this.recordProgressModal.show) {
                 this.recordProgressModal.objectiveId = input.id;
                 this.recordProgressModal.objectiveName = input.objective.title;
                 this.recordProgressModal.show = !this.recordProgressModal.show;
@@ -354,15 +356,14 @@ export default {
             }
         },
         async toggleViewProgressModal(input) {
-            if (!this.viewProgressModal.show) {                
+            if (!this.viewProgressModal.show) {
                 this.viewProgressModal.objectiveName = input.objective.title;
                 await this.getBinnacle(input.id);
                 this.viewProgressModal.show = !this.viewProgressModal.show;
-            }
-            else {
+            } else {
                 // this.loaded = true;
                 this.viewProgressModal.show = !this.viewProgressModal.show;
-            }    
+            }
         },
         async toggleFinishObjectiveModal(input) {
             if (!this.finishObjectiveModal.show) {
@@ -370,9 +371,10 @@ export default {
                 this.finishObjectiveModal.objectiveName = input.objective.title;
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.');
                 await this.completeObjective(this.finishObjectiveModal.objectiveId);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
-            }            
+            }
         },
         selectTagColor(status) {
             switch (status) {
@@ -400,6 +402,8 @@ export default {
                 return 'Completado';
             case 4:
                 return 'Validado';
+            default:
+                return 'No iniciado';
             }
         },
     },
