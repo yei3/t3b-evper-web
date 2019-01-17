@@ -96,7 +96,7 @@
                                     v-show="(index + 1) == data.currentStep"
                                     :evaluationId="evaluation.id"
                                     :section="section"
-                                    :questions="notEvaluableQuestions"
+                                    :questions="notEvaluableQuestions(section.childSections[0].id)"
                                     :onlyLecture="onlyLecture"
                                 />
                                 <evaluation-section v-if="isGenericSection(section)"
@@ -279,6 +279,10 @@ export default {
         capitalize(str) {
             return str.replace(/^\w/, c => c.toUpperCase());
         },
+        notEvaluableQuestions(subsectionId) {
+            if (!this.evaluation) return [];
+            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null && qst.sectionId === subsectionId);
+        },
     },
     computed: {
         ...mapGetters({
@@ -317,10 +321,7 @@ export default {
             if (!this.evaluation) return '';
             return this.evaluation.template.instructions;
         },
-        notEvaluableQuestions() {
-            if (!this.evaluation) return [];
-            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null);
-        },
+        
     },
 };
 </script>

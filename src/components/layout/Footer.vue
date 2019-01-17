@@ -1,6 +1,6 @@
 <template>
     <a-layout-footer class="custom-footer">
-        <strong style="font-weight: 700;">Tiendas 3B</strong> © 2018
+        <strong style="font-weight: 700;">Tiendas 3B</strong> © 2019
         <div class="footer-right">
             Hecho con <a-icon type="heart"/> por Yei<b>3</b> Software
         </div>
