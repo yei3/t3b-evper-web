@@ -205,17 +205,28 @@ export default {
                 });
             if (!response) return;
             this.spin = false;
+
             this.evaluation = response.data.result;
-            /*
-            this.evaluation.template.sections.push({
-                name: "Objetivos",
-                displayName: true,
-                evaluationTemplateId: 3,
-                parentId: null,
-                unmeasuredQuestions: [],
-                measuredQuestions: [],
-            });
-            */
+
+            // Sort sections
+            const sectNextObj = this.evaluation.template.sections
+                .find(sect => this.isSectionNextObjetives(sect));
+            this.evaluation.template.sections = this.evaluation.template.sections
+                .filter(sect => !this.isSectionNextObjetives(sect));
+
+            const sectObj = this.evaluation.template.sections
+                .find(sect => this.isSectionObjetives(sect));
+            this.evaluation.template.sections = this.evaluation.template.sections
+                .filter(sect => !this.isSectionObjetives(sect));
+
+            if (sectObj) {
+                this.evaluation.template.sections.splice(0, 0, sectObj);
+            }
+            if (sectNextObj) {
+                this.evaluation.template.sections
+                    .splice(this.evaluation.template.sections.length, 0, sectNextObj);
+            }
+
             this.data.lastStep = this.evaluationSections.length;
         },
         getQuestions() {
@@ -281,7 +292,8 @@ export default {
         },
         notEvaluableQuestions(subsectionId) {
             if (!this.evaluation) return [];
-            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null && qst.sectionId === subsectionId);
+            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null
+                && qst.sectionId === subsectionId);
         },
     },
     computed: {
@@ -321,7 +333,7 @@ export default {
             if (!this.evaluation) return '';
             return this.evaluation.template.instructions;
         },
-        
+
     },
 };
 </script>

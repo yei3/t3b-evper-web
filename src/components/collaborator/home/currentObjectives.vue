@@ -50,7 +50,7 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown >
                         <a-menu slot="overlay">
-                            <a-menu-item 
+                            <a-menu-item
                                 key="1"
                                 :disabled="record.status === 'Completado'"
                                 @click="toggleRecordProgressModal(record)">
