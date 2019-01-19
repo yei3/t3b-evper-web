@@ -48,6 +48,18 @@
     color: #fff;
 }
 
+.btn-red, .btn-red:active, .btn-red:focus {
+    background: #d32506;
+    border-color: #d32506;
+    color: #fff;
+}
+
+.btn-red:hover {
+    background: #b92004;
+    border-color: #b92004;
+    color: #fff;
+}
+
 .ant-select-selection:hover, .ant-select-selection:active, .ant-select-selection:focus {
     border-color: #1ab394;
     -webkit-box-shadow:none;

@@ -16,28 +16,39 @@
             <a-col :sm="12" :md="3" style="text-align: right;">
                 <a-dropdown>
                     <a-menu slot="overlay">
-                        <a-menu-item key="1"
-                            :disabled="objective.status === 3"
-                            @click="
-                                modals.modalRecordProgress.show = true;
-                                modals.modalRecordProgress.input = '';
-                            "
-                        >
-                            Registrar avances
-                        </a-menu-item>
                         <a-menu-item key="2"
                             @click="modals.modalViewProgress.show = true"
                         >
                             Ver avances
                         </a-menu-item>
+                        <a-menu-item key="1"
+                            :disabled="objective.status === 3"
+                            v-if="isCollaborator"
+                            @click="
+                                modals.modalRecordProgress.show = true;
+                                modals.input = '';
+                            "
+                        >
+                            Registrar avances
+                        </a-menu-item>
                         <a-menu-divider />
                         <a-menu-item key="3" @click="
-                            modals.modalFinish.show = true
-                            modals.modalFinish.input = ''
+                            modals.modalComplete.show = true
+                            modals.input = ''
                         "
-                            :disabled="objective.status === 3"
+                            v-if="isCollaborator"
+                            :disabled="objective.status !== 2"
                         >
                             Completar objetivo
+                        </a-menu-item>
+                        <a-menu-item key="3" @click="
+                            modals.modalValidate.show = true
+                            modals.input = ''
+                        "
+                            v-if="isBoss"
+                            :disabled="objective.status !== 3"
+                        >
+                            Validar objetivo
                         </a-menu-item>
                     </a-menu>
                     <a-button class="ant-btn-small">
@@ -72,14 +83,14 @@
                     <a-textarea
                         placeholder="Avance del objetivo..."
                         :rows="6"
-                        v-model="modals.modalRecordProgress.input"
+                        v-model="modals.input"
                     />
                 </a-col>
             </a-row>
             <template slot="footer">
                 <a-button
                     key="back"
-                    @click="clearModalRecordProgress"
+                    @click="modals.modalRecordProgress.show = false"
                 >
                     Cancelar
                 </a-button>
@@ -87,10 +98,10 @@
                     class="modal-button-ok"
                     key="submit"
                     type="primary"
-                    @click="saveProgress"
+                    @click="updateObjectiveStatus(modals.modalRecordProgress, STATUS.IN_PROGRESS)"
                     :loading="modals.modalRecordProgress.loading"
                     :disabled="
-                        modals.modalRecordProgress.input === '' ||
+                        modals.input === '' ||
                         modals.modalRecordProgress.loading
                     "
                 >
@@ -113,7 +124,7 @@
                     <span v-if="objective$.binnacle.length === 0">No hay avances</span>
                 </a-col>
                 <a-col :span="24" style="padding: 0px 20px;">
-                    <a-timeline mode="alternate">
+                    <a-timeline>
                         <a-timeline-item v-for="(item, index) in objective$.binnacle"
                             :key="index"
                             color="gray"
@@ -122,7 +133,7 @@
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
-                                {{item.username}}
+                                {{item.userName}}
                                 <small>{{ item.creationTime }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
@@ -140,8 +151,8 @@
                 </a-button>
             </template>
         </a-modal>
-        <!-- Finish Objetive -->
-        <a-modal v-model="modals.modalFinish.show" width="600px">
+        <!-- Complete Objective -->
+        <a-modal v-model="modals.modalComplete.show" width="600px">
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -163,7 +174,7 @@
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
                     <a-textarea placeholder="Comentarios..." :rows="6"
-                        v-model="modals.modalFinish.input"
+                        v-model="modals.input"
                     />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
@@ -174,7 +185,7 @@
             <template slot="footer">
                 <a-button
                     key="back"
-                    @click="modals.modalFinish.show = false"
+                    @click="modals.modalComplete.show = false"
                 >
                     Cancelar
                 </a-button>
@@ -182,9 +193,68 @@
                     class="modal-button-ok"
                     key="submit"
                     type="primary"
-                    :loading="modals.modalFinish.loading"
-                    :disabled="modals.modalFinish.input === ''"
-                    @click="completeObjective"
+                    :loading="modals.modalComplete.loading"
+                    :disabled="modals.input === ''"
+                    @click="updateObjectiveStatus(modals.modalComplete, STATUS.COMPLETED)"
+                >
+                    Si, completar objetivo
+                </a-button>
+            </template>
+        </a-modal>
+        <!-- Validate Objective -->
+        <a-modal v-model="modals.modalValidate.show" width="600px">
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="check-square" class="modal-icon" />
+                    </a-col>
+                    <a-col :span="24" class="modal-header">
+                        <h1>Validar Objetivo</h1>
+                        <small>{{objective.name}}</small>
+                    </a-col>
+                </a-row>
+            </template>
+
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
+                    <span>
+                        Agregue un comentario con respecto al cumplimiento
+                        del objetivo por parte del evaluado.
+                    </span>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion">
+                    <a-textarea placeholder="Comentarios..." :rows="6"
+                        v-model="modals.input"
+                    />
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion-bottom">
+                    ¿Está seguro que desea validar el objetivo indicado?
+                </a-col>
+            </a-row>
+
+            <template slot="footer">
+                <a-button
+                    key="back"
+                    @click="modals.modalValidate.show = false"
+                >
+                    Cancelar
+                </a-button>
+                <a-button
+                    class="btn-red"
+                    type="danger"
+                    :loading="modals.modalValidate.loading"
+                    :disabled="modals.input === ''"
+                    @click="updateObjectiveStatus(modals.modalValidate, STATUS.IN_PROGRESS)"
+                >
+                    No, reabrir objetivo
+                </a-button>
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    :loading="modals.modalValidate.loading"
+                    :disabled="modals.input === ''"
+                    @click="updateObjectiveStatus(modals.modalValidate, STATUS.VALIDATED)"
                 >
                     Si, completar objetivo
                 </a-button>
@@ -217,21 +287,29 @@ export default {
         return {
             objective$: null,
             modals: {
+                input: '',
                 modalRecordProgress: {
                     show: false,
-                    input: '',
                     loading: false,
                 },
                 modalViewProgress: {
                     show: false,
-                    input: '',
                     loading: false,
                 },
-                modalFinish: {
+                modalComplete: {
                     show: false,
-                    input: '',
                     loading: false,
                 },
+                modalValidate: {
+                    show: false,
+                    loading: false,
+                },
+            },
+            STATUS: {
+                NOT_STARTED: 1,
+                IN_PROGRESS: 2,
+                COMPLETED: 3,
+                VALIDATED: 4,
             },
         };
     },
@@ -242,45 +320,38 @@ export default {
         init() {
             this.objective$ = this.objective;
         },
-        clearModalRecordProgress() {
-            this.modals.modalRecordProgress.show = false;
-            this.modals.modalRecordProgress.input = '';
-        },
-        async saveProgress() {
-            this.modals.modalRecordProgress.loading = true;
-            const response = await client3B.binnacle.createMessage({
+        async updateObjectiveStatus(_modal, status) {
+            const modal = _modal;
+            modal.loading = true;
+
+            let response = await client3B.binnacle.createMessage({
                 evaluationQuestionId: this.objective.id,
-                text: this.modals.modalRecordProgress.input,
-                // creationTime: new Date(),
+                text: this.modals.input,
             }).catch(error => errorHandler(this, error));
 
-            this.modals.modalRecordProgress.loading = false;
-            this.modals.modalRecordProgress.show = false;
+            modal.loading = false;
+            modal.show = false;
 
             if (!response) return;
 
-            this.$message.success('Evaluación guardada correctamente');
-            this.objective$.status = 2;
             this.objective$.binnacle.push({
                 id: response.data.result.id,
                 evaluationQuestionId: response.data.result.evaluationQuestionId,
                 text: response.data.result.text,
                 creationTime: response.data.result.creationTime,
-                username: authService.getUserData().name,
+                userName: authService.getUserData().name,
             });
-        },
-        async completeObjective() {
-            this.modals.modalFinish.loading = true;
-            const response = await client3B.objective.updateStatus({
+
+            response = await client3B.objective.updateStatus({
                 id: this.objective$.id,
-                status: 3,
+                status,
             }).catch(error => errorHandler(this, error));
 
-            this.modals.modalFinish.loading = false;
+            modal.loading = false;
             if (!response) return;
-            this.modals.modalFinish.show = false;
-            this.objective$.status = 3;
-            this.$message.success('El objetivo se ha completado correctamente');
+            modal.show = false;
+            this.objective$.status = status;
+            this.$message.success('El objetivo se ha actualizado correctamente');
         },
     },
     computed: {
@@ -305,6 +376,12 @@ export default {
             };
 
             return statuses[this.objective$.status];
+        },
+        isCollaborator() {
+            return authService.ROLES.COLLABORATOR === authService.getCurrentRole();
+        },
+        isBoss() {
+            return authService.ROLES.SUPERVISOR === authService.getCurrentRole();
         },
     },
 };

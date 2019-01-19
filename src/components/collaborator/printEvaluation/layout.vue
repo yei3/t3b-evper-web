@@ -77,8 +77,14 @@
         <div class="collapse-content">
             <a-row class="" style="padding: 0 0 8px;">
                 <a-col :span="13">
-                    <p>He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas.</p>
-                    <p>Haré lo mejor posible para mejorar mi desempeño basado en estos comentarios.</p>
+                    <p>
+                        He leído y comprendido esta evaluación de desempeño
+                        y las recomendaciones señaladas.
+                    </p>
+                    <p>
+                        Haré lo mejor posible para mejorar mi desempeño
+                        basado en estos comentarios.
+                    </p>
                     <br><br>
                     <p class="signature">Nombre y firma del Evaluado</p>
                 </a-col>
