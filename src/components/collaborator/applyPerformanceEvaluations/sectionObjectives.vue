@@ -5,6 +5,23 @@
                 <h1>{{capitalize(section.name)}}</h1>
             </a-col>
             <a-col :span="24">
+                <a-row :gutter="16" style="margin-bottom: 20px;">
+                    <a-col :md="4" :lg="2">
+                        <strong>Estatus</strong>
+                    </a-col>
+                    <a-col :md="6" :lg="8">
+                        <strong>Objetivo</strong>
+                    </a-col>
+                    <a-col :md="6" :lg="8">
+                        <strong>Entregable</strong>
+                    </a-col>
+                    <a-col :md="6" :lg="4">
+                        <strong>Fecha Fin</strong>
+                    </a-col>
+                    <a-col :md="2" :lg="2">
+                        <strong>Acciones</strong>
+                    </a-col>
+                </a-row>
                 <div v-for="(objective, index) in objectives" :key="index">
                     <question-goal
                         :index="index"

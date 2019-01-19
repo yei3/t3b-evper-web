@@ -1,19 +1,19 @@
 <template>
-    <a-col :span="24" style="padding: 5px 15px 0px 15px; margin-bottom: 0px;">
-        <a-row :gutter="16">
-            <a-col :sm="12" :md="3">
+    <a-col :span="24" style="padding: 5px 0px 0px 0px; margin-bottom: 0px;">
+        <a-row :gutter="16" >
+            <a-col :md="4" :lg="2">
                 <a-tag :class="tagColorClass">{{objectiveStatus}}</a-tag>
             </a-col>
-            <a-col :sm="12" :md="6">
+            <a-col :md="6" :lg="8">
                 <strong>{{objective.name}}</strong>
             </a-col>
-            <a-col :sm="12" :md="6">
+            <a-col :md="6" :lg="8">
                 {{objective.deliverable}}
             </a-col>
-            <a-col :sm="12" :md="6">
+            <a-col :md="6" :lg="4">
                 {{(new Date(objective.deliveryDate)).toLocaleString()}}
             </a-col>
-            <a-col :sm="12" :md="3" style="text-align: right;">
+            <a-col :md="2" :lg="2">
                 <a-dropdown>
                     <a-menu slot="overlay">
                         <a-menu-item key="2"
