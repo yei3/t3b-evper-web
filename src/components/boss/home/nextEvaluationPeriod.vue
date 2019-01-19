@@ -4,7 +4,7 @@
             <h3 class="tittle-collapse">Periodo 2018-02</h3>
             <a-range-picker
                 disabled
-                :defaultValue="[moment('2018-08-01', dateFormat), moment('2019-01-31', dateFormat)]"
+                :defaultValue="[moment('2018-07-01', dateFormat), moment('2018-12-31', dateFormat)]"
             />
         </a-collapse-panel>
     </a-collapse>
