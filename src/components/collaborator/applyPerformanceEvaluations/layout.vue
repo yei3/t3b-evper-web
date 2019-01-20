@@ -279,9 +279,11 @@ export default {
             this.$router.push({ name: 'collaborator-assessment-print', params: { id } });
         },
         isSectionNextObjetives(section) {
+            if (!this.evaluation.template.includePastObjectives) return false;
             return normalizeStr(section.name) === normalizeStr(SECTION_PROX_OBJETIVES_NAME);
         },
         isSectionObjetives(section) {
+            if (!this.evaluation.template.includePastObjectives) return false;
             return normalizeStr(section.name) === normalizeStr(SECTION_OBJETIVES_NAME);
         },
         isGenericSection(section) {
