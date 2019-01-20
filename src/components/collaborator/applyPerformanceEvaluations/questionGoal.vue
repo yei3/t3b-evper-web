@@ -370,7 +370,7 @@ export default {
             const statuses = {
                 0: 'No iniciado',
                 1: 'No iniciado',
-                2: 'En progreso',
+                2: 'En proceso',
                 3: 'Completado',
                 4: 'Validado',
             };
