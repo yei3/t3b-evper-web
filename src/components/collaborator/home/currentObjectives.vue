@@ -374,6 +374,7 @@ export default {
             } else {
                 await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
+                this.$router.go(this.$router.currentRoute);
             }
         },
         async toggleViewProgressModal(input) {
@@ -395,6 +396,7 @@ export default {
                 await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.');
                 await this.completeObjective(this.finishObjectiveModal.objectiveId);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+                this.$router.go(this.$router.currentRoute);
             }
         },
         selectTagColor(status) {
