@@ -76,7 +76,7 @@
                         type='dashed'
                         class="add-button"
                         style="width: 48%; min-width: 200px;"
-                        @click="view.sectionModal.show=true"
+                        @click="resetModalValues(); view.sectionModal.show=true"
                         v-show="lastStep !== 0 || format.id"
                     >
                         <a-icon type='plus' /> Agregar Sección
@@ -111,6 +111,7 @@
                 />
                 <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                     v-model="step.label"
+                    :sectionPercent='step.percent'
                     :sectionId="step.id"
                     :subsectionsFetched="step.section.childSections"
                     :showFinishButton="index === (dinamicSteps.length - 1)"
@@ -122,24 +123,25 @@
             title="Agregar Nueva Sección"
             v-model="view.sectionModal.show"
         >
-            <a-input
+            <a-input v-model="view.sectionModal.value"
                 placeholder="Nombre de la sección"
                 addonBefore="Nombre"
-                v-model="view.sectionModal.value"
                 @keyup.enter.native="addSection"
             />
-            <a-input type="number"
+            <a-input v-model="view.sectionModal.percent"
+                type="number"
                 style="margin-top: 20px;"
                 addonBefore="Porcentaje"
                 addonAfter="%"
                 placeholder="0 a 100"
                 min="1"
                 max="100"
+                @keyup.enter.native="addSection"
             />
             <template slot="footer">
                 <a-row>
                     <a-col :span="12" style="text-align: left;">
-                        <a-button key="back" @click="cancelAddSection">
+                        <a-button key="back" @click="resetModalValues">
                             Cancelar
                         </a-button>
                     </a-col>
@@ -188,6 +190,7 @@ export default {
                     show: false,
                     error: null,
                     value: '',
+                    percent: 0,
                     loading: false,
                 },
                 stepsUUID: 2,
@@ -215,9 +218,8 @@ export default {
                 name: this.view.sectionModal.value,
                 evaluationTemplateId: this.format.id,
                 displayName: true,
-            }).catch(
-                // this.$message.success('Hubo un error al guardar la sección')
-            );
+                value: this.view.sectionModal.percent,
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.view.sectionModal.loading = false;
                 return;
@@ -228,18 +230,20 @@ export default {
                 id: section.id,
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
+                percent: Number(this.view.sectionModal.percent),
                 section: { childSections: [] },
             };
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
-            this.cancelAddSection();
+            this.resetModalValues();
             this.setLastStep(this.view.steps.length - 1);
             this.view.sectionModal.loading = false;
             this.$message.success('Evaluación guardada correctamente');
         },
-        cancelAddSection() {
+        resetModalValues() {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
+            this.view.sectionModal.percent = 0;
         },
         async deleteSection(sectionStep) {
             this.view.loadingDelete = true;
@@ -254,9 +258,7 @@ export default {
             });
             const response = await client3B.section.delete({
                 id: section.id,
-            }).catch(
-                // this.$message.success('Hubo un error al eliminar la sección')
-            );
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.view.loadingDelete = false;
                 return;
@@ -295,6 +297,7 @@ export default {
                     id: section.id,
                     label: section.name,
                     name: section.name,
+                    percent: section.value,
                     section,
                 });
                 this.view.stepsUUID += 1;

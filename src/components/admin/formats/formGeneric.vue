@@ -6,10 +6,14 @@
                     <span style="font-size: 26px;
                         font-weight: 100;"
                     >
-                        {{sectionTitle}}
+                        {{sectionTitle}} <small style="font-size: 15px;">
+                            {{sectionPercent$}}%
+                        </small>
                     </span>
                     <a-tooltip placement="top" title="Editar Título">
-                        <a @click="sectionModal.visible = true; sectionModal.value = sectionTitle;"
+                        <a @click="sectionModal.visible = true;
+                                   sectionModal.value = sectionTitle;
+                                   sectionModal.percent = sectionPercent$"
                             style="color: #777;"
                         >
                             <a-icon type="edit" class="form-icon"/>
@@ -56,9 +60,9 @@
                         />
                     </a-tooltip>
                     <a-modal title="Título de la Subsección" v-model="subsection.showModal">
-                        <a-input
+                        <a-input placeholder="Título de la subsección"
                             v-model="subsection.title.lastValue"
-                            addonBefore="Título"
+                            addonBefore="Nombre"
                             @keyup.enter.native="updateSubsection(subsection)"
                         />
                         <template slot="footer">
@@ -251,9 +255,18 @@
                     title="Título de la Sección"
                     v-model="sectionModal.visible"
                 >
-                    <a-input
-                        v-model="sectionModal.value"
+                    <a-input v-model="sectionModal.value"
                         addonBefore="Título"
+                        @keyup.enter.native="handleSectionTitleInput"
+                    />
+                    <a-input v-model="sectionModal.percent"
+                        type="number"
+                        style="margin-top: 20px;"
+                        addonBefore="Porcentaje"
+                        addonAfter="%"
+                        placeholder="0 a 100"
+                        min="1"
+                        max="100"
                         @keyup.enter.native="handleSectionTitleInput"
                     />
                     <template slot="footer">
@@ -359,6 +372,10 @@ export default {
             type: String,
             required: true,
         },
+        sectionPercent: {
+            type: Number,
+            required: true,
+        },
     },
     model: {
         prop: 'sectionTitle',
@@ -366,6 +383,7 @@ export default {
     },
     data() {
         return {
+            sectionPercent$: 0,
             view: {
                 loading: false,
             },
@@ -378,6 +396,7 @@ export default {
                 visible: false,
                 value: '',
                 loading: false,
+                percent: 0,
             },
             answerTypes,
             subsectionUUID: 0,
@@ -416,6 +435,7 @@ export default {
             updateEvaluationForm: 'updateEvaluationForm',
         }),
         loadData() {
+            this.sectionPercent$ = this.sectionPercent;
             if (this.subsectionsFetched) {
                 this.subsections = this.subsectionsFetched.map(subs => ({
                     id: subs.id,
@@ -565,6 +585,7 @@ export default {
                 id: this.sectionId,
                 evaluationTemplateId: this.format.id,
                 name: this.sectionModal.value,
+                value: this.sectionModal.percent,
             }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.sectionModal.loading = false;
@@ -573,7 +594,9 @@ export default {
 
             this.sectionModal.visible = false;
             this.$emit('input', this.sectionModal.value);
+            this.sectionPercent$ = this.sectionModal.percent;
             this.sectionModal.value = '';
+            this.sectionModal.percent = '';
             this.sectionModal.loading = false;
             this.$message.success('Evaluación guardada correctamente');
         },

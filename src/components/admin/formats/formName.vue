@@ -145,6 +145,7 @@ export default {
                 this.evaluation.description = this.formatfetched.description;
                 this.evaluation.instructions = this.formatfetched.instructions;
                 this.evaluation.isAutoEvaluation = this.formatfetched.isAutoEvaluation;
+                this.evaluation.includePastObjectives = this.formatfetched.includePastObjectives;
             }
         },
         handleForm(e) {
