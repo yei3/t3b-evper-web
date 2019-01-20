@@ -62,14 +62,14 @@
                             </a-menu-item>
                             <a-menu-item
                                 key="2"
-                                :disabled="record.status === 'Completado'"
                                 @click="toggleViewProgressModal(record)">
                                 Ver avances
                             </a-menu-item>
                             <a-menu-divider />
                             <a-menu-item
                                 key="3"
-                                :disabled="record.status === 'Completado'"
+                                :disabled="record.status === 'Completado' ||
+                                           record.status === 'No iniciado'"
                                 @click="toggleFinishObjectiveModal(record)">
                                 Completar objetivo
                             </a-menu-item>
@@ -112,7 +112,8 @@
             <template slot="footer">
                 <a-button
                     key="back"
-                    @click="toggleRecordProgressModal"
+                    @click="recordProgressModal.show = false"
+                    :disabled="recordProgressModal.loading"
                 >
                     Cancelar
                 </a-button>
@@ -122,6 +123,7 @@
                     type="primary"
                     @click="toggleRecordProgressModal"
                     :disabled="!recordProgressModal.enableButton"
+                    :loading="recordProgressModal.loading"
                 >
                     Guardar
                 </a-button>
@@ -144,7 +146,7 @@
 
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
-                    <a-timeline mode="alternate">
+                    <a-timeline>
                         <a-timeline-item v-for="(item, index) in binnacle" :key="index"
                             color="gray"
                             class="timeline-item"
@@ -207,7 +209,8 @@
             <template slot="footer">
                 <a-button
                     key="back"
-                    @click="toggleFinishObjectiveModal"
+                    @click="finishObjectiveModal.show = false"
+                    :disabled="finishObjectiveModal.loading"
                 >
                     Cancelar
                 </a-button>
@@ -216,7 +219,8 @@
                     key="submit"
                     type="primary"
                     @click="toggleFinishObjectiveModal"
-                    :disabled="!finishObjectiveModal.enableButton"
+                    :disabled="!finishObjectiveModal.enableButton "
+                    :loading="finishObjectiveModal.loading"
                 >
                     Si, completar objetivo
                 </a-button>
@@ -229,6 +233,7 @@
 <script>
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
+import { error } from 'util';
 
 const columns = [
     {
@@ -275,18 +280,21 @@ export default {
             username: '',
             binnacle: [],
             recordProgressModal: {
+                loading: false,
                 show: false,
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: '',
             },
             viewProgressModal: {
+                loading: false,
                 show: false,
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: '',
             },
             finishObjectiveModal: {
+                loading: false,
                 show: false,
                 enableButton: true,
                 objectiveId: 0,
@@ -294,6 +302,9 @@ export default {
             },
 
         };
+    },
+    watch: {
+        $route: 'getCurrentObjectives',
     },
     async created() {
         await this.getCurrentObjectives();
@@ -366,37 +377,47 @@ export default {
             }
             this.spin = false;
         },
-        async toggleRecordProgressModal(input) {
+        async toggleRecordProgressModal(objective) {
             if (!this.recordProgressModal.show) {
-                this.recordProgressModal.objectiveId = input.id;
-                this.recordProgressModal.objectiveName = input.objective.title;
+                this.recordProgressModal.objectiveId = objective.id;
+                this.recordProgressModal.objectiveName = objective.objective.title;
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
-                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message);
+                this.recordProgressModal.loading = true;
+                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message)
+                    .catch(error => errorHandler(this, error));
+                objective.status = this.selectStatusName(2);
+                const obj = this.data.find(obj => obj.id === this.recordProgressModal.objectiveId);
+                obj.status = this.selectStatusName(2);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
-                this.$router.go(this.$router.currentRoute);
+                this.recordProgressModal.loading = false;
             }
         },
-        async toggleViewProgressModal(input) {
+        async toggleViewProgressModal(objective) {
             if (!this.viewProgressModal.show) {
-                this.viewProgressModal.objectiveName = input.objective.title;
-                await this.getBinnacle(input.id);
+                this.viewProgressModal.objectiveName = objective.objective.title;
+                await this.getBinnacle(objective.id);
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             } else {
                 // this.loaded = true;
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             }
         },
-        async toggleFinishObjectiveModal(input) {
+        async toggleFinishObjectiveModal(objective) {
             if (!this.finishObjectiveModal.show) {
-                this.finishObjectiveModal.objectiveId = input.id;
-                this.finishObjectiveModal.objectiveName = input.objective.title;
+                this.finishObjectiveModal.objectiveId = objective.id;
+                this.finishObjectiveModal.objectiveName = objective.objective.title;
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.');
-                await this.completeObjective(this.finishObjectiveModal.objectiveId);
+                this.finishObjectiveModal.show = true;
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.')
+                    .catch(error => errorHandler(error));
+                await this.completeObjective(this.finishObjectiveModal.objectiveId)
+                    .catch(error => errorHandler(error));;
+                const obj = this.data.find(obj => obj.id === this.finishObjectiveModal.objectiveId);
+                obj.status = this.selectStatusName(3);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
-                this.$router.go(this.$router.currentRoute);
+                this.finishObjectiveModal.show = false;
             }
         },
         selectTagColor(status) {
