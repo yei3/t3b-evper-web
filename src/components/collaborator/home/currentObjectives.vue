@@ -233,7 +233,6 @@
 <script>
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
-import { error } from 'util';
 
 const columns = [
     {
@@ -386,8 +385,7 @@ export default {
                 this.recordProgressModal.loading = true;
                 await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message)
                     .catch(error => errorHandler(this, error));
-                objective.status = this.selectStatusName(2);
-                const obj = this.data.find(obj => obj.id === this.recordProgressModal.objectiveId);
+                const obj = this.data.find(tmp => tmp.id === this.recordProgressModal.objectiveId);
                 obj.status = this.selectStatusName(2);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
                 this.recordProgressModal.loading = false;
@@ -411,10 +409,10 @@ export default {
             } else {
                 this.finishObjectiveModal.show = true;
                 await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.')
-                    .catch(error => errorHandler(error));
+                    .catch(error => errorHandler(this, error));
                 await this.completeObjective(this.finishObjectiveModal.objectiveId)
-                    .catch(error => errorHandler(error));;
-                const obj = this.data.find(obj => obj.id === this.finishObjectiveModal.objectiveId);
+                    .catch(error => errorHandler(this, error));
+                const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
                 obj.status = this.selectStatusName(3);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
                 this.finishObjectiveModal.show = false;
