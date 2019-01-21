@@ -39,6 +39,17 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Publish_SentGeneralMultipleUserNotification`;
         return this.request(path, this.methods.post, data);
     }
+
+    /**
+     * Request for send notifications to boss user
+     * @param {Object} data
+     *
+     * @return {Promise}        Http Response
+     */
+    sendBossNotification(data) {
+        const path = `${this.entityPath}/Publish_SentBossGeneralUserNotification`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default Dashboard;

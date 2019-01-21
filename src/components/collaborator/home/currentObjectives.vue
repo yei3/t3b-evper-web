@@ -339,6 +339,7 @@ export default {
                     status: 3,
                 },
             ).catch(error => errorHandler(this, error));
+            this.sendBossNotification(objectiveId);
             this.$message.success('El objetivo se ha completado correctamente');
         },
         async addObjetiveMessage(objectiveId, message) {
@@ -417,6 +418,13 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
                 this.finishObjectiveModal.show = false;
             }
+        },
+        async sendBossNotification(_objectiveId) {
+            await client3B.notifications.sendBossNotification(
+                {
+                    objectiveId: _objectiveId,
+                },
+            ).catch(error => errorHandler(this, error));
         },
         selectTagColor(status) {
             switch (status) {
