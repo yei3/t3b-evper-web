@@ -243,7 +243,7 @@ export default {
         return {
             spin: false,
             loading: false,
-            collapsed: false,
+            collapsed: true,
             columns,
             data: [],
             dateString: '',

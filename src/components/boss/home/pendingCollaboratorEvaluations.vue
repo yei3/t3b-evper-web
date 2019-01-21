@@ -60,7 +60,7 @@
                     <a-button
                         class="table-link-light" ghost
                         @click="toggleScheduleReviewModal"
-                        v-show="transformStatus(action) === 'Agendar revisión'"
+                        v-show="transformStatus(action) === 'Agendar Revisión'"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
@@ -79,7 +79,7 @@
                         <a-icon type="calendar" class="modal-icon" />
                     </a-col>
                     <a-col :span="24" class="modal-header">
-                        <h1>Agendar revisión</h1>
+                        <h1>Agendar Revisión</h1>
                         <small>(Nombre de la evaluacion) - (Nombre del colaborador)</small>
                     </a-col>
                 </a-row>
@@ -114,7 +114,7 @@
                     type="primary"
                     @click="toggleScheduleReviewModal"
                 >
-                    Agendar revisión
+                    Agendar Revisión
                 </a-button>
             </template>
         </a-modal>
@@ -231,6 +231,9 @@ export default {
             if (status === 'En proceso') {
                 return 'Continuar';
             }
+            if (status === 'Finalizado') {
+                return 'Agendar Revisión';
+            }
             return 'Iniciar';
         },
         selectTagColor(status) {
@@ -239,7 +242,7 @@ export default {
                 return 'ant-tag-red';
             case 'En proceso':
                 return 'ant-tag-yellow';
-            case 'Completado':
+            case 'Finalizado':
                 return 'ant-tag-green';
             case 'Validado':
                 return 'ant-tag-blue';
@@ -254,7 +257,7 @@ export default {
             case 1:
                 return 'En proceso';
             case 2:
-                return 'Completado';
+                return 'Finalizado';
             case 3:
                 return 'Validado';
             default:
