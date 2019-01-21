@@ -10,7 +10,7 @@
                             {{sectionPercent$}}%
                         </small>
                     </span>
-                    <a-tooltip placement="top" title="Editar Título">
+                    <a-tooltip placement="top" title="Editar Título o Porcentaje">
                         <a @click="sectionModal.visible = true;
                                    sectionModal.value = sectionTitle;
                                    sectionModal.percent = sectionPercent$"
