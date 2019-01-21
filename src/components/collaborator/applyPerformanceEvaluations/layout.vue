@@ -264,7 +264,7 @@ export default {
         },
         async finishEvaluation() {
             if (!this.isEvaluationCompleted()) {
-                errorHandler(this, 'Responde todas las pregunas para poder finalizar la evaluación');
+                errorHandler(this, 'Responde todas las preguntas para poder finalizar la evaluación');
                 return;
             }
             this.loading = true;
