@@ -4,10 +4,10 @@
         :class="answerStatus"
     >
         <a-row>
-            <a-col :xxl="8" :xl="16" :lg="10" :md="12" :sm="24">
-                <span class="question-label">{{index}}. {{questionText}}</span>
+            <a-col :xxl="18" :xl="18" :lg="16" :md="24" :sm="24">
+                <span class="question-label">{{index}}. {{questionText}}:</span>
             </a-col>
-            <a-col :xxl="16" :xl="8" :lg="14" :md="12" :sm="24">
+            <a-col :xxl="6" :xl="6" :lg="8" :md="24" :sm="24" style="text-align: center;">
                 <span style="font-size: 14px; font-weight: 600" v-show="value">
                     SI
                 </span>
