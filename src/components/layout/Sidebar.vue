@@ -1,6 +1,6 @@
 <template>
     <a-layout-sider breakpoint="lg" :trigger="null" collapsible v-model="sidebarCollapsed"
-        theme="dark" width=220
+        theme="dark" width=250
     >
         <a-row style="padding: 25px 0px 20px 15px; background-color: #ff0000"
             v-show="sidebarCollapsed"
