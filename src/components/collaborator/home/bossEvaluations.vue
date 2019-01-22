@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse">
+    <div class="collapse" v-show="data.length > 0 ">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
                 Cierre de mi evaluación

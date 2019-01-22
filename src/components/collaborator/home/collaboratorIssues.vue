@@ -26,15 +26,15 @@
         <a-row class="collapse-content" v-show="!collapsed">
             <a-col :span="8" style="padding-right: 6px;">
                 <a-badge :count="autoEvaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-                <span class="badged-text">Auto-evaluaciones en procesos</span>
+                <span class="badged-text">Auto-evaluaciones en proceso</span>
             </a-col>
             <a-col :span="8" style="padding: 0px 3px 0px 3px;">
                 <a-badge :count="evaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-                <span class="badged-text">Cierre de mis evaluaciones en procesos</span>
+                <span class="badged-text">Cierre de mis evaluaciones en proceso</span>
             </a-col>
             <a-col :span="8" style="padding-left: 6px;">
                 <a-badge :count="objectives" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
-                <span class="badged-text">Objetivos en procesos</span>
+                <span class="badged-text">Objetivos en proceso</span>
             </a-col>
         </a-row>
     </div>
