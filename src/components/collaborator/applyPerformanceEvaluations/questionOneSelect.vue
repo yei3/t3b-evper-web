@@ -8,8 +8,8 @@
                 fieldDecoratorId="q1"
                 style="text-align: left; margin-bottom: 0px;"
                 :label='`${index}. ${questionText}`'
-                :labelCol="{ xxl: 8, xl: 16, lg: 10, md: 12, sm: 24 }"
-                :wrapperCol="{ xxl: 16, xl: 8, lg: 14, md: 12, sm: 24 }"
+                :labelCol="{ xxl: 18, xl: 12, lg: 14, md: 24, sm: 24 }"
+                :wrapperCol="{ xxl: 6, xl: 10, lg: 10, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
                     initialValue: value,
                     rules: [
@@ -163,5 +163,6 @@ div >>> .ant-form-item-label {
 
 div >>> .ant-form-item-required {
     font-size: 15px;
+    white-space: initial;
 }
 </style>

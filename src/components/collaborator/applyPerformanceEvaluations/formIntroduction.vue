@@ -7,9 +7,7 @@
         </a-row>
         <a-row style="padding: 70px 10px;">
             <a-col :span="24">
-                <span>
-                    {{instructions}}
-                </span>
+                <pre>{{instructions}}</pre>
             </a-col>
         </a-row>
     </a-col>
