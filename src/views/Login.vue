@@ -305,16 +305,24 @@ export default {
                 password: this.user.newPassword,
                 confirmPassword: this.user.newPasswordConfirmation,
             };
-            authService.storeAuthData(this.authData);
-            try {
-                await client3B.account.firstTimeLogin(update);
-            } catch (error) {
-                this.handleError(error.response.data.error);
+            if(this.validatePass(update.password))
+            {
+                authService.storeAuthData(this.authData);
+                try {
+                    await client3B.account.firstTimeLogin(update);
+                } catch (error) {
+                    this.handleError(error.response.data.error);
+                    this.loading = false;
+                    authService.removeAuthData();
+                    return;
+                }
+                this.saveSession();
+            } else {
+                this.$message.error("La contraseña debe tener al menos un número, una mayúscula y un símbolo.")
                 this.loading = false;
-                authService.removeAuthData();
-                return;
             }
-            this.saveSession();
+
+            
         },
         async passwordRecovery() {
             this.loading = true;
@@ -326,6 +334,10 @@ export default {
             if (!response) return;
             this.showRecovPass = false;
             this.$message.success('Se ha enviado el correo de recuperación');
+        },
+        validatePass(password){
+            var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\d]).{5,}$/;
+            return regex.test(password);
         },
         handleError(error) {
             const time = 10;
