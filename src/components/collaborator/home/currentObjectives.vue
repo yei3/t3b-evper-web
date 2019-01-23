@@ -5,7 +5,7 @@
                 <span>Seguimiento</span>
             </a-col>
             <a-col :xs="11" :sm="9" :md="7" :lg="5">
-                <a-progress :percent="objectivesPercet(data)" size="small" />
+                <a-progress :percent="objectivesPercet(data)" strokeColor="#1ab394" size="small" />
             </a-col>
             <a-col :span=1 style="text-align: right;">
                 <a>
@@ -69,7 +69,8 @@
                             <a-menu-item
                                 key="3"
                                 :disabled="record.status === 'Completado' ||
-                                           record.status === 'No iniciado'"
+                                           record.status === 'No iniciado' ||
+                                           record.status === 'Validado'"
                                 @click="toggleFinishObjectiveModal(record)">
                                 Completar objetivo
                             </a-menu-item>
@@ -143,7 +144,6 @@
                     </a-col>
                 </a-row>
             </template>
-
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
@@ -163,7 +163,8 @@
                         </a-timeline-item>
                     </a-timeline>
                 </a-col>
-            </a-row>            <template slot="footer">
+            </a-row>
+            <template slot="footer">
                 <a-button
                     key="back"
                     @click="toggleViewProgressModal"
@@ -226,7 +227,6 @@
                 </a-button>
             </template>
         </a-modal>
-
     </div>
 </template>
 
@@ -429,7 +429,7 @@ export default {
         objectivesPercet(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Completado') {
+                if (objective.status === 'Validado') {
                     completed += 1;
                 }
             });

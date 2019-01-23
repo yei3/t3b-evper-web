@@ -244,8 +244,10 @@ export default {
                 return 'ant-tag-yellow';
             case 'Finalizado':
                 return 'ant-tag-green';
-            case 'Validado':
+            case 'Pendiente de revisión':
                 return 'ant-tag-blue';
+            case 'Cerrada':
+                return 'ant-tag-gray';
             default:
                 return 'ant-tag-gray';
             }
@@ -259,7 +261,9 @@ export default {
             case 2:
                 return 'Finalizado';
             case 3:
-                return 'Validado';
+                return 'Pendiente de revisión';
+            case 4:
+                return 'Cerrada';
             default:
                 return 'No iniciado';
             }

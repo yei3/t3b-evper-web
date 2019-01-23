@@ -46,6 +46,31 @@ export default {
         background: white;
         padding: 8px 15px 16px;
     }
+    .ant-tag {
+        width: 84px;
+        color: #606060;
+        text-align: center;
+    }
+    .ant-tag:hover {
+        cursor: auto;
+        color: #606060;
+    }
+    .ant-tag-red {
+        background: #fff1f0;
+    }
+    .ant-tag-gray {
+        background: #f8f8f8;
+        border-color: #5e5e5e;
+    }
+    .ant-tag-blue {
+        background: #d2eeff;
+    }
+    .ant-tag-green {
+        background: #ddffea;
+    }
+    .ant-tag-yellow {
+        background: #feffc6;
+    }
     .ant-collapse-borderless > .ant-collapse-item {
         border-bottom: none;
     }

@@ -42,7 +42,9 @@
                         </a>
                     </a-col>
                     <a-col :span="4">
-                        <p><a-progress :percent="objectivesPercet(collaborator.objectives)"
+                        <p><a-progress
+                            strokeColor="#1ab394" 
+                            :percent="objectivesPercet(collaborator.objectives)"
                             :showInfo="false"
                             size="small"
                         /></p>
@@ -59,10 +61,10 @@
                         <span slot="status" slot-scope="status">
                             <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                         </span>
-                        <span slot="objective" slot-scope="objective">
+                        <span slot="objective" slot-scope="objective, record">
                             <p><a
                                 class="table-link"
-                                @click="toggleViewProgressModal"
+                                @click="toggleViewProgressModal(record)"
                             >
                                 {{objective.title}}
                             </a></p>
@@ -73,6 +75,16 @@
                                 <a-menu slot="overlay">
                                     <a-menu-item key="1" @click="toggleViewProgressModal(record)">
                                         Ver avances
+                                    </a-menu-item>
+                                    <a-menu-divider />
+                                    <a-menu-item
+                                        key="2"
+                                        :disabled="
+                                            record.status === 'En proceso' ||
+                                            record.status === 'No iniciado'"
+                                        @click="toggleFinishObjectiveModal(record)"
+                                    >
+                                        {{transformStatus(record.status)}}
                                     </a-menu-item>
                                 </a-menu>
                                 <a-button class="ant-btn-small">
@@ -94,39 +106,88 @@
                 <a-row>
                     <a-col :span="24" class="modal-header">
                         <h1>Ver avances</h1>
-                        <small>(Nombre del Objetivo) - (Nombre del colaborador)</small>
+                        <small>{{ viewProgressModal.objectiveName }} - {{ viewProgressModal.evaluatedName }}</small>
+                    </a-col>
+                </a-row>
+            </template>
+            <a-row class="modal-content">
+                <a-col :span="24" style="padding: 0px 20px;">
+                    <a-timeline>
+                        <a-timeline-item v-for="(item, index) in viewProgressModal.binnacle" :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
+                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
+                                {{ item.username }}
+                                <small>{{ item.created }}</small>
+                            </p>
+                            <p style="padding-left: 20px; padding-top: 5px">
+                                {{ item.message }}
+                            </p>
+                        </a-timeline-item>
+                    </a-timeline>
+                </a-col>
+            </a-row>
+            <template slot="footer">
+                
+            </template>
+        </a-modal>
+
+        <a-modal
+            v-model="finishObjectiveModal.show"
+            onOk="toggleFinishObjectiveModal"
+            width="600px"
+        >
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="check-square" class="modal-icon" />
+                    </a-col>
+                    <a-col :span="24" class="modal-header">
+                        <h1>Validar o Reabrir Objetivo</h1>
+                        <small>
+                            {{ finishObjectiveModal.objectiveName }} - {{ finishObjectiveModal.evaluatedName }}
+                        </small>
                     </a-col>
                 </a-row>
             </template>
 
             <a-row class="modal-content">
-                <a-col :span="24"  style="padding: 0px 20px;">
-                    <a-timeline>
-                        <!-- <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se han definido las características del producto.
-                            </p>
-                        </a-timeline-item> -->
-
-                    </a-timeline>
+                <a-col :span="24" class="modal-content-seccion-top">
+                    <span>
+                        Agregue un comentario con respecto al cumplimiento del
+                        objetivo por parte del evaluado.
+                    </span>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion">
+                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion-bottom">
+                     ¿Está seguro que desea validar o reabrir el objetivo indicado?
                 </a-col>
             </a-row>
 
             <template slot="footer">
                 <a-button
-                    key="back"
-                    @click="toggleViewProgressModal"
+                    key="open"
+                    type="danger"
+                    @click="toggleOpenOrValidateObjective(false, 2)"
+                    :disabled="finishObjectiveModal.loading"
                 >
-                    Cerrar
+                    No, reabrir objetivo
+                </a-button>
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="toggleOpenOrValidateObjective(true, 4)"
+                >
+                    Si, validar objetivo
                 </a-button>
             </template>
         </a-modal>
-
     </div>
 </template>
 
@@ -168,7 +229,16 @@ export default {
             viewProgressModal: {
                 show: false,
                 enableButton: true,
-
+                objectiveName: '',
+                evaluatedName: '',
+                binnacle: [],
+            },
+            finishObjectiveModal: {
+                show: false,
+                enableButton: true,
+                objectiveId: 0,
+                objectiveName: '',
+                evaluatedName: '',
             },
             data: [],
         };
@@ -177,6 +247,26 @@ export default {
         this.getCollaboratorsObjectives();
     },
     methods: {
+        async openOrValidateObjective(objectiveId, status) {
+            await client3B.objective.updateStatus(
+                {
+                    id: objectiveId,
+                    status: status,
+                },
+            ).catch(error => errorHandler(this, error));
+            let action = (status === 2) ? 'reabierto' : 'validado';
+            this.$message.success('El objetivo se ha '+action+' correctamente');
+        },
+        async addObjetiveMessage(objectiveId, message) {
+            await client3B.binnacle.createMessage(
+                {
+                    evaluationQuestionId: objectiveId,
+                    text: message,
+                },
+            ).catch(error => errorHandler(this, error));
+            this.message = '';
+            this.$message.success('El mensaje se ha guardado correctamente');
+        },
         async getCollaboratorsObjectives() {
             this.spin = true;
             let response = null;
@@ -186,14 +276,30 @@ export default {
                 // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    const objectives = [];
+
+                    let objectives = [];
                     const objectivesAux = items[index].objectivesSummary;
+
                     for (let jndex = 0; jndex < objectivesAux.length; jndex += 1) {
+
+                        let binnacle = [];
+                        const binnacleAux = objectivesAux[jndex].binnacle;
+
+                        for (let hndex = 0; hndex < binnacleAux.length; hndex++) {
+                            binnacle.push({
+                                message: binnacleAux[hndex].text,
+                                username: binnacleAux[hndex].userName,
+                                created: new Date(binnacleAux[hndex].creationTime).toLocaleDateString(),
+                            });
+                        }
                         objectives.push({
                             key: jndex + 1,
+                            id: objectivesAux[jndex].id,
+                            name: items[index].collaboratorFullName,
                             status: this.selectStatusName(objectivesAux[jndex].status),
                             objective: {
                                 title: objectivesAux[jndex].name,
+                                binnacle,
                             },
                             endDate: objectivesAux[jndex].deliveryDate,
                         });
@@ -211,8 +317,39 @@ export default {
             }
             this.spin = false;
         },
-        toggleViewProgressModal() {
-            this.viewProgressModal.show = !this.viewProgressModal.show;
+        toggleViewProgressModal(input) {
+            if (!this.viewProgressModal.show) {
+                this.viewProgressModal.evaluatedName = input.name;
+                this.viewProgressModal.binnacle = input.objective.binnacle;
+                this.viewProgressModal.objectiveName = input.objective.title;                
+                this.viewProgressModal.show = !this.viewProgressModal.show;
+            } else {
+                this.viewProgressModal.show = !this.viewProgressModal.show;
+            }
+        },
+        async toggleFinishObjectiveModal(input) {
+            this.finishObjectiveModal.evaluatedName = input.name;
+            this.finishObjectiveModal.objectiveId = input.id;
+            this.finishObjectiveModal.objectiveName = input.objective.title;
+            this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+        },
+        async toggleOpenOrValidateObjective(input, status) {
+            if (input) {
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.')
+                    .catch(error => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
+                    .catch(error => errorHandler(this, error));
+                const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                obj.status = this.selectStatusName(4);    
+            } else {
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se reabrió el objetivo.')
+                    .catch(error => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2)
+                    .catch(error => errorHandler(this, error));
+                const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                obj.status = this.selectStatusName(2);                
+            }
+            this.finishObjectiveModal.show = false;
         },
         selectTagColor(status) {
             switch (status) {
@@ -244,10 +381,13 @@ export default {
                 return 'No iniciado';
             }
         },
+        transformStatus(status) {
+            return (status === 'Validado') ? 'Reabrir objetivo' : 'Validar objetivo';
+        },
         objectivesCount(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Completado') {
+                if (objective.status === 'Validado') {
                     completed += 1;
                 }
             });
@@ -257,7 +397,7 @@ export default {
         objectivesPercet(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Completado') {
+                if (objective.status === 'Validado') {
                     completed += 1;
                 }
             });
