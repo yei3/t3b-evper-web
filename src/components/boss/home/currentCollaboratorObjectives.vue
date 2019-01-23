@@ -339,8 +339,9 @@ export default {
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
                     .catch(error => errorHandler(this, error));
-                const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
-                obj.status = this.selectStatusName(4);    
+                console.log(this.finishObjectiveModal.objectiveId);
+                // const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                // obj.status = this.selectStatusName(4);
             } else {
                 await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se reabrió el objetivo.')
                     .catch(error => errorHandler(this, error));
