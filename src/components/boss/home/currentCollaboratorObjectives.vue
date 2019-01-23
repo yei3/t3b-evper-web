@@ -339,16 +339,27 @@ export default {
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
                     .catch(error => errorHandler(this, error));
-                console.log(this.finishObjectiveModal.objectiveId);
-                // const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
-                // obj.status = this.selectStatusName(4);
+                
+                let obj = null;
+                for (let i = 0; i < this.data.length; i++) {
+                    if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
+                        obj = this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                    }
+                }
+                obj.status = this.selectStatusName(4);
             } else {
                 await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se reabrió el objetivo.')
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2)
                     .catch(error => errorHandler(this, error));
-                const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
-                obj.status = this.selectStatusName(2);                
+                
+                let obj = null;
+                for (let i = 0; i < this.data.length; i++) {
+                    if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
+                        obj = this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                    }
+                }
+                obj.status = this.selectStatusName(2);
             }
             this.finishObjectiveModal.show = false;
         },
