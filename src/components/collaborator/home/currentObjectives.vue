@@ -5,7 +5,7 @@
                 <span>Seguimiento</span>
             </a-col>
             <a-col :xs="11" :sm="9" :md="7" :lg="5">
-                <a-progress :percent="0" size="small" />
+                <a-progress :percent="objectivesPercet(data)" size="small" />
             </a-col>
             <a-col :span=1 style="text-align: right;">
                 <a>
@@ -426,6 +426,15 @@ export default {
                 },
             ).catch(error => errorHandler(this, error));
         },
+        objectivesPercet(objectives) {
+            let completed = 0;
+            objectives.forEach((objective) => {
+                if (objective.status === 'Completado') {
+                    completed += 1;
+                }
+            });
+            return Math.ceil((completed * 100) / objectives.length);
+        },
         selectTagColor(status) {
             switch (status) {
             case 'No iniciado':
@@ -453,7 +462,7 @@ export default {
             case 4:
                 return 'Validado';
             default:
-                return 'No iniciado';
+                return 'error';
             }
         },
     },
