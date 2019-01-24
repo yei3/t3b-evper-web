@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title">
             <a-col :span="21" style="text-align: center;">
-                Autoevaluaciones En procesos
+                Autoevaluaciones en proceso
             </a-col>
             <a-col :span="3" style="text-align: right;">
                 <a>

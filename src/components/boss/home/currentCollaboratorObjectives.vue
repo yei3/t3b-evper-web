@@ -162,7 +162,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="message"/>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                      ¿Está seguro que desea validar o reabrir el objetivo indicado?
@@ -281,10 +281,8 @@ export default {
                     const objectivesAux = items[index].objectivesSummary;
 
                     for (let jndex = 0; jndex < objectivesAux.length; jndex += 1) {
-
                         let binnacle = [];
                         const binnacleAux = objectivesAux[jndex].binnacle;
-
                         for (let hndex = 0; hndex < binnacleAux.length; hndex++) {
                             binnacle.push({
                                 message: binnacleAux[hndex].text,
@@ -321,7 +319,7 @@ export default {
             if (!this.viewProgressModal.show) {
                 this.viewProgressModal.evaluatedName = input.name;
                 this.viewProgressModal.binnacle = input.objective.binnacle;
-                this.viewProgressModal.objectiveName = input.objective.title;                
+                this.viewProgressModal.objectiveName = input.objective.title;
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             } else {
                 this.viewProgressModal.show = !this.viewProgressModal.show;
@@ -335,11 +333,10 @@ export default {
         },
         async toggleOpenOrValidateObjective(input, status) {
             if (input) {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.')
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo validado: ' + this.message)
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
                     .catch(error => errorHandler(this, error));
-                
                 let obj = null;
                 for (let i = 0; i < this.data.length; i++) {
                     if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
@@ -348,11 +345,10 @@ export default {
                 }
                 obj.status = this.selectStatusName(4);
             } else {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se reabrió el objetivo.')
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo Reabierto: ' + this.message)
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2)
                     .catch(error => errorHandler(this, error));
-                
                 let obj = null;
                 for (let i = 0; i < this.data.length; i++) {
                     if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
@@ -362,6 +358,7 @@ export default {
                 obj.status = this.selectStatusName(2);
             }
             this.finishObjectiveModal.show = false;
+            this.message = '';
         },
         selectTagColor(status) {
             switch (status) {

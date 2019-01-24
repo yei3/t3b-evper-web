@@ -200,7 +200,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="message"/>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                      ¿Está seguro que desea completar el objetivo indicado?
@@ -247,13 +247,13 @@ const columns = [
         key: 'objective',
         scopedSlots: { customRender: 'objective' },
     },
-    {
+    /*{
         title: 'Evaluable',
         dataIndex: 'evaluable',
         key: 'evaluable',
         scopedSlots: { customRender: 'evaluable' },
         align: 'center',
-    },
+    },*/
     {
         title: 'Fecha fin',
         dataIndex: 'endDate',
@@ -409,12 +409,13 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.')
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo completado: '+this.message)
                     .catch(error => errorHandler(this, error));
                 await this.completeObjective(this.finishObjectiveModal.objectiveId)
                     .catch(error => errorHandler(this, error));
                 const obj = this.data.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
                 obj.status = this.selectStatusName(3);
+                this.message='';
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
                 this.finishObjectiveModal.show = false;
             }
