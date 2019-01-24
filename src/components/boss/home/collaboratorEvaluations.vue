@@ -346,7 +346,7 @@ export default {
             } else {
                 await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
-                this.getCollaboratorEvaluations();
+                // this.getCollaboratorEvaluations();
             }
         },
         disableButton(status) {
