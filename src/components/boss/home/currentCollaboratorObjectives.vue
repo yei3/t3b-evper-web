@@ -162,7 +162,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="message"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message"/>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                      ¿Está seguro que desea validar o reabrir el objetivo indicado?
@@ -239,6 +239,7 @@ export default {
                 objectiveId: 0,
                 objectiveName: '',
                 evaluatedName: '',
+                message: '',
             },
             data: [],
         };
@@ -276,7 +277,6 @@ export default {
                 // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-
                     let objectives = [];
                     const objectivesAux = items[index].objectivesSummary;
 
@@ -333,7 +333,7 @@ export default {
         },
         async toggleOpenOrValidateObjective(input, status) {
             if (input) {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo validado: ' + this.message)
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo validado: ' + this.finishObjectiveModal.message)
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
                     .catch(error => errorHandler(this, error));
@@ -345,7 +345,7 @@ export default {
                 }
                 obj.status = this.selectStatusName(4);
             } else {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo Reabierto: ' + this.message)
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo Reabierto: ' + this.finishObjectiveModal.message)
                     .catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2)
                     .catch(error => errorHandler(this, error));
@@ -358,7 +358,7 @@ export default {
                 obj.status = this.selectStatusName(2);
             }
             this.finishObjectiveModal.show = false;
-            this.message = '';
+            this.finishObjectiveModal.message = '';
         },
         selectTagColor(status) {
             switch (status) {
