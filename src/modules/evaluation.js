@@ -5,6 +5,10 @@ module.exports = {
             value: 3,
         },
         {
+            label: 'Acción',
+            value: 5,
+        },
+        {
             label: 'Respuesta abierta',
             value: 0,
         },
