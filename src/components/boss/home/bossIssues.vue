@@ -27,7 +27,7 @@
             <a-col :span="12">
                 <a-badge :count="pendingEvaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
                 <span class="badged-text">
-                    Evaluaciones de colaboradores En procesos
+                    Evaluaciones de colaboradores en proceso
                 </span>
             </a-col>
             <a-col :span="12">
@@ -35,7 +35,7 @@
                     :numberStyle= "{backgroundColor: '#f8ac59'}"
                 />
                 <span class="badged-text">
-                    Validación de objetivos de colaboradores En procesos
+                    Validación de objetivos de colaboradores en proceso
                 </span>
             </a-col>
         </a-row>

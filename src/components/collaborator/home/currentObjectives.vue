@@ -5,7 +5,7 @@
                 <span>Seguimiento</span>
             </a-col>
             <a-col :xs="11" :sm="9" :md="7" :lg="5">
-                <a-progress :percent="0" size="small" />
+                <a-progress :percent="objectivesPercet(data)" strokeColor="#1ab394" size="small" />
             </a-col>
             <a-col :span=1 style="text-align: right;">
                 <a>
@@ -69,7 +69,8 @@
                             <a-menu-item
                                 key="3"
                                 :disabled="record.status === 'Completado' ||
-                                           record.status === 'No iniciado'"
+                                           record.status === 'No iniciado' ||
+                                           record.status === 'Validado'"
                                 @click="toggleFinishObjectiveModal(record)">
                                 Completar objetivo
                             </a-menu-item>
@@ -106,7 +107,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" modal-content-seccion-bottom>
-                    <a-textarea placeholder="Avance del objetivo..." :rows="6" v-model="message"/>
+                    <a-textarea placeholder="Avance del objetivo..." :rows="6" v-model="recordProgressModal.message"/>
                 </a-col>
             </a-row>
             <template slot="footer">
@@ -143,7 +144,6 @@
                     </a-col>
                 </a-row>
             </template>
-
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
@@ -163,7 +163,8 @@
                         </a-timeline-item>
                     </a-timeline>
                 </a-col>
-            </a-row>            <template slot="footer">
+            </a-row>
+            <template slot="footer">
                 <a-button
                     key="back"
                     @click="toggleViewProgressModal"
@@ -199,7 +200,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message"/>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                      ¿Está seguro que desea completar el objetivo indicado?
@@ -226,7 +227,6 @@
                 </a-button>
             </template>
         </a-modal>
-
     </div>
 </template>
 
@@ -247,13 +247,13 @@ const columns = [
         key: 'objective',
         scopedSlots: { customRender: 'objective' },
     },
-    {
+    /*{
         title: 'Evaluable',
         dataIndex: 'evaluable',
         key: 'evaluable',
         scopedSlots: { customRender: 'evaluable' },
         align: 'center',
-    },
+    },*/
     {
         title: 'Fecha fin',
         dataIndex: 'endDate',
@@ -275,7 +275,6 @@ export default {
             loaded: false,
             data: [],
             columns,
-            message: '',
             username: '',
             binnacle: [],
             recordProgressModal: {
@@ -284,6 +283,7 @@ export default {
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: '',
+                message: '',
             },
             viewProgressModal: {
                 loading: false,
@@ -298,6 +298,7 @@ export default {
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: '',
+                message: '',
             },
 
         };
@@ -349,7 +350,6 @@ export default {
                     text: message,
                 },
             ).catch(error => errorHandler(this, error));
-            this.message = '';
             this.$message.success('El mensaje se ha guardado correctamente');
         },
         async getCurrentObjectives() {
@@ -384,13 +384,15 @@ export default {
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
                 this.recordProgressModal.loading = true;
-                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.message)
+                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.recordProgressModal.message)
                     .catch(error => errorHandler(this, error));
                 const obj = this.data.find(tmp => tmp.id === this.recordProgressModal.objectiveId);
                 obj.status = this.selectStatusName(2);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
                 this.recordProgressModal.loading = false;
             }
+            this.recordProgressModal.message = '';
+            
         },
         async toggleViewProgressModal(objective) {
             if (!this.viewProgressModal.show) {
@@ -409,7 +411,7 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Se completó el objetivo.')
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo completado: ' + this.finishObjectiveModal.message)
                     .catch(error => errorHandler(this, error));
                 await this.completeObjective(this.finishObjectiveModal.objectiveId)
                     .catch(error => errorHandler(this, error));
@@ -418,6 +420,7 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
                 this.finishObjectiveModal.show = false;
             }
+            this.finishObjectiveModal.message = '';
         },
         async sendBossNotification(_objectiveId) {
             await client3B.notifications.sendBossNotification(
@@ -425,6 +428,15 @@ export default {
                     objectiveId: _objectiveId,
                 },
             ).catch(error => errorHandler(this, error));
+        },
+        objectivesPercet(objectives) {
+            let completed = 0;
+            objectives.forEach((objective) => {
+                if (objective.status === 'Validado') {
+                    completed += 1;
+                }
+            });
+            return Math.ceil((completed * 100) / objectives.length);
         },
         selectTagColor(status) {
             switch (status) {
@@ -453,7 +465,7 @@ export default {
             case 4:
                 return 'Validado';
             default:
-                return 'No iniciado';
+                return 'error';
             }
         },
     },

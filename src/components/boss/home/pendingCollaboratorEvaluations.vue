@@ -53,14 +53,15 @@
                         size="small"
                         class="btn--start-evaluations"
                         @click="fillEvaluation(record.id, record.autoEvaluation)"
-                        :disabled="disableButton(record.status)"
+                        v-show="!disableButton(record.status)"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                     <a-button
-                        class="table-link-light" ghost
-                        @click="toggleScheduleReviewModal"
-                        v-show="transformStatus(action) === 'Agendar revisión'"
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="toggleScheduleReviewModal(record)"
+                        v-show="transformStatus(action) === 'Agendar Revisión'"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
@@ -80,7 +81,10 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Agendar revisión</h1>
-                        <small>(Nombre de la evaluacion) - (Nombre del colaborador)</small>
+                        <small>
+                            {{scheduleReviewModal.evaluationName}} -
+                            {{scheduleReviewModal.collaboratorName}}
+                        </small>
                     </a-col>
                 </a-row>
             </template>
@@ -88,11 +92,18 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                         Seleecione la fecha de la revisón:
+                         Seleecione la fecha y hora de la revisón:
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker style="width: 100%" />
+                    <a-date-picker
+                        showTime
+                        format="YYYY-MM-DD HH:mm"
+                        placeholder="Selecciona el día y la hora de la revisión"
+                        style="width: 100%"
+                        @ok="onSelectDate"
+                    />
+
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>
@@ -170,9 +181,13 @@ export default {
         return {
             spin: false,
             collapsed: false,
+            dateString: '',
             scheduleReviewModal: {
                 show: false,
                 enableButton: false,
+                evaluationId: 0,
+                evaluationName: '',
+                collaboratorName: '',
             },
             data: [],
             columns,
@@ -182,6 +197,18 @@ export default {
         this.getCollaboratorEvaluations();
     },
     methods: {
+        onSelectDate(value) {
+            this.dateString = new Date(value._d); // eslint-disable-line
+        },
+        async scheduleReview(evaluationId, date) {
+            await client3B.evaluation.revision.updateRevisionDate(
+                {
+                    evaluationId,
+                    revisionTime: date.toISOString(),
+                },
+            ).catch(error => errorHandler(this, error));
+            this.$message.success('La fecha de revisión se ha guardado correctamente');
+        },
         async getCollaboratorEvaluations() {
             this.spin = true;
             let response = null;
@@ -208,8 +235,17 @@ export default {
             }
             this.spin = false;
         },
-        toggleScheduleReviewModal() {
-            this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+        async toggleScheduleReviewModal(input) {
+            if (!this.scheduleReviewModal.show) {
+                this.scheduleReviewModal.evaluationId = input.id;
+                this.scheduleReviewModal.evaluationName = input.evaluation.title;
+                this.scheduleReviewModal.collaboratorName = input.collaborator;
+                this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+            } else {
+                await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
+                this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+                // this.getCollaboratorEvaluations();
+            }
         },
         fillEvaluation(id, autoEvaluation) {
             if (autoEvaluation === true) {
@@ -231,6 +267,9 @@ export default {
             if (status === 'En proceso') {
                 return 'Continuar';
             }
+            if (status === 'Finalizado') {
+                return 'Agendar Revisión';
+            }
             return 'Iniciar';
         },
         selectTagColor(status) {
@@ -239,10 +278,12 @@ export default {
                 return 'ant-tag-red';
             case 'En proceso':
                 return 'ant-tag-yellow';
-            case 'Completado':
+            case 'Finalizado':
                 return 'ant-tag-green';
-            case 'Validado':
+            case 'Pendiente de revisión':
                 return 'ant-tag-blue';
+            case 'Cerrada':
+                return 'ant-tag-gray';
             default:
                 return 'ant-tag-gray';
             }
@@ -254,9 +295,11 @@ export default {
             case 1:
                 return 'En proceso';
             case 2:
-                return 'Completado';
+                return 'Finalizado';
             case 3:
-                return 'Validado';
+                return 'Pendiente de revisión';
+            case 4:
+                return 'Cerrada';
             default:
                 return 'No iniciado';
             }
@@ -271,7 +314,7 @@ export default {
         background: #00d5af;
         color: #000;
         font-size: 11px;
-        width: 82px;
+        width: 102px;
     }
     .btn--start-evaluations:hover {
         background: #00af8f;

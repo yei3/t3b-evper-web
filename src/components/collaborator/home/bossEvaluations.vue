@@ -153,7 +153,7 @@ export default {
     data() {
         return {
             spin: false,
-            collapsed: false,
+            collapsed: true,
             CBEModal: {
                 show: false,
                 enableButton: false,

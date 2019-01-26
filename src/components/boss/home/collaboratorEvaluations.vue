@@ -243,7 +243,7 @@ export default {
         return {
             spin: false,
             loading: false,
-            collapsed: false,
+            collapsed: true,
             columns,
             data: [],
             dateString: '',
@@ -346,7 +346,7 @@ export default {
             } else {
                 await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
-                this.getCollaboratorEvaluations();
+                // this.getCollaboratorEvaluations();
             }
         },
         disableButton(status) {
@@ -356,32 +356,35 @@ export default {
             return false;
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
-                return 'ant-tag-red';
+            switch (status) {
+                case 'No iniciado':
+                    return 'ant-tag-red';
+                case 'En proceso':
+                    return 'ant-tag-yellow';
+                case 'Finalizado':
+                    return 'ant-tag-green';
+                case 'Pendiente de revisión':
+                    return 'ant-tag-blue';
+                case 'Cerrada':
+                    return 'ant-tag-gray';
+                default:
+                    return 'ant-tag-gray';
             }
-            if (status === 'En proceso') {
-                return 'ant-tag-yellow';
-            }
-            if (status === 'Finalizado') {
-                return 'ant-tag-green';
-            }
-            if (status === 'Validado') {
-                return 'ant-tag-blue';
-            }
-            return 'ant-tag-gray';
         },
         selectStatusName(status) {
             switch (status) {
-            case 0:
-                return 'No iniciado';
-            case 1:
-                return 'En proceso';
-            case 2:
-                return 'Finalizado';
-            case 3:
-                return 'Validado';
-            default:
-                return 'No iniciado';
+                case 0:
+                    return 'No iniciado';
+                case 1:
+                    return 'En proceso';
+                case 2:
+                    return 'Finalizado';
+                case 3:
+                    return 'Pendiente de revisión';
+                case 4:
+                    return 'Cerrada';
+                default:
+                    return 'No iniciado';
             }
         },
     },
