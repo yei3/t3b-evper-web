@@ -97,8 +97,10 @@
     </div>
 </template>
 <script>
+import authService from '@/services/auth';
 import client3B from '@/api/client3B';
 import Footer from '@/components/layout/Footer.vue';
+import errorHandler from '@/views/errorHandler';
 
 export default {
     components: {
@@ -106,10 +108,12 @@ export default {
     },
     beforeCreate() {
         this.form = this.$form.createForm(this);
-    },
+},
     data() {
         return {
             spin: false,
+            userInfo: authService.getUserData(),
+            userData: '',
             user: {
                 email: '',
                 scholarship: '',
@@ -119,6 +123,7 @@ export default {
         };
     },
     created() {
+        this.getUserInfo();
     },
     methods: {
         handleChange(info) {
@@ -139,6 +144,7 @@ export default {
             try {
                 await client3B.user.updateScholarshipAndEmail(update);
                 this.$message.success('¡Tu información fue guardada con éxito!');
+                this.loading = false;
             } catch (error) {
                 this.handleError(error.response.data.error);
                 this.loading = false;
@@ -161,6 +167,17 @@ export default {
             } else {
                 this.$message.error(error, time);
                 this.errors.push(error);
+            }
+        },
+        async getUserInfo() {
+            let response = null;
+            try {
+                response = await client3B.user.get(this.userInfo.id);
+                this.userData = response.data.result;
+                this.user.email = this.userData.emailAddress;
+                this.user.scholarship = this.userData.scholarship;
+            } catch (error) {
+                errorHandler(this, error);
             }
         },
     },
