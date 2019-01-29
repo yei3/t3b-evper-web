@@ -35,11 +35,14 @@
             @close="onClose"
             :visible="visible"
             >
-            <li v-for="item in data" :key="item.id">
-                <strong>{{ item.id  }}</strong>
+            <div v-for="item in data" :key="item.id">
+                <a-icon type="bell" theme="filled" style="font-size: 14px;" />
+                <strong>   {{ item.id  }}</strong>
                 <br>
                 {{ item.status }}
-            </li>
+                <br>
+                <p style="text-align:right;">{{ item.endDate }}</p>
+            </div>
             <br><br>
             <div  class="text-lg-right">
                 <a-button @click="onClose">Cerrar</a-button>
@@ -76,6 +79,7 @@ export default {
         },
         showDrawer() {
             this.visible = true;
+            this.countNotif = 0;
         },
         onClose() {
             this.visible = false;
