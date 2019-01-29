@@ -15,7 +15,9 @@
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active">Realizar auto-evaluación</strong>
+                        <strong class="breadcrumb-path-active">
+                            Realizar <span v-show="isAutoEvaluation">auto-</span>evaluación
+                        </strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
@@ -30,7 +32,10 @@
                         <a-col :sm="24" :md="12">
                             <h1>{{evaluationName}}</h1>
                         </a-col>
-                        <a-col :sm="24" :md="12"
+                        <a-col :sm="12" :md="6" style="text-align: right;">
+                            <h3 v-show="!isAutoEvaluation">  {{evaluatedName}}</h3>
+                        </a-col>
+                        <a-col :sm="12" :md="6"
                             style="text-align: right; padding-right: 31px; padding-top: 5px;"
                         >
                             <a-button class="btn-blue"
@@ -182,6 +187,8 @@ export default {
             loading: false,
             collapsed: false,
             evaluation: null,
+            isAutoEvaluation: true,
+            evaluatedName: '',
             data: {
                 currentStep: 0,
                 lastStep: 0,
@@ -207,6 +214,12 @@ export default {
             this.spin = false;
 
             this.evaluation = response.data.result;
+            if (this.evaluation == null) {
+                this.isAutoEvaluation = false;
+            } else {
+                this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
+                this.evaluatedName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
+            }
 
             // Sort sections
             const sectNextObj = this.evaluation.template.sections
