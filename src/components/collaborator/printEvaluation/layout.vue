@@ -10,19 +10,25 @@
                     src="https://t3b.blob.core.windows.net/t3b/images/site/logo.png"
                 />
             </a-col>
-            <a-col :span="12">
+            <a-col :span="1"></a-col>
+            <a-col :span="10">
                 <h1>{{ evaluation.name }}</h1>
                 <p>{{ evaluation.template.name }}</p>
                 <p>{{ evaluation.template.description }}</p>
             </a-col>
-            <a-col :span="5">
-                <b>Inicio: </b> <span style="font-weight: normal">
+            <a-col :span="6">
+                <b>Inicio: </b>
+                <span style="font-weight: normal">
                     {{ new Date(evaluation.startDateTime).toLocaleDateString() }}
                 </span>
                 <br>
-                <b>Fin: </b> <span style="font-weight: normal">
+                <b>Fin: </b>
+                <span style="font-weight: normal">
                     {{ new Date(evaluation.endDateTime).toLocaleDateString() }}
                 </span>
+                <br>
+                <br>
+                <b style="color: #00b490;">{{ collaboratorName }}</b>
             </a-col>
             <a-col :span="3">
                 <a-button class="btn-blue"
@@ -46,13 +52,13 @@
                 <span
                     v-for="(subsection, j) in section.childSections" :key="j"
                 >
-                    <h4 class="left-padd__subsection">{{ subsection.name }}</h4>
+                    <h4 class="subsection left-padd__subsection">{{ subsection.name }}</h4>
                     <span
                         :key="h"
                         v-for="(question, h) in subsection.unmeasuredQuestions"
                     >
                         <p class="left-padd__question"><b>Pregunta: </b>{{ question.text }}</p>
-                        <p class="left-padd__question"><b>Respuesta: </b> </p>
+                        <p class="left-padd__question"><b>Respuesta: </b>{{findAnwer(question.id)}}</p>
                     </span>
                     <span
                         :key="h"
@@ -77,37 +83,41 @@
         <div class="collapse-content">
             <a-row class="" style="padding: 0 0 8px;">
                 <a-col :span="13">
-                    <p>
-                        He leído y comprendido esta evaluación de desempeño
-                        y las recomendaciones señaladas.
+                    <p v-show="isAutoEvaluation">
+                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con mi Evaluador.
                     </p>
-                    <p>
-                        Haré lo mejor posible para mejorar mi desempeño
-                        basado en estos comentarios.
+                    <p v-show="!isAutoEvaluation">
+                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con el Evaluado.
                     </p>
                     <br><br>
-                    <p class="signature">Nombre y firma del Evaluado</p>
+                    <p v-show="isAutoEvaluation" class="signature"><b>Firma de Evaluado</b></p>
+                    <p v-show="!isAutoEvaluation" class="signature"><b>Firma de Evaluador</b></p>
                 </a-col>
                 <a-col :span="4"></a-col>
                 <a-col :span="6">
                     <br><br>
                     <br><br>
-                    <p class="signature">Fecha</p>
+                    <p class="signature"><b>Fecha</b></p>
                 </a-col>
                 <a-col :span="1"></a-col>
             </a-row>
             <a-row class="" style="padding: 24px 0 0 0;">
                 <a-col :span="13">
-                    <p>He preparado esta evaluación de desempeño con detenimiento, lo he </p>
-                    <p>explicado claramente y discutido en detalle con el colaborador.</p>
+                    <p v-show="isAutoEvaluation">
+                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la mejora en el desempeño del Evaluado.
+                    </p>
+                    <p v-show="!isAutoEvaluation">
+                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi desempeño basado en estos comentarios.
+                    </p>
                     <br><br>
-                    <p class="signature">Nombre y firma del eEvaluador</p>
+                    <p v-show="isAutoEvaluation" class="signature"><b>Firma de Evaluador</b></p>
+                    <p v-show="!isAutoEvaluation" class="signature"><b>Firma de Evaluado</b></p>
                 </a-col>
                 <a-col :span="4"></a-col>
                 <a-col :span="6">
                     <br><br>
                     <br><br>
-                    <p class="signature">Fecha</p>
+                    <p class="signature"><b>Fecha</b></p>
                 </a-col>
                 <a-col :span="1"></a-col>
             </a-row>
@@ -130,9 +140,25 @@ export default {
             spin: false,
             loading: false,
             collapsed: false,
+            isAutoEvaluation: true,
+            collaboratorName: '',
+            anwsers: [],
             sections: [],
             evaluation: [],
-
+            selectOptions: [
+                {
+                    value: '-70',
+                    label: 'Insatisfactorio (<70%)',
+                },
+                {
+                    value: '71-99',
+                    label: 'Cumple requerimiento (71% a 99%)',
+                },
+                {
+                    value: '+100',
+                    label: 'Excede requerimiento (100%)',
+                },
+            ],
         };
     },
     async created() {
@@ -153,7 +179,20 @@ export default {
             if (!response) return;
             this.spin = false;
             this.evaluation = response.data.result;
+            this.collaboratorName = response.data.result.user.name + ' ' + response.data.result.user.surname;
+            this.isAutoEvaluation = response.data.result.template.isAutoEvaluation;
             this.sections = response.data.result.template.sections;
+            this.anwsers = response.data.result.questions;
+        },
+        findAnwer(questionId) {
+            
+            let ans = '';
+            this.anwsers.forEach( (anwser) => {
+                // console.log(anwser.evaluationQuestionId)
+                if(anwser.evaluationQuestionId === questionId)
+                    ans = anwser.unmeasuredAnswer.text;
+            });
+            return ans.replace(/[\])}[{(]/g, '');
         },
     },
 };
@@ -164,13 +203,18 @@ export default {
         text-align: center;
         border-top: solid 1px black;
     }
+    .subsection {
+        color: #00b490;
+        font-size: 15px;
+        text-decoration: underline black;
+    }
     .section__title {
         padding: 0px 8px;
         border-radius: 2px;
         background-color: #6fd1bd;
     }
     .left-padd__subsection {
-        margin: 0 0 0 24px;
+        margin: 4px 0 8px 24px;
     }
     .left-padd__question {
         margin: 0 0 0 48px;

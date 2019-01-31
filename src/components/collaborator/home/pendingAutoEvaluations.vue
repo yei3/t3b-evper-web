@@ -117,25 +117,25 @@ export default {
                 response = await client3B.dashboard.getCollaborator();
                 const items = response.data.result.evaluationSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index += 1) {
+                items.forEach((evaluation, index) => {
                     this.data.push({
-                        id: items[index].id,
+                        id: evaluation.id,
                         key: index + 1,
-                        status: this.selectStatusName(items[index].status),
+                        status: this.selectStatusName(evaluation.status),
                         evaluation: {
-                            title: items[index].name,
-                            subtitle: items[index].description,
+                            title: evaluation.name,
+                            subtitle: evaluation.description,
                         },
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
+                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
                     });
-                }
+                });
             } catch (error) {
                 errorHandler(this, error);
             }
             this.spin = false;
         },
         fillEvaluation(id, status) {
-            if (status === 'Finalizada') {
+            if (status === 'Finalizado') {
                 this.$router.push({ name: 'collaborator-assessment', params: { id } });
             } else {
                 this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
@@ -148,7 +148,7 @@ export default {
             return false;
         },
         transformStatus(status) {
-            if (status === 'Finalizada') {
+            if (status === 'Finalizado') {
                 return 'Ver';
             }
             if (status === 'En proceso') {
