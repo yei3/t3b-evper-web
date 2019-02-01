@@ -52,19 +52,26 @@
                 <span
                     v-for="(subsection, j) in section.childSections" :key="j"
                 >
-                    <h4 class="subsection left-padd__subsection">{{ subsection.name }}</h4>
+                    <div class="subsection--padd">
+                        <b
+                            class="subsection"
+                            v-show="isNullOrEmpty(subsection.name)"                        
+                        >
+                            {{ subsection.name }}
+                        </b>
+                    </div>
                     <span
                         :key="h"
                         v-for="(question, h) in subsection.unmeasuredQuestions"
                     >
-                        <p class="left-padd__question"><b>Pregunta: </b>{{ question.text }}</p>
-                        <p class="left-padd__question"><b>Respuesta: </b>{{findAnwer(question.id)}}</p>
+                        <p class="question__border"><b>{{h+1}}.- </b> <a-icon type="question-circle" /> {{ question.text }}<b></b></p>
+                        <p class="question__border">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a-icon type="edit" />&nbsp;{{findAnwer(question.id)}}</p>
                     </span>
                     <span
                         :key="h"
                         v-for="(question, h) in subsection.measuredQuestions"
                     >
-                        <p class="left-padd__question">
+                        <p class="question__border">
                             <b>Objetivo: </b>{{ question.text }}
                             <b>Valor esperado: </b> {{question.expected || question.expectedText}}
                             <b>Valor real: </b>
@@ -74,7 +81,7 @@
                         :key="h"
                         v-for="(question, h) in subsection.measuredQuestions"
                     >
-                        <p class="left-padd__question">{{ question.text }}</p>
+                        <p class="question__border">{{ question.text }}</p>
                     </span> -->
                 </span>
                 <a-divider />
@@ -169,6 +176,9 @@ export default {
             // Pass the element id here
             this.$printHtml('printEvaluation');
         },
+        isNullOrEmpty(input) {
+            return (input !== null && input !== '');
+        },
         async fetchEvaluation() {
             this.spin = true;
             const response = await client3B.evaluation.get(this.$route.params.id)
@@ -188,9 +198,9 @@ export default {
             
             let ans = '';
             this.anwsers.forEach( (anwser) => {
-                // console.log(anwser.evaluationQuestionId)
-                if(anwser.evaluationQuestionId === questionId)
-                    ans = anwser.unmeasuredAnswer.text;
+                if(anwser.evaluationQuestionId === questionId) {
+                    ans = anwser.unmeasuredAnswer.text; ;
+                }
             });
             return ans.replace(/[\])}[{(]/g, '');
         },
@@ -206,17 +216,23 @@ export default {
     .subsection {
         color: #00b490;
         font-size: 15px;
-        text-decoration: underline black;
+        padding: 1px 8px;
+        margin: 0 0 0 20px;
+        border-radius: 4px;
+        border: 1px solid #adadad
+    }
+    .subsection--padd {
+        padding: 16px 0 8px 0;
     }
     .section__title {
         padding: 0px 8px;
-        border-radius: 2px;
+        font-size: 15px;
+        border-radius: 3px;
+        color: #000000;
         background-color: #6fd1bd;
+        text-align: center;
     }
-    .left-padd__subsection {
-        margin: 4px 0 8px 24px;
-    }
-    .left-padd__question {
-        margin: 0 0 0 48px;
+    .question__border {
+        margin: 0 0 0 30px;
     }
 </style>
