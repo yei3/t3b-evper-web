@@ -176,8 +176,19 @@ export default {
             // Pass the element id here
             this.$printHtml('printEvaluation');
         },
-        isNullOrEmpty(input) {
-            return (input !== null && input !== '');
+        findAnwer(questionId) {
+            
+            let ans = '';
+            const regex = `/[\[\]']+/g`;
+            this.anwsers.forEach( (anwser) => {
+                if(anwser.evaluationQuestionId === questionId) {
+                    ans = anwser.unmeasuredAnswer.text; ;
+                }
+            });
+            return ans.replace(regex, '');
+        },
+        isNullOrEmpty(subsection) {
+            return (subsection !== null && subsection !== '' && subsection !== 'Objetivos');
         },
         async fetchEvaluation() {
             this.spin = true;
@@ -193,17 +204,7 @@ export default {
             this.isAutoEvaluation = response.data.result.template.isAutoEvaluation;
             this.sections = response.data.result.template.sections;
             this.anwsers = response.data.result.questions;
-        },
-        findAnwer(questionId) {
-            
-            let ans = '';
-            this.anwsers.forEach( (anwser) => {
-                if(anwser.evaluationQuestionId === questionId) {
-                    ans = anwser.unmeasuredAnswer.text; ;
-                }
-            });
-            return ans.replace(/[\])}[{(]/g, '');
-        },
+        },        
     },
 };
 </script>
@@ -222,7 +223,7 @@ export default {
         border: 1px solid #adadad
     }
     .subsection--padd {
-        padding: 16px 0 8px 0;
+        padding: 32px 0 16px 0;
     }
     .section__title {
         padding: 0px 8px;

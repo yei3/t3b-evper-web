@@ -52,16 +52,16 @@
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id, record.autoEvaluation)"
-                        v-show="!disableButton(record.status)"
+                        @click="fillEvaluation(record)"
+                        v-show="!disableButton(record.status, record.autoEvaluation)"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="toggleScheduleReviewModal(record)"
-                        v-show="transformStatus(action) === 'Agendar Revisión'"
+                        @click="scheduleReview(record.id)"
+                        v-show="disableButton(record.status, record.autoEvaluation)"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
@@ -200,14 +200,13 @@ export default {
         onSelectDate(value) {
             this.dateString = new Date(value._d); // eslint-disable-line
         },
-        async scheduleReview(evaluationId, date) {
-            await client3B.evaluation.revision.updateRevisionDate(
-                {
-                    evaluationId,
-                    revisionTime: date.toISOString(),
-                },
+        async scheduleReview(evaluationId) {
+            await client3B.evaluation.revision.unrevise(
+                evaluationId,
             ).catch(error => errorHandler(this, error));
-            this.$message.success('La fecha de revisión se ha guardado correctamente');
+            const obj = this.data.find(tmp => tmp.id === evaluationId);
+                obj.status = this.selectStatusName(4);
+            this.$message.success('La evaluación está en proceso de revisión '+ evaluationId);
         },
         async getCollaboratorEvaluations() {
             this.spin = true;
@@ -244,31 +243,28 @@ export default {
             } else {
                 await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
-                // this.getCollaboratorEvaluations();
             }
         },
-        fillEvaluation(id, autoEvaluation) {
-            if (autoEvaluation === true) {
+        fillEvaluation(input) {
+            let id = input.id;
+            if (input.autoEvaluation == true || input.status === 'Pte. revisión') {
                 this.$router.push({ name: 'boss-assessment', params: { id } });
             } else {
                 this.$router.push({ name: 'boss-assessments-apply', params: { id } });
             }
         },
-        disableButton(status) {
-            if (status !== 'No iniciado' && status !== 'En proceso') {
-                return true;
-            }
-            return false;
+        disableButton(status, isAutoEvaluation) {
+            return (status === 'Finalizado' && !isAutoEvaluation);
         },
         transformStatus(status, autoEvaluation) {
-            if (autoEvaluation === true) {
-                return 'Ver';
-            }
             if (status === 'En proceso') {
                 return 'Continuar';
             }
-            if (status === 'Finalizado') {
+            if (status === 'Finalizado' && !autoEvaluation) {
                 return 'Agendar Revisión';
+            }
+            if (autoEvaluation === true || status === 'Pte. revisión') {
+                return 'Ver';
             }
             return 'Iniciar';
         },
@@ -280,12 +276,12 @@ export default {
                 return 'ant-tag-yellow';
             case 'Finalizado':
                 return 'ant-tag-green';
-            case 'Pendiente de revisión':
-                return 'ant-tag-blue';
+            case 'Pte. revisión':
+                return 'ant-tag-gray';
             case 'Cerrada':
-                return 'ant-tag-gray';
+                return 'ant-tag-blue';
             default:
-                return 'ant-tag-gray';
+                return 'ant-tag-white';
             }
         },
         selectStatusName(status) {
@@ -296,9 +292,9 @@ export default {
                 return 'En proceso';
             case 2:
                 return 'Finalizado';
-            case 3:
-                return 'Pendiente de revisión';
             case 4:
+                return 'Pte. revisión';
+            case 3:
                 return 'Cerrada';
             default:
                 return 'No iniciado';

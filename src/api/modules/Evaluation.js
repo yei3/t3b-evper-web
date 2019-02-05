@@ -26,6 +26,34 @@ class Revision extends Http {
     }
 
     /**
+     * Request for the evaluation revision
+     *
+     * @param {String} evaluationId   Id for the user
+     *
+     * @return {Promise}        Http Response
+     */
+    unrevise(evaluationId) {
+        const path = `${this.entityPath}/UnreviseEvaluation`;
+        return this.request(path, this.methods.post, {
+            $qs: { evaluationId },
+        });
+    }
+
+    /**
+     * Request for the evaluation revision
+     *
+     * @param {String} evaluationId   Id for the user
+     *
+     * @return {Promise}        Http Response
+     */
+    validate(evaluationId) {
+        const path = `${this.entityPath}/UnreviseEvaluation`;
+        return this.request(path, this.methods.post, {
+            $qs: { evaluationId },
+        });
+    }
+
+    /**
      * Request for the update evaluation revision date
      *
      * @param {Object} data     Data to update revision date

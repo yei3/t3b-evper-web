@@ -37,7 +37,7 @@
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
                 <span slot="objective" slot-scope="objective">
-                    <p>
+                    <p style="font-size: 13px">
                     <!-- <a
                         class="table-link"
                         @click="toggleViewProgressModal"
@@ -45,7 +45,7 @@
                         {{objective.title}}
                     <!-- </a> -->
                     </p>
-                    <p><small>{{objective.subtitle}}</small></p>
+                    <!-- <p><small>{{objective.subtitle}}</small></p> -->
                 </span>
                 <span slot="evaluable" slot-scope="evaluable" class="text-center">
                     <a-icon type="check" v-if="!evaluable"/>

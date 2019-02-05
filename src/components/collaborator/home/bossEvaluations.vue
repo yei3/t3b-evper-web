@@ -34,19 +34,21 @@
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
-                    <p><a
+                    <p>
+                    <!-- <a
                         class="table-link"
                         @click="toggleCBEModal()"
-                    >
+                    > -->
                         {{evaluation.title}}
-                    </a></p>
+                    <!-- </a> -->
+                    </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
                     <a-button
                         size="small"
                         class="btn--close-evaluations"
-                        @click="toggleCBEModal()"
+                        @click="toggleCBEModal(record)"
                         :disabled="disableButton(record.status)"
                     >
                         Cerrar
@@ -67,7 +69,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Cerrar Evaluación</h1>
-                        <small>(Nombre de la evaluación)</small>
+                        <small>{{CBEModal.evaluationName}}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -75,19 +77,20 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a su evaluación y a la
-                        retroalimentación recibida por su Jefe.
+                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida por mi Evaluador.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
                     <a-textarea placeholder="Comentarios..." :rows="6"/>
                 </a-col>
                 <a-col class="modal-content-seccion">
-                    <a-checkbox @change="CBEModal.enableButton = !CBEModal.enableButton">
+                    <a-checkbox
+                        :checked="CBEModal.enableButton"
+                        @change="CBEModal.enableButton = !CBEModal.enableButton"    
+                    >
                         <strong style="font-size: 13px;">
-                        He leído y comprendido la evaluación de desempeño realizada por mi Jefe
-                        y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi
-                        desempeño basado en sus comentarios.</strong>
+                            He preparado los objetivos para el próximo periodo.
+                        </strong>
                     </a-checkbox>
                 </a-col>
                 <a-col class="modal-content-seccion-bottom">
@@ -96,12 +99,12 @@
             </a-row>
 
             <template slot="footer">
-                <a-button
+                <!-- <a-button
                     key="back"
                     @click="toggleCBEModal"
                 >
                     Cancelar
-                </a-button>
+                </a-button> -->
                 <a-button
                     class="modal-button-ok"
                     key="submit"
@@ -153,10 +156,11 @@ export default {
     data() {
         return {
             spin: false,
-            collapsed: true,
+            collapsed: false,
             CBEModal: {
                 show: false,
                 enableButton: false,
+                evaluationName: '',
             },
             data: [],
             columns,
@@ -173,30 +177,34 @@ export default {
                 response = await client3B.dashboard.getCollaborator();
                 const items = response.data.result.revisionSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index += 1) {
+                items.forEach((evaluation, index) => {
                     this.data.push({
                         key: index + 1,
-                        status: this.selectStatusName(items[index].status),
+                        status: this.selectStatusName(evaluation.status),
                         evaluation: {
-                            title: items[index].name,
-                            subtitle: 'sin descripción',
+                            title: evaluation.name,
+                            subtitle: evaluation.description,
                         },
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
-                        reviewDate: new Date(items[index].revisionDateTime).toLocaleString(
+                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
+                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString(
                             [],
                             {
                                 day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
                             },
                         ),
                     });
-                }
+                });
             } catch (error) {
                 errorHandler(this, error);
             } finally {
                 this.spin = false;
             }
         },
-        toggleCBEModal() {
+        toggleCBEModal(input) {
+            if (!this.CBEModal.show) {
+                this.CBEModal.enableButton = false;
+                this.CBEModal.evaluationName = input.evaluation.title;
+            }
             this.CBEModal.show = !this.CBEModal.show;
         },
         disableButton(status) {
@@ -213,12 +221,12 @@ export default {
                 return 'ant-tag-yellow';
             case 'Finalizado':
                 return 'ant-tag-green';
-            case 'En revisión':
-                return 'ant-tag-blue';
+            case 'Pte. revisión':
+                return 'ant-tag-gray';
             case 'Validado':
                 return 'ant-tag-blue';
             default:
-                return 'ant-tag-gray';
+                return 'ant-tag-white';
             }
         },
         selectStatusName(status) {
@@ -229,9 +237,9 @@ export default {
                 return 'En proceso';
             case 2:
                 return 'Finalizado';
-            case 3:
-                return 'En revisión';
             case 4:
+                return 'Pte. revisión';
+            case 3:
                 return 'Validado';
             default:
                 return 'No iniciado';

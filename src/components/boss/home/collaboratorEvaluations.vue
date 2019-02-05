@@ -34,12 +34,14 @@
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
-                    <p><a
+                    <p>
+                    <!-- <a
                         class="table-link"
                         @click="toggleFinishEvaluationModal"
-                    >
+                    > -->
                         {{evaluation.title}}
-                    </a></p>
+                    <!-- </a> -->
+                    </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="collaborator" slot-scope="collaborator">
@@ -54,14 +56,19 @@
                     </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
+                    <a-popconfirm title="Está seguro de eliminar la sección?"
+                        @confirm="validateEvaluation(record.id)"
+                        okText="Al validar la evaluación, está aceptando que los próximos objetivos son los acordados de la revisión."
+                        cancelText="No"
+                    >
                     <a-button
                         size="small"
                         class="btn--close-evaluations"
-                        @click="toggleFinishEvaluationModal(record)"
                         :disabled="disableButton(record.status)"
                     >
                         Validar
                     </a-button>
+                    </a-popconfirm>
                 </span>
             </a-table>
         </a-row>
@@ -243,7 +250,7 @@ export default {
         return {
             spin: false,
             loading: false,
-            collapsed: true,
+            collapsed: false,
             columns,
             data: [],
             dateString: '',
@@ -269,6 +276,17 @@ export default {
     methods: {
         onSelectDate(value) {
             this.dateString = new Date(value._d); // eslint-disable-line
+        },
+        async validateEvaluation(evaluationId) {
+            this.loading = true;
+            console.log(evaluationId);
+            await client3B.evaluation.revision.revise(
+                    evaluationId,
+            ).catch(error => errorHandler(this, error));
+            this.loading = false;
+            const obj = this.data.find(tmp => tmp.id === evaluationId);
+                obj.status = this.selectStatusName(3);
+            this.$message.success('La evaluación se ha validado correctamente');
         },
         async scheduleReview(evaluationId, date) {
             this.loading = true;
@@ -299,26 +317,26 @@ export default {
                 response = await client3B.dashboard.getSupervisor();
                 const items = response.data.result.collaboratorRevisionSummary;
                 this.data = [];
-                for (let index = 0; index < items.length; index += 1) {
+                items.forEach((evaluation, index) => {
                     this.data.push({
                         key: index + 1,
-                        id: items[index].evaluationId,
-                        // status: this.selectStatusName(items[index].status),
-                        status: this.selectStatusName(2),
+                        id: evaluation.evaluationId,
+                        // status: this.selectStatusName(evaluation.status),
+                        status: this.selectStatusName(evaluation.status),
                         evaluation: {
-                            title: items[index].name,
-                            subtitle: items[index].description,
+                            title: evaluation.name,
+                            subtitle: evaluation.description,
                         },
-                        collaborator: items[index].collaboratorFullName,
-                        reviewDate: new Date(items[index].revisionDateTime).toLocaleString(
+                        collaborator: evaluation.collaboratorFullName,
+                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString(
                             [],
                             {
                                 day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
                             },
                         ),
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
+                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
                     });
-                }
+                });
             } catch (error) {
                 errorHandler(this, error);
             } finally {
@@ -346,7 +364,6 @@ export default {
             } else {
                 await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
-                // this.getCollaboratorEvaluations();
             }
         },
         disableButton(status) {
@@ -363,12 +380,12 @@ export default {
                     return 'ant-tag-yellow';
                 case 'Finalizado':
                     return 'ant-tag-green';
-                case 'Pendiente de revisión':
+                case 'Pte. revisión':
+                    return 'ant-tag-gray';
+                case 'Validada':
                     return 'ant-tag-blue';
-                case 'Cerrada':
-                    return 'ant-tag-gray';
                 default:
-                    return 'ant-tag-gray';
+                    return 'ant-tag-white';
             }
         },
         selectStatusName(status) {
@@ -379,10 +396,10 @@ export default {
                     return 'En proceso';
                 case 2:
                     return 'Finalizado';
-                case 3:
-                    return 'Pendiente de revisión';
                 case 4:
-                    return 'Cerrada';
+                    return 'Pte. revisión';
+                case 3:
+                    return 'Validada';
                 default:
                     return 'No iniciado';
             }
