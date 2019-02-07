@@ -29,21 +29,21 @@
             </div>
         </a-row>
         <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">
-            <a-row :key="collaborator.id" v-for="collaborator in data"
+            <a-row :key="collaborator.id" v-for="(collaborator, index) in data"
                 class="collapse-single-wrapper"
             >
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
                         <a-avatar shape="circle" :src="collaboratorImgUrl(collaborator.number)" />
                         <a class="table-link" style="margin-left: 5px;"
-                            @click="currentCollaborator = (collaborator.id !== currentCollaborator)?
-                                collaborator.id:0">
+                            @click="currentCollaborator = (index !== currentCollaborator)?
+                                index:-1">
                             {{collaborator.name}}
                         </a>
                     </a-col>
                     <a-col :span="4">
                         <p><a-progress
-                            strokeColor="#1ab394" 
+                            strokeColor="#1ab394"
                             :percent="objectivesPercet(collaborator.objectives)"
                             :showInfo="false"
                             size="small"
@@ -52,7 +52,7 @@
                     </a-col>
                 </a-col>
                 <a-col :span="24" class="collapse-single-content"
-                    v-show="currentCollaborator == collaborator.id">
+                    v-show="currentCollaborator == index">
                     <a-table
                         :columns="columns"
                         :dataSource="collaborator.objectives"
@@ -131,7 +131,7 @@
                 </a-col>
             </a-row>
             <template slot="footer">
-                
+
             </template>
         </a-modal>
 
@@ -333,8 +333,10 @@ export default {
         },
         async toggleOpenOrValidateObjective(input, status) {
             if (input) {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo validado: ' + this.finishObjectiveModal.message)
-                    .catch(error => errorHandler(this, error));
+                await this.addObjetiveMessage(
+                    this.finishObjectiveModal.objectiveId,
+                    'Objetivo validado: ' + this.finishObjectiveModal.message
+                ).catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
                     .catch(error => errorHandler(this, error));
                 let obj = null;
