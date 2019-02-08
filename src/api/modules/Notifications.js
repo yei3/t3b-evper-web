@@ -50,6 +50,17 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Publish_SentBossGeneralUserNotification`;
         return this.request(path, this.methods.post, data);
     }
+
+    /**
+     * Request for send notifications when occurs a review
+     * @param {Object} data
+     *
+     * @return {Promise}        Http Response
+     */
+    sendReviewNotification(data) {
+        const path = `${this.entityPath}/Publish_SentReviewNotification`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default Dashboard;
