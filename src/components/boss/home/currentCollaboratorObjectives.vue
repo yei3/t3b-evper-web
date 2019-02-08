@@ -52,11 +52,12 @@
                     </a-col>
                 </a-col>
                 <a-col :span="24" class="collapse-single-content"
-                    v-show="currentCollaborator == index" style="overflow-x: scroll;">
+                    v-show="currentCollaborator == index">
                     <a-table
                         :columns="columns"
                         :dataSource="collaborator.objectives"
                         :pagination=false
+                        :scroll="{ x: true }"
                     >
                         <span slot="status" slot-scope="status">
                             <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
