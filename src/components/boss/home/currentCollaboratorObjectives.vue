@@ -225,7 +225,7 @@ export default {
         return {
             spin: false,
             collapsed: false,
-            currentCollaborator: 0,
+            currentCollaborator: -1,
             columns,
             viewProgressModal: {
                 show: false,
