@@ -280,6 +280,7 @@ export default {
                     revisionTime: date.toISOString(),
                 },
             ).catch(error => errorHandler(this, error));
+            this.sendReviewNotification(evaluationId, date.toISOString());
             this.loading = false;
             this.$message.success('La fecha de revisión se ha guardado correctamente');
         },
@@ -350,6 +351,14 @@ export default {
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
                 // this.getCollaboratorEvaluations();
             }
+        },
+        async sendReviewNotification(_evaluationId, _date) {
+            await client3B.notifications.sendReviewNotification(
+                {
+                    evaluationId: _evaluationId,
+                    date: _date,
+                },
+            ).catch(error => errorHandler(this, error));
         },
         disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {
