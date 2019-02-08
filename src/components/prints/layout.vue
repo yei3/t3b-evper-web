@@ -179,13 +179,13 @@ export default {
         findAnwer(questionId) {
             
             let ans = '';
-            const regex = `/[\[\]']+/g`;
+            const regex = "/[\[\]']+/g";
             this.anwsers.forEach( (anwser) => {
                 if(anwser.evaluationQuestionId === questionId) {
-                    ans = anwser.unmeasuredAnswer.text; ;
+                    ans = anwser.unmeasuredAnswer.text;
                 }
             });
-            return ans.replace(regex, '');
+            return (ans !== null) ? ans.replace(regex, '') : '';
         },
         isNullOrEmpty(subsection) {
             return (subsection !== null && subsection !== '' && subsection !== 'Objetivos');

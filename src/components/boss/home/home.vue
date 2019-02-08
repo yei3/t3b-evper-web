@@ -8,12 +8,12 @@
             <a-col :lg="6" :sm="0"></a-col>
         </a-row>
         <a-row style="margin-top: 30px;">
-            <a-col :span="24" style="padding: 16px 4px;">
-                <current-collaborator-objectives />
-            </a-col>
             <a-col :span="24">
                 <boss-issues/>
             </a-col>
+            <a-col :span="24" style="padding: 16px 4px;">
+                <current-collaborator-objectives />
+            </a-col>            
             <a-col :span="24" style="padding: 16px 4px;">
                 <pending-collaborator-evaluations />
             </a-col>

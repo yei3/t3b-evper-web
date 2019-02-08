@@ -14,11 +14,11 @@
         </a-row>
         <a-row style="margin-top: 30px;">
             <a-col :span="24">
-                <current-objectives />
-            </a-col>
-            <a-col :span="24">
                 <collaborator-issues/>
             </a-col>
+            <a-col :span="24">
+                <current-objectives />
+            </a-col>            
             <a-col :span="24">
                 <pending-auto-evaluations />
             </a-col>

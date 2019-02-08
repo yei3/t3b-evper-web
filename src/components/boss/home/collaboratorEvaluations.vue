@@ -56,18 +56,17 @@
                     </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-popconfirm title="Está seguro de eliminar la sección?"
+                    <a-popconfirm 
+                        title="Al validar la evaluación, está aceptando que los próximos objetivos son los acordados de la revisión."
                         @confirm="validateEvaluation(record.id)"
-                        okText="Al validar la evaluación, está aceptando que los próximos objetivos son los acordados de la revisión."
-                        cancelText="No"
+                        okText="Sí, validar cierre"
+                        cancelText="No, revisar objetivos"
                     >
-                    <a-button
-                        size="small"
-                        class="btn--close-evaluations"
-                        :disabled="disableButton(record.status)"
-                    >
-                        Validar
-                    </a-button>
+                        <a-button
+                            size="small"
+                            class="btn--close-evaluations"
+                            :disabled="disableButton(record.status)"
+                        >Validar</a-button>
                     </a-popconfirm>
                 </span>
             </a-table>
@@ -279,7 +278,6 @@ export default {
         },
         async validateEvaluation(evaluationId) {
             this.loading = true;
-            console.log(evaluationId);
             await client3B.evaluation.revision.revise(
                     evaluationId,
             ).catch(error => errorHandler(this, error));

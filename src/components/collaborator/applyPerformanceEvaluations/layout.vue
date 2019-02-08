@@ -289,7 +289,7 @@ export default {
         },
         printEvaluation() {
             const { id } = this.$route.params;
-            this.$router.push({ name: 'collaborator-assessment-print', params: { id } });
+            this.$router.push({ name: 'print-assessment', params: { id } });
         },
         isSectionNextObjetives(section) {
             if (!this.evaluation.template.includePastObjectives) return false;

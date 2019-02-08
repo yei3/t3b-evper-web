@@ -1,6 +1,5 @@
 import collaboratorHome from '@/components/collaborator/home/layout.vue';
 import collaboratorReports from '@/components/collaborator/reports/layout.vue';
-import printEvaluation from '@/components/collaborator/printEvaluation/layout.vue';
 import performanceEvaluations from '@/components/collaborator/performanceEvaluations/layout.vue';
 import performanceEvaluation from '@/components/collaborator/performanceEvaluation/layout.vue';
 import applyPerformanceEvaluations from '@/components/collaborator/applyPerformanceEvaluations/layout.vue';
@@ -37,12 +36,6 @@ export default [
         path: 'collaborator/assessment/:id',
         name: 'collaborator-assessment',
         component: performanceEvaluation,
-        beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
-    },
-    {
-        path: 'collaborator/assessment/:id/print',
-        name: 'collaborator-assessment-print',
-        component: printEvaluation,
         beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
     },
     {

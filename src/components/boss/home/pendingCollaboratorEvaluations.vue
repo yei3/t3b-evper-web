@@ -247,7 +247,7 @@ export default {
         },
         fillEvaluation(input) {
             let id = input.id;
-            if (input.autoEvaluation == true || input.status === 'Pte. revisión') {
+            if (input.autoEvaluation == true || input.status === 'Pte. revisión' || input.status === 'Cerrada') {
                 this.$router.push({ name: 'boss-assessment', params: { id } });
             } else {
                 this.$router.push({ name: 'boss-assessments-apply', params: { id } });
@@ -263,7 +263,7 @@ export default {
             if (status === 'Finalizado' && !autoEvaluation) {
                 return 'Agendar Revisión';
             }
-            if (autoEvaluation === true || status === 'Pte. revisión') {
+            if (autoEvaluation === true || status === 'Pte. revisión' || status === 'Cerrada') {
                 return 'Ver';
             }
             return 'Iniciar';
