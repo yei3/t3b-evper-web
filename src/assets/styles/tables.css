@@ -45,3 +45,7 @@ p {
 .ant-table-thead > tr > th {
     background: transparent;
 }
+
+.ant-table td {
+    white-space: nowrap;
+}

@@ -11,7 +11,9 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
+            <a-table :columns="columns" :dataSource="data" :pagination=false
+                :scroll="{ x: true }"
+            >
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
