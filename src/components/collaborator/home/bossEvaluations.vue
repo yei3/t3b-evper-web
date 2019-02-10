@@ -202,12 +202,20 @@ export default {
                 this.spin = false;
             }
         },
+        async sendBossCloseEvaluationNotification() {
+            await client3B.notifications.sendBossCloseEvaluationNotification(
+                {},
+            ).catch(error => errorHandler(this, error));
+        },
         toggleCBEModal(input) {
             if (!this.CBEModal.show) {
                 this.CBEModal.enableButton = false;
                 this.CBEModal.evaluationName = input.evaluation.title;
+                this.CBEModal.show = !this.CBEModal.show;
+            } else {
+                this.sendBossCloseEvaluationNotification();
+                this.CBEModal.show = !this.CBEModal.show;
             }
-            this.CBEModal.show = !this.CBEModal.show;
         },
         disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {
