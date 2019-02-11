@@ -18,20 +18,22 @@
                     ]
                 }"
             >
-                <a-input placeholder="Respuesta"
-                    v-model="value"
-                    :disabled="onlyLecture"
-                    @keyup="edited=true"
-                    @keypress.enter.prevent="save"
-                >
+                <a-tooltip placement="top" title="Recuerda salvar tus comentarios presionando enter al terminar o dando clic en el botón de la derecha.">
+                    <a-input placeholder="Respuesta"
+                        v-model="value"
+                        :disabled="onlyLecture"
+                        @keyup="edited=true"
+                        @keypress.enter.prevent="save"
+                    >
 
-                    <a-icon class="input-save"
-                        @click="save"
-                        slot="addonAfter"
-                        type="save"
-                        v-if="!onlyLecture"
-                    />
-                </a-input>
+                        <a-icon class="input-save"
+                            @click="save"
+                            slot="addonAfter"
+                            type="save"
+                            v-if="!onlyLecture"
+                        />
+                    </a-input>
+                </a-tooltip>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
