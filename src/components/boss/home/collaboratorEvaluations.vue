@@ -296,7 +296,7 @@ export default {
                     revisionTime: date.toISOString(),
                 },
             ).catch(error => errorHandler(this, error));
-            this.sendReviewNotification(evaluationId, date.toISOString());
+            this.sendReviewNotification(evaluationId, date);
             this.loading = false;
             this.$message.success('La fecha de revisión se ha guardado correctamente');
         },
@@ -367,11 +367,11 @@ export default {
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
             }
         },
-        async sendReviewNotification(_evaluationId, _date) {
+        async sendReviewNotification(_evaluationId, _dateReview) {
             await client3B.notifications.sendReviewNotification(
                 {
                     evaluationId: _evaluationId,
-                    date: _date,
+                    dateReview: _dateReview,
                 },
             ).catch(error => errorHandler(this, error));
         },

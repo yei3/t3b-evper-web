@@ -214,16 +214,21 @@ export default {
                 this.spin = false;
             }
         },
-        async toggleCBEModal(input) {
+        async sendBossCloseEvaluationNotification() {
+            await client3B.notifications.sendBossCloseEvaluationNotification(
+                {},
+            ).catch(error => errorHandler(this, error));
+        },
+        toggleCBEModal(input) {
             if (!this.CBEModal.show) {
                 this.CBEModal.enableButton = false;
                 this.CBEModal.evaluationId = input.id;
                 this.CBEModal.evaluationName = input.evaluation.title;
+                this.CBEModal.show = !this.CBEModal.show;
             } else {
-                await this.addClosingMessage(this.CBEModal.evaluationId, this.CBEModal.evaluationCloseMsg);
-                this.CBEModal.evaluationCloseMsg = '';
+                this.sendBossCloseEvaluationNotification();
+                this.CBEModal.show = !this.CBEModal.show;
             }
-            this.CBEModal.show = !this.CBEModal.show;            
         },
         disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {
