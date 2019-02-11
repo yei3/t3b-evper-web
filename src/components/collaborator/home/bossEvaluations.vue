@@ -83,7 +83,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="CBEModal.evaluationCloseMsg"/>
                 </a-col>
                 <a-col class="modal-content-seccion">
                     <a-checkbox
@@ -162,7 +162,9 @@ export default {
             CBEModal: {
                 show: false,
                 enableButton: false,
+                evaluationId: 0,
                 evaluationName: '',
+                evaluationCloseMsg: '',
             },
             data: [],
             columns,
@@ -172,6 +174,15 @@ export default {
         this.getRevisionSummary();
     },
     methods: {
+        async addClosingMessage(id, message) {
+            await client3B.evaluation.closeComment(
+                {
+                    evaluationId: id,
+                    comment: message,
+                },
+            ).catch(error => errorHandler(this, error));
+            this.$message.success('El mensaje se ha guardado correctamente');
+        },
         async getRevisionSummary() {
             this.spin = true;
             let response = null;
@@ -182,6 +193,7 @@ export default {
                 items.forEach((evaluation, index) => {
                     this.data.push({
                         key: index + 1,
+                        id: evaluation.evaluationId,
                         status: this.selectStatusName(evaluation.status),
                         evaluation: {
                             title: evaluation.name,
@@ -202,12 +214,16 @@ export default {
                 this.spin = false;
             }
         },
-        toggleCBEModal(input) {
+        async toggleCBEModal(input) {
             if (!this.CBEModal.show) {
                 this.CBEModal.enableButton = false;
+                this.CBEModal.evaluationId = input.id;
                 this.CBEModal.evaluationName = input.evaluation.title;
+            } else {
+                await this.addClosingMessage(this.CBEModal.evaluationId, this.CBEModal.evaluationCloseMsg);
+                this.CBEModal.evaluationCloseMsg = '';
             }
-            this.CBEModal.show = !this.CBEModal.show;
+            this.CBEModal.show = !this.CBEModal.show;            
         },
         disableButton(status) {
             if (status === 'No iniciado' || status === 'En proceso') {

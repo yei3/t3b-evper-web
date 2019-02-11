@@ -58,7 +58,7 @@
                     </a>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-popconfirm 
+                    <a-popconfirm
                         title="Al validar la evaluación, está aceptando que los próximos objetivos son los acordados de la revisión."
                         @confirm="validateEvaluation(record.id)"
                         okText="Sí, validar cierre"

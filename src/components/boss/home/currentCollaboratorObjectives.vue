@@ -63,12 +63,14 @@
                             <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                         </span>
                         <span slot="objective" slot-scope="objective, record">
-                            <p><a
+                            <p>
+                            <!-- <a
                                 class="table-link"
                                 @click="toggleViewProgressModal(record)"
-                            >
+                            > -->
                                 {{objective.title}}
-                            </a></p>
+                            <!-- </a> -->
+                            </p>
                             <p><small>{{objective.subtitle}}</small></p>
                         </span>
                         <span slot="action" slot-scope="text, record">

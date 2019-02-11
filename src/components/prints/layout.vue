@@ -3,6 +3,11 @@
         style="background-color: white;
         margin: 30px 30px;"
     >
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin tip="Cargando..." size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-title" style="margin: 16px 0;">
             <a-col :span="3">
                 <a-avatar
@@ -44,9 +49,46 @@
             <p>{{ evaluation.template.instructions }}</p>
             <br><br>
             <a-row
+                v-show="isAutoEvaluation"
+            >
+                <div class="section__title" >
+                    <h3>Objetivos</h3>
+                    <!-- <h3>{{ section.name }}</h3> -->
+                </div>
+                <span
+                    v-for="(objective, i) in currentObjectives.objectives" :key="i"    
+                >
+                    <!-- <div class="subsection--padd">
+                        <b
+                            class="subsection"
+                            v-show="isNullOrEmpty(objective.name)"
+                        >
+                            {{ subsection.name }}
+                        </b>
+                    </div> -->
+                    <p class="question__border">
+                        <b>{{i+1}}.- </b>
+                        <a-icon type="question-circle" />
+                        {{ objective.text }}
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="edit" />
+                        &nbsp;
+                        {{ objective.notEvaluableAnswer.text }}
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="calendar" />
+                        &nbsp;
+                        {{ objective.notEvaluableAnswer.commitmentTime }}
+                    </p>
+                </span>
+            </a-row>
+            <a-row
                 v-for="(section, i) in sections" :key="i"
             >
-                <div class="section__title">
+                <div class="section__title" >
                     <h3>{{ section.name }}</h3>
                 </div>
                 <span
@@ -55,7 +97,7 @@
                     <div class="subsection--padd">
                         <b
                             class="subsection"
-                            v-show="isNullOrEmpty(subsection.name)"                        
+                            v-show="isNullOrEmpty(subsection.name)"
                         >
                             {{ subsection.name }}
                         </b>
@@ -64,8 +106,17 @@
                         :key="h"
                         v-for="(question, h) in subsection.unmeasuredQuestions"
                     >
-                        <p class="question__border"><b>{{h+1}}.- </b> <a-icon type="question-circle" /> {{ question.text }}<b></b></p>
-                        <p class="question__border">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a-icon type="edit" />&nbsp;{{findAnwer(question.id)}}</p>
+                        <p class="question__border">
+                            <b>{{h+1}}.- </b>
+                            <a-icon type="question-circle" />
+                            {{ question.text }}
+                        </p>
+                        <p class="question__border">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a-icon type="edit" />
+                            &nbsp;
+                            {{findAnwer(question.id)}}
+                        </p>
                     </span>
                     <span
                         :key="h"
@@ -77,14 +128,51 @@
                             <b>Valor real: </b>
                         </p>
                     </span>
-                    <!-- <span
+                    <span
                         :key="h"
-                        v-for="(question, h) in subsection.measuredQuestions"
+                        v-for="(question, h) in subsection.notEvaluableAnswer"
                     >
                         <p class="question__border">{{ question.text }}</p>
-                    </span> -->
+                    </span>
                 </span>
                 <a-divider />
+            </a-row>
+            <a-row
+                v-show="isAutoEvaluation"
+            >
+                <div class="section__title" >
+                    <h3>Próximos Objetivos</h3>
+                    <!-- <h3>{{ section.name }}</h3> -->
+                </div>
+                <span
+                    v-for="(objective, i) in nextObjectives.objectives" :key="i"    
+                >
+                    <!-- <div class="subsection--padd">
+                        <b
+                            class="subsection"
+                            v-show="isNullOrEmpty(objective.name)"
+                        >
+                            {{ subsection.name }}
+                        </b>
+                    </div> -->
+                    <p class="question__border">
+                        <b>{{i+1}}.- </b>
+                        <a-icon type="question-circle" />
+                        {{ objective.text }}
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="edit" />
+                        &nbsp;
+                        {{ objective.notEvaluableAnswer.text }}
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="calendar" />
+                        &nbsp;
+                        {{ objective.notEvaluableAnswer.commitmentTime }}
+                    </p>
+                </span>
             </a-row>
         </div>
         <div class="collapse-content">
@@ -151,7 +239,21 @@ export default {
             collaboratorName: '',
             anwsers: [],
             sections: [],
-            evaluation: [],
+            evaluation: {
+                template: {
+                    name: '',
+                    description: '',
+                    instructions: '',
+                },
+            },
+            nextObjectives: {
+                sectionId: 0,
+                objectives: [],
+            },
+            currentObjectives: {
+                sectionId: 0,
+                objectives: [],
+            },
             selectOptions: [
                 {
                     value: '-70',
@@ -177,7 +279,6 @@ export default {
             this.$printHtml('printEvaluation');
         },
         findAnwer(questionId) {
-            
             let ans = '';
             const regex = "/[\[\]']+/g";
             this.anwsers.forEach( (anwser) => {
@@ -187,8 +288,44 @@ export default {
             });
             return (ans !== null) ? ans.replace(regex, '') : '';
         },
+        clearSections(sections) {
+            this.sections = [];
+            this.nextObjectives.objectives = [];
+            this.currentObjectives.objectives = [];
+            sections.forEach(section => {
+                if (this.isObjectiveSection(section)) {
+                    this.sections.push(
+                        section
+                    );
+                }                
+            });
+            this.anwsers.forEach(anwser => {
+                if (anwser.notEvaluableAnswer !== null) {
+                    if (anwser.sectionId === this.nextObjectives.sectionId) {
+                        this.nextObjectives.objectives.push(
+                            anwser,
+                        );
+                    }
+                    if (anwser.sectionId === this.currentObjectives.sectionId) {
+                        this.currentObjectives.objectives.push(
+                            anwser,
+                        );
+                    }
+                }
+            });
+            console.log(this.nextObjectives);
+            console.log(this.currentObjectives);
+        },
         isNullOrEmpty(subsection) {
-            return (subsection !== null && subsection !== '' && subsection !== 'Objetivos');
+            return (subsection !== null && subsection !== '');
+        },
+        isObjectiveSection(section) {
+            if (section.name === 'Objetivos') {
+                this.currentObjectives.sectionId = section.childSections[0].id;
+            } else if (section.name === 'Próximos Objetivos') {
+                this.nextObjectives.sectionId = section.childSections[0].id;
+            }
+            return (section.name !== 'Próximos Objetivos' && section.name !== 'Objetivos');
         },
         async fetchEvaluation() {
             this.spin = true;
@@ -198,13 +335,16 @@ export default {
                     errorHandler(this, error);
                 });
             if (!response) return;
-            this.spin = false;
+            
             this.evaluation = response.data.result;
-            this.collaboratorName = response.data.result.user.name + ' ' + response.data.result.user.surname;
-            this.isAutoEvaluation = response.data.result.template.isAutoEvaluation;
-            this.sections = response.data.result.template.sections;
-            this.anwsers = response.data.result.questions;
-        },        
+            this.anwsers = this.evaluation.questions;
+            this.collaboratorName = this.evaluation.user.name +' '+ this.evaluation.user.surname;
+            this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
+            
+            await this.clearSections(this.evaluation.template.sections);
+            
+            this.spin = false;
+        },
     },
 };
 </script>
