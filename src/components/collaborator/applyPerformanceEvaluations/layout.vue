@@ -146,6 +146,12 @@
                             </a-col>
                         </a-row>
                     </div>
+                    <div v-show="evaluation.status == 4"
+                                style="margin-left: 30px;padding-bottom:30px;"
+                    >
+                        <h3>Comentario de cierre: </h3>
+                        <strong>{{evaluation.closingComment}}</strong>
+                    </div>
                 </div>
             </a-col>
         </a-row>
