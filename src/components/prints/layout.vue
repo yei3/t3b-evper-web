@@ -313,8 +313,6 @@ export default {
                     }
                 }
             });
-            console.log(this.nextObjectives);
-            console.log(this.currentObjectives);
         },
         isNullOrEmpty(subsection) {
             return (subsection !== null && subsection !== '');
