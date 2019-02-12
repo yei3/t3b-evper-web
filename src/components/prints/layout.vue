@@ -174,6 +174,15 @@
                     </p>
                 </span>
             </a-row>
+            <a-row
+                v-show="evaluation.status == 4"
+            >
+                <div class="section__title" >
+                    <h3>Comentario de cierre</h3>
+                </div>
+                <span><p class="question__border">{{evaluation.closingComment}}</p></span>
+            </a-row>
+
         </div>
         <div class="collapse-content">
             <a-row class="" style="padding: 0 0 8px;">
