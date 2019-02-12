@@ -71,6 +71,17 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Publish_SendBossCloseEvaluationNotification`;
         return this.request(path, this.methods.post, {});
     }
+
+    /**
+     * Request for send notifications when occurs a validate of an evaluation
+     * @param {Object} data
+     *
+     * @return {Promise}        Http Response
+     */
+    sendValidateEvaluationNotification(data) {
+        const path = `${this.entityPath}/Publish_SendValidateEvaluationNotification`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default Dashboard;

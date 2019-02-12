@@ -283,6 +283,7 @@ export default {
             await client3B.evaluation.revision.revise(
                     evaluationId,
             ).catch(error => errorHandler(this, error));
+            this.sendValidateEvaluationNotification(evaluationId);
             this.loading = false;
             const obj = this.data.find(tmp => tmp.id === evaluationId);
                 obj.status = this.selectStatusName(3);
@@ -372,6 +373,13 @@ export default {
                 {
                     evaluationId: _evaluationId,
                     dateReview: _dateReview,
+                },
+            ).catch(error => errorHandler(this, error));
+        },
+        async sendValidateEvaluationNotification(_evaluationId) {
+            await client3B.notifications.sendValidateEvaluationNotification(
+                {
+                    evaluationId: _evaluationId,
                 },
             ).catch(error => errorHandler(this, error));
         },
