@@ -94,7 +94,7 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                         Seleecione la fecha y hora de la revisón:
+                         Seleccione la fecha y hora de la revisón:
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
