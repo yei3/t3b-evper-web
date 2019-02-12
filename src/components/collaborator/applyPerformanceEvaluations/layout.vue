@@ -126,31 +126,14 @@
                                 >
                                     Siguiente
                                 </a-button>
-                                <a-button @click="$router.push({ name: 'home' })"
-                                    class="btn-green"
-                                    v-show="(data.currentStep === viewSteps.length - 1)
-                                        && !onlyLecture"
-                                >
-                                    Finalizar edición
-                                </a-button>
-                                <a-button
-                                    @click="$router.push({
-                                        name: 'collaborator-evaluationsHistory'
-                                    })"
-                                    class="btn-green"
-                                    v-show="(data.currentStep === viewSteps.length - 1)
-                                        && onlyLecture"
-                                >
-                                    Finalizar revisión
-                                </a-button>
                             </a-col>
                         </a-row>
                     </div>
-                    <div v-show="evaluation.status == 4"
+                    <div v-show="isClosed"
                                 style="margin-left: 30px;padding-bottom:30px;"
                     >
                         <h3>Comentario de cierre: </h3>
-                        <strong>{{evaluation.closingComment}}</strong>
+                        <strong>{{closingComment}}</strong>
                     </div>
                 </div>
             </a-col>
@@ -194,6 +177,8 @@ export default {
             collapsed: false,
             evaluation: null,
             isAutoEvaluation: true,
+            isClosed: false,
+            closingComment: '',
             evaluatedName: '',
             data: {
                 currentStep: 0,
@@ -223,6 +208,10 @@ export default {
             if (this.evaluation == null) {
                 this.isAutoEvaluation = false;
             } else {
+                if (this.evaluation.status == 4) {
+                    this.isClosed =  true;
+                    this.closingComment = this.evaluation.closingComment;
+                }
                 this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
                 this.evaluatedName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             }

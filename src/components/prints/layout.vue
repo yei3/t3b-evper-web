@@ -175,7 +175,7 @@
                 </span>
             </a-row>
             <a-row
-                v-show="evaluation.status == 4"
+                v-show="isClosed"
             >
                 <div class="section__title" >
                     <h3>Comentario de cierre</h3>
@@ -245,6 +245,7 @@ export default {
             loading: false,
             collapsed: false,
             isAutoEvaluation: true,
+            isClosed: false,
             collaboratorName: '',
             anwsers: [],
             sections: [],
@@ -347,6 +348,7 @@ export default {
             this.anwsers = this.evaluation.questions;
             this.collaboratorName = this.evaluation.user.name +' '+ this.evaluation.user.surname;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
+            this.isClosed = this.evaluation.status == 4;
             
             await this.clearSections(this.evaluation.template.sections);
             
