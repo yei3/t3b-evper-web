@@ -109,6 +109,7 @@
                             v-model="question.text"
                             placeholder="Texto de la pregunta"
                             @change="setQuestionAsModify(question)"
+                            :disabled="question.answerType === 5"
                         />
                     </a-form-item>
 
@@ -131,7 +132,14 @@
                         <a-select
                             v-model="question.answerType"
                             placeholder="Tipo de respuesta"
-                            @select="setQuestionAsModify(question)"
+                            @select="(value) => {
+                                setQuestionAsModify(question);
+                                if (value === 5) {
+                                    question.text = 'Pregunta tipo Acción';
+                                } else if (question.text === 'Pregunta tipo Acción') {
+                                    question.text = '';
+                                }
+                            }"
                         >
                             <a-select-option :key="answerType.value"
                                 :value="answerType.value"
