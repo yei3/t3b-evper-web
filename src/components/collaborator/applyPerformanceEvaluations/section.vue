@@ -69,7 +69,7 @@
                                 :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
                             <question-action
-                                v-if="qstTemplate.questionType == 6"
+                                v-if="qstTemplate.questionType == 5"
                                 :index="index + 1"
                                 :onlyLecture="onlyLecture"
                                 :questionText="qstTemplate.text"
