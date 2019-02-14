@@ -177,6 +177,12 @@ export default {
                 */
                 {
                     role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-evaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial de evaluaciones',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
                     to: 'admin-users',
                     icon: 'user',
                     text: 'Usuarios',

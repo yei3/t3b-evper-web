@@ -20,8 +20,6 @@
                 <h1>{{ evaluation.name }}</h1>
                 <p>{{ evaluation.template.name }}</p>
                 <p>{{ evaluation.template.description }}</p>
-            </a-col>
-            <a-col :span="6">
                 <b>Inicio: </b>
                 <span style="font-weight: normal">
                     {{ new Date(evaluation.startDateTime).toLocaleDateString() }}
@@ -31,9 +29,29 @@
                 <span style="font-weight: normal">
                     {{ new Date(evaluation.endDateTime).toLocaleDateString() }}
                 </span>
+            </a-col>
+            <a-col :span="6">
+                <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
                 <br>
+                <b>N° Objetivos logrados:</b>
+                <span style="font-weight: normal">
+                    &emsp;&emsp;{{completed}}
+                </span>
                 <br>
-                <b style="color: #00b490;">{{ collaboratorName }}</b>
+                <b>N° Excede requerimiento:</b>
+                <span style="font-weight: normal">
+                    &emsp;{{answerER}}
+                </span>
+                <br>
+                <b>N° Cumple requerimiento:</b>
+                <span style="font-weight: normal">
+                    &emsp;{{answerCR}}
+                </span>
+                <br>
+                <b>N° Insatisfactorio:</b>
+                <span style="font-weight: normal">
+                    &emsp;&emsp;{{answerIN}}
+                </span>
             </a-col>
             <a-col :span="3">
                 <a-button class="btn-blue"
@@ -56,7 +74,7 @@
                     <!-- <h3>{{ section.name }}</h3> -->
                 </div>
                 <span
-                    v-for="(objective, i) in currentObjectives.objectives" :key="i"    
+                    v-for="(objective, i) in currentObjectives.objectives" :key="i"
                 >
                     <!-- <div class="subsection--padd">
                         <b
@@ -69,7 +87,7 @@
                     <p class="question__border">
                         <b>{{i+1}}.- </b>
                         <a-icon type="question-circle" />
-                        {{ objective.text }}
+                        {{ objective.text }}  -  {{getStatusText(objective.status) }}
                     </p>
                     <p class="question__border">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -145,7 +163,7 @@
                     <!-- <h3>{{ section.name }}</h3> -->
                 </div>
                 <span
-                    v-for="(objective, i) in nextObjectives.objectives" :key="i"    
+                    v-for="(objective, i) in nextObjectives.objectives" :key="i"
                 >
                     <!-- <div class="subsection--padd">
                         <b
@@ -247,6 +265,10 @@ export default {
             isAutoEvaluation: true,
             isClosed: false,
             collaboratorName: '',
+            completed: '',
+            answerER: 0,
+            answerCR: 0,
+            answerIN: 0,
             anwsers: [],
             sections: [],
             evaluation: {
@@ -282,6 +304,8 @@ export default {
     },
     async created() {
         await this.fetchEvaluation();
+        await this.objectivesCount();
+        await this.answersCount();
     },
     methods: {
         print() {
@@ -291,8 +315,8 @@ export default {
         findAnwer(questionId) {
             let ans = '';
             const regex = "/[\[\]']+/g";
-            this.anwsers.forEach( (anwser) => {
-                if(anwser.evaluationQuestionId === questionId) {
+            this.anwsers.forEach((anwser) => {
+                if (anwser.evaluationQuestionId === questionId) {
                     ans = anwser.unmeasuredAnswer.text;
                 }
             });
@@ -302,14 +326,14 @@ export default {
             this.sections = [];
             this.nextObjectives.objectives = [];
             this.currentObjectives.objectives = [];
-            sections.forEach(section => {
+            sections.forEach((section) => {
                 if (this.isObjectiveSection(section)) {
                     this.sections.push(
-                        section
+                        section,
                     );
-                }                
+                }
             });
-            this.anwsers.forEach(anwser => {
+            this.anwsers.forEach((anwser) => {
                 if (anwser.notEvaluableAnswer !== null) {
                     if (anwser.sectionId === this.nextObjectives.sectionId) {
                         this.nextObjectives.objectives.push(
@@ -335,6 +359,44 @@ export default {
             }
             return (section.name !== 'Próximos Objetivos' && section.name !== 'Objetivos');
         },
+        objectivesCount() {
+            this.completed = 0;
+            this.currentObjectives.objectives.forEach((objective) => {
+                if (objective.status === 4) {
+                    this.completed += 1;
+                }
+            });
+            return this.completed;
+        },
+        answersCount() {
+            this.answerER = 0;
+            this.answerCR = 0;
+            this.answerIN = 0;
+            this.anwsers.forEach((anwser) => {
+                if (anwser.unmeasuredAnswer != null) {
+                    if (anwser.unmeasuredAnswer.text === '-70') {
+                        this.answerIN += 1;
+                    } else if (anwser.unmeasuredAnswer.text === '71-99') {
+                        this.answerCR += 1;
+                    } else if (anwser.unmeasuredAnswer.text === '+100') {
+                        this.answerER += 1;
+                    }
+                }
+            });
+        },
+        getStatusText(status) {
+            let res = '';
+            if (status === 1) {
+                res = 'No iniciado';
+            } else if (status === 2) {
+                res = 'En proceso';
+            } else if (status === 3) {
+                res = 'Completado';
+            } else if (status === 4) {
+                res = 'Validado';
+            }
+            return res;
+        },
         async fetchEvaluation() {
             this.spin = true;
             const response = await client3B.evaluation.get(this.$route.params.id)
@@ -343,15 +405,12 @@ export default {
                     errorHandler(this, error);
                 });
             if (!response) return;
-            
             this.evaluation = response.data.result;
             this.anwsers = this.evaluation.questions;
-            this.collaboratorName = this.evaluation.user.name +' '+ this.evaluation.user.surname;
+            this.collaboratorName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
-            this.isClosed = this.evaluation.status == 4;
-            
+            this.isClosed = this.evaluation.status === 4;
             await this.clearSections(this.evaluation.template.sections);
-            
             this.spin = false;
         },
     },

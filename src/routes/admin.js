@@ -8,6 +8,7 @@ import CreateEvaluation from '@/components/admin/evaluations/evaluation.vue';
 import Users from '@/components/admin/users/users.vue';
 import Organigram from '@/components/admin/organization/organigram.vue';
 import Notifications from '@/components/admin/notifications/notifications.vue';
+import EvaluationsHistory from '@/components/admin/evaluationsHistory/evaluationsHistory.vue';
 
 export default [
     {
@@ -56,6 +57,12 @@ export default [
         path: 'admin/notifications',
         name: 'admin-notifications',
         component: Notifications,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: 'admin/evaluationsHistory',
+        name: 'admin-evaluationsHistory',
+        component: EvaluationsHistory,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
 ];
