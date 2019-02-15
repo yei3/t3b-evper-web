@@ -21,24 +21,19 @@
                     ]
                 }"
             >
-                <a-tooltip placement="top"
-                    title="Recuerda salvar tus comentarios presionando enter al terminar
-                            o dando clic en el botón de la derecha."
+                <a-input v-model="ans.action"
+                    placeholder="Descripción de la Acción"
+                    :disabled="onlyLecture"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
                 >
-                    <a-input v-model="ans.action"
-                        placeholder="Descripción de la Acción"
-                        :disabled="onlyLecture"
-                        @keyup="edited = true"
-                        @keypress.enter.prevent="save"
-                    >
-                        <a-icon class="input-save"
-                            @click="save"
-                            slot="addonAfter"
-                            type="save"
-                            v-if="!onlyLecture"
-                        />
-                    </a-input>
-                </a-tooltip>
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                    />
+                </a-input>
             </a-form-item>
             <a-form-item
                 fieldDecoratorId="q2"
@@ -83,23 +78,18 @@
                     ]
                 }"
             >
-                <a-tooltip placement="top"
-                    title="Recuerda salvar tus comentarios presionando enter al terminar
-                            o dando clic en el botón de la derecha."
+                <a-input v-model="ans.person"
+                    placeholder="Nombre del responsable"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
                 >
-                    <a-input v-model="ans.person"
-                        placeholder="Nombre del responsable"
-                        @keyup="edited = true"
-                        @keypress.enter.prevent="save"
-                    >
-                        <a-icon class="input-save"
-                            @click="save"
-                            slot="addonAfter"
-                            type="save"
-                            v-if="!onlyLecture"
-                        />
-                    </a-input>
-                </a-tooltip>
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                    />
+                </a-input>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
