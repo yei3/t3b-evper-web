@@ -174,12 +174,12 @@ export default {
         this.getRevisionSummary();
     },
     methods: {
-        async addClosingMessage(id, message) {
+        async addClosingMessage(evaluationId, message) {
             await client3B.evaluation.closeComment(
                 {
-                    evaluationId: id,
                     comment: message,
-                },
+                    id: evaluationId
+                }
             ).catch(error => errorHandler(this, error));
             this.$message.success('El mensaje se ha guardado correctamente');
         },
@@ -219,15 +219,18 @@ export default {
                 {},
             ).catch(error => errorHandler(this, error));
         },
-        toggleCBEModal(input) {
+        async toggleCBEModal(input) {
             if (!this.CBEModal.show) {
                 this.CBEModal.enableButton = false;
                 this.CBEModal.evaluationId = input.id;
                 this.CBEModal.evaluationName = input.evaluation.title;
                 this.CBEModal.show = !this.CBEModal.show;
             } else {
+                await this.addClosingMessage(this.CBEModal.evaluationId, this.CBEModal.evaluationCloseMsg);
                 this.sendBossCloseEvaluationNotification();
                 this.CBEModal.show = !this.CBEModal.show;
+                // this.data.splice( this.data.indexOf(this.CBEModal.evaluationId), 1);
+                // console.log(this.data);    
             }
         },
         disableButton(status) {
