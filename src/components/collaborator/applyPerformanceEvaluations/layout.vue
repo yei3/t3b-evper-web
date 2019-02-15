@@ -271,10 +271,6 @@ export default {
             return true;
         },
         async finishEvaluation() {
-            if (!this.isEvaluationCompleted()) {
-                errorHandler(this, 'Responde todas las preguntas para poder finalizar la evaluación');
-                return;
-            }
             this.loading = true;
             await client3B.evaluation.revision.finish(this.$route.params.id)
                 .catch(error => errorHandler(this, error));
