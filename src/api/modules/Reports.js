@@ -13,7 +13,7 @@ class Reports extends Http {
      * Request for the information for a User Reports
      *
      * @return {Promise}        Http Response
-    * */
+    **/
     getCollaboratorReport() {
         const path = `${this.entityPath}/GetEvaluationCollaboratorResults`;
         return this.request(path, this.methods.get, {});
@@ -23,7 +23,27 @@ class Reports extends Http {
      * Request for the information for a User Reports
      *
      * @return {Promise}        Http Response
-    * */
+    **/
+    getCollaboratorObjectivesReport() {
+        const path = `${this.entityPath}/GetCollaboratorObjectivesReport`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for a User Reports
+     *
+     * @return {Promise}        Http Response
+    **/
+    getCollaboratorCompetencesReport() {
+        const path = `${this.entityPath}/GetCollaboratorCompetencesReport`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for a User Reports
+     *
+     * @return {Promise}        Http Response
+    **/
     GetCollaboratorEvaluationComparision(
         currentTemplateId,
         currentTerm,
