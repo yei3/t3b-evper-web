@@ -301,7 +301,7 @@ export default {
                 evaluationQuestionId: question.id,
                 commitmentTime: question.deliverDate,
                 text: question.deriverable,
-            }, { goal: true }).catch(error => errorHandler(error));
+            }, { goal: true }).catch(error => errorHandler(this, error));
 
             return response;
         },
