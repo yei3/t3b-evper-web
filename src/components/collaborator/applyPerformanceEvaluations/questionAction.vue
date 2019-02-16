@@ -21,24 +21,19 @@
                     ]
                 }"
             >
-                <a-tooltip placement="top"
-                    title="Recuerda salvar tus comentarios presionando enter al terminar
-                            o dando clic en el botón de la derecha."
+                <a-input v-model="ans.action"
+                    placeholder="Descripción de la Acción"
+                    :disabled="onlyLecture"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
                 >
-                    <a-input v-model="ans.action"
-                        placeholder="Descripción de la Acción"
-                        :disabled="onlyLecture"
-                        @keyup="edited = true"
-                        @keypress.enter.prevent="save"
-                    >
-                        <a-icon class="input-save"
-                            @click="save"
-                            slot="addonAfter"
-                            type="save"
-                            v-if="!onlyLecture"
-                        />
-                    </a-input>
-                </a-tooltip>
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                    />
+                </a-input>
             </a-form-item>
             <a-form-item
                 fieldDecoratorId="q2"
@@ -83,23 +78,18 @@
                     ]
                 }"
             >
-                <a-tooltip placement="top"
-                    title="Recuerda salvar tus comentarios presionando enter al terminar
-                            o dando clic en el botón de la derecha."
+                <a-input v-model="ans.person"
+                    placeholder="Nombre del responsable"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
                 >
-                    <a-input v-model="ans.person"
-                        placeholder="Nombre del responsable"
-                        @keyup="edited = true"
-                        @keypress.enter.prevent="save"
-                    >
-                        <a-icon class="input-save"
-                            @click="save"
-                            slot="addonAfter"
-                            type="save"
-                            v-if="!onlyLecture"
-                        />
-                    </a-input>
-                </a-tooltip>
+                    <a-icon class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                    />
+                </a-input>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
@@ -172,7 +162,10 @@ export default {
         parseAnswer() {
             if (this.answer.text) {
                 this.ans.action = this.answer.action;
-                this.ans.text = this.answer.text;
+                this.ans.person = this.answer.text;
+                if (this.answer.commitmentDate) {
+                    this.ans.deliverDate = new Date(this.answer.commitmentDate);
+                } else
                 this.ans.deliverDate = new Date();
             }
             if (this.questionStatus === 1) {
@@ -193,7 +186,7 @@ export default {
                 evaluationQuestionId: this.questionId,
                 action: this.ans.action,
                 text: String(this.ans.person),
-                commitmentDate: new Date(this.ans.deliverDate._d).toISOString(),
+                commitmentDate: new Date(this.ans.deliverDate).toISOString(),
                 evaluationUnmeasuredQuestion: {
                     status: 2,
                 },
