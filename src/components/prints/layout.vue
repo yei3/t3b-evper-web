@@ -67,7 +67,6 @@
             <p>{{ evaluation.template.instructions }}</p>
             <br><br>
             <a-row
-                v-show="isAutoEvaluation"
             >
                 <div class="section__title" >
                     <h3>Objetivos</h3>
@@ -156,7 +155,6 @@
                 <a-divider />
             </a-row>
             <a-row
-                v-show="isAutoEvaluation"
             >
                 <div class="section__title" >
                     <h3>Próximos Objetivos</h3>
