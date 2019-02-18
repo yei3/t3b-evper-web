@@ -44,6 +44,7 @@
                                     <a-input v-model="question.text"
                                         placeholder="Descripción del Objetivo"
                                         @change="question.edited = true"
+                                        :disabled="onlyLecture"
                                     />
                                 </a-form-item>
                                 <a-form-item
@@ -65,6 +66,7 @@
                                     <a-input v-model="question.deriverable"
                                         placeholder="Entregable del Objetivo"
                                         @change="question.edited = true"
+                                        :disabled="onlyLecture"
                                     />
                                 </a-form-item>
                                 <a-form-item
@@ -87,6 +89,7 @@
                                         :defaultValue="moment(question.deliverDate, 'YYYY/MM/DD')"
                                         :format="'YYYY/MM/DD'"
                                         placeholder="Fecha de Entrega"
+                                        :disabled="onlyLecture"
                                         @change="(moment, _) => {
                                             question.deliverDate = moment;
                                             question.edited = true;
@@ -94,7 +97,10 @@
                                     />
                                 </a-form-item>
                             </a-form>
-                            <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
+                            <a-col :sm="24" :md="24"
+                                style="text-align: center; margin-top: 10px;"
+                                v-if="!onlyLecture"
+                            >
                                 <a @click="deleteQuestion(question, index)"
                                     class="link-delete-question form-icon"
                                     style="padding-right: 2%; padding-left: 4%;"
@@ -123,7 +129,7 @@
                                 />
                             </a-col>
                         </a-row>
-                        <a-row>
+                        <a-row v-if="!onlyLecture">
                             <a-col :md="24" style="text-align: center;">
                                 <a-button
                                     type='dashed'
@@ -152,6 +158,10 @@ let questionUUID = 0;
 
 export default {
     props: {
+        onlyLecture: {
+            type: Boolean,
+            default: false,
+        },
         evaluationId: {
             type: Number,
             required: true,
