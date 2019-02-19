@@ -197,7 +197,7 @@
                     :loading="loading"
                     @click="toggleScheduleReviewModal"
                 >
-                    Agendar revisión
+                    Re-agendar revisión
                 </a-button>
             </template>
         </a-modal>
@@ -206,6 +206,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+import 'moment/locale/es';
 import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 
@@ -276,7 +278,10 @@ export default {
     },
     methods: {
         onSelectDate(value) {
-            this.dateString = new Date(value._d); // eslint-disable-line
+            let fixedDate = new Date(value._d);
+            // temporary fix for UTC
+            fixedDate.setHours(fixedDate.getHours()-6);
+            this.dateString = fixedDate; // eslint-disable-line
         },
         async validateEvaluation(evaluationId) {
             this.loading = true;
@@ -289,21 +294,32 @@ export default {
                 obj.status = this.selectStatusName(3);
             this.$message.success('La evaluación se ha validado correctamente');
         },
-        async scheduleReview(evaluationId, date) {
+        async scheduleReview(evaluationId) {
             this.loading = true;
+            let date = this.dateString;
             await client3B.evaluation.revision.updateRevisionDate(
                 {
                     evaluationId,
                     revisionTime: date.toISOString(),
                 },
             ).catch(error => errorHandler(this, error));
+
             this.sendReviewNotification(evaluationId, date);
+            // fix hot date string
+            date.setHours(date.getHours()+6);
+            const obj = this.data.find(tmp => tmp.id === evaluationId);            
+            obj.reviewDate =
+                date.toLocaleDateString(
+                    [],
+                    {
+                        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                    },
+                );
             this.loading = false;
             this.$message.success('La fecha de revisión se ha guardado correctamente');
         },
         async reviewEvaluation(evaluationId) {
             this.loading = true;
-            console.log(evaluationId);
             await client3B.evaluation.revision.revise(
                 {
                     evaluationId,
@@ -364,7 +380,7 @@ export default {
                 this.scheduleReviewModal.collaboratorName = input.collaborator;
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
             } else {
-                await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
+                await this.scheduleReview(this.scheduleReviewModal.evaluationId);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
             }
         },

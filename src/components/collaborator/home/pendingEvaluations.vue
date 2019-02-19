@@ -131,7 +131,7 @@ export default {
                     return 'ant-tag-yellow';
                 case 'Finalizado':
                     return 'ant-tag-green';
-                case 'Pendiente de revisión':
+                case 'Pte. revisión':
                     return 'ant-tag-blue';
                 case 'Cerrada':
                     return 'ant-tag-gray';
@@ -148,7 +148,7 @@ export default {
                 case 2:
                     return 'Finalizado';
                 case 3:
-                    return 'Pendiente de revisión';
+                    return 'Pte. revisión';
                 case 4:
                     return 'Cerrada';
                 default:
