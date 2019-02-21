@@ -5,13 +5,19 @@
         <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
             <p>2019-1</p>
             <div class="small">
-                <chart v-if="isObjectivesLoaded" :chartdata="currentData" :options="currentOptions"/>
+                <chart v-if="isObjectivesLoaded"
+                    :chartdata="currentData"
+                    :options="currentOptions"
+                />
             </div>
         </a-col>
         <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
             <p>2018-2</p>
             <div class="small">
-                <chart v-if="isObjectivesLoaded" :chartdata="previousData" :options="previousOptions"/>
+                <chart v-if="isObjectivesLoaded"
+                    :chartdata="previousData"
+                    :options="previousOptions"
+                />
             </div>
         </a-col>
         <a-row v-show="spin">
@@ -29,6 +35,13 @@
             </div>
         </a-row>
         <a-col :span="8" class="text-left">
+            <a-select defaultValue="radar" style="width: 200px"
+                @change="option => competencesChartType = option"
+            >
+                <a-select-option value="radar">Gráfica Radar</a-select-option>
+                <a-select-option value="bar">Gráfica de Barras</a-select-option>
+            </a-select>
+
             <a-list
                 itemLayout="horizontal"
                 :dataSource="competencesSections"
@@ -39,8 +52,14 @@
             </a-list>
         </a-col>
         <a-col :span="12" class="text-center">
-            <div class="radar--size">
+            <div class="radar--size" v-show="competencesChartType == 'radar'">
                 <radar-chart v-if="isCompentecesLoaded"
+                    :chartdata="compentecesData"
+                    :options="compentecesOptions"
+                />
+            </div>
+            <div class="radar--size" v-show="competencesChartType == 'bar'">
+                <bar-chart v-if="isCompentecesLoaded"
                     :chartdata="compentecesData"
                     :options="compentecesOptions"
                 />
@@ -54,10 +73,15 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import Chart from '@/components/charts/doughnut.vue';
 import RadarChart from '@/components/charts/radar.vue';
+import BarChart from '@/components/charts/bar.vue';
 
 export default {
     name: 'Objectives',
-    components: { Chart, RadarChart },
+    components: {
+        Chart,
+        RadarChart,
+        BarChart,
+    },
     data: () => ({
         spin: false,
         isObjectivesLoaded: false,
@@ -92,6 +116,7 @@ export default {
             responsive: true,
             maintainAspectRatio: true,
         },
+        competencesChartType: 'radar',
         compentecesData: {
             labels: [],
             datasets: [],
@@ -102,34 +127,34 @@ export default {
         },
         competencesSections: [
             {
-                title: 'Orientación a resultados'
+                title: 'Orientación a resultados',
             },
             {
-                title: 'Eficiencia'
+                title: 'Eficiencia',
             },
             {
-                title: 'Orientación al detalle'
+                title: 'Orientación al detalle',
             },
             {
-                title: 'Comunicación'
+                title: 'Comunicación',
             },
             {
-                title: 'Capacidad de análisis y solución de problemas'
+                title: 'Capacidad de análisis y solución de problemas',
             },
             {
-                title: 'Cultura 3B'
+                title: 'Cultura 3B',
             },
         ],
     }),
     async mounted() {
-        await this.getCollaboratorObjectives(),
+        await this.getCollaboratorObjectives();
         await this.getCollaboratorCompetences();
     },
     methods: {
         async getCollaboratorCompetences() {
             this.isCompentecesLoaded = false;
-            let currentData = [8, 8, 4, 5, 7, 9];
-            let previousData = [6, 7, 9, 8, 4, 5];
+            const currentData = [8, 8, 4, 5, 7, 9];
+            const previousData = [6, 7, 9, 8, 4, 5];
 
             const response = await client3B.report.getCollaboratorCompetencesReport()
                 .catch((error) => {
@@ -138,12 +163,14 @@ export default {
                 });
             if (!response) return;
 
+
+            /*
             const competences = response.data.result;
-            
             competences.forEach(competence => {
-                
+
             });
-            
+            */
+
             this.compentecesData = {
                 labels: ['Orientación a resultados', 'Eficiencia', 'Orientación al detalle', 'Comunicación', 'Capacidad de análisis y solución de problemas', 'Cultura 3B'],
                 datasets: [
@@ -168,7 +195,6 @@ export default {
                 maintainAspectRatio: true,
             };
             this.isCompentecesLoaded = true;
-            
         },
         async getCollaboratorObjectives() {
             this.spin = true;
@@ -183,9 +209,9 @@ export default {
                 });
             if (!response) return;
 
-            const result = response.data.result;
-            currentDiff = result.currentTotal-result.currentValidated;
-            previousDiff = result.previousTotal-result.previousValidated;
+            const { result } = response.data;
+            currentDiff = result.currentTotal - result.currentValidated;
+            previousDiff = result.previousTotal - result.previousValidated;
             // Current Chart
             this.currentData = {
                 datasets: [{
@@ -208,7 +234,7 @@ export default {
                 }],
                 labels: ['Cumplidos', 'No cumplidos'],
             };
-            
+
             this.spin = false;
             this.isObjectivesLoaded = true;
         },
