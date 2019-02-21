@@ -62,7 +62,7 @@
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="scheduleReview(record.id)"
+                        @click="toggleScheduleReviewModal(record)"
                         v-show="disableButton(record.status, record.autoEvaluation)"
                     >
                         {{transformStatus(action, record.autoEvaluation)}}
@@ -200,15 +200,36 @@ export default {
     },
     methods: {
         onSelectDate(value) {
-            this.dateString = new Date(value._d); // eslint-disable-line
+            this.dateString = value._d;
         },
         async scheduleReview(evaluationId) {
+            this.loading = true;
+            // unrevise evaluation for real change of status
             await client3B.evaluation.revision.unrevise(
                 evaluationId,
             ).catch(error => errorHandler(this, error));
+            // schedule revision date
+            await client3B.evaluation.revision.updateRevisionDate(
+                {
+                    evaluationId,
+                    revisionTime: this.dateString.toISOString(),
+                },
+            ).catch(error => errorHandler(this, error));
+            // send notification
+            this.sendReviewNotification(evaluationId, this.dateString);
+            // change status on real-time XD
             const obj = this.data.find(tmp => tmp.id === evaluationId);
                 obj.status = this.selectStatusName(4);
+            this.loading = false;
             this.$message.success('La evaluación está en proceso de revisión '+ evaluationId);
+        },
+        async sendReviewNotification(_evaluationId, _dateReview) {
+            await client3B.notifications.sendReviewNotification(
+                {
+                    evaluationId: _evaluationId,
+                    dateReview: _dateReview,
+                },
+            ).catch(error => errorHandler(this, error));
         },
         async getCollaboratorEvaluations() {
             this.spin = true;
@@ -243,7 +264,7 @@ export default {
                 this.scheduleReviewModal.collaboratorName = input.collaborator;
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
             } else {
-                await this.scheduleReview(this.scheduleReviewModal.evaluationId, this.dateString);
+                await this.scheduleReview(this.scheduleReviewModal.evaluationId);
                 this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
             }
         },
