@@ -33,22 +33,22 @@
             <a-col :span="6">
                 <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
                 <br>
-                <b>N° Objetivos logrados:</b>
+                <b>% Objetivos logrados:</b>
                 <span style="font-weight: normal">
                     &emsp;&emsp;{{completed}}
                 </span>
                 <br>
-                <b>N° Excede requerimiento:</b>
+                <b>% Excede requerimiento:</b>
                 <span style="font-weight: normal">
                     &emsp;{{answerER}}
                 </span>
                 <br>
-                <b>N° Cumple requerimiento:</b>
+                <b>% Cumple requerimiento:</b>
                 <span style="font-weight: normal">
                     &emsp;{{answerCR}}
                 </span>
                 <br>
-                <b>N° Insatisfactorio:</b>
+                <b>% Insatisfactorio:</b>
                 <span style="font-weight: normal">
                     &emsp;&emsp;{{answerIN}}
                 </span>
@@ -85,8 +85,9 @@
                     </div> -->
                     <p class="question__border">
                         <b>{{i+1}}.- </b>
-                        <a-icon type="question-circle" />
-                        {{ objective.text }}  -  {{getStatusText(objective.status) }}
+                        <strong>
+                            {{ objective.text }}  -  {{getStatusText(objective.status) }}
+                        </strong>
                     </p>
                     <p class="question__border">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -98,7 +99,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ objective.notEvaluableAnswer.commitmentTime }}
+                        {{ formatDate(objective.notEvaluableAnswer.commitmentTime) }}
                     </p>
                 </span>
             </a-row>
@@ -125,8 +126,7 @@
                     >
                         <p class="question__border">
                             <b>{{h+1}}.- </b>
-                            <a-icon type="question-circle" />
-                            {{ question.text }}
+                            <strong>{{ question.text }}</strong>
                         </p>
                         <p class="question__border">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -173,8 +173,7 @@
                     </div> -->
                     <p class="question__border">
                         <b>{{i+1}}.- </b>
-                        <a-icon type="question-circle" />
-                        {{ objective.text }}
+                        <strong>{{ objective.text }}</strong>
                     </p>
                     <p class="question__border">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -204,10 +203,12 @@
             <a-row class="" style="padding: 0 0 8px;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con mi Evaluador.
+                        He preparado esta auto evaluación de desempeño con detenimiento,
+                         la he explicado claramente y discutido en detalle con mi Evaluador.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con el Evaluado.
+                        He preparado esta evaluación de desempeño con detenimiento,
+                         la he explicado claramente y discutido en detalle con el Evaluado.
                     </p>
                     <br><br>
                     <p v-show="isAutoEvaluation" class="signature"><b>Firma de Evaluado</b></p>
@@ -224,10 +225,14 @@
             <a-row class="" style="padding: 24px 0 0 0;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la mejora en el desempeño del Evaluado.
+                        He leído y comprendido esta auto evaluación de desempeño,
+                         otorgando mis recomendaciones para la mejora en el
+                          desempeño del Evaluado.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi desempeño basado en estos comentarios.
+                        He leído y comprendido esta evaluación de desempeño y
+                         las recomendaciones señaladas. Haré lo mejor posible
+                         para mejorar mi desempeño basado en estos comentarios.
                     </p>
                     <br><br>
                     <p v-show="isAutoEvaluation" class="signature"><b>Firma de Evaluador</b></p>
@@ -318,7 +323,15 @@ export default {
                     ans = anwser.unmeasuredAnswer.text;
                 }
             });
-            return (ans !== null) ? ans.replace(regex, '') : '';
+            ans = (ans !== null) ? ans.replace(regex, '') : '';
+            if (ans === '-70') {
+                ans = 'Insatisfactorio';
+            } else if (ans === '71-99') {
+                ans = 'Cumple requerimiento';
+            } else if (ans === '+100') {
+                ans = 'Excede requerimiento';
+            }
+            return ans;
         },
         clearSections(sections) {
             this.sections = [];
@@ -359,28 +372,51 @@ export default {
         },
         objectivesCount() {
             this.completed = 0;
+            let count = 0;
             this.currentObjectives.objectives.forEach((objective) => {
                 if (objective.status === 4) {
-                    this.completed += 1;
+                    count += 1;
                 }
             });
-            return this.completed;
+            if (count > 0) {
+                this.completed = ((count * 100) / this.currentObjectives.objectives.length);
+                this.completed = `${this.completed.toPrecision(4)}  %`;
+            }
         },
         answersCount() {
             this.answerER = 0;
             this.answerCR = 0;
             this.answerIN = 0;
+            let total = 0;
+            let countER = 0;
+            let countCR = 0;
+            let countIN = 0;
             this.anwsers.forEach((anwser) => {
                 if (anwser.unmeasuredAnswer != null) {
                     if (anwser.unmeasuredAnswer.text === '-70') {
-                        this.answerIN += 1;
+                        countIN += 1;
+                        total += 1;
                     } else if (anwser.unmeasuredAnswer.text === '71-99') {
-                        this.answerCR += 1;
+                        countCR += 1;
+                        total += 1;
                     } else if (anwser.unmeasuredAnswer.text === '+100') {
-                        this.answerER += 1;
+                        countER += 1;
+                        total += 1;
                     }
                 }
             });
+            if (countIN > 0) {
+                this.answerIN = ((countIN * 100) / total);
+                this.answerIN = `${this.answerIN.toPrecision(4)}  %`;
+            }
+            if (countCR > 0) {
+                this.answerCR = ((countCR * 100) / total);
+                this.answerCR = `${this.answerCR.toPrecision(4)}  %`;
+            }
+            if (countCR > 0) {
+                this.answerER = ((countER * 100) / total);
+                this.answerER = `${this.answerER.toPrecision(4)}  %`;
+            }
         },
         getStatusText(status) {
             let res = '';
@@ -392,6 +428,13 @@ export default {
                 res = 'Completado';
             } else if (status === 4) {
                 res = 'Validado';
+            }
+            return res;
+        },
+        formatDate(date) {
+            let res = `${date} `;
+            if (res.length > 10) {
+                res = res.substring(0, 10);
             }
             return res;
         },
