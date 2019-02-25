@@ -1,17 +1,23 @@
 <template>
 <div>
     <a-row class="main-content">
-        <h3 class="breadcrumb-header">Objetivos</h3>
-        <a-col v-if="loaded" :span="12" class="text-center">
+        <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
+        <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
             <p>2019-1</p>
             <div class="small">
-                <chart v-if="loaded" :chartdata="chartdata" :options="options"/>
+                <chart v-if="isObjectivesLoaded"
+                    :chartdata="currentData"
+                    :options="currentOptions"
+                />
             </div>
         </a-col>
-        <a-col v-if="loaded" :span="12" class="text-center">
+        <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
             <p>2018-2</p>
             <div class="small">
-                <chart v-if="loaded" :chartdata="chartdata2" :options="options2"/>
+                <chart v-if="isObjectivesLoaded"
+                    :chartdata="previousData"
+                    :options="previousOptions"
+                />
             </div>
         </a-col>
         <a-row v-show="spin">
@@ -22,16 +28,23 @@
     </a-row>
     <a-divider />
     <a-row class="main-content">
-        <h3 class="breadcrumb-header">Competencias</h3>
+        <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin tip="Cargando..." size="small" />
             </div>
         </a-row>
         <a-col :span="8" class="text-left">
+            <a-select defaultValue="radar" style="width: 200px"
+                @change="option => competencesChartType = option"
+            >
+                <a-select-option value="radar">Gráfica Radar</a-select-option>
+                <a-select-option value="bar">Gráfica de Barras</a-select-option>
+            </a-select>
+
             <a-list
                 itemLayout="horizontal"
-                :dataSource="subseccions"
+                :dataSource="competencesSections"
             >
                 <a-list-item slot="renderItem" slot-scope="item, index">
                     {{item.title}}
@@ -39,8 +52,14 @@
             </a-list>
         </a-col>
         <a-col :span="12" class="text-center">
-            <div class="radar--size">
-                <radar-chart v-if="loaded2"
+            <div class="radar--size" v-show="competencesChartType == 'radar'">
+                <radar-chart v-if="isCompentecesLoaded"
+                    :chartdata="compentecesData"
+                    :options="compentecesOptions"
+                />
+            </div>
+            <div class="radar--size" v-show="competencesChartType == 'bar'">
+                <bar-chart v-if="isCompentecesLoaded"
                     :chartdata="compentecesData"
                     :options="compentecesOptions"
                 />
@@ -54,164 +73,178 @@ import client3B from '@/api/client3B';
 import errorHandler from '@/views/errorHandler';
 import Chart from '@/components/charts/doughnut.vue';
 import RadarChart from '@/components/charts/radar.vue';
+import BarChart from '@/components/charts/bar.vue';
 
 export default {
     name: 'Objectives',
-    components: { Chart, RadarChart },
+    props: {
+        collaboratorId: {
+            type: Number,
+            default: 0,
+        },
+    },
+    components: {
+        Chart,
+        RadarChart,
+        BarChart,
+    },
     data: () => ({
-
         spin: false,
-        loaded: false,
-        loaded2: false,
-
-        chartdata: null,
-        options: null,
-
-        chartdata2: null,
-        options2: null,
-
-        subseccions: [],
-        compentecesData: null,
-        compentecesOptions: null,
+        isObjectivesLoaded: false,
+        isCompentecesLoaded: false,
+        currentData: {
+            datasets: [{
+                data: [],
+                backgroundColor: [],
+            }],
+            labels: [],
+        },
+        currentOptions: {
+            display: true,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)',
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+        },
+        previousData: {
+            datasets: [{
+                data: [],
+                backgroundColor: [],
+            }],
+            labels: [],
+        },
+        previousOptions: {
+            display: true,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)',
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+        },
+        competencesChartType: 'radar',
+        compentecesData: {
+            labels: [],
+            datasets: [],
+        },
+        compentecesOptions: {
+            responsive: false,
+            maintainAspectRatio: false,
+        },
+        competencesSections: [
+            {
+                title: 'Orientación a resultados',
+            },
+            {
+                title: 'Eficiencia',
+            },
+            {
+                title: 'Orientación al detalle',
+            },
+            {
+                title: 'Comunicación',
+            },
+            {
+                title: 'Capacidad de análisis y solución de problemas',
+            },
+            {
+                title: 'Cultura 3B',
+            },
+        ],
     }),
     async mounted() {
-        this.getCollaboratorObjectives();
+        await this.getCollaboratorObjectives();
+        await this.getCollaboratorCompetences();
     },
     methods: {
-        async getCollaboratorCompetences(
-            currentTemplateId,
-            currentTerm,
-            currrentDays,
-            beforeTemplateId,
-            beforeTerm,
-            beforeDays,
-        ) {
-            this.loaded2 = false;
+        async getCollaboratorCompetences() {
+            this.isCompentecesLoaded = false;
+            const currentData = [8, 8, 4, 5, 7, 9];
+            const previousData = [6, 7, 9, 8, 4, 5];
 
-            const labels = [];
-            let response = null;
-            const beforeData = [];
-            const currrentData = [];
+            const response = await client3B.report.getCollaboratorCompetencesReport()
+                .catch((error) => {
+                    this.spin = false;
+                    errorHandler(this, error);
+                });
+            if (!response) return;
 
-            try {
-                response = await client3B.report.GetCollaboratorEvaluationComparision(
-                    currentTemplateId,
-                    currentTerm,
-                    currrentDays,
-                    beforeTemplateId,
-                    beforeTerm,
-                    beforeDays,
-                );
 
-                const beforeEvaluation = response.data.result.rightEvaluation;
-                const currentEvaluation = response.data.result.leftEvaluation;
+            /*
+            const competences = response.data.result;
+            competences.forEach(competence => {
 
-                for (let i = 0; i < currentEvaluation.sections.length; i += 1) {
-                    labels.push(currentEvaluation.sections[i].name);
-                    this.subseccions.push({ title: currentEvaluation.sections[i].name });
-                    beforeData.push(beforeEvaluation.sections[i].finishedQuestions);
-                    currrentData.push(currentEvaluation.sections[i].finishedQuestions);
-                }
+            });
+            */
 
-                this.compentecesData = {
-                    labels,
-                    datasets: [
-                        {
-                            label: '2019-1',
-                            data: currrentData,
-                            borderWidth: 2,
-                            borderColor: '#00b880',
-                            backgroundColor: '#00b88088',
-                        },
-                        {
-                            label: '2018-2',
-                            data: beforeData,
-                            borderWidth: 2,
-                            borderColor: '#b6b6b6',
-                            backgroundColor: '#b6b6b688',
-                        },
-                    ],
-                };
-                this.compentecesOptions = {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                };
-                this.loaded2 = true;
-            } catch (error) {
-                errorHandler(this, error);
-            }
+            this.compentecesData = {
+                labels: ['Orientación a resultados', 'Eficiencia', 'Orientación al detalle', 'Comunicación', 'Capacidad de análisis y solución de problemas', 'Cultura 3B'],
+                datasets: [
+                    {
+                        label: '2019-1',
+                        data: currentData,
+                        borderWidth: 2,
+                        borderColor: '#00b880',
+                        backgroundColor: '#00b88088',
+                    },
+                    {
+                        label: '2018-2',
+                        data: previousData,
+                        borderWidth: 2,
+                        borderColor: '#b6b6b6',
+                        backgroundColor: '#b6b6b688',
+                    },
+                ],
+            };
+            this.compentecesOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+            };
+            this.isCompentecesLoaded = true;
         },
         async getCollaboratorObjectives() {
             this.spin = true;
-            this.loaded = false;
-            let response = null;
+            let currentDiff = 0;
+            let previousDiff = 0;
+            this.isObjectivesLoaded = false;
 
-            try {
-                response = await client3B.report.getCollaboratorReport();
-
-                const results = response.data.result;
-
-                if (results.length < 2) {
+            const response = await client3B.report.getCollaboratorObjectivesReportById({
+                    UserId: this.collaboratorId,
+                })
+                .catch((error) => {
                     this.spin = false;
-                    this.$message.success('No hay información para obtener resultados');
-                    return;
-                }
+                    errorHandler(this, error);
+                });
+            if (!response) return;
 
-                const total = [results[0].total, results[1].total];
-                const finished = [results[0].finished, results[1].finished];
-                const beforeTerm = results[1].term;
-                const currentTerm = results[0].term;
-                const beforeDays = this.getYearDays(results[1].creationTime);
-                const currrentDays = this.getYearDays(results[0].creationTime);
-                const beforeTemplateId = results[1].evaluationTemplateId;
-                const currentTemplateId = results[0].evaluationTemplateId;
+            const { result } = response.data;
+            currentDiff = result.currentTotal - result.currentValidated;
+            previousDiff = result.previousTotal - result.previousValidated;
+            // Current Chart
+            this.currentData = {
+                datasets: [{
+                    data: [result.currentValidated, currentDiff],
+                    backgroundColor: [
+                        '#00b880',
+                        '#ff3b3b',
+                    ],
+                }],
+                labels: ['Cumplidos', 'No cumplidos'],
+            };
+            // Previous Chart
+            this.previousData = {
+                datasets: [{
+                    data: [result.previousValidated, previousDiff],
+                    backgroundColor: [
+                        '#00b880',
+                        '#ff3b3b',
+                    ],
+                }],
+                labels: ['Cumplidos', 'No cumplidos'],
+            };
 
-                await this.getCollaboratorCompetences(
-                    currentTemplateId,
-                    currentTerm,
-                    currrentDays,
-                    beforeTemplateId,
-                    beforeTerm,
-                    beforeDays,
-                );
-
-                this.chartdata = {
-                    datasets: [{
-                        data: [finished[0], total[0] - finished[0]],
-                        backgroundColor: [
-                            '#00b880',
-                            '#ff3b3b',
-                        ],
-                    }],
-                    labels: ['Cumplidos', 'No cumplidos'],
-                };
-                this.options = {
-                    display: true,
-                    labels: {
-                        fontColor: 'rgb(255, 99, 132)',
-                    },
-                    responsive: true,
-                    maintainAspectRatio: true,
-                };
-                this.chartdata2 = {
-                    datasets: [{
-                        data: [finished[1], total[1] - finished[1]],
-                        backgroundColor: [
-                            '#00b880',
-                            '#ff3b3b',
-                        ],
-                    }],
-                    labels: ['Cumplidos', 'No cumplidos'],
-                };
-                this.options2 = {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                };
-                this.spin = false;
-                this.loaded = true;
-            } catch (error) {
-                errorHandler(this, error);
-            }
+            this.spin = false;
+            this.isObjectivesLoaded = true;
         },
         getYearDays(dateString) {
             const inputDate = new Date(dateString);

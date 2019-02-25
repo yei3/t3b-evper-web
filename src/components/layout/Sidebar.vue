@@ -135,6 +135,12 @@ export default {
                     icon: 'home',
                     text: 'Home',
                 },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-reports',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
                 /*
                 {
                     role: authService.ROLES.SUPERVISOR,

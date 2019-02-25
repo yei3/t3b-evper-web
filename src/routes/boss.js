@@ -18,7 +18,7 @@ export default [
         path: 'boss/results',
         name: 'boss-reports',
         component: bossReports,
-        beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
+        beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
     },
     {
         path: 'boss/assessments',
