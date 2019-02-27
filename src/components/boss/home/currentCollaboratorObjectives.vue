@@ -133,9 +133,6 @@
                     </a-timeline>
                 </a-col>
             </a-row>
-            <template slot="footer">
-
-            </template>
         </a-modal>
 
         <a-modal
