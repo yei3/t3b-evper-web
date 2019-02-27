@@ -2,10 +2,11 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :xs="12" :sm="14" :md="16" :lg="18" class="text-padding">
-                <span>Seguimiento</span>
+                <span>Seguimiento a Objetivos Semestrales</span>
             </a-col>
             <a-col :xs="11" :sm="9" :md="7" :lg="5">
                 <a-progress :percent="objectivesPercet(data)" strokeColor="#1ab394" size="small" />
+                {{objectivesText(data)}}
             </a-col>
             <a-col :span=1 style="text-align: right;">
                 <a>
@@ -439,6 +440,18 @@ export default {
                 }
             });
             return Math.ceil((completed * 100) / objectives.length);
+        },
+        objectivesText(objectives) {
+            let completed = 0;
+            let total = 0;
+            objectives.forEach((objective) => {
+                if (objective.status === 'Validado') {
+                    completed += 1;
+                }
+                total += 1;
+            });
+            //return Math.ceil((completed * 100) / objectives.length);
+            return  `${completed} de ${total} objetivos cumplidos.`
         },
         selectTagColor(status) {
             switch (status) {

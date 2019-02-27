@@ -117,10 +117,10 @@
                                 <a-button
                                     size="small"
                                     class="btn--start-evaluations"
-                                    @click="fillEvaluation(record)"
+                                    @click="printEvaluation(record)"
                                     :disabled="disableButton(record.status)"
                                 >
-                                    {{transformStatus(action)}}
+                                    Imprimir
                                 </a-button>
                                 <!-- <router-link
                                     class="table-link-light"
@@ -392,6 +392,10 @@ export default {
             } else {
                 this.$router.push({ name: 'boss-assessments-apply', params: { id } });
             }
+        },
+        printEvaluation(input) {
+            let id = input.id;
+            this.$router.push({ name: 'print-assessment', params: { id } });
         },
     },
 };

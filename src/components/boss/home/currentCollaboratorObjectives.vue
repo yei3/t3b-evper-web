@@ -1,8 +1,8 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
-            <a-col :span="23">
-                Seguimiento
+        <a-row class="collapse-title-boss">
+            <a-col :span="23" class="text-center">
+                Seguimiento a Objetivos Semestrales
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -134,6 +134,14 @@
                 </a-col>
             </a-row>
             <template slot="footer">
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="viewProgressModal.show = false"
+                >
+                    OK
+                </a-button>
 
             </template>
         </a-modal>
@@ -318,15 +326,12 @@ export default {
             }
             this.spin = false;
         },
-        toggleViewProgressModal(input) {
-            if (!this.viewProgressModal.show) {
-                this.viewProgressModal.evaluatedName = input.name;
-                this.viewProgressModal.binnacle = input.objective.binnacle;
-                this.viewProgressModal.objectiveName = input.objective.title;
-                this.viewProgressModal.show = !this.viewProgressModal.show;
-            } else {
-                this.viewProgressModal.show = !this.viewProgressModal.show;
-            }
+        async toggleViewProgressModal(input) {
+            console.log('cargando');
+            this.viewProgressModal.evaluatedName = input.name;
+            this.viewProgressModal.binnacle = input.objective.binnacle;
+            this.viewProgressModal.objectiveName = input.objective.title;
+            this.viewProgressModal.show = !this.viewProgressModal.show;
         },
         async toggleFinishObjectiveModal(input) {
             this.finishObjectiveModal.evaluatedName = input.name;
