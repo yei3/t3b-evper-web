@@ -1,10 +1,10 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
         <a-collapse-panel header="Periodo" key="1" class="text-center">
-            <h3 class="tittle-collapse">Periodo 2018-02</h3>
+            <h3 class="tittle-collapse">Periodo 2019-01</h3>
             <a-range-picker
                 disabled
-                :defaultValue="[moment('2018-07-01', dateFormat), moment('2018-12-31', dateFormat)]"
+                :defaultValue="[moment('01-01-2019', dateFormat), moment('30-06-2019', dateFormat)]"
             />
         </a-collapse-panel>
     </a-collapse>
@@ -16,7 +16,7 @@ import moment from 'moment';
 
 export default {
     data() {
-        this.dateFormat = 'YYYY-MM-DD';
+        this.dateFormat = 'DD-MM-YYYY';
         return {};
     },
     methods: {

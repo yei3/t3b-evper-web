@@ -1,6 +1,6 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
+        <a-row class="collapse-title-boss">
             <a-col :span="23" style="text-align: center;">
                 Acciones por finalizar
             </a-col>
@@ -86,6 +86,7 @@ export default {
 
 <style scoped>
 .collapse-mod {
+    background-color: darkblue;
     font-weight: 600;
     font-size: 14px;
 }

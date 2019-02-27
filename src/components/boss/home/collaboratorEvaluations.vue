@@ -1,8 +1,8 @@
 <template>
-    <div class="collapse">
-        <a-row class="collapse-title background--title">
+    <div class="collapse" v-show="data.length > 0 ">
+        <a-row class="collapse-title-boss">
             <a-col :span="23" class="text-center">
-                Cierre de evaluaciones
+                Cierre de Evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -62,7 +62,7 @@
                         title="Al validar la evaluación, está aceptando que los próximos objetivos son los acordados de la revisión."
                         @confirm="validateEvaluation(record.id)"
                         okText="Sí, validar cierre"
-                        cancelText="No, revisar objetivos"
+                        cancelText="Cancelar"
                     >
                         <a-button
                             size="small"

@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :span=23>
-                Mis evaluaciones
+                Evaluaciones Pendientes
             </a-col>
             <a-col :span=1 style="text-align: right; color: #fff;">
 
