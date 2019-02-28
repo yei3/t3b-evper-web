@@ -86,7 +86,7 @@ export default {
 
 <style scoped>
 .collapse-mod {
-    background-color: darkblue;
+    background-color: #223a52;
     font-weight: 600;
     font-size: 14px;
 }
