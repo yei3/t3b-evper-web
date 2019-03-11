@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title background--title">
             <a-col :xs="12" :sm="14" :md="16" :lg="18" class="text-padding">
-                <span>Seguimiento a Objetivos Semestrales</span>
+                <span>Seguimiento a Objetivos Actuales</span>
             </a-col>
             <a-col :xs="11" :sm="9" :md="7" :lg="5">
                 <a-progress :percent="objectivesPercet(data)" strokeColor="#1ab394" size="small" />
@@ -395,7 +395,6 @@ export default {
                 this.recordProgressModal.loading = false;
             }
             this.recordProgressModal.message = '';
-
         },
         async toggleViewProgressModal(objective) {
             if (!this.viewProgressModal.show) {
@@ -414,7 +413,7 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo completado: ' + this.finishObjectiveModal.message)
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, `Objetivo completado: ${this.finishObjectiveModal.message}`)
                     .catch(error => errorHandler(this, error));
                 await this.completeObjective(this.finishObjectiveModal.objectiveId)
                     .catch(error => errorHandler(this, error));
@@ -450,8 +449,7 @@ export default {
                 }
                 total += 1;
             });
-            //return Math.ceil((completed * 100) / objectives.length);
-            return  `${completed} de ${total} objetivos cumplidos.`
+            return `${completed} de ${total} objetivos cumplidos.`;
         },
         selectTagColor(status) {
             switch (status) {

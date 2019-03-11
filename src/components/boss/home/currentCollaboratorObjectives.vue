@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title-boss">
             <a-col :span="23" class="text-center">
-                Seguimiento a Objetivos Semestrales
+                Seguimiento a Objetivos Actuales
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>

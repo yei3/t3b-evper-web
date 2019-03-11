@@ -2,7 +2,7 @@
     <div class="collapse">
         <a-row class="collapse-title-boss">
             <a-col :span="23" class="text-center">
-                Evaluaciones Pendientes
+                Evaluaciones Periodo Actual
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -219,9 +219,9 @@ export default {
             this.sendReviewNotification(evaluationId, this.dateString);
             // change status on real-time XD
             const obj = this.data.find(tmp => tmp.id === evaluationId);
-                obj.status = this.selectStatusName(4);
+            obj.status = this.selectStatusName(4);
             this.loading = false;
-            this.$message.success('La evaluación está en proceso de revisión '+ evaluationId);
+            this.$message.success(`La evaluación está en proceso de revisión  ${evaluationId}`);
         },
         async sendReviewNotification(_evaluationId, _dateReview) {
             await client3B.notifications.sendReviewNotification(
@@ -269,8 +269,8 @@ export default {
             }
         },
         fillEvaluation(input) {
-            let id = input.id;
-            if (input.autoEvaluation == true || input.status === 'Pte. revisión' || input.status === 'Cerrada') {
+            const id = input.id;
+            if (input.autoEvaluation === true || input.status === 'Pte. revisión' || input.status === 'Cerrada') {
                 this.$router.push({ name: 'boss-assessment', params: { id } });
             } else {
                 this.$router.push({ name: 'boss-assessments-apply', params: { id } });

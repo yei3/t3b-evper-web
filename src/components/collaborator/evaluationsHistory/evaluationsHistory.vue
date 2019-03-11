@@ -47,7 +47,7 @@
 import client3B from '@/api/client3B';
 import { mapActions, mapGetters } from 'vuex';
 import Footer from '@/components/layout/Footer.vue';
-import pendingEvaluations from '@/components/collaborator/home/pendingEvaluations.vue';
+import pendingEvaluations from '@/components/collaborator/evaluationsHistory/autoEvaluationsHistory.vue';
 import errorHandler from '@/views/errorHandler';
 
 export default {
