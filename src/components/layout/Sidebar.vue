@@ -370,7 +370,6 @@ export default {
 .ant-dropdown-link:hover {
     color: #fff;
     opacity: 0.8;
-    cursor: pointer;
     font-size: 12px;
     text-decoration:none;
 }
