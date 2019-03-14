@@ -18,17 +18,36 @@
             <a-col :span="1"></a-col>
             <a-col :span="10">
                 <h1>{{ evaluation.name }}</h1>
-                <p>{{ evaluation.template.name }}</p>
-                <p>{{ evaluation.template.description }}</p>
-                <b>Inicio: </b>
+                <b>Región: </b>
                 <span style="font-weight: normal">
-                    {{ new Date(evaluation.startDateTime).toLocaleDateString() }}
+                    {{ region }}
                 </span>
                 <br>
-                <b>Fin: </b>
+                <b>Área: </b>
                 <span style="font-weight: normal">
-                    {{ new Date(evaluation.endDateTime).toLocaleDateString() }}
+                    {{ area }}
                 </span>
+                <br>
+                <b>Puesto: </b>
+                <span style="font-weight: normal">
+                    {{ jobDescription }}
+                </span>
+                <br>
+                <b>Tiempo en el puesto: </b>
+                <span style="font-weight: normal">
+                    {{ formatDate(reassignDate) }}
+                </span>
+                <br>
+                <b>Fecha de ingreso: </b>
+                <span style="font-weight: normal">
+                    {{ formatDate(entryDate) }}
+                </span>
+                <br>
+                <b>Fecha de revisión: </b>
+                <span style="font-weight: normal">
+                    {{ formatDate(reviewDate) }}
+                </span>
+                <br>
             </a-col>
             <a-col :span="6">
                 <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
@@ -265,9 +284,15 @@ export default {
             spin: false,
             loading: false,
             collapsed: false,
+            region: '',
+            area: '',
+            jobDescription: '',
+            reviewDate: '',
+            entryDate: '',
+            reassignDate: '',
+            collaboratorName: '',
             isAutoEvaluation: true,
             isClosed: false,
-            collaboratorName: '',
             completed: '',
             answerER: 0,
             answerCR: 0,
@@ -448,6 +473,12 @@ export default {
             if (!response) return;
             this.evaluation = response.data.result;
             this.anwsers = this.evaluation.questions;
+            this.region = this.evaluation.user.region;
+            this.area = this.evaluation.user.area;
+            this.jobDescription = this.evaluation.user.jobDescription;
+            this.reviewDate = this.evaluation.endDateTime;
+            this.entryDate = this.evaluation.user.entryDate;
+            this.reassignDate = this.evaluation.user.reassignDate;
             this.collaboratorName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
             this.isClosed = this.evaluation.status === 4;
