@@ -6,6 +6,7 @@ import bossReports from '@/components/boss/reports/layout.vue';
 import performanceEvaluations from '@/components/boss/performanceEvaluations/layout.vue';
 import performanceEvaluation from '@/components/boss/performanceEvaluation/layout.vue';
 import applyPerformanceEvaluations from '@/components/boss/applyPerformanceEvaluations/layout.vue';
+import closedEvaluationsHistory from '@/components/boss/evaluationsHistory/evaluationsHistory.vue';
 
 export default [
     {
@@ -36,6 +37,12 @@ export default [
         path: 'boss/assessments/:id',
         name: 'boss-assessment',
         component: performanceEvaluation,
+        beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
+    },
+    {
+        path: 'boss/evaluationsHisroty',
+        name: 'boss-closedEvaluationsHistory',
+        component: closedEvaluationsHistory,
         beforeEnter: beforeEnter(authService.ROLES.SUPERVISOR),
     },
 ];

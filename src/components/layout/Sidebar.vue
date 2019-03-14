@@ -137,6 +137,12 @@ export default {
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-closedEvaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
                     to: 'boss-reports',
                     icon: 'line-chart',
                     text: 'Resultados',
