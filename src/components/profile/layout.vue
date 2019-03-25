@@ -18,11 +18,16 @@
                 <a-row style="padding: 0 0 16px 0">
                     <span class="breadcrumb-header" >
                         Edita tu foto de perfil
-                    </span>
+                    </span>                   
                 </a-row>
                 <a-row>
                     <a-col :sm="{ span:24 }">
-                        <a-upload-dragger name="file" :multiple="false" >
+                        <input type="file" id="fileinput" />
+                        <button id="upload-button" @click="updateImgProfile">
+                            <a-icon type="cloud-upload" />
+                            Subir imagen
+                        </button>
+                        <!-- <a-upload-dragger name="file" :multiple="false" change="handleChange">
                             <p class="ant-upload-drag-icon">
                                 <a-icon type="cloud-upload" />
                             </p>
@@ -34,7 +39,7 @@
                                 Estrictamente prohibido la carga de datos de
                                 la empresa u otros archivos maliciosos
                             </p>
-                        </a-upload-dragger>
+                        </a-upload-dragger> -->
                     </a-col>
                 </a-row>
                 <!-- <span style="font-size: 16px;">de usuarios</span> -->
@@ -101,6 +106,7 @@ import authService from '@/services/auth';
 import client3B from '@/api/client3B';
 import Footer from '@/components/layout/Footer.vue';
 import errorHandler from '@/views/errorHandler';
+import '@/assets/scripts/azure-storage.blob.min';
 
 export default {
     components: {
@@ -108,32 +114,54 @@ export default {
     },
     beforeCreate() {
         this.form = this.$form.createForm(this);
-},
+    },
     data() {
         return {
             spin: false,
             userInfo: authService.getUserData(),
             userData: '',
             user: {
+                id: 0,
                 email: '',
                 scholarship: '',
             },
             loading: false,
-
+            headers: {
+                authorization: 'authorization-text',
+            },
+            account: {
+                name: "t3b", // esto es algo temporal se tiene que crear una función en Azure (tipo lamdas de AWS) para obtener el SAS Token
+                sas:  "?sv=2018-03-28&ss=b&srt=sco&sp=rwdlac&se=2019-06-13T22:56:46Z&st=2019-03-13T15:56:46Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=j9m7xWiks1iSQjPRvZOTrlwxvMUM3GxjV0B1iLKjtlk%3D"
+            },
         };
     },
     created() {
         this.getUserInfo();
     },
     methods: {
+        updateImgProfile() {
+            const file = document.getElementById('fileinput').files[0];
+            const blobUri = 'https://' + this.account.name + '.blob.core.windows.net';
+            const blobService = AzureStorage.Blob.createBlobServiceWithSas(blobUri, this.account.sas);
+            
+            if (typeof(file) != 'undefined') {
+                blobService.createBlockBlobFromBrowserFile(
+                    't3b',
+                    'images/profile/'+this.user.id+'.png', 
+                    file,
+                    (error, result) => {
+                        if(error) {
+                            this.$message.error('Hubo un problema al cargar tu imagen, vuele a intentarlo');
+                        } else {
+                            this.$message.success('Tu imagen fue cargada con éxito.');
+                        }
+                    });                
+            } else {
+                this.$message.error('¡Selecciona una imagen por favor!');
+            }            
+        },
         handleChange(info) {
-            console.log(info.file);
-
-            // if (status === 'done') {
-            this.$message.success(`${info.file.name} file uploaded successfully.`);
-            // } else if (status === 'error') {
-            //     this.$message.error(`${info.file.name} file upload failed.`);
-            // }
+            // updateImgProfile must be here
         },
         async updateProfile() {
             this.loading = true;
@@ -174,6 +202,7 @@ export default {
             try {
                 response = await client3B.user.get(this.userInfo.id);
                 this.userData = response.data.result;
+                this.user.id = this.userData.userName;
                 this.user.email = this.userData.emailAddress;
                 this.user.scholarship = this.userData.scholarship;
             } catch (error) {
