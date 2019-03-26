@@ -1,93 +1,56 @@
 <template>
-    <a-layout-sider
-        breakpoint="lg"
-        :trigger="null"
-        collapsible
-        v-model="sidebarCollapsed"
-        theme="dark"
-        width=220
+    <a-layout-sider breakpoint="lg" :trigger="null" collapsible v-model="sidebarCollapsed"
+        theme="dark" width=250
     >
-        <a-row
-            style="padding: 25px 0px 20px 15px; background-color: #ff0000"
+        <a-row style="padding: 25px 0px 20px 15px; background-color: #ff0000"
             v-show="sidebarCollapsed"
         >
-            <a-dropdown >
-                <a-col class="ant-dropdown-link" v-show="sidebarCollapsed">
-                    <a-avatar
-                        shape="square"
-                        :size="48"
-                        src="/favicon.ico"
-                    />
-                </a-col>
-                <a-menu slot="overlay">
-                    <a-menu-item
-                        :key="arole"
-                        v-for="arole in user.roles"
-                        v-show="arole !== userCurrentRole"
-                    >
-                        <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                        <a @click="logout">Cerrar Sesión</a>
-                    </a-menu-item>
-                </a-menu>
-            </a-dropdown>
-
+            <a-col class="ant-dropdown-link">
+                <a-avatar shape="square" :size="48" src="/favicon.ico"/>
+            </a-col>
         </a-row>
-        <a-row
-            style="padding: 35px 25px 23px 25px; background-color: #ff0000;
-                   background-image: url('/img/header-profile-skin.png');"
+        <a-row style="padding: 35px 25px 23px 8px; background-color: #ff0000;
+                    background-image: url('/img/header-profile-skin.png');"
             v-show="!sidebarCollapsed"
         >
             <a-col>
-                <a-row
-                    type="flex"
-                    justify="space-around"
-                    align="middle"
-                >
+                <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
-                        <a-avatar
-                            :size="48"
-                            :src="imageUrl"
-                        />
+                        <a-avatar :size="60" :src="imageUrl" class="avatar--border"/>
                     </a-col>
                 </a-row>
-                <a-row
-                    type="flex"
-                    justify="space-around"
-                    align="middle"
-                >
+                <a-row type="flex" justify="space-around" align="middle">
                     <a-col style="margin-top: 5px;">
-                        <strong
-                            style="
-                                font-size: 13px;
-                                font-weight: 600;
-                                color: #fff;"
-                        >
+                        <strong style=" font-size: 13px; font-weight: 600; color: #fff;">
                             {{username}}
                         </strong>
                     </a-col>
                 </a-row>
-                <a-row
-                    type="flex"
-                    justify="space-around"
-                    align="middle"
-                >
+                <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
                         <a-dropdown>
                             <a class="ant-dropdown-link" href="#">
                                 {{roleEs}} <a-icon type="down" />
                             </a>
                             <a-menu slot="overlay">
-                                <a-menu-item
-                                    :key="arole"
-                                    v-for="arole in user.roles"
+                                <a-menu-item v-for="arole in user.roles" :key="arole"
                                     v-show="arole !== userCurrentRole"
                                 >
-                                    <a @click="setCurrentRole(arole)">{{roleToEs(arole)}}</a>
+                                    <a @click="setCurrentRole(arole)">
+                                        <a-icon type="user" /> {{roleToEs(arole)}}
+                                    </a>
                                 </a-menu-item>
+                                <a-menu-divider/>
                                 <a-menu-item>
-                                    <a @click="logout">Cerrar Sesión</a>
+                                    <a @click="updateProfile">
+                                        <a-icon type="form" /> Editar perfil
+                                    </a>
+                                </a-menu-item>
+                                <a-menu-divider/>
+                                <a-menu-item>
+                                    <a @click="logout">
+                                        <a-icon type="logout" /> Cerrar Sesión
+                                    </a>
                                 </a-menu-item>
                             </a-menu>
                         </a-dropdown>
@@ -97,97 +60,38 @@
         </a-row>
         <a-row>
             <a-col>
-                <a-menu
-                    mode="inline"
-                    theme="dark"
-                    :selectedKeys="selectedKeys"
-                >
-                    <a-menu-item key="1" v-show="role == rolesAvailables.COLLABORATOR">
-                        <router-link :to="{ name: 'collaborator-home' }">
-                            <a-icon type="home" />
-                            <span>Home Evaluado</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="2" v-show="role == rolesAvailables.COLLABORATOR">
-                        <router-link :to="{ name: 'collaborator-assessments' }" >
-                            <a-icon type="form" />
-                            <span>Evaluaciones</span>
-                        </router-link>
-                    </a-menu-item>
+                <a-menu mode="inline" theme="dark" :selectedKeys="selectedKeys" >
+                    <a-sub-menu key="sub2" v-show="sidebarCollapsed">
+                        <span slot="title">
+                            <a-icon type="safety-certificate" />
+                            <span>Tipo de rol</span>
+                        </span>
+                        <a-menu-item v-for="arole in user.roles" :key="arole"
+                            v-show="arole !== userCurrentRole"
+                        >
+                            <a @click="setCurrentRole(arole)">
+                                <a-icon type="user" /> {{roleToEs(arole)}}
+                            </a>
+                        </a-menu-item>
+                        <a-menu-divider style="background-color: #666;"/>
+                        <a-menu-item>
+                            <a @click="updateProfile">
+                                <a-icon type="form" /> Editar perfil
+                            </a>
+                        </a-menu-item>
+                        <a-menu-divider style="background-color: #666;"/>
+                        <a-menu-item>
+                            <a @click="logout">
+                                <a-icon type="logout" /> Cerrar Sesión
+                            </a>
+                        </a-menu-item>
+                    </a-sub-menu>
 
-                    <a-menu-item key="3" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link :to="{ name: 'boss-home' }">
-                            <a-icon type="home" />
-                            <span>Home Evaluador</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="4" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link to="/">
-                            <a-icon type="form" />
-                            <span>Evaluaciones</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="5" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link to="/">
-                            <a-icon type="notification" />
-                            <span>Avisos</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="6" v-show="role == rolesAvailables.SUPERVISOR">
-                        <router-link to="/">
-                            <a-icon type="line-chart" />
-                            <span>Resultados</span>
-                        </router-link>
-                    </a-menu-item>
-
-                    <!--
-                    <a-menu-item key="7" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="home" />
-                            <span>Home </span>
-                        </router-link>
-                    </a-menu-item>
-                    -->
-                    <a-menu-item key="8" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link :to="{ name: 'admin-home' }">
-                            <a-icon type="file-text" />
-                            <span>Formatos</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="9" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link :to="{ name: 'admin-evaluations' }">
-                            <a-icon type="form" />
-                            <span>Evaluaciones</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="10" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="cluster" />
-                            <span>Organigrama</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="11" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="setting" />
-                            <span>Configuración</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="12" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="notification" />
-                            <span>Avisos</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="13" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="line-chart" />
-                            <span>Resultados</span>
-                        </router-link>
-                    </a-menu-item>
-                    <a-menu-item key="14" v-show="role == rolesAvailables.ADMINISTRATOR">
-                        <router-link to="/">
-                            <a-icon type="user" />
-                            <span>Usuarios</span>
+                    <a-menu-item v-for="(item, index) in sidebarItems"
+                        :key="String(index)" v-show="role == item.role">
+                        <router-link :to="{ name: item.to }">
+                            <a-icon :type="item.icon" />
+                            <span>{{item.text}}</span>
                         </router-link>
                     </a-menu-item>
                 </a-menu>
@@ -206,36 +110,122 @@ export default {
             selectedKeys: [],
             user: authService.getUserData(),
             userCurrentRole: authService.getCurrentRole(),
-            rolesAvailables: authService.ROLES,
+            sidebarItems: [
+                {
+                    role: authService.ROLES.COLLABORATOR,
+                    to: 'collaborator-home',
+                    icon: 'home',
+                    text: 'Home',
+                },
+                {
+                    role: authService.ROLES.COLLABORATOR,
+                    to: 'collaborator-reports',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
+                {
+                    role: authService.ROLES.COLLABORATOR,
+                    to: 'collaborator-evaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial de evaluaciones',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-home',
+                    icon: 'home',
+                    text: 'Home',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-closedEvaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-reports',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
+                /*
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'onWork',
+                    icon: 'form',
+                    text: 'Evaluaciones',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-reports',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
+                */
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-home',
+                    icon: 'file-text',
+                    text: 'Formatos',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-evaluations',
+                    icon: 'form',
+                    text: 'Evaluaciones',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-organigram',
+                    icon: 'cluster',
+                    text: 'Organigrama',
+                },
+                /*
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'onWork',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
+                */
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-evaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial de evaluaciones',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-users',
+                    icon: 'user',
+                    text: 'Usuarios',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-notifications',
+                    icon: 'bell',
+                    text: 'Avisos',
+                },
+            ],
         };
     },
     created() {
         this.getSelectedItem();
+        setTimeout(() => {
+            this.sidebarCollapsed = false;
+        }, 10000);
     },
     watch: {
         $route: 'getSelectedItem',
     },
     methods: {
         getSelectedItem() {
-            const mapRouteItem = {
-                'collaborator-home': 1,
-                'collaborator-assessments': 2,
-                'boss-home': 3,
-                'admin-home': 8,
-                'admin-evaluations': 9,
-            };
-            const selectedkey = mapRouteItem[this.$route.name];
-            if (selectedkey) {
+            const selectedkey = this.sidebarItems.findIndex(item => item.to === this.$route.name);
+            if (selectedkey !== -1) {
                 this.selectedKeys = [String(selectedkey)];
             }
         },
-        onOpenChange(openKeys) {
-            const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
-            if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-                this.openKeys = openKeys;
-            } else {
-                this.openKeys = latestOpenKey ? [latestOpenKey] : [];
-            }
+        updateProfile() {
+            this.$router.push({ name: 'update-profile' });
         },
         setCurrentRole(role) {
             authService.setCurrentRole(role);
@@ -245,9 +235,7 @@ export default {
         logout() {
             authService.removeAuthData();
             authService.removeUserData();
-            console.log('logout');
             this.$router.push({ name: 'login' });
-            console.log('end logout');
         },
         roleToEs(role) {
             if (role === authService.ROLES.ADMINISTRATOR) {
@@ -277,7 +265,6 @@ export default {
         },
         username() {
             return `${this.user.name}`;
-            // return `${this.user.name} ${this.user.surname}`;
         },
         role() {
             return this.userCurrentRole;
@@ -292,6 +279,11 @@ export default {
 
 
 <style>
+
+.avatar--border {
+    border: solid 2px;
+    background: #565656;;
+}
 
 .ant-layout-sider,
 .ant-menu,
@@ -317,6 +309,7 @@ export default {
     background-color: #000;
 }
 
+.ant-menu-vertical .ant-menu-submenu-title,
 .ant-menu-inline .ant-menu-submenu-title {
     height: 40px;
     padding-top: 0px;
@@ -339,6 +332,7 @@ export default {
     margin-bottom: 0px;
 }
 
+/*
 .ant-menu-vertical.ant-menu-sub .ant-menu-item:first-child {
     margin-top: 15px;
 }
@@ -351,6 +345,7 @@ export default {
     margin-right: 15px;
     margin-left: 15px;
 }
+*/
 
 .ant-menu-vertical,
 .ant-menu-vertical .ant-menu-item,
@@ -375,7 +370,6 @@ export default {
 .ant-dropdown-link:hover {
     color: #fff;
     opacity: 0.8;
-    cursor: pointer;
     font-size: 12px;
     text-decoration:none;
 }

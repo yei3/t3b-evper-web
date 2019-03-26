@@ -1,22 +1,36 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
-        <a-collapse-panel header="Próximo periodo de evaluación" key="1">
-            <h3 class="tittle-collapse">Periodo 2018-02</h3>
-            <a-icon type="calendar" />
-            <small style="color: #888;">08/01/2019 - 15/01/2019</small>
+        <a-collapse-panel header="Periodo" key="1" class="text-center">
+            <h3 class="tittle-collapse">Periodo 2019-01</h3>
+            <a-range-picker
+                disabled
+                :defaultValue="[moment('01-01-2019', dateFormat), moment('30-06-2019', dateFormat)]"
+            />
         </a-collapse-panel>
     </a-collapse>
 </template>
 
-
 <script>
-export default {
+import moment from 'moment';
 
+export default {
+    data() {
+        this.dateFormat = 'DD-MM-YYYY';
+        return {};
+    },
+    methods: {
+        moment,
+        disabledDate() {
+            // Can not select days before today and today
+            return true;
+        },
+    },
 };
 </script>
 
 <style scoped>
 .collapse-mod {
+    background-color: #223a52;
     font-weight: 600;
     font-size: 14px;
 }

@@ -1,8 +1,8 @@
 <template>
-    <div class="collapse">
+    <div class="collapse" v-show="data.length > 0 ">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
-                Cierre de mis evaluaciones realizadas por mi jefe
+                Cierre de Evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,27 +18,41 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin tip="Cargando..." size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
+            <a-table :columns="columns" :dataSource="data" :pagination=false
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
-                    <p><a
+                    <p>
+                    <!-- <a
                         class="table-link"
                         @click="toggleCBEModal()"
-                    >
+                    > -->
                         {{evaluation.title}}
-                    </a></p>
+                    <!-- </a> -->
+                    </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-button size="small" class="btn--close-evaluations" @click="toggleCBEModal()">
+                    <a-button
+                        size="small"
+                        class="btn--close-evaluations"
+                        @click="toggleCBEModal(record)"
+                        :disabled="disableButton(record.status)"
+                    >
                         Cerrar
                     </a-button>
                 </span>
@@ -57,7 +71,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Cerrar Evaluación</h1>
-                        <small>(Nombre de la evaluación)</small>
+                        <small>{{CBEModal.evaluationName}}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -65,19 +79,20 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a su evaluación y a la
-                        retroalimentación recibida por su Jefe.
+                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida por mi Evaluador.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="CBEModal.evaluationCloseMsg"/>
                 </a-col>
                 <a-col class="modal-content-seccion">
-                    <a-checkbox @change="CBEModal.enableButton = !CBEModal.enableButton">
+                    <a-checkbox
+                        :checked="CBEModal.enableButton"
+                        @change="CBEModal.enableButton = !CBEModal.enableButton"    
+                    >
                         <strong style="font-size: 13px;">
-                        He leído y comprendido la evaluación de desempeño realizada por mi Jefe
-                        y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi
-                        desempeño basado en sus comentarios.</strong>
+                            He preparado los objetivos para el próximo periodo.
+                        </strong>
                     </a-checkbox>
                 </a-col>
                 <a-col class="modal-content-seccion-bottom">
@@ -86,12 +101,12 @@
             </a-row>
 
             <template slot="footer">
-                <a-button
+                <!-- <a-button
                     key="back"
                     @click="toggleCBEModal"
                 >
                     Cancelar
-                </a-button>
+                </a-button> -->
                 <a-button
                     class="modal-button-ok"
                     key="submit"
@@ -107,6 +122,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -139,47 +157,119 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
             CBEModal: {
                 show: false,
                 enableButton: false,
+                evaluationId: 0,
+                evaluationName: '',
+                evaluationCloseMsg: '',
             },
-            data: [
-                {
-                    key: '1',
-                    status: 'En revisión',
-                    evaluation: {
-                        title: 'Período 2017-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    reviewDate: '13/07/2017',
-                    endDate: '13/07/2017',
-                },
-            ],
+            data: [],
             columns,
         };
     },
+    created() {
+        this.getRevisionSummary();
+    },
     methods: {
-        toggleCBEModal() {
-            this.CBEModal.show = !this.CBEModal.show;
+        async addClosingMessage(evaluationId, message) {
+            await client3B.evaluation.closeComment(
+                {
+                    comment: message,
+                    id: evaluationId
+                }
+            ).catch(error => errorHandler(this, error));
+            this.$message.success('El mensaje se ha guardado correctamente');
+        },
+        async getRevisionSummary() {
+            this.spin = true;
+            let response = null;
+            try {
+                response = await client3B.dashboard.getCollaborator();
+                const items = response.data.result.revisionSummary;
+                this.data = [];
+                items.forEach((evaluation, index) => {
+                    this.data.push({
+                        key: index + 1,
+                        id: evaluation.evaluationId,
+                        status: this.selectStatusName(evaluation.status),
+                        evaluation: {
+                            title: evaluation.name,
+                            subtitle: evaluation.description,
+                        },
+                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
+                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString(
+                            [],
+                            {
+                                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                            },
+                        ),
+                    });
+                });
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.spin = false;
+            }
+        },
+        async sendBossCloseEvaluationNotification() {
+            await client3B.notifications.sendBossCloseEvaluationNotification(
+                {},
+            ).catch(error => errorHandler(this, error));
+        },
+        async toggleCBEModal(input) {
+            if (!this.CBEModal.show) {
+                this.CBEModal.enableButton = false;
+                this.CBEModal.evaluationId = input.id;
+                this.CBEModal.evaluationName = input.evaluation.title;
+                this.CBEModal.show = !this.CBEModal.show;
+            } else {
+                await this.addClosingMessage(this.CBEModal.evaluationId, this.CBEModal.evaluationCloseMsg);
+                this.sendBossCloseEvaluationNotification();
+                this.CBEModal.show = !this.CBEModal.show;
+                // this.data.splice( this.data.indexOf(this.CBEModal.evaluationId), 1);
+                // console.log(this.data);    
+            }
+        },
+        disableButton(status) {
+            if (status === 'No iniciado' || status === 'En proceso') {
+                return true;
+            }
+            return false;
         },
         selectTagColor(status) {
             switch (status) {
             case 'No iniciado':
                 return 'ant-tag-red';
-            case 'Finalizado':
-                return 'ant-tag-blue';
-            case 'En revisión':
-                return 'ant-tag-gray';
-            case 'Completado':
-                return 'ant-tag-green';
             case 'En proceso':
                 return 'ant-tag-yellow';
+            case 'Finalizado':
+                return 'ant-tag-green';
+            case 'Pte. revisión':
+                return 'ant-tag-gray';
+            case 'Validado':
+                return 'ant-tag-blue';
             default:
-                break;
+                return 'ant-tag-white';
             }
-
-            return 'ant-tag-red';
+        },
+        selectStatusName(status) {
+            switch (status) {
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Finalizado';
+            case 4:
+                return 'Pte. revisión';
+            case 3:
+                return 'Validado';
+            default:
+                return 'No iniciado';
+            }
         },
     },
 };

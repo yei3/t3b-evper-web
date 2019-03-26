@@ -32,7 +32,7 @@
         >
             <a-row v-show="spin">
                 <div style="text-align: center; margin-top: 20px;">
-                    <a-spin size="large" />
+                    <a-spin tip="Cargando..." size="large" />
                 </div>
             </a-row>
             <a-row class="steps" v-show="!spin">
@@ -43,7 +43,7 @@
             </a-row>
             <a-divider />
             <a-row :gutter="16" v-show="!spin">
-                <a-col :sm="24" :md="6"
+                <a-col :xxl="4" :xl="6" :lg="8" :md="12" :sm="24"
                     v-for="(step, index) in view.steps"
                     :key="index"
                 >
@@ -76,7 +76,7 @@
                         type='dashed'
                         class="add-button"
                         style="width: 48%; min-width: 200px;"
-                        @click="view.sectionModal.show=true"
+                        @click="resetModalValues(); view.sectionModal.show=true"
                         v-show="lastStep !== 0 || format.id"
                     >
                         <a-icon type='plus' /> Agregar Sección
@@ -111,6 +111,7 @@
                 />
                 <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
                     v-model="step.label"
+                    :sectionPercent='step.percent'
                     :sectionId="step.id"
                     :subsectionsFetched="step.section.childSections"
                     :showFinishButton="index === (dinamicSteps.length - 1)"
@@ -122,19 +123,38 @@
             title="Agregar Nueva Sección"
             v-model="view.sectionModal.show"
         >
-            <a-input
-                v-model="view.sectionModal.value"
+            <a-input v-model="view.sectionModal.value"
+                placeholder="Nombre de la sección"
+                addonBefore="Nombre"
+                @keyup.enter.native="addSection"
+            />
+            <a-input v-model="view.sectionModal.percent"
+                type="number"
+                style="margin-top: 20px;"
+                addonBefore="Porcentaje"
+                addonAfter="%"
+                placeholder="0 a 100"
+                min="1"
+                max="100"
                 @keyup.enter.native="addSection"
             />
             <template slot="footer">
-                <a-button key="back" @click="cancelAddSection">Cancelar</a-button>
-                <a-button key="submit"
-                    class="btn-green"
-                    @click="addSection"
-                    :loading="view.sectionModal.loading"
-                >
-                    Agregar
-                </a-button>
+                <a-row>
+                    <a-col :span="12" style="text-align: left;">
+                        <a-button key="back" @click="resetModalValues">
+                            Cancelar
+                        </a-button>
+                    </a-col>
+                    <a-col :span="12" style="text-align: right;">
+                        <a-button key="submit"
+                            class="btn-green"
+                            @click="addSection"
+                            :loading="view.sectionModal.loading"
+                        >
+                            Agregar
+                        </a-button>
+                    </a-col>
+                </a-row>
             </template>
         </a-modal>
     </div>
@@ -170,6 +190,7 @@ export default {
                     show: false,
                     error: null,
                     value: '',
+                    percent: 0,
                     loading: false,
                 },
                 stepsUUID: 2,
@@ -197,7 +218,8 @@ export default {
                 name: this.view.sectionModal.value,
                 evaluationTemplateId: this.format.id,
                 displayName: true,
-            }).catch(this.$message.success('Hubo un error al guardar la sección'));
+                value: this.view.sectionModal.percent,
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.view.sectionModal.loading = false;
                 return;
@@ -208,18 +230,20 @@ export default {
                 id: section.id,
                 label: this.view.sectionModal.value,
                 name: this.view.sectionModal.value.replace(/ /g, ''),
+                percent: Number(this.view.sectionModal.percent),
                 section: { childSections: [] },
             };
             this.view.steps.push(step);
             this.view.stepsUUID += 1;
-            this.cancelAddSection();
+            this.resetModalValues();
             this.setLastStep(this.view.steps.length - 1);
             this.view.sectionModal.loading = false;
             this.$message.success('Evaluación guardada correctamente');
         },
-        cancelAddSection() {
+        resetModalValues() {
             this.view.sectionModal.show = false;
             this.view.sectionModal.value = '';
+            this.view.sectionModal.percent = 0;
         },
         async deleteSection(sectionStep) {
             this.view.loadingDelete = true;
@@ -234,7 +258,7 @@ export default {
             });
             const response = await client3B.section.delete({
                 id: section.id,
-            }).catch(this.$message.success('Hubo un error al eliminar la sección'));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.view.loadingDelete = false;
                 return;
@@ -253,11 +277,11 @@ export default {
                 return;
             }
             const response = await client3B.format.get(this.$route.params.id)
-                .catch(error => errorHandler(error));
+                .catch(error => errorHandler(this, error));
             if (!response) {
                 this.spin = false;
                 return;
-            };
+            }
 
             const format = response.data.result;
             this.formatfetched = format;
@@ -273,6 +297,7 @@ export default {
                     id: section.id,
                     label: section.name,
                     name: section.name,
+                    percent: section.value,
                     section,
                 });
                 this.view.stepsUUID += 1;

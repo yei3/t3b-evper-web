@@ -18,6 +18,7 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Collaborator`;
         return this.request(path, this.methods.get, {});
     }
+
     /**
      * Request for the information for a Supervisor
      *
@@ -25,6 +26,26 @@ class Dashboard extends Http {
      */
     getSupervisor() {
         const path = `${this.entityPath}/Supervisor`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for Evaluations History
+     *
+     * @return {Promise}        Http Response
+     */
+    getEvaluationsHistory() {
+        const path = `${this.entityPath}/EvaluationsHistory`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for a Supervisor History
+     *
+     * @return {Promise}        Http Response
+     */
+    getSupervisorHistory() {
+        const path = `${this.entityPath}/SupervisorHistory`;
         return this.request(path, this.methods.get, {});
     }
 }

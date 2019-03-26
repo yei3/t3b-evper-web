@@ -1,8 +1,8 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
-            <a-col :span="23">
-                Evaluaciones de Colaboradores En procesos
+        <a-row class="collapse-title-boss">
+            <a-col :span="23" class="text-center">
+                Evaluaciones Periodo Actual
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,49 +18,54 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin tip="Cargando..." size="small" />
+            </div>
+        </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
+            <a-table :columns="columns" :dataSource="data" :pagination=false
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                        <router-link
+                        <!-- <router-link
                             class="table-link"
                             :to="{name: 'boss-assessments-apply' }"
-                        >
+                        > -->
                             {{evaluation.title}}
-                        </router-link>
+                        <!-- </router-link> -->
                     </p>
                     <p><small>{{evaluation.subtitle}}</small></p>
                 </span>
-                <span slot="action" slot-scope="action">
-                    <!-- <a-button
-                        class="table-link-light" ghost
-                        :to="{ name: 'boss-assessments-apply' }"
-                        v-show="transformStatus(action) !== 'Agendar revisión'"
-                    >
-                        {{transformStatus(action)}}
-                    </a-button> -->
-                    <div v-show="transformStatus(action) !== 'Agendar revisión'">
-                        <router-link
-                            class="table-link-light"
-                            :to="{ name: 'boss-assessments-apply' }"
-                        >
-                            {{transformStatus(action)}}
-                        </router-link>
-                    </div>
+                <span slot="autoEvaluation" slot-scope="autoEvaluation" class="text-center">
+                    <a-icon type="check" v-if="autoEvaluation"/>
+                    <a-icon type="minus" v-if="!autoEvaluation"/>
+                </span>
+                <span slot="action" slot-scope="action, record">
                     <a-button
-                        class="table-link-light" ghost
-                        @click="toggleScheduleReviewModal"
-                        v-show="transformStatus(action) === 'Agendar revisión'"
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="fillEvaluation(record)"
+                        v-show="!disableButton(record.status, record.autoEvaluation)"
                     >
-                        {{transformStatus(action)}}
+                        {{transformStatus(action, record.autoEvaluation)}}
+                    </a-button>
+                    <a-button
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="toggleScheduleReviewModal(record)"
+                        v-show="disableButton(record.status, record.autoEvaluation)"
+                    >
+                        {{transformStatus(action, record.autoEvaluation)}}
                     </a-button>
                 </span>
             </a-table>
@@ -78,7 +83,10 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Agendar revisión</h1>
-                        <small>(Nombre de la evaluacion) - (Nombre del colaborador)</small>
+                        <small>
+                            {{scheduleReviewModal.evaluationName}} -
+                            {{scheduleReviewModal.collaboratorName}}
+                        </small>
                     </a-col>
                 </a-row>
             </template>
@@ -86,11 +94,18 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                         Seleecione la fecha de la revisón:
+                         Seleccione la fecha y hora de la revisón:
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker style="width: 100%" />
+                    <a-date-picker
+                        showTime
+                        format="YYYY-MM-DD HH:mm"
+                        placeholder="Selecciona el día y la hora de la revisión"
+                        style="width: 100%"
+                        @ok="onSelectDate"
+                    />
+
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>
@@ -121,6 +136,9 @@
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -140,6 +158,13 @@ const columns = [
         key: 'collaborator',
     },
     {
+        title: 'Auto Evaluación',
+        dataIndex: 'autoEvaluation',
+        key: 'autoEvaluation',
+        scopedSlots: { customRender: 'autoEvaluation' },
+        align: 'center',
+    },
+    {
         title: 'Fecha fin',
         dataIndex: 'endDate',
         key: 'endDate',
@@ -156,105 +181,162 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
+            dateString: '',
             scheduleReviewModal: {
                 show: false,
                 enableButton: false,
+                evaluationId: 0,
+                evaluationName: '',
+                collaboratorName: '',
             },
-            data: [
-                {
-                    key: '1',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '2',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Silvia Sánchez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '3',
-                    status: 'No iniciado',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Laura Alcántara',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '4',
-                    status: 'En proceso',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '5',
-                    status: 'En proceso',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Silvia Sánchez',
-                    endDate: '13/07/2018',
-                },
-                {
-                    key: '6',
-                    status: 'Finalizada',
-                    evaluation: {
-                        title: 'Período 2018-1',
-                        subtitle: 'Evaluación de Desempeño',
-                    },
-                    collaborator: 'Leonardo Juárez',
-                    endDate: '13/07/2018',
-                },
-            ],
+            data: [],
             columns,
         };
     },
+    created() {
+        this.getCollaboratorEvaluations();
+    },
     methods: {
-        toggleScheduleReviewModal() {
-            this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+        onSelectDate(value) {
+            this.dateString = value._d;
         },
-        transformStatus(status) {
+        async scheduleReview(evaluationId) {
+            this.loading = true;
+            // unrevise evaluation for real change of status
+            await client3B.evaluation.revision.unrevise(
+                evaluationId,
+            ).catch(error => errorHandler(this, error));
+            // schedule revision date
+            await client3B.evaluation.revision.updateRevisionDate(
+                {
+                    evaluationId,
+                    revisionTime: this.dateString.toISOString(),
+                },
+            ).catch(error => errorHandler(this, error));
+            // send notification
+            this.sendReviewNotification(evaluationId, this.dateString);
+            // change status on real-time XD
+            const obj = this.data.find(tmp => tmp.id === evaluationId);
+            obj.status = this.selectStatusName(4);
+            this.loading = false;
+            this.$message.success(`La evaluación está en proceso de revisión  ${evaluationId}`);
+        },
+        async sendReviewNotification(_evaluationId, _dateReview) {
+            await client3B.notifications.sendReviewNotification(
+                {
+                    evaluationId: _evaluationId,
+                    dateReview: _dateReview,
+                },
+            ).catch(error => errorHandler(this, error));
+        },
+        async getCollaboratorEvaluations() {
+            this.spin = true;
+            let response = null;
+            try {
+                response = await client3B.dashboard.getSupervisor();
+                const items = response.data.result.collaboratorsEvaluationSummary;
+                this.data = [];
+                for (let i = 0; i < items.length; i += 1) {
+                    this.data.push({
+                        id: items[i].id,
+                        key: i + 1,
+                        status: this.selectStatusName(items[i].status),
+                        evaluation: {
+                            title: items[i].name,
+                            subtitle: items[i].description,
+                        },
+                        autoEvaluation: items[i].isAutoEvaluation,
+                        collaborator: items[i].collaboratorName,
+                        endDate: new Date(items[i].endDateTime).toLocaleDateString(),
+                    });
+                }
+            } catch (error) {
+                errorHandler(this, error);
+            }
+            this.spin = false;
+        },
+        async toggleScheduleReviewModal(input) {
+            if (!this.scheduleReviewModal.show) {
+                this.scheduleReviewModal.evaluationId = input.id;
+                this.scheduleReviewModal.evaluationName = input.evaluation.title;
+                this.scheduleReviewModal.collaboratorName = input.collaborator;
+                this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+            } else {
+                await this.scheduleReview(this.scheduleReviewModal.evaluationId);
+                this.scheduleReviewModal.show = !this.scheduleReviewModal.show;
+            }
+        },
+        fillEvaluation(input) {
+            const id = input.id;
+            if (input.autoEvaluation === true || input.status === 'Pte. revisión' || input.status === 'Cerrada') {
+                this.$router.push({ name: 'boss-assessment', params: { id } });
+            } else {
+                this.$router.push({ name: 'boss-assessments-apply', params: { id } });
+            }
+        },
+        disableButton(status, isAutoEvaluation) {
+            return (status === 'Finalizado' && !isAutoEvaluation);
+        },
+        transformStatus(status, autoEvaluation) {
             if (status === 'En proceso') {
                 return 'Continuar';
             }
-            if (status === 'Finalizada') {
-                return 'Agendar revisión';
+            if (status === 'Finalizado' && !autoEvaluation) {
+                return 'Agendar Revisión';
+            }
+            if (autoEvaluation === true || status === 'Pte. revisión' || status === 'Cerrada') {
+                return 'Ver';
             }
             return 'Iniciar';
         },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
+            switch (status) {
+            case 'No iniciado':
                 return 'ant-tag-red';
-            }
-            if (status === 'En proceso') {
+            case 'En proceso':
                 return 'ant-tag-yellow';
-            }
-            if (status === 'Finalizada') {
+            case 'Finalizado':
                 return 'ant-tag-green';
+            case 'Pte. revisión':
+                return 'ant-tag-gray';
+            case 'Cerrada':
+                return 'ant-tag-blue';
+            default:
+                return 'ant-tag-white';
             }
-            return 'ant-tag-gray';
+        },
+        selectStatusName(status) {
+            switch (status) {
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'En proceso';
+            case 2:
+                return 'Finalizado';
+            case 4:
+                return 'Pte. revisión';
+            case 3:
+                return 'Cerrada';
+            default:
+                return 'No iniciado';
+            }
         },
     },
 };
 </script>
 
 <style scoped>
-
+    .btn--start-evaluations {
+        border: none;
+        background: #00d5af;
+        color: #000;
+        font-size: 11px;
+        width: 102px;
+    }
+    .btn--start-evaluations:hover {
+        background: #00af8f;
+        color: #fff;
+    }
 </style>

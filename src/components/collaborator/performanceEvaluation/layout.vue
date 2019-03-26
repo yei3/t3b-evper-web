@@ -1,56 +1,17 @@
 <template>
-    <div>
-        <a-row :gutter="32" class="breadcrumb-wrapper">
-            <a-col :span="24">
-                <h1>Evaluaciones de Desempeño</h1>
-            </a-col>
-            <a-col :span="24">
-                <a-breadcrumb>
-                    <a-breadcrumb-item>
-                        <router-link
-                            class="breadcrumb-path"
-                            :to="{ name: 'collaborator-home' }"
-                        >
-                            Home Colaborador
-                        </router-link>
-                    </a-breadcrumb-item>
-                    <a-breadcrumb-item>
-                        <router-link
-                            class="breadcrumb-path"
-                            :to="{ name: 'collaborator-assessments' }">
-                            Evaluaciones de desempeño
-                        </router-link>
-                    </a-breadcrumb-item>
-                    <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active">Ver Evaluación</strong>
-                    </a-breadcrumb-item>
-                </a-breadcrumb>
-            </a-col>
-        </a-row>
-        <a-row class="main-content" style="margin-top: 30px;">
-            <a-col :span="24" style="padding-bottom: 30px;">
-                <evaluation />
-            </a-col>
-        </a-row>
-    </div>
+    <layout :onlyLecture="true" />
 </template>
 
 <script>
-import evaluation from '@/components/collaborator/performanceEvaluation/evaluation.vue';
+import layout from '@/components/collaborator/applyPerformanceEvaluations/layout.vue';
 
 export default {
     components: {
-        evaluation,
-    },
-    data() {
-        return {
-        };
+        layout,
     },
 };
 </script>
 
 <style scoped>
-.main-content >>> .form-autoevaluation {
-    background-color: #fff;
-}
+
 </style>

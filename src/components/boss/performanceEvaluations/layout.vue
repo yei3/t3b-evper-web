@@ -10,7 +10,7 @@
                         <router-link :to="{ name: 'collaborator-home' }"
                             class="breadcrumb-path"
                         >
-                            Home Colaborador
+                            Home Evaluador
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>

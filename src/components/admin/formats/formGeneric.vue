@@ -6,10 +6,14 @@
                     <span style="font-size: 26px;
                         font-weight: 100;"
                     >
-                        {{sectionTitle}}
+                        {{sectionTitle}} <small style="font-size: 15px;">
+                            {{sectionPercent$}}%
+                        </small>
                     </span>
-                    <a-tooltip placement="top" title="Editar Título">
-                        <a @click="sectionModal.visible = true; sectionModal.value = sectionTitle;"
+                    <a-tooltip placement="top" title="Editar Título o Porcentaje">
+                        <a @click="sectionModal.visible = true;
+                                   sectionModal.value = sectionTitle;
+                                   sectionModal.percent = sectionPercent$"
                             style="color: #777;"
                         >
                             <a-icon type="edit" class="form-icon"/>
@@ -56,19 +60,27 @@
                         />
                     </a-tooltip>
                     <a-modal title="Título de la Subsección" v-model="subsection.showModal">
-                        <a-input
+                        <a-input placeholder="Título de la subsección"
                             v-model="subsection.title.lastValue"
+                            addonBefore="Nombre"
                             @keyup.enter.native="updateSubsection(subsection)"
                         />
                         <template slot="footer">
-                            <a-button class="" @click="subsection.showModal = false;">
-                                Cancelar
-                            </a-button>
-                            <a-button class="btn-green" @click="updateSubsection(subsection)"
-                                :loading="subsection.loading"
-                            >
-                                Aceptar
-                            </a-button>
+                            <a-row>
+                                <a-col :span="12" style="text-align: left;">
+                                    <a-button class="" @click="subsection.showModal = false;">
+                                        Cancelar
+                                    </a-button>
+                                </a-col>
+                                <a-col :span="12" style="text-align: right;">
+                                    <a-button class="btn-green"
+                                        @click="updateSubsection(subsection)"
+                                        :loading="subsection.loading"
+                                    >
+                                        Aceptar
+                                    </a-button>
+                                </a-col>
+                            </a-row>
                         </template>
                     </a-modal>
                 </a-col></a-row>
@@ -81,8 +93,8 @@
                         :fieldDecoratorId="'question-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Pregunta'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.text,
                             rules: [
@@ -104,8 +116,8 @@
                         :fieldDecoratorId="'answer-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Tipo de Respuesta'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.answerType,
                             rules: [
@@ -134,20 +146,20 @@
                         :fieldDecoratorId="'expectedValue-' + subsection.id + '-' + question.id"
                         style="margin: 10px 0px;"
                         label='Valor del Objetivo'
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.expectedValue,
                             rules: [
                                 {
                                     required: true,
-                                    message: 'Ingresa el valor numérico del objetivo'
+                                    message: 'Ingresa el valor del objetivo'
                                 }
                             ]
                         }"
                     >
                         <a-input style=""
-                            type="number"
+                            type="text"
                             v-model="question.expectedValue"
                             placeholder="Valor del Objetivo"
                             @change="setQuestionAsModify(question)"
@@ -158,8 +170,8 @@
                         label='Relación de aprobación del objetivo'
                         :fieldDecoratorId="`approvalRship-${subsection.id}-${question.id}`"
                         style="margin: 10px 0px;"
-                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 12, sm: 24 }"
-                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 12, sm: 24 }"
+                        :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
+                        :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                         :fieldDecoratorOptions="{
                             initialValue: question.approvalRelationship,
                             rules: [
@@ -174,27 +186,24 @@
                             placeholder="Relación de aprobación del objetivo"
                             @select="setQuestionAsModify(question)"
                         >
-                            <a-select-option value="1">
-                                El valor real debe ser menor al del objetivo
-                            </a-select-option>
-                            <a-select-option value="2">
-                                El valor real debe ser menor o igual al del objetivo
-                            </a-select-option>
-                            <a-select-option value="3">
-                                El valor real debe ser igual al del objetivo
-                            </a-select-option>
-                            <a-select-option value="5">
-                                El valor real debe ser mayor o igual al del objetivo
-                            </a-select-option>
-                            <a-select-option value="4">
-                                El valor real debe ser mayor al del objetivo
+                            <a-select-option v-for="(item, index) in objectiveRelationships"
+                                :key="index"
+                                :value="item.value"
+                            >
+                                {{item.label}}
                             </a-select-option>
                         </a-select>
                     </a-form-item>
                     <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;">
+                        <a-switch :checked="question.qualifiable"
+                            @change='question.qualifiable = !question.qualifiable;
+                                     setQuestionAsModify(question);'
+                            size="small"
+                            :disabled="question.loading"
+                        /> Calificable
                         <a @click="removeQuestion(subsection.key, question)"
                             class="link-delete-question form-icon"
-                            style="padding-right: 2%;"
+                            style="padding-right: 2%; padding-left: 4%;"
                             :disabled="question.loading"
                         >
                             <a-icon
@@ -246,21 +255,37 @@
                     title="Título de la Sección"
                     v-model="sectionModal.visible"
                 >
-                    <a-input
-                        v-model="sectionModal.value"
+                    <a-input v-model="sectionModal.value"
+                        addonBefore="Título"
+                        @keyup.enter.native="handleSectionTitleInput"
+                    />
+                    <a-input v-model="sectionModal.percent"
+                        type="number"
+                        style="margin-top: 20px;"
+                        addonBefore="Porcentaje"
+                        addonAfter="%"
+                        placeholder="0 a 100"
+                        min="1"
+                        max="100"
                         @keyup.enter.native="handleSectionTitleInput"
                     />
                     <template slot="footer">
-                        <a-button @click="sectionModal.visible = false;
-                            sectionModal.value = '';">
-                            Cancelar
-                        </a-button>
-                        <a-button class="btn-green"
-                            @click="handleSectionTitleInput"
-                            :loading="sectionModal.loading"
-                        >
-                            Aceptar
-                        </a-button>
+                        <a-row>
+                            <a-col :span="12" style="text-align: left;">
+                                <a-button @click="sectionModal.visible = false;
+                                    sectionModal.value = '';">
+                                    Cancelar
+                                </a-button>
+                            </a-col>
+                            <a-col :span="12" style="text-align: right;">
+                                <a-button class="btn-green"
+                                    @click="handleSectionTitleInput"
+                                    :loading="sectionModal.loading"
+                                >
+                                    Aceptar
+                                </a-button>
+                            </a-col>
+                        </a-row>
                     </template>
                 </a-modal>
                 <a-modal
@@ -268,20 +293,27 @@
                     v-model="addSubsectionModal.visible"
                 >
                     <a-input
+                        addonBefore="Título"
                         v-model="addSubsectionModal.value"
                         @keyup.enter.native="addSubsection(addSubsectionModal.value)"
                     />
                     <template slot="footer">
-                        <a-button @click="addSubsectionModal.visible = false;
-                            addSubsectionModal.value = '';">
-                            Cancelar
-                        </a-button>
-                        <a-button class="btn-green"
-                            @click="addSubsection(addSubsectionModal.value)"
-                            :loading="addSubsectionModal.loading"
-                        >
-                            Aceptar
-                        </a-button>
+                        <a-row>
+                            <a-col :span="12" style="text-align: left;">
+                                <a-button @click="addSubsectionModal.visible = false;
+                                    addSubsectionModal.value = '';">
+                                    Cancelar
+                                </a-button>
+                            </a-col>
+                            <a-col :span="12" style="text-align: right;">
+                                <a-button class="btn-green"
+                                    @click="addSubsection(addSubsectionModal.value)"
+                                    :loading="addSubsectionModal.loading"
+                                >
+                                    Aceptar
+                                </a-button>
+                            </a-col>
+                        </a-row>
                     </template>
                 </a-modal>
             </a-row>
@@ -318,6 +350,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import client3B from '@/api/client3B';
+import { answerTypes } from '@/modules/evaluation';
 import errorHandler from '@/views/errorHandler';
 import { setTimeout } from 'timers';
 
@@ -339,6 +372,10 @@ export default {
             type: String,
             required: true,
         },
+        sectionPercent: {
+            type: Number,
+            required: true,
+        },
     },
     model: {
         prop: 'sectionTitle',
@@ -346,6 +383,7 @@ export default {
     },
     data() {
         return {
+            sectionPercent$: 0,
             view: {
                 loading: false,
             },
@@ -358,43 +396,33 @@ export default {
                 visible: false,
                 value: '',
                 loading: false,
+                percent: 0,
             },
-            answerTypes: [
-                {
-                    label: 'Objetivo',
-                    value: 3,
-                },
-                {
-                    label: 'Respuesta abierta',
-                    value: 0,
-                },
-                {
-                    label: 'Múltiples respuestas abiertas',
-                    value: 1,
-                },
-                {
-                    label: 'Selección de respuesta predefinida',
-                    value: 2,
-                },
-                {
-                    label: 'Si / No',
-                    value: 4,
-                },
-            ],
+            answerTypes,
             subsectionUUID: 0,
             subsections: [],
-            userActions: {
-                sections: {
-                    create: [],
-                    update: [],
-                    delete: [],
+            objectiveRelationships: [
+                {
+                    value: 1,
+                    label: 'El valor real debe ser menor al del objetivo',
                 },
-                questions: {
-                    create: [],
-                    update: [],
-                    delete: [],
+                {
+                    value: 2,
+                    label: 'El valor real debe ser menor o igual al del objetivo',
                 },
-            },
+                {
+                    value: 3,
+                    label: 'El valor real debe ser igual al del objetivo',
+                },
+                {
+                    value: 5,
+                    label: 'El valor real debe ser mayor o igual al del objetivo',
+                },
+                {
+                    value: 4,
+                    label: 'El valor real debe ser mayor al del objetivo',
+                },
+            ],
         };
     },
     mounted() {
@@ -407,6 +435,7 @@ export default {
             updateEvaluationForm: 'updateEvaluationForm',
         }),
         loadData() {
+            this.sectionPercent$ = this.sectionPercent;
             if (this.subsectionsFetched) {
                 this.subsections = this.subsectionsFetched.map(subs => ({
                     id: subs.id,
@@ -428,6 +457,7 @@ export default {
                             answerType: qst.questionType,
                             lastAnswerType: qst.questionType,
                             edited: false,
+                            qualifiable: qst.isQualifiable,
                         })),
                         ...subs.measuredQuestions.map(qst => ({
                             id: qst.id,
@@ -438,7 +468,8 @@ export default {
                             lastAnswerType: qst.questionType,
                             edited: false,
                             approvalRelationship: qst.relation,
-                            expectedValue: qst.expected,
+                            expectedValue: qst.expectedText || qst.expected,
+                            qualifiable: qst.isQualifiable,
                         })),
                     ],
                 }));
@@ -454,7 +485,7 @@ export default {
                 evaluationTemplateId: this.format.id,
                 displayName: true,
                 parentId: this.sectionId,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.addSubsectionModal.loading = false;
                 return;
@@ -479,6 +510,7 @@ export default {
                     answerType: null,
                     lastAnswerType: null,
                     edited: true,
+                    qualifiable: true,
                 }],
             });
             this.addSubsectionModal.visible = false;
@@ -494,7 +526,7 @@ export default {
                 displayName: subsection.title.visible,
                 evaluationTemplateId: this.format.id,
                 parentId: this.sectionId,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 subsection.loading = false;
                 return;
@@ -516,6 +548,7 @@ export default {
                 answerType: null,
                 lastAnswerType: null,
                 edited: true,
+                qualifiable: true,
             });
         },
         async removeQuestion(sectionId, _question) {
@@ -538,13 +571,12 @@ export default {
             subsection.loading = true;
             const response = await client3B.section.delete({
                 id: subsection.key,
-            }).catch(error => errorHandler(error));
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 subsection.loading = false;
                 return;
             }
-            this.subsections = this.subsections.filter(sbt =>
-                sbt.id !== subsection.id);
+            this.subsections = this.subsections.filter(sbt => sbt.id !== subsection.id);
             subsection.loading = false;
         },
         async handleSectionTitleInput() {
@@ -553,7 +585,8 @@ export default {
                 id: this.sectionId,
                 evaluationTemplateId: this.format.id,
                 name: this.sectionModal.value,
-            }).catch(error => errorHandler(error));
+                value: this.sectionModal.percent,
+            }).catch(error => errorHandler(this, error));
             if (!response) {
                 this.sectionModal.loading = false;
                 return;
@@ -561,7 +594,9 @@ export default {
 
             this.sectionModal.visible = false;
             this.$emit('input', this.sectionModal.value);
+            this.sectionPercent$ = this.sectionModal.percent;
             this.sectionModal.value = '';
+            this.sectionModal.percent = '';
             this.sectionModal.loading = false;
             this.$message.success('Evaluación guardada correctamente');
         },
@@ -588,20 +623,36 @@ export default {
 
             question.loading = true;
             let response = null;
+            const data = {
+                text: question.text,
+                questionType: question.answerType,
+                sectionId,
+                relation: question.approvalRelationship,
+                isQualifiable: question.qualifiable,
+            };
+
+            // Verificar si es texto
+            if (question.answerType === 3) { // Es tipo objetivo
+                if (Number.isNaN(Number(question.expectedValue)) && data.relation === 3) {
+                    data.expectedText = question.expectedValue;
+                } else if (Number.isNaN(Number(question.expectedValue))) {
+                    const msg = 'Los Objetivos tipo texto solo son permitidos con la relación de igualdad';
+                    errorHandler(this, msg);
+                    question.loading = false;
+                    return;
+                } else {
+                    data.expected = question.expectedValue;
+                }
+            }
 
             if (question.key) {
                 await this.deleteQuestion(sectionId, question);
                 question.key = null;
             }
 
-            response = await client3B.question.create({
-                text: question.text,
-                questionType: question.answerType,
-                sectionId,
-                relation: question.approvalRelationship,
-                expected: question.expectedValue,
-            }, { objective: question.answerType === 3 })
-                .catch(error => errorHandler(this, error));
+            response = await client3B.question.create(data, {
+                objective: question.answerType === 3,
+            }).catch(error => errorHandler(this, error));
 
             if (!response) {
                 question.loading = false;
@@ -629,49 +680,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.dynamic-delete-button {
-  cursor: pointer;
-  position: relative;
-  top: 0px;
-  font-size: 16px;
-  color: #777;
-  transition: all .3s;
-}
-.dynamic-delete-button:hover {
-  color: #777;
-}
-.link-delete-question {
-    color: #777;
-}
-.link-delete-question:hover {
-    color: #777;
-}
-
-.form-icon {
-    color: #777;
-}
-
-.form-icon:hover {
-    color: #333;
-}
-
-.add-button {
-    width: 90%;
-}
-.add-button:hover {
-    border-style: dashed;
-}
-.question-row {
-    margin: 30px 0px;
-    padding: 0px 10px;
-    border-left: 3px solid #1AB394;
-}
-.green-bar {
-    border-left: 3px solid #1AB394;
-}
-.orange-bar {
-    border-left: 3px solid #F57B22;
-}
-
-</style>
+<style src="@/assets/styles/evaluationForm.css" scoped></style>

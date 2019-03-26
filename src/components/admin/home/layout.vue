@@ -23,9 +23,7 @@
         </a-row>
         <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
             <a-row class="main-content" style="margin-top: 30px;">
-                <a-col :span="24" style="padding-bottom: 30px;">
-                    <search-formats />
-                </a-col>
+                <search-formats />
             </a-row>
         </div>
     </div>

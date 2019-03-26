@@ -1,8 +1,8 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
-            <a-col :span="23">
-                Seguimiento a Objetivos Actuales de Colaboradores
+        <a-row class="collapse-title-boss">
+            <a-col :span="23" class="text-center">
+                Seguimiento a Objetivos Actuales
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -10,7 +10,7 @@
                         class="dropdown-icon"
                         type="down"
                         @click="collapsed = !collapsed"
-                        v-show="!collapsed"
+                        v-show="collapsed"
                     />
                 </a>
                 <a>
@@ -18,26 +18,33 @@
                         class="dropdown-icon"
                         type="up"
                         @click="collapsed = !collapsed"
-                        v-show="collapsed"
+                        v-show="!collapsed"
                     />
                 </a>
             </a-col>
         </a-row>
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin tip="Cargando..." size="small" />
+            </div>
+        </a-row>
         <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">
-            <a-row :key="collaborator.id" v-for="collaborator in data"
+            <a-row :key="collaborator.id" v-for="(collaborator, index) in data"
                 class="collapse-single-wrapper"
             >
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
-                        <a-avatar shape="square" icon="user" />
+                        <a-avatar shape="circle" :src="collaboratorImgUrl(collaborator.number)" />
                         <a class="table-link" style="margin-left: 5px;"
-                            @click="currentCollaborator = (collaborator.id !== currentCollaborator)?
-                                collaborator.id:0">
+                            @click="currentCollaborator = (index !== currentCollaborator)?
+                                index:-1">
                             {{collaborator.name}}
                         </a>
                     </a-col>
                     <a-col :span="4">
-                        <p><a-progress :percent="objectivesPercet(collaborator.objectives)"
+                        <p><a-progress
+                            strokeColor="#1ab394"
+                            :percent="objectivesPercet(collaborator.objectives)"
                             :showInfo="false"
                             size="small"
                         /></p>
@@ -45,29 +52,42 @@
                     </a-col>
                 </a-col>
                 <a-col :span="24" class="collapse-single-content"
-                    v-show="currentCollaborator == collaborator.id">
+                    v-show="currentCollaborator == index">
                     <a-table
                         :columns="columns"
                         :dataSource="collaborator.objectives"
                         :pagination=false
+                        :scroll="{ x: true }"
                     >
                         <span slot="status" slot-scope="status">
                             <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
                         </span>
-                        <span slot="objective" slot-scope="objective">
-                            <p><a
+                        <span slot="objective" slot-scope="objective, record">
+                            <p>
+                            <!-- <a
                                 class="table-link"
-                                @click="toggleViewProgressModal"
-                            >
+                                @click="toggleViewProgressModal(record)"
+                            > -->
                                 {{objective.title}}
-                            </a></p>
+                            <!-- </a> -->
+                            </p>
                             <p><small>{{objective.subtitle}}</small></p>
                         </span>
                         <span slot="action" slot-scope="text, record">
                             <a-dropdown>
                                 <a-menu slot="overlay">
-                                    <a-menu-item key="1" @click="toggleViewProgressModal">
+                                    <a-menu-item key="1" @click="toggleViewProgressModal(record)">
                                         Ver avances
+                                    </a-menu-item>
+                                    <a-menu-divider />
+                                    <a-menu-item
+                                        key="2"
+                                        :disabled="
+                                            record.status === 'En proceso' ||
+                                            record.status === 'No iniciado'"
+                                        @click="toggleFinishObjectiveModal(record)"
+                                    >
+                                        {{transformStatus(record.status)}}
                                     </a-menu-item>
                                 </a-menu>
                                 <a-button class="ant-btn-small">
@@ -89,124 +109,103 @@
                 <a-row>
                     <a-col :span="24" class="modal-header">
                         <h1>Ver avances</h1>
-                        <small>(Nombre del Objetivo) - (Nombre del colaborador)</small>
+                        <small>{{ viewProgressModal.objectiveName }} - {{ viewProgressModal.evaluatedName }}</small>
                     </a-col>
                 </a-row>
             </template>
-
             <a-row class="modal-content">
-                <a-col :span="24"  style="padding: 0px 20px;">
+                <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item color="gray" class="timeline-item">
+                        <a-timeline-item v-for="(item, index) in viewProgressModal.binnacle" :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
+                                {{ item.username }}
+                                <small>{{ item.created }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
-                                Se han definido las características del producto.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se han revisado propuestas de 3 proveedores,
-                                se están revisando actualmente.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha seleccionado el proveedor, ya contamos con a
-                                muestra del producto.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="edit" style="font-size: 20px" />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha revisado el producto, se procede a la compra.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1ab394"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha completado el objetivo, ya
-                                contamos con el producto en operación.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #ed5565"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha reabierto el objetivo, falta documentación.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1ab394"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user2.jpg"/> Leonardo Juárez
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha completado el objetivo,
-                                se envia documentación.
-                            </p>
-                        </a-timeline-item>
-                        <a-timeline-item color="gray" class="timeline-item">
-                            <a-icon slot="dot" type="check-circle"
-                                style="font-size: 20px; color: #1c84c6"
-                            />
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" src="/user.jpg"/> Karen Villanueva
-                                <small>13/07/2018 01:32:40 pm</small>
-                            </p>
-                            <p style="padding-left: 20px; padding-top: 5px">
-                                Se ha validado el objetivo, todo funciona correctamente.
+                                {{ item.message }}
                             </p>
                         </a-timeline-item>
                     </a-timeline>
                 </a-col>
             </a-row>
-
             <template slot="footer">
                 <a-button
-                    key="back"
-                    @click="toggleViewProgressModal"
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="viewProgressModal.show = false"
                 >
-                    Cerrar
+                    OK
                 </a-button>
+
             </template>
         </a-modal>
 
+        <a-modal
+            v-model="finishObjectiveModal.show"
+            onOk="toggleFinishObjectiveModal"
+            width="600px"
+        >
+            <template slot="title">
+                <a-row>
+                    <a-col :span="24" class="modal-icon-wrapper">
+                        <a-icon type="check-square" class="modal-icon" />
+                    </a-col>
+                    <a-col :span="24" class="modal-header">
+                        <h1>Validar o Reabrir Objetivo</h1>
+                        <small>
+                            {{ finishObjectiveModal.objectiveName }} - {{ finishObjectiveModal.evaluatedName }}
+                        </small>
+                    </a-col>
+                </a-row>
+            </template>
+
+            <a-row class="modal-content">
+                <a-col :span="24" class="modal-content-seccion-top">
+                    <span>
+                        Agregue un comentario con respecto al cumplimiento del
+                        objetivo por parte del evaluado.
+                    </span>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion">
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message"/>
+                </a-col>
+                <a-col :span="24" class="modal-content-seccion-bottom">
+                     ¿Está seguro que desea validar o reabrir el objetivo indicado?
+                </a-col>
+            </a-row>
+
+            <template slot="footer">
+                <a-button
+                    key="open"
+                    type="danger"
+                    @click="toggleOpenOrValidateObjective(false, 2)"
+                    :disabled="finishObjectiveModal.loading"
+                >
+                    No, reabrir objetivo
+                </a-button>
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="toggleOpenOrValidateObjective(true, 4)"
+                >
+                    Si, validar objetivo
+                </a-button>
+            </template>
+        </a-modal>
     </div>
 </template>
 
 <script>
+import client3B from '@/api/client3B';
+import errorHandler from '@/views/errorHandler';
+
 const columns = [
     {
         title: 'Estatus',
@@ -214,7 +213,7 @@ const columns = [
         key: 'status',
         scopedSlots: { customRender: 'status' },
     }, {
-        title: 'Objectivo',
+        title: 'Objetivo',
         dataIndex: 'objective',
         key: 'objective',
         scopedSlots: { customRender: 'objective' },
@@ -234,166 +233,180 @@ const columns = [
 export default {
     data() {
         return {
+            spin: false,
             collapsed: false,
-            currentCollaborator: 0,
+            currentCollaborator: -1,
             columns,
             viewProgressModal: {
                 show: false,
                 enableButton: true,
+                objectiveName: '',
+                evaluatedName: '',
+                binnacle: [],
             },
-            data: [
-                {
-                    id: 1,
-                    name: 'Leonardo Juárez',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Silvia Sánchez',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'No iniciado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Validado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
-                {
-                    id: 3,
-                    name: 'Laura Alcántara',
-                    objectives: [
-                        {
-                            key: '1',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Planes de sucesión en Barrientos',
-                                subtitle: 'Entregable: Documento con plan detallado ',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '2',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Portal de Beneficios',
-                                subtitle: 'Entregable: Sitio productivo con la información de beneficios',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '3',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Sistema de Evaluación de Desempeño',
-                                subtitle: 'Entregable: Sistema productivo',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                        {
-                            key: '4',
-                            status: 'Completado',
-                            objective: {
-                                title: 'Plan de formación',
-                                subtitle: 'Entregable: Documento con plan detallado',
-                            },
-                            endDate: '13/07/2018',
-                        },
-                    ],
-                },
-            ],
+            finishObjectiveModal: {
+                show: false,
+                enableButton: true,
+                objectiveId: 0,
+                objectiveName: '',
+                evaluatedName: '',
+                message: '',
+            },
+            data: [],
         };
     },
+    created() {
+        this.getCollaboratorsObjectives();
+    },
     methods: {
-        toggleViewProgressModal() {
+        async openOrValidateObjective(objectiveId, status) {
+            await client3B.objective.updateStatus(
+                {
+                    id: objectiveId,
+                    status: status,
+                },
+            ).catch(error => errorHandler(this, error));
+            let action = (status === 2) ? 'reabierto' : 'validado';
+            this.$message.success('El objetivo se ha '+action+' correctamente');
+        },
+        async addObjetiveMessage(objectiveId, message) {
+            await client3B.binnacle.createMessage(
+                {
+                    evaluationQuestionId: objectiveId,
+                    text: message,
+                },
+            ).catch(error => errorHandler(this, error));
+            this.message = '';
+            this.$message.success('El mensaje se ha guardado correctamente');
+        },
+        async getCollaboratorsObjectives() {
+            this.spin = true;
+            let response = null;
+            try {
+                response = await client3B.dashboard.getSupervisor();
+                const items = response.data.result.collaboratorsObjectivesSummary;
+                // console.log(response.data.result.collaboratorsObjectivesSummary);
+                this.data = [];
+                for (let index = 0; index < items.length; index += 1) {
+                    let objectives = [];
+                    const objectivesAux = items[index].objectivesSummary;
+
+                    for (let jndex = 0; jndex < objectivesAux.length; jndex += 1) {
+                        let binnacle = [];
+                        const binnacleAux = objectivesAux[jndex].binnacle;
+                        for (let hndex = 0; hndex < binnacleAux.length; hndex++) {
+                            binnacle.push({
+                                message: binnacleAux[hndex].text,
+                                username: binnacleAux[hndex].userName,
+                                created: new Date(binnacleAux[hndex].creationTime).toLocaleDateString(),
+                            });
+                        }
+                        objectives.push({
+                            key: jndex + 1,
+                            id: objectivesAux[jndex].id,
+                            name: items[index].collaboratorFullName,
+                            status: this.selectStatusName(objectivesAux[jndex].status),
+                            objective: {
+                                title: objectivesAux[jndex].name,
+                                binnacle,
+                            },
+                            endDate: objectivesAux[jndex].deliveryDate,
+                        });
+                    }
+                    this.data.push({
+                        key: index + 1,
+                        name: items[index].collaboratorFullName,
+                        number: items[index].collaboratorEmployeeNumber,
+                        objectives,
+                        totalPendingObjectives: items[index].totalPendingObjectives,
+                    });
+                }
+            } catch (error) {
+                errorHandler(this, error);
+            }
+            this.spin = false;
+        },
+        async toggleViewProgressModal(input) {
+            console.log('cargando');
+            this.viewProgressModal.evaluatedName = input.name;
+            this.viewProgressModal.binnacle = input.objective.binnacle;
+            this.viewProgressModal.objectiveName = input.objective.title;
             this.viewProgressModal.show = !this.viewProgressModal.show;
         },
+        async toggleFinishObjectiveModal(input) {
+            this.finishObjectiveModal.evaluatedName = input.name;
+            this.finishObjectiveModal.objectiveId = input.id;
+            this.finishObjectiveModal.objectiveName = input.objective.title;
+            this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
+        },
+        async toggleOpenOrValidateObjective(input, status) {
+            if (input) {
+                await this.addObjetiveMessage(
+                    this.finishObjectiveModal.objectiveId,
+                    'Objetivo validado: ' + this.finishObjectiveModal.message
+                ).catch(error => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
+                    .catch(error => errorHandler(this, error));
+                let obj = null;
+                for (let i = 0; i < this.data.length; i++) {
+                    if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
+                        obj = this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                    }
+                }
+                obj.status = this.selectStatusName(4);
+            } else {
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo Reabierto: ' + this.finishObjectiveModal.message)
+                    .catch(error => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2)
+                    .catch(error => errorHandler(this, error));
+                let obj = null;
+                for (let i = 0; i < this.data.length; i++) {
+                    if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
+                        obj = this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                    }
+                }
+                obj.status = this.selectStatusName(2);
+            }
+            this.finishObjectiveModal.show = false;
+            this.finishObjectiveModal.message = '';
+        },
         selectTagColor(status) {
-            if (status === 'No iniciado') {
+            switch (status) {
+            case 'No iniciado':
                 return 'ant-tag-red';
-            }
-            if (status === 'En proceso') {
+            case 'En proceso':
                 return 'ant-tag-yellow';
-            }
-            if (status === 'Completado') {
+            case 'Completado':
                 return 'ant-tag-green';
-            }
-            if (status === 'Validado') {
+            case 'Validado':
                 return 'ant-tag-blue';
+            default:
+                return 'ant-tag-gray';
             }
-            return 'ant-tag-gray';
+        },
+        selectStatusName(status) {
+            switch (status) {
+            case 0:
+                return 'No iniciado';
+            case 1:
+                return 'No iniciado';
+            case 2:
+                return 'En proceso';
+            case 3:
+                return 'Completado';
+            case 4:
+                return 'Validado';
+            default:
+                return 'No iniciado';
+            }
+        },
+        transformStatus(status) {
+            return (status === 'Validado') ? 'Reabrir objetivo' : 'Validar objetivo';
         },
         objectivesCount(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Completado') {
+                if (objective.status === 'Validado') {
                     completed += 1;
                 }
             });
@@ -403,11 +416,14 @@ export default {
         objectivesPercet(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Completado') {
+                if (objective.status === 'Validado') {
                     completed += 1;
                 }
             });
             return (completed * 100) / objectives.length;
+        },
+        collaboratorImgUrl(employeeNumber) {
+            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${employeeNumber}.png`;
         },
     },
 };

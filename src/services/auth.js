@@ -1,3 +1,10 @@
+const ROLES = {
+    ADMINISTRATOR: 'Administrator',
+    SUPERVISOR: 'Supervisor',
+    COLLABORATOR: 'Collaborator',
+};
+
+
 /**
  * Save the auth data into the local storage
  * @param {Object} data Auth data
@@ -43,7 +50,20 @@ function getCurrentRole() {
  */
 function storeUserData(data) {
     localStorage.setItem('user', JSON.stringify(data));
-    setCurrentRole(data.roles[0]);
+    const roles = data.roles.reduce((_obj, item) => {
+        const obj = _obj;
+        obj[item] = true;
+        return obj;
+    }, {});
+    if (ROLES.COLLABORATOR in roles) {
+        setCurrentRole(ROLES.COLLABORATOR);
+    } else if (ROLES.SUPERVISOR in roles) {
+        setCurrentRole(ROLES.SUPERVISOR);
+    } else if (ROLES.Administrator in roles) {
+        setCurrentRole(ROLES.Administrator);
+    } else {
+        setCurrentRole(data.roles[0]);
+    }
 }
 
 /**
@@ -80,14 +100,15 @@ function getAccessToken() {
  * Returns True if the accessToken is not expired
  */
 function validateAccessToken() {
-    const auth = getAuthData();
     const now = new Date();
+    const auth = getAuthData();
 
     if (!auth.expiration) {
         return false;
     }
 
-    if (auth.expiration >= now) {
+    auth.expiration = new Date(auth.expiration);
+    if (auth.expiration <= now) {
         return false;
     }
 
@@ -110,12 +131,6 @@ function removeUserData() {
     localStorage.removeItem('user');
 }
 
-
-const ROLES = {
-    ADMINISTRATOR: 'Administrator',
-    SUPERVISOR: 'Supervisor',
-    COLLABORATOR: 'Collaborator',
-};
 
 export default {
     storeAuthData,

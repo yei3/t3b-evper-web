@@ -1,28 +1,5 @@
 <template>
     <div>
-        <!-- <a-row :gutter="16">
-            <a-col :span="4">
-                <a-input placeholder="Nombre" />
-            </a-col>
-            <a-col :span="5">
-                <a-input placeholder="Area" />
-            </a-col>
-            <a-col :span="3">
-                <a-input placeholder="Evaluador" />
-            </a-col>
-            <a-col :span="3">
-                <a-input placeholder="Evaluado" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Inicio" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Fin" />
-            </a-col>
-            <a-col :span="1">
-                <a-button shape="circle" icon="search" @click="search" />
-            </a-col>
-        </a-row> -->
         <a-row class="collapse-title" style="margin-top: 0px;">
             <a-col :span="12">
                 <h1>Formatos</h1>
@@ -30,16 +7,19 @@
         </a-row>
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
-                <a-spin size="large" />
+                <a-spin tip="Cargando..." size="large" />
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
+            <a-table :columns="columns" :dataSource="data" :pagination=true
+                :scroll="{ x: true }"
+            >
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
                             <a-menu-item>
                                 <a @click="gotToEditForm(record.key)">
+                                    <a-icon type="edit" />
                                     Editar
                                 </a>
                             </a-menu-item>
@@ -51,6 +31,7 @@
                                     cancelText="No"
                                     class="pop-confirm"
                                 >
+                                    <a-icon type="delete" />
                                     Eliminar
                                 </a-popconfirm>
                             </a-menu-item>
@@ -121,7 +102,7 @@ export default {
                     Id: id,
                 });
             } catch (error) {
-                errorHandler(error);
+                errorHandler(this, error);
             }
             await this.search();
         },
@@ -144,7 +125,7 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(this, error);
             }
             this.spin = false;
         },

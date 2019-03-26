@@ -13,16 +13,13 @@
             <a-col :lg="6" :sm="24" style="text-align: center"></a-col>
         </a-row>
         <a-row style="margin-top: 30px;">
-            <a-col :span="24" style="padding: 16px 4px;">
-                <current-objectives />
-            </a-col>
             <a-col :span="24">
-                <collaborator-issues/>
-            </a-col>
-            <a-col :span="24" style="padding: 16px 4px;">
+                <current-objectives />
+            </a-col>            
+            <a-col :span="24">
                 <pending-auto-evaluations />
             </a-col>
-            <a-col :span="24" style="padding: 16px 4px;">
+            <a-col :span="24">
                 <boss-evaluations />
             </a-col>
         </a-row>
@@ -47,6 +44,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+    .dropdown-icon {
+        color: #fff;
+    }
 </style>

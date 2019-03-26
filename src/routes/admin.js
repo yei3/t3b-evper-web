@@ -6,6 +6,9 @@ import CreateFormat from '@/components/admin/formats/layout.vue';
 import Evaluation from '@/components/admin/evaluations/layout.vue';
 import CreateEvaluation from '@/components/admin/evaluations/evaluation.vue';
 import Users from '@/components/admin/users/users.vue';
+import Organigram from '@/components/admin/organization/organigram.vue';
+import Notifications from '@/components/admin/notifications/notifications.vue';
+import EvaluationsHistory from '@/components/admin/evaluationsHistory/evaluationsHistory.vue';
 
 export default [
     {
@@ -40,8 +43,26 @@ export default [
     },
     {
         path: 'admin/users',
-        name: 'users',
+        name: 'admin-users',
         component: Users,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: 'admin/organigram',
+        name: 'admin-organigram',
+        component: Organigram,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: 'admin/notifications',
+        name: 'admin-notifications',
+        component: Notifications,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: 'admin/evaluationsHistory',
+        name: 'admin-evaluationsHistory',
+        component: EvaluationsHistory,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
 ];

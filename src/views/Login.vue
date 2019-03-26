@@ -33,18 +33,14 @@
                             <a-row>
                                 <a-col style="text-align: center;">
                                     <label style="font-size: 30px; font-weight: 900; color: black;">
-                                        Evaluación de Desempeño
+                                        Evaluación de desempeño
                                     </label>
                                     <a-divider />
                                 </a-col>
                             </a-row>
-                            <a-row
-                                type="flex"
-                                justify="center"
-                                align="middle"
-                            >
+                            <a-row type="flex" justify="center" align="middle">
                                 <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
-                                    v-if="!showFormConfirmPassword"
+                                    v-if="!showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
                                         <a-form-item
@@ -82,10 +78,10 @@
                                     </a-form>
                                 </a-col>
                                 <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
-                                    v-else
+                                    v-if="showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
-                                        <a-form-item>
+                                        <a-form-item style="margin: 0px;">
                                             <label for="">
                                                 <h4 style="color: red; margin: 0px;">
                                                     Para continuar actualiza tus datos
@@ -100,6 +96,7 @@
                                                 v-model="user.email"
                                                 class="form-input"
                                                 placeholder="Email de la empresa"
+                                                type="email"
                                             />
                                         </a-form-item>
                                         <a-form-item
@@ -124,7 +121,7 @@
                                                 placeholder="Confirma tu nueva Contraseña"
                                             />
                                         </a-form-item>
-                                        <a-form-item>
+                                        <a-form-item style="margin-bottom: 0px;">
                                             <a-button
                                                 block
                                                 htmlType='submit'
@@ -135,13 +132,66 @@
                                                 Actualizar datos
                                             </a-button>
                                         </a-form-item>
+                                        <a-form-item>
+                                            <a
+                                                style="color: #666; text-decoration: underline;"
+                                                @click="redirectToHome"
+                                            >
+                                                Cancelar
+                                            </a>
+                                        </a-form-item>
+                                    </a-form>
+                                </a-col>
+                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="showRecovPass" >
+                                    <a-form>
+                                        <a-form-item
+                                            hasFeedback
+                                            :validateStatus="errors.length? 'error': ''"
+                                        >
+                                            <a-input
+                                                v-model="user.id"
+                                                class="form-input"
+                                                placeholder="Número de Empleado"
+                                            />
+                                        </a-form-item>
+                                        <a-form-item
+                                            hasFeedback
+                                            :validateStatus="errors.length? 'error': ''"
+                                        >
+                                            <a-input
+                                                type="email"
+                                                v-model="user.email"
+                                                class="form-input"
+                                                placeholder="Correo Eletrónico"
+                                            />
+                                        </a-form-item>
+                                        <a-form-item>
+                                            <a-button
+                                                block
+                                                htmlType='submit'
+                                                class="login-buttom"
+                                                :loading="loading"
+                                                @click="passwordRecovery"
+                                            >
+                                                Enviar correo de recuperación
+                                            </a-button>
+                                        </a-form-item>
                                     </a-form>
                                 </a-col>
                             </a-row>
-                            <a-row v-show="!showFormConfirmPassword">
+                            <a-row v-show="!showFormConfirmPassword && !showRecovPass">
                                 <a-col>
-                                    <a href="#" style="color: #666; text-decoration: underline;">
-                                        ¿Olvidó su número de empleado o contraseña?
+                                    <a @click="showRecovPass = true"
+                                        style="color: #666; text-decoration: underline;">
+                                        ¿Olvidó su contraseña?
+                                    </a>
+                                </a-col>
+                            </a-row>
+                            <a-row v-show="showRecovPass">
+                                <a-col>
+                                    <a @click="showRecovPass = false"
+                                        style="color: #666; text-decoration: underline;">
+                                        Iniciar Sesión
                                     </a>
                                 </a-col>
                             </a-row>
@@ -187,18 +237,18 @@ export default {
                 newPasswordConfirmation: '',
             },
             showFormConfirmPassword: false,
+            showRecovPass: false,
             loading: false,
             errors: [],
+            authData: null,
+            userData: null,
         };
     },
     methods: {
         redirectToHome() {
             this.loading = false;
-            setTimeout(() => {
-                this.$router.push({ name: 'home' });
-            }, 1000);
+            this.$router.go('/');
         },
-
         async login() {
             this.loading = true;
             this.errors = [];
@@ -211,13 +261,18 @@ export default {
             try {
                 response = await client3B.auth.authenticate(auth);
             } catch (error) {
-                this.handleError(error.response.data.error);
+                if (error.response) {
+                    this.handleError(error.response.data.error);
+                } else {
+                    this.handleError(error);
+                }
                 this.loading = false;
                 return;
             }
-            const authData = response.data.result;
-            authService.storeAuthData(authData);
+            this.authData = response.data.result;
 
+            // Neccessary to get the session information
+            authService.storeAuthData(this.authData);
             try {
                 response = await client3B.session.getSession();
             } catch (error) {
@@ -225,21 +280,23 @@ export default {
                 this.loading = false;
                 return;
             }
-
-            const userData = response.data.result.user;
-            userData.roles = response.data.result.roles;
-            authService.storeUserData(userData);
-
-            if (authData.isFirstTimeLogin
-                && userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
+            authService.removeAuthData();
+            this.userData = response.data.result.user;
+            this.userData.roles = response.data.result.roles;
+            if (this.authData.isFirstTimeLogin
+                && this.userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
                 this.showFormConfirmPassword = true;
                 this.loading = false;
                 return;
             }
 
+            this.saveSession();
+        },
+        saveSession() {
+            authService.storeAuthData(this.authData);
+            authService.storeUserData(this.userData);
             this.redirectToHome();
         },
-
         async updatePassword() {
             this.loading = true;
             const update = {
@@ -248,23 +305,46 @@ export default {
                 password: this.user.newPassword,
                 confirmPassword: this.user.newPasswordConfirmation,
             };
-            console.log(update);
-            try {
-                await client3B.account.firstTimeLogin(update);
-            } catch (error) {
-                this.handleError(error.response.data.error);
+            if(this.validatePass(update.password))
+            {
+                authService.storeAuthData(this.authData);
+                try {
+                    await client3B.account.firstTimeLogin(update);
+                } catch (error) {
+                    this.handleError(error.response.data.error);
+                    this.loading = false;
+                    authService.removeAuthData();
+                    return;
+                }
+                this.saveSession();
+            } else {
+                this.$message.error("La contraseña debe tener al menos un número, una mayúscula y un símbolo.")
                 this.loading = false;
-                return;
             }
-            console.log(update);
-            this.redirectToHome();
-        },
 
+            
+        },
+        async passwordRecovery() {
+            this.loading = true;
+            const response = await client3B.user.recoverPassword({
+                employeeNumber: this.user.id,
+                emailAddress: this.user.email,
+            }).catch(error => this.handleError(error));
+            this.loading = false;
+            if (!response) return;
+            this.showRecovPass = false;
+            this.$message.success('Se ha enviado el correo de recuperación');
+        },
+        validatePass(password){
+            var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\d]).{5,}$/;
+            return regex.test(password);
+        },
         handleError(error) {
             const time = 10;
-            console.log(error);
             this.errors = [];
-            if (error.validationErrors) {
+            if (error.response) {
+                this.handleError(error.response.data.error);
+            } if (error.validationErrors) {
                 error.validationErrors.forEach((err) => {
                     this.$message.error(err.message, time);
                     this.errors.push(err.message);

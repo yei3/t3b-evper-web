@@ -2,7 +2,8 @@
     color: #fff;
     font-weight: 600;
     text-shadow: none;
-    font-size: 10px;
+    font-size: 11px;
+    cursor: auto;
 }
 
 .ant-tag-red {
