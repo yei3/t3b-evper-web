@@ -51,10 +51,10 @@
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id, record.status)"
+                        @click="printEvaluation(record)"
                         :disabled="disableButton(record.status)"
                     >
-                        {{transformStatus(action)}}
+                        Imprimir
                     </a-button>
                     <!-- <router-link
                         class="table-link-light"
@@ -143,20 +143,15 @@ export default {
                 this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
             }
         },
+        printEvaluation(input) {
+            let id = input.id;
+            this.$router.push({ name: 'print-assessment', params: { id } });
+        },
         disableButton(status) {
             if (status === 'Validado') {
                 return true;
             }
             return false;
-        },
-        transformStatus(status) {
-            if (status === 'Finalizado') {
-                return 'Ver';
-            }
-            if (status === 'En proceso') {
-                return 'Continuar';
-            }
-            return 'Iniciar';
         },
         selectTagColor(status) {
             switch (status) {
