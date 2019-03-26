@@ -283,7 +283,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getSupervisor();
+                response = await client3B.dashboard.getSupervisorHistory();
                 const items = response.data.result.collaboratorsObjectivesSummary;
                 // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
