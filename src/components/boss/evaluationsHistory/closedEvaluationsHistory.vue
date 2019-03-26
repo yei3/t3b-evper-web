@@ -54,10 +54,10 @@
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record)"
+                        @click="printEvaluation(record)"
                         v-show="!disableButton(record.status, record.autoEvaluation)"
                     >
-                        {{transformStatus(action, record.autoEvaluation)}}
+                        Imprimir
                     </a-button>
                     <a-button
                         size="small"
@@ -235,7 +235,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getSupervisor();
+                response = await client3B.dashboard.getSupervisorHistory();
                 const items = response.data.result.collaboratorsEvaluationSummary;
                 this.data = [];
                 for (let i = 0; i < items.length; i += 1) {
@@ -275,6 +275,10 @@ export default {
             } else {
                 this.$router.push({ name: 'boss-assessments-apply', params: { id } });
             }
+        },
+        printEvaluation(input) {
+            let id = input.id;
+            this.$router.push({ name: 'print-assessment', params: { id } });
         },
         disableButton(status, isAutoEvaluation) {
             return (status === 'Finalizado' && !isAutoEvaluation);
