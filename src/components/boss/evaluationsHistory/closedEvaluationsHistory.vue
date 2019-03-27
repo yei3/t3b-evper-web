@@ -1,7 +1,7 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title-old">
-            <a-col :span="23" class="text-center">
+        <a-row class="collapse-title-old2">
+            <a-col :span="23">
                 Evaluaciones Anteriores
             </a-col>
             <a-col :span="1" style="text-align: right;">

@@ -1,13 +1,10 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
-            <a-col :xs="12" :sm="14" :md="16" :lg="18" class="text-padding">
-                <span>Seguimiento a Objetivos Actuales</span>
+        <a-row class="collapse-title-old">
+            <a-col :span=23>
+                <span>Objetivos Anteriores</span>
             </a-col>
-            <a-col :xs="11" :sm="9" :md="7" :lg="5">
-                <a-progress :percent="objectivesPercet(data)" strokeColor="#1ab394" size="small" />
-                {{objectivesText(data)}}
-            </a-col>
+           
             <a-col :span=1 style="text-align: right;">
                 <a>
                     <a-icon
@@ -359,7 +356,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getCollaborator();
+                response = await client3B.dashboard.getCollaboratorHistory();
                 const items = response.data.result.objectiveSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
@@ -372,7 +369,7 @@ export default {
                             subtitle: 'sin descripción',
                         },
                         evaluable: items[index].isNotEvaluable,
-                        endDate: new Date(items[index].deliveryDate).toLocaleDateString(),
+                        endDate: new Date(items[index].deliveryDate).toLocaleDateString().substring(0, 10),
                     });
                 }
             } catch (error) {
@@ -480,6 +477,13 @@ export default {
             default:
                 return 'error';
             }
+        },
+        formatDate(date) {
+            let res = `${date} `;
+            if (res.length > 10) {
+                res = res.substring(0, 10);
+            }
+            return res;
         },
     },
 };

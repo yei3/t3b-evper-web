@@ -310,7 +310,7 @@ export default {
                                 title: objectivesAux[jndex].name,
                                 binnacle,
                             },
-                            endDate: objectivesAux[jndex].deliveryDate,
+                            endDate: new Date(objectivesAux[jndex].deliveryDate).toLocaleDateString(),
                         });
                     }
                     this.data.push({

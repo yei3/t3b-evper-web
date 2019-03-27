@@ -2,7 +2,7 @@
     <div class="users">
         <a-row class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Historial de mis evaluaciones</h1>
+                <h1 class="breadcrumb-header">Historial</h1>
             </a-col>
         </a-row>
         <div class="collapse-content">
