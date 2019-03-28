@@ -127,7 +127,7 @@ export default {
                     role: authService.ROLES.COLLABORATOR,
                     to: 'collaborator-evaluationsHistory',
                     icon: 'search',
-                    text: 'Historial de evaluaciones',
+                    text: 'Historial',
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
@@ -137,15 +137,15 @@ export default {
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
-                    to: 'boss-closedEvaluationsHistory',
-                    icon: 'search',
-                    text: 'Historial',
-                },
-                {
-                    role: authService.ROLES.SUPERVISOR,
                     to: 'boss-reports',
                     icon: 'line-chart',
                     text: 'Resultados',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-closedEvaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial',
                 },
                 /*
                 {
@@ -191,7 +191,7 @@ export default {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: 'admin-evaluationsHistory',
                     icon: 'search',
-                    text: 'Historial de evaluaciones',
+                    text: 'Historial',
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,

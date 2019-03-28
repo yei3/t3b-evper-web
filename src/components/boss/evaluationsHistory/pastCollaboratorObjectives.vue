@@ -1,7 +1,7 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title-old">
-            <a-col :span="23" class="text-center">
+        <a-row class="collapse-title-old2">
+            <a-col :span="23">
                 Objetivos Anteriores
             </a-col>
             <a-col :span="1" style="text-align: right;">
@@ -310,7 +310,7 @@ export default {
                                 title: objectivesAux[jndex].name,
                                 binnacle,
                             },
-                            endDate: objectivesAux[jndex].deliveryDate,
+                            endDate: new Date(objectivesAux[jndex].deliveryDate).toLocaleDateString(),
                         });
                     }
                     this.data.push({

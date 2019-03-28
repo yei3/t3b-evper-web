@@ -16,7 +16,7 @@
 }
 
 .collapse-title-old {
-    background-color:darkgray;
+    background-color:#f5f5f5;
     font-weight: 600;
     font-size: 14px;
     color:black;
@@ -27,6 +27,22 @@
 }
 
 .collapse-title-old, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
+.collapse-title-old2 {
+    background-color:#cccccc;
+    font-weight: 600;
+    font-size: 14px;
+    color:white;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title-old2, .collapse-content {
     padding: 15px 15px 7px;
     min-width: 640px;
 }

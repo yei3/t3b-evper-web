@@ -1,7 +1,7 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title-old">
-            <a-col :span=23>
+            <a-col :span="23">
                 Evaluaciones Anteriores
             </a-col>
             <a-col :span=1 style="text-align: right; color: #fff;">
@@ -51,10 +51,10 @@
                     <a-button
                         size="small"
                         class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id, record.status)"
+                        @click="printEvaluation(record)"
                         :disabled="disableButton(record.status)"
                     >
-                        {{transformStatus(action)}}
+                        Imprimir
                     </a-button>
                     <!-- <router-link
                         class="table-link-light"
@@ -182,13 +182,17 @@ export default {
                     return 'En proceso';
                 case 2:
                     return 'Finalizado';
-                case 3:
-                    return 'Pte. revisión';
                 case 4:
+                    return 'Pte. revisión';
+                case 3:
                     return 'Cerrada';
                 default:
                     return 'No iniciado';
             }
+        },
+        printEvaluation(input) {
+            let id = input.id;
+            this.$router.push({ name: 'print-assessment', params: { id } });
         },
     },
 };
