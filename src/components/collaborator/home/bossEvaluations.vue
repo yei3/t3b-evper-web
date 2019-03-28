@@ -2,7 +2,7 @@
     <div class="collapse" v-show="data.length > 0 ">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
-                Cierre de mi evaluación
+                Cierre de Evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>

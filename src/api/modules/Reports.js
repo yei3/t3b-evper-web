@@ -83,6 +83,30 @@ class Reports extends Http {
         const path = `${this.entityPath}/GetEvaluationResultDetail`;
         return this.request(path, this.methods.get, {});
     }
+
+    /**
+     * Request for the information for a User Reports by Id
+     * 
+     * @param {Object} data   Id for the user
+     *
+     * @return {Promise}        Http Response
+    **/
+    getCollaboratorReportById(data) {
+    const path = `${this.entityPath}/GetEvaluationCollaboratorResultsById`;
+    return this.request(path, this.methods.get, data);
+    }
+
+    /**
+     * Request for the information for a User Reports by Id
+     * 
+     * @param {Object} data   Id for the user
+     *
+     * @return {Promise}        Http Response
+    **/
+    getCollaboratorObjectivesReportById(data) {
+    const path = `${this.entityPath}/GetCollaboratorObjectivesReportById`;
+    return this.request(path, this.methods.get, data);
+    }
 }
 
 export default Reports;

@@ -18,7 +18,7 @@
                     ]
                 }"
             >
-                <a-tooltip placement="top" title="Recuerda salvar tus comentarios presionando enter al terminar o dando clic en el botón de la derecha.">
+                <a-tooltip placement="top" title="Recuerda dar clic en el disquete para guardar tus comentarios.">
                     <a-input placeholder="Respuesta"
                         v-model="value"
                         :disabled="onlyLecture"

@@ -11,6 +11,14 @@
             <a-col :span="12">
                 <a-row>
                    <a-col  style="text-align: right;">
+                       <a-button
+                            icon="user"
+                            style="border-style: none; cursor: unset;"
+                            class="logout-buttom"
+                            :key="userCurrentRole"
+                        >
+                        {{ userCurrentRole }}
+                        </a-button>
                        <a-button @click="showDrawer">
                             <a-badge :count="countNotif">
                                 <a-icon type="bell" theme="filled" style="font-size: 25px;" />
@@ -59,6 +67,9 @@ import errorHandler from '@/views/errorHandler';
 export default {
     data() {
         return {
+            userCurrentRole: authService.getCurrentRole() === 'Collaborator' ? 'Evaluado' 
+                            : authService.getCurrentRole() === 'Supervisor' ? 'Evaluador' 
+                            : 'Administrador',
             countNotif: 0,
             enableButton: false,
             visible: false,

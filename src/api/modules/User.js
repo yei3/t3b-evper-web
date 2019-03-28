@@ -56,6 +56,16 @@ class User extends Http {
         const path = `${this.entityPath}/GetAllJobDescriptions`;
         return this.request(path, this.methods.get, {});
     }
+
+    /**
+     * Request for the information for All Collaborators
+     *
+     * @return {Promise}        Http Response
+     */
+    getCollaborators() {
+        const path = `${this.entityPath}/GetCollaborators`;
+        return this.request(path, this.methods.get, {});
+    }
 }
 
 export default User;

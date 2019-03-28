@@ -1,8 +1,8 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title-boss">
+        <a-row class="collapse-title-old">
             <a-col :span="23" class="text-center">
-                Seguimiento a Objetivos Actuales
+                Objetivos Anteriores
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -283,7 +283,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getSupervisor();
+                response = await client3B.dashboard.getSupervisorHistory();
                 const items = response.data.result.collaboratorsObjectivesSummary;
                 // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
@@ -343,7 +343,7 @@ export default {
             if (input) {
                 await this.addObjetiveMessage(
                     this.finishObjectiveModal.objectiveId,
-                    'Objetivo validado: ' + this.finishObjectiveModal.message
+                    'Objetivo validado: ' + this.finishObjectiveModal.message,
                 ).catch(error => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
                     .catch(error => errorHandler(this, error));

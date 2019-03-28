@@ -135,6 +135,18 @@ export default {
                     icon: 'home',
                     text: 'Home',
                 },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-closedEvaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-reports',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
                 /*
                 {
                     role: authService.ROLES.SUPERVISOR,
@@ -364,7 +376,6 @@ export default {
 .ant-dropdown-link:hover {
     color: #fff;
     opacity: 0.8;
-    cursor: pointer;
     font-size: 12px;
     text-decoration:none;
 }

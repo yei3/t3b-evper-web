@@ -1,8 +1,8 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title background--title">
+        <a-row class="collapse-title-old">
             <a-col :span=23>
-                Evaluaciones Periodo Actual
+                Evaluaciones Anteriores
             </a-col>
             <a-col :span=1 style="text-align: right; color: #fff;">
 
@@ -116,7 +116,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getCollaborator();
+                response = await client3B.dashboard.getEvaluationsHistory();
                 const items = response.data.result.evaluationSummary;
                 this.data = [];
                 items.forEach((evaluation, index) => {
@@ -167,9 +167,9 @@ export default {
                 case 'Finalizado':
                     return 'ant-tag-green';
                 case 'Pte. revisión':
-                    return 'ant-tag-blue';
-                case 'Cerrada':
                     return 'ant-tag-gray';
+                case 'Cerrada':
+                    return 'ant-tag-blue';
                 default:
                     return 'ant-tag-gray';
             }

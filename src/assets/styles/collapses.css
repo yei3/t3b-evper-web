@@ -4,6 +4,38 @@
     margin-bottom: 35px;
 }
 
+.collapse-title-boss {
+    background-color: #223a52;
+    font-weight: 600;
+    font-size: 14px;
+    color:white;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title-old {
+    background-color:darkgray;
+    font-weight: 600;
+    font-size: 14px;
+    color:black;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title-old, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
+.collapse-title-boss, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
 .collapse-title, .collapse-content {
     padding: 15px 15px 7px;
     min-width: 640px;

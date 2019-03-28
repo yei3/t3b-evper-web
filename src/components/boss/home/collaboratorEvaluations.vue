@@ -1,8 +1,8 @@
 <template>
-    <div class="collapse">
-        <a-row class="collapse-title background--title">
+    <div class="collapse" v-show="data.length > 0 ">
+        <a-row class="collapse-title-boss">
             <a-col :span="23" class="text-center">
-                Cierre de evaluaciones
+                Cierre de Evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
@@ -62,7 +62,7 @@
                         title="Al validar la evaluación, está aceptando que los próximos objetivos son los acordados de la revisión."
                         @confirm="validateEvaluation(record.id)"
                         okText="Sí, validar cierre"
-                        cancelText="No, revisar objetivos"
+                        cancelText="Cancelar"
                     >
                         <a-button
                             size="small"
@@ -278,10 +278,7 @@ export default {
     },
     methods: {
         onSelectDate(value) {
-            let fixedDate = new Date(value._d);
-            // temporary fix for UTC
-            fixedDate.setHours(fixedDate.getHours()-6);
-            this.dateString = fixedDate; // eslint-disable-line
+            this.dateString = value._d;
         },
         async validateEvaluation(evaluationId) {
             this.loading = true;
@@ -296,20 +293,18 @@ export default {
         },
         async scheduleReview(evaluationId) {
             this.loading = true;
-            let date = this.dateString;
             await client3B.evaluation.revision.updateRevisionDate(
                 {
                     evaluationId,
-                    revisionTime: date.toISOString(),
+                    revisionTime: this.dateString.toISOString(),
                 },
             ).catch(error => errorHandler(this, error));
 
-            this.sendReviewNotification(evaluationId, date);
-            // fix hot date string
-            date.setHours(date.getHours()+6);
+            this.sendReviewNotification(evaluationId, this.dateString);
+            // hot date string
             const obj = this.data.find(tmp => tmp.id === evaluationId);            
             obj.reviewDate =
-                date.toLocaleDateString(
+                this.dateString.toLocaleDateString(
                     [],
                     {
                         day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
@@ -339,14 +334,13 @@ export default {
                     this.data.push({
                         key: index + 1,
                         id: evaluation.evaluationId,
-                        // status: this.selectStatusName(evaluation.status),
                         status: this.selectStatusName(evaluation.status),
                         evaluation: {
                             title: evaluation.name,
                             subtitle: evaluation.description,
                         },
                         collaborator: evaluation.collaboratorFullName,
-                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString(
+                        reviewDate: new Date(evaluation.revisionDateTime+'Z').toLocaleDateString(
                             [],
                             {
                                 day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',

@@ -1,9 +1,8 @@
-
 <template>
     <div class="users">
         <a-row class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Historial de mis evaluaciones</h1>
+                <h1 class="breadcrumb-header">Historial de Evaluaciones y Objetivos</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
@@ -19,24 +18,17 @@
         </a-row>
         <div class="collapse-content">
             <div>
-                <a-row class="steps">
-                    <span class="breadcrumb-header" style="font-weight: 120;">
-                        Historial de mis evaluaciones
-                    </span>
-
+                <a-row style="margin-top: 30px;">
+                    <a-col :span="24">
+                        <history-objectives/>
+                    </a-col>
                 </a-row>
-                <a-divider />
-
             </div>
-
-            <!-- Edit form -->
             <div>
                 <a-row style="margin-top: 30px;">
-
                     <a-col :span="24">
-                        <pending-evaluations />
+                        <closed-evaluations/>
                     </a-col>
-
                 </a-row>
             </div>
         </div>
@@ -47,13 +39,15 @@
 import client3B from '@/api/client3B';
 import { mapActions, mapGetters } from 'vuex';
 import Footer from '@/components/layout/Footer.vue';
-import pendingEvaluations from '@/components/collaborator/evaluationsHistory/autoEvaluationsHistory.vue';
+import closedEvaluations from '@/components/boss/evaluationsHistory/closedEvaluationsHistory.vue';
+import historyObjectives from '@/components/boss/evaluationsHistory/pastCollaboratorObjectives.vue';
 import errorHandler from '@/views/errorHandler';
 
 export default {
     components: {
         Footer,
-        pendingEvaluations,
+        closedEvaluations,
+        historyObjectives,
     },
     beforeCreate () {
         this.form = this.$form.createForm(this)
