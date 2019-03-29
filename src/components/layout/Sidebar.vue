@@ -130,6 +130,12 @@ export default {
                     text: 'Historial',
                 },
                 {
+                    role: authService.ROLES.COLLABORATOR,
+                    to: 'collaborator-help',
+                    icon: 'question',
+                    text: 'Ayuda',
+                },
+                {
                     role: authService.ROLES.SUPERVISOR,
                     to: 'boss-home',
                     icon: 'home',
