@@ -82,6 +82,17 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Publish_SendValidateEvaluationNotification`;
         return this.request(path, this.methods.post, data);
     }
+
+    /**
+     * Request for send notifications to multple users
+     * @param {Object} data
+     *
+     * @return {Promise}        Http Response
+     */
+    publishGeneralMessageToAdminMail(data) {
+        const path = `${this.entityPath}/Publish_SentGeneralMessageToAdminMail`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default Dashboard;
