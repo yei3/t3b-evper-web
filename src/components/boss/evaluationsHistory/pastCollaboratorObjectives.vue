@@ -79,16 +79,6 @@
                                     <a-menu-item key="1" @click="toggleViewProgressModal(record)">
                                         Ver avances
                                     </a-menu-item>
-                                    <a-menu-divider />
-                                    <a-menu-item
-                                        key="2"
-                                        :disabled="
-                                            record.status === 'En proceso' ||
-                                            record.status === 'No iniciado'"
-                                        @click="toggleFinishObjectiveModal(record)"
-                                    >
-                                        {{transformStatus(record.status)}}
-                                    </a-menu-item>
                                 </a-menu>
                                 <a-button class="ant-btn-small">
                                     ...
