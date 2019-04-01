@@ -3,7 +3,7 @@
     <div class="users">
         <a-row class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Historial de mis evaluaciones</h1>
+                <h1 class="breadcrumb-header">Historial</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
@@ -21,7 +21,28 @@
             <div>
                 <a-row class="steps">
                     <span class="breadcrumb-header" style="font-weight: 120;">
-                        Historial de mis evaluaciones
+                        Objetivos
+                    </span>
+
+                </a-row>
+                <a-divider />
+
+            </div>
+
+            <!-- Edit form -->
+            <div>
+                <a-row style="margin-top: 30px;">
+
+                    <a-col :span="24">
+                        <objectives-history />
+                    </a-col>
+
+                </a-row>
+            </div>
+            <div>
+                <a-row class="steps">
+                    <span class="breadcrumb-header" style="font-weight: 120;">
+                        Evaluaciones
                     </span>
 
                 </a-row>
@@ -48,12 +69,14 @@ import client3B from '@/api/client3B';
 import { mapActions, mapGetters } from 'vuex';
 import Footer from '@/components/layout/Footer.vue';
 import pendingEvaluations from '@/components/collaborator/evaluationsHistory/autoEvaluationsHistory.vue';
+import objectivesHistory from '@/components/collaborator/evaluationsHistory/objectivesHistory.vue';
 import errorHandler from '@/views/errorHandler';
 
 export default {
     components: {
         Footer,
         pendingEvaluations,
+        objectivesHistory,
     },
     beforeCreate () {
         this.form = this.$form.createForm(this)

@@ -4,6 +4,7 @@ import performanceEvaluations from '@/components/collaborator/performanceEvaluat
 import performanceEvaluation from '@/components/collaborator/performanceEvaluation/layout.vue';
 import applyPerformanceEvaluations from '@/components/collaborator/applyPerformanceEvaluations/layout.vue';
 import evaluationsHistory from '@/components/collaborator/evaluationsHistory/evaluationsHistory.vue';
+import help from '@/components/collaborator/help/layout.vue';
 import beforeEnter from '@/routes/guards/globals';
 import authService from '@/services/auth';
 
@@ -42,6 +43,12 @@ export default [
         path: 'collaborator/evaluationsHistory',
         name: 'collaborator-evaluationsHistory',
         component: evaluationsHistory,
+        beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
+    },
+    {
+        path: 'collaborator/help',
+        name: 'collaborator-help',
+        component: help,
         beforeEnter: beforeEnter(authService.ROLES.COLLABORATOR),
     },
 ];
