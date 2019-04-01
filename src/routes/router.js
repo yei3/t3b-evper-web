@@ -29,6 +29,8 @@ export default new Router({
                     name: 'home',
                     beforeEnter: (to, from, next) => {
                         if (!authService.validateAccessToken()) {
+                            authService.removeAuthData();
+                            authService.removeUserData();
                             return next({ name: 'login' });
                         }
                         // Validate that the role for the user and redirect
@@ -81,7 +83,6 @@ export default new Router({
                     },
                 },
             ],
-            
         },
         {
             path: '/profile',
