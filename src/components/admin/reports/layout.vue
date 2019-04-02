@@ -35,16 +35,24 @@
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región: </h5>
-                        <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
-                            <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                        <a-select style="width: 100%" v-model="left.region"
+                            @change="left.area = null"
+                        >
+                            <a-select-option v-for="region in regions" :key="region.id"
+                                :value="region.id"
+                            >
                                 {{region.displayName}}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área: </h5>
-                        <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
-                            <a-select-option :value="area.id" v-for="area in leftAreas" :key="area.id">
+                        <a-select style="width: 100%" v-model="left.area"
+                            @change="left.person = null"
+                        >
+                            <a-select-option v-for="area in leftAreas" :key="area.id"
+                                :value="area.id"
+                            >
                                 {{area.displayName}}
                             </a-select-option>
                         </a-select>
@@ -83,16 +91,24 @@
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región: </h5>
-                        <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
-                            <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                        <a-select style="width: 100%" v-model="right.region"
+                            @change="right.area = null"
+                        >
+                            <a-select-option v-for="region in regions" :key="region.id"
+                                :value="region.id"
+                            >
                                 {{region.displayName}}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área: </h5>
-                        <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
-                            <a-select-option :value="area.id" v-for="area in rightAreas" :key="area.id">
+                        <a-select style="width: 100%" v-model="right.area"
+                            @change="right.person = null"
+                        >
+                            <a-select-option v-for="area in rightAreas" :key="area.id"
+                                :value="area.id"
+                            >
                                 {{area.displayName}}
                             </a-select-option>
                         </a-select>
@@ -130,7 +146,7 @@
                 </a-col>
                 <a-col :md="24" style="text-align: center; padding-top: 20px;">
                     <a-alert v-show="bannerError" banner closable
-                        message="Ningún campo debe estar vacio"
+                        :message="bannerError"
                     />
                     <br/>
                     <a-button type="primary" @click="getReport"
@@ -176,7 +192,7 @@ export default {
     },
     data() {
         return {
-            bannerError: false,
+            bannerError: null,
             loading: false,
             regions: [],
             areas: [],
@@ -232,20 +248,23 @@ export default {
                 .catch(error => errorHandler(this, error));
             this.areas = response.data.result;
 
-            response = await client3B.organizationUnit.getOrganigram().catch(error => errorHandler(this, error));
+            response = await client3B.organizationUnit.getOrganigram()
+                .catch(error => errorHandler(this, error));
             this.organigram = response.data.result;
         },
         filterOption(input, option) {
-            return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+            return option.componentOptions.children[0].text.toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0;
         },
         async getReport() {
-            this.bannerError = false;
-            if (this.left.region === null || this.right.region === null ||
-                this.left.person === null || this.right.person === null ||
-                this.left.start === undefined || this.right.start === undefined ||
-                this.left.end === undefined || this.right.end === undefined ||
-                this.left.person === null || this.right.person === null) {
-                this.bannerError = true;
+            this.bannerError = null;
+            if (this.left.region === null || this.right.region === null) {
+                this.bannerError = 'Al menos una región debe ser seleccionada';
+                return;
+            }
+            if (this.left.start === undefined || this.right.start === undefined
+                || this.left.end === undefined || this.right.end === undefined) {
+                this.bannerError = 'Selecciona un rango de fechas correcto';
                 return;
             }
             let response = await client3B.report.getAdminReport({
@@ -320,12 +339,14 @@ export default {
         },
         leftPeople() {
             if (!this.left.area) return [];
-            const area = this.organigram.find(org => org.parentId !== null && org.id === this.left.area);
+            const area = this.organigram
+                .find(org => org.parentId !== null && org.id === this.left.area);
             return area.organizationUnitUsers;
         },
         rightPeople() {
             if (!this.right.area) return [];
-            const area = this.organigram.find(org => org.parentId !== null && org.id === this.right.area);
+            const area = this.organigram
+                .find(org => org.parentId !== null && org.id === this.right.area);
             return area.organizationUnitUsers;
         },
     },
