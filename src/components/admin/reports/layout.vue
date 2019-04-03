@@ -268,19 +268,19 @@ export default {
                 return;
             }
             let response = await client3B.report.getAdminReport({
-                OrganizationUnitId: this.left.region,
+                OrganizationUnitId: [this.left.region],
                 JobDescription: this.left.person,
-                StarTime: this.left.start,
-                EndDateTime: this.left.end,
+                StarTime: this.left.start.toISOString(),
+                EndDateTime: this.left.end.toISOString(),
                 UserId: this.left.person,
             }).catch(error => errorHandler(this, error));
             const leftReport = response.data.result;
 
             response = await client3B.report.getAdminReport({
-                OrganizationUnitId: this.right.region,
+                OrganizationUnitId: [this.right.region],
                 JobDescription: this.right.person,
-                StarTime: this.right.start,
-                EndDateTime: this.right.end,
+                StarTime: this.right.start.toISOString(),
+                EndDateTime: this.right.end.toISOString(),
                 UserId: this.right.person,
             }).catch(error => errorHandler(this, error));
             const rightReport = response.data.result;
