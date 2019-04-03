@@ -55,24 +55,9 @@
                     <a-dropdown >
                         <a-menu slot="overlay">
                             <a-menu-item
-                                key="1"
-                                :disabled="record.status === 'Completado'"
-                                @click="toggleRecordProgressModal(record)">
-                                Registrar avances
-                            </a-menu-item>
-                            <a-menu-item
                                 key="2"
                                 @click="toggleViewProgressModal(record)">
                                 Ver avances
-                            </a-menu-item>
-                            <a-menu-divider />
-                            <a-menu-item
-                                key="3"
-                                :disabled="record.status === 'Completado' ||
-                                           record.status === 'No iniciado' ||
-                                           record.status === 'Validado'"
-                                @click="toggleFinishObjectiveModal(record)">
-                                Completar objetivo
                             </a-menu-item>
                         </a-menu>
                         <a-button class="ant-btn-small">
