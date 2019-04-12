@@ -35,7 +35,7 @@
                 <br>
                 <b>Tiempo en el puesto: </b>
                 <span style="font-weight: normal">
-                    {{ formatDate(reassignDate) }}
+                    {{ getDiffDates(formatDate(entryDate)) }}
                 </span>
                 <br>
                 <b>Fecha de ingreso: </b>
@@ -462,6 +462,17 @@ export default {
                 res = res.substring(0, 10);
             }
             return res;
+        },
+        getDiffDates(date) {
+            console.log(`la fecha inicial es ${date}`);
+            const fecha1 = new Date(date);
+            const fecha2 = new Date();
+            const resta = fecha2.getTime() - fecha1.getTime();
+            const res = Math.round(resta / (1000 * 60 * 60 * 24));
+            if(res < 30) {
+                return `${res} días.`; 
+            }
+            return `${(res / 30).toFixed(2)} meses`;
         },
         async fetchEvaluation() {
             this.spin = true;
