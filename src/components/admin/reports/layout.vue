@@ -267,8 +267,10 @@ export default {
                 this.bannerError = 'Selecciona un rango de fechas correcto';
                 return;
             }
+            let OrganizationUnitId = [this.left.region];
+            if (this.left.area) OrganizationUnitId.push(this.left.area);
             let response = await client3B.report.getAdminReport({
-                OrganizationUnitId: [this.left.region],
+                OrganizationUnitId,
                 JobDescription: this.left.person,
                 StarTime: this.left.start.toISOString(),
                 EndDateTime: this.left.end.toISOString(),
@@ -276,8 +278,10 @@ export default {
             }).catch(error => errorHandler(this, error));
             const leftReport = response.data.result;
 
+            OrganizationUnitId = [this.right.region];
+            if (this.right.area) OrganizationUnitId.push(this.right.area);
             response = await client3B.report.getAdminReport({
-                OrganizationUnitId: [this.right.region],
+                OrganizationUnitId,
                 JobDescription: this.right.person,
                 StarTime: this.right.start.toISOString(),
                 EndDateTime: this.right.end.toISOString(),
