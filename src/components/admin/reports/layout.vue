@@ -166,13 +166,13 @@
             <a-row>
                 <a-col :sm="24" :md="12">
                     <bar-chart v-if="leftChartData"
-                        :chartdata="leftChartData"
+                        :chartData="leftChartData"
                         :options="barOptions"
                     />
                 </a-col>
                 <a-col :sm="24" :md="12">
                     <bar-chart v-if="rightChartData"
-                        :chartdata="rightChartData"
+                        :chartData="rightChartData"
                         :options="barOptions"
                     />
                 </a-col>
@@ -257,14 +257,17 @@ export default {
                 .indexOf(input.toLowerCase()) >= 0;
         },
         async getReport() {
+            this.loading = true;
             this.bannerError = null;
             if (this.left.region === null || this.right.region === null) {
                 this.bannerError = 'Al menos una región debe ser seleccionada';
+                this.loading = false;
                 return;
             }
             if (this.left.start === undefined || this.right.start === undefined
                 || this.left.end === undefined || this.right.end === undefined) {
                 this.bannerError = 'Selecciona un rango de fechas correcto';
+                this.loading = false;
                 return;
             }
             let AreaId = 0;
@@ -334,6 +337,8 @@ export default {
                     },
                 ],
             };
+
+            this.loading = false;
         },
     },
     computed: {
