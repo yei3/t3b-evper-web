@@ -302,12 +302,12 @@ export default {
                         backgroundColor: '#e94e6f',
                     },
                     {
-                        label: 'Satisfactorio',
+                        label: 'Cumple Requerimiento',
                         data: leftReport.map(item => item.satisfactory),
                         backgroundColor: '#498bc9',
                     },
                     {
-                        label: 'Excede',
+                        label: 'Excede Requerimiento',
                         data: leftReport.map(item => item.exceeds),
                         backgroundColor: '#2eaa79',
                     },
