@@ -1,20 +1,34 @@
 <template>
-    <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
-            <a-col :h2="24">
-                <h1 class="breadcrumb-header">Resultados de Evaluación | Análisis Comparativo</h1>
-            </a-col>
-            <a-col :h2="24">
-                <a-breadcrumb>
-                    <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-reports' }"
-                            class="breadcrumb-path"
-                        >
-                            Resultados
-                        </router-link>
-                    </a-breadcrumb-item>
-                </a-breadcrumb>
-            </a-col>
+    <div id="printReport">
+        <a-row class="breadcrumb-wrapper">
+            <a-row :gutter="32">
+                <a-col :h2="24">
+                    <h1 class="breadcrumb-header">
+                        Resultados de Evaluación | Análisis Comparativo
+                    </h1>
+                </a-col>
+            </a-row>
+            <a-row :gutter="32">
+                <a-col :span="21">
+                    <a-breadcrumb>
+                        <a-breadcrumb-item>
+                            <router-link :to="{ name: 'admin-reports' }"
+                                class="breadcrumb-path"
+                            >
+                                Resultados
+                            </router-link>
+                        </a-breadcrumb-item>
+                    </a-breadcrumb>
+                </a-col>
+                <a-col :span="3">
+                    <a-button class="btn-blue"
+                        @click="print"
+                    >
+                        <a-icon type="printer" />
+                        Imprimir
+                    </a-button>
+                </a-col>
+            </a-row>
         </a-row>
         <div class="collapse-content"
             style="background-color: white;
@@ -159,9 +173,9 @@
             </a-row>
         </div>
 
-        <div class="collapse-content"
-            style="background-color: white;
-            margin: 30px 30px;"
+        <div
+            class="collapse-content"
+            style="background-color: white; margin: 30px 30px;"
         >
             <a-row>
                 <a-col :sm="24" :md="12">
@@ -182,11 +196,13 @@
 </template>
 
 <script>
-import BarChart from '@/components/charts/horizontalBar.vue';
 import client3B from '@/api/client3B';
+import print from '@/modules/mixin/print';
 import errorHandler from '@/views/errorHandler';
+import BarChart from '@/components/charts/horizontalBar.vue';
 
 export default {
+    mixins: [print],
     components: {
         BarChart,
     },
@@ -239,6 +255,10 @@ export default {
         this.init();
     },
     methods: {
+        print() {
+            // Pass the element id here
+            this.$printHtml('printReport');
+        },
         async init() {
             let response = await client3B.organizationUnit.getAllRegions()
                 .catch(error => errorHandler(this, error));
