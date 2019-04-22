@@ -35,7 +35,7 @@
                 <br>
                 <b>Tiempo en el puesto: </b>
                 <span style="font-weight: normal">
-                    {{ getDiffDates(formatDate(entryDate)) }}
+                    {{ getDiffDates(formatDate(entryDate), formatDate(reassignDate)) }}
                 </span>
                 <br>
                 <b>Fecha de ingreso: </b>
@@ -463,16 +463,20 @@ export default {
             }
             return res;
         },
-        getDiffDates(date) {
-            console.log(`la fecha inicial es ${date}`);
-            const fecha1 = new Date(date);
-            const fecha2 = new Date();
-            const resta = fecha2.getTime() - fecha1.getTime();
-            const res = Math.round(resta / (1000 * 60 * 60 * 24));
-            if(res < 30) {
-                return `${res} días.`; 
+        getDiffDates(entry, reassign) {
+            const fecha1 = new Date(entry);
+            let fecha2 = new Date();
+            if (reassign == '0001-01-01') {
+                fecha2 = fecha1;
+            } else {
+                fecha2 = new Date(reassign);
             }
-            return `${(res / 30).toFixed(2)} meses`;
+            const resta = new Date().getTime() - fecha2.getTime();
+            const dias = Math.round(resta / (1000 * 60 * 60 * 24));
+            const anios = dias / 365;
+            const meses = ((dias - (Math.trunc(anios) * 365)) / 30.4);
+            const numDias = dias - (Math.trunc(anios) * 365) - (Math.trunc(meses) * 30.4); 
+            return Math.floor(anios) + " años " + Math.floor(meses) + " meses " + numDias.toFixed(0) + " días."
         },
         async fetchEvaluation() {
             this.spin = true;
