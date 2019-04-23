@@ -34,9 +34,9 @@ class Reports extends Http {
      *
      * @return {Promise}        Http Response
      */
-    getCollaboratorCompetencesReport() {
+    getCollaboratorCompetencesReport(period) {
         const path = `${this.entityPath}/GetCollaboratorCompetencesReport`;
-        return this.request(path, this.methods.get, {});
+        return this.request(path, this.methods.get, { period });
     }
 
     /*
