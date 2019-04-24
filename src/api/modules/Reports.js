@@ -34,41 +34,6 @@ class Reports extends Http {
      *
      * @return {Promise}        Http Response
      */
-    getCollaboratorCompetencesReport(period) {
-        const path = `${this.entityPath}/GetCollaboratorCompetencesReport`;
-        return this.request(path, this.methods.get, { period });
-    }
-
-    /*
-     * Request for the information for a User Reports
-     *
-     * @return {Promise}        Http Response
-     */
-    GetCollaboratorEvaluationComparision(
-        currentTemplateId,
-        currentTerm,
-        currrentDays,
-        beforeTemplateId,
-        beforeTerm,
-        beforeDays,
-    ) {
-        const path = `${this.entityPath}/GetCollaboratorEvaluationComparision`;
-        const params = {
-            LeftEvaluationTemplateId: currentTemplateId,
-            LeftEvaluationTerm: currentTerm,
-            LeftEvaluationDayOfYear: currrentDays,
-            RightEvaluationTemplateId: beforeTemplateId,
-            RightEvaluationTerm: beforeTerm,
-            RightEvaluationYear: beforeDays,
-        };
-        return this.request(path, this.methods.get, params);
-    }
-
-    /*
-     * Request for the information for a User Reports
-     *
-     * @return {Promise}        Http Response
-     */
     getSupervisorReports() {
         const path = `${this.entityPath}/GetEvaluationResults`;
         return this.request(path, this.methods.get, {});
@@ -105,6 +70,11 @@ class Reports extends Http {
      */
     getCollaboratorObjectivesReportById(data) {
         const path = `${this.entityPath}/GetCollaboratorObjectivesReportById`;
+        return this.request(path, this.methods.get, data);
+    }
+
+    getAdminObjectivesReport(data) {
+        const path = `${this.entityPath}/GetAdministratorObjectivesReport`;
         return this.request(path, this.methods.get, data);
     }
 
