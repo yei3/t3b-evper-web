@@ -204,7 +204,7 @@
                         align="middle"
                     >
                         <a-col :span="17">
-                            <small> Tiendas 3B © 2018 </small>
+                            <small> Tiendas 3B © 2019 </small>
                         </a-col>
                         <a-col style="text-align: rigth;">
                             <a href="" style="color: #666;">

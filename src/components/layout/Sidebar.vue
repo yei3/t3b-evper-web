@@ -102,6 +102,7 @@
 
 <script>
 import authService from '@/services/auth';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'Sidebar',
@@ -248,6 +249,7 @@ export default {
         setCurrentRole(role) {
             authService.setCurrentRole(role);
             this.userCurrentRole = role;
+            this.$store.state.userProfile = this.roleToEs(role);
             this.$router.push({ name: 'home' });
         },
         logout() {

@@ -15,9 +15,8 @@
                             icon="user"
                             style="border-style: none; cursor: unset;"
                             class="logout-buttom"
-                            :key="userCurrentRole"
                         >
-                        {{ userCurrentRole }}
+                        {{ userProfile }}
                         </a-button>
                        <a-button @click="showDrawer">
                             <a-badge :count="countNotif">
@@ -67,9 +66,6 @@ import errorHandler from '@/views/errorHandler';
 export default {
     data() {
         return {
-            userCurrentRole: authService.getCurrentRole() === 'Collaborator' ? 'Evaluado' 
-                            : authService.getCurrentRole() === 'Supervisor' ? 'Evaluador' 
-                            : 'Administrador',
             countNotif: 0,
             enableButton: false,
             visible: false,
@@ -126,6 +122,7 @@ export default {
     computed: {
         ...mapGetters({
             sidebarCollapsed: 'sidebarCollapsed',
+            userProfile: 'userProfile',
         }),
     },
 };
