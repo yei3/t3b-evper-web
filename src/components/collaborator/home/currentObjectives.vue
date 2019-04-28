@@ -78,7 +78,7 @@
                                 Completar objetivo
                             </a-menu-item>
                         </a-menu>
-                        <a-button class="ant-btn-small">
+                        <a-button class="ant-btn-small" v-show="record.evaluable">
                             ...
                         </a-button>
                     </a-dropdown>
