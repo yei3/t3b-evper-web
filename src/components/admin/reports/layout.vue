@@ -226,10 +226,7 @@ import client3B from '@/api/client3B';
 import print from '@/modules/mixin/print';
 import errorHandler from '@/views/errorHandler';
 import BarChart from '@/components/charts/horizontalBar.vue';
-<<<<<<< HEAD
-=======
 import DoughnutChart from '@/components/charts/doughnut.vue';
->>>>>>> develop
 
 export default {
     mixins: [print],
