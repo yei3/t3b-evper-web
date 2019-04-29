@@ -1,29 +1,26 @@
 const ROLES = {
-    ADMINISTRATOR: 'Administrator',
-    SUPERVISOR: 'Supervisor',
-    COLLABORATOR: 'Collaborator',
+  ADMINISTRATOR: "Administrator",
+  SUPERVISOR: "Supervisor",
+  COLLABORATOR: "Collaborator"
 };
-
 
 /**
  * Save the auth data into the local storage
  * @param {Object} data Auth data
  */
 function storeAuthData(data) {
-    const {
-        accessToken,
-        expireInSeconds,
-        userId,
-        isFirstTimeLongin,
-    } = data;
-    const expiration = new Date();
-    expiration.setUTCSeconds(expiration.getUTCSeconds() + expireInSeconds);
-    localStorage.setItem('auth', JSON.stringify({
-        userId,
-        accessToken,
-        expiration,
-        isFirstTimeLongin,
-    }));
+  const { accessToken, expireInSeconds, userId, isFirstTimeLongin } = data;
+  const expiration = new Date();
+  expiration.setUTCSeconds(expiration.getUTCSeconds() + expireInSeconds);
+  localStorage.setItem(
+    "auth",
+    JSON.stringify({
+      userId,
+      accessToken,
+      expiration,
+      isFirstTimeLongin
+    })
+  );
 }
 
 /**
@@ -31,7 +28,7 @@ function storeAuthData(data) {
  * @param {String} role
  */
 function setCurrentRole(role) {
-    localStorage.setItem('user_role', role);
+  localStorage.setItem("user_role", role);
 }
 
 /**
@@ -40,7 +37,7 @@ function setCurrentRole(role) {
  * @returns {String} User role
  */
 function getCurrentRole() {
-    return localStorage.getItem('user_role');
+  return localStorage.getItem("user_role");
 }
 
 /**
@@ -49,21 +46,21 @@ function getCurrentRole() {
  * @param {Object} data User information
  */
 function storeUserData(data) {
-    localStorage.setItem('user', JSON.stringify(data));
-    const roles = data.roles.reduce((_obj, item) => {
-        const obj = _obj;
-        obj[item] = true;
-        return obj;
-    }, {});
-    if (ROLES.COLLABORATOR in roles) {
-        setCurrentRole(ROLES.COLLABORATOR);
-    } else if (ROLES.SUPERVISOR in roles) {
-        setCurrentRole(ROLES.SUPERVISOR);
-    } else if (ROLES.Administrator in roles) {
-        setCurrentRole(ROLES.Administrator);
-    } else {
-        setCurrentRole(data.roles[0]);
-    }
+  localStorage.setItem("user", JSON.stringify(data));
+  const roles = data.roles.reduce((_obj, item) => {
+    const obj = _obj;
+    obj[item] = true;
+    return obj;
+  }, {});
+  if (ROLES.COLLABORATOR in roles) {
+    setCurrentRole(ROLES.COLLABORATOR);
+  } else if (ROLES.SUPERVISOR in roles) {
+    setCurrentRole(ROLES.SUPERVISOR);
+  } else if (ROLES.Administrator in roles) {
+    setCurrentRole(ROLES.Administrator);
+  } else {
+    setCurrentRole(data.roles[0]);
+  }
 }
 
 /**
@@ -72,7 +69,7 @@ function storeUserData(data) {
 3 * @returns {Object} User data
  */
 function getUserData() {
-    return JSON.parse(localStorage.getItem('user') || '{}');
+  return JSON.parse(localStorage.getItem("user") || "{}");
 }
 
 /**
@@ -81,9 +78,8 @@ function getUserData() {
  * @returns {Object} Authentication data
  */
 function getAuthData() {
-    return JSON.parse(localStorage.getItem('auth') || '{}');
+  return JSON.parse(localStorage.getItem("auth") || "{}");
 }
-
 
 /**
  * Returns the accessToken
@@ -91,57 +87,53 @@ function getAuthData() {
  * @returns {String} accessToken
  */
 function getAccessToken() {
-    const auth = getAuthData();
-    return auth.accessToken;
+  const auth = getAuthData();
+  return auth.accessToken;
 }
-
 
 /**
  * Returns True if the accessToken is not expired
  */
 function validateAccessToken() {
-    const now = new Date();
-    const auth = getAuthData();
+  const now = new Date();
+  const auth = getAuthData();
 
-    if (!auth.expiration) {
-        return false;
-    }
+  if (!auth.expiration) {
+    return false;
+  }
 
-    auth.expiration = new Date(auth.expiration);
-    if (auth.expiration <= now) {
-        return false;
-    }
+  auth.expiration = new Date(auth.expiration);
+  if (auth.expiration <= now) {
+    return false;
+  }
 
-    return true;
+  return true;
 }
-
 
 /**
  * Remove the auth information
  */
 function removeAuthData() {
-    localStorage.removeItem('auth');
+  localStorage.removeItem("auth");
 }
-
 
 /**
  * Remove the user information
  */
 function removeUserData() {
-    localStorage.removeItem('user');
+  localStorage.removeItem("user");
 }
 
-
 export default {
-    storeAuthData,
-    storeUserData,
-    getAuthData,
-    getUserData,
-    removeAuthData,
-    removeUserData,
-    validateAccessToken,
-    getAccessToken,
-    setCurrentRole,
-    getCurrentRole,
-    ROLES,
+  storeAuthData,
+  storeUserData,
+  getAuthData,
+  getUserData,
+  removeAuthData,
+  removeUserData,
+  validateAccessToken,
+  getAccessToken,
+  setCurrentRole,
+  getCurrentRole,
+  ROLES
 };
