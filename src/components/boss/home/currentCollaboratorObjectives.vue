@@ -90,7 +90,7 @@
                                         {{transformStatus(record.status)}}
                                     </a-menu-item>
                                 </a-menu>
-                                <a-button class="ant-btn-small">
+                                <a-button class="ant-btn-small" v-show="record.evaluable">
                                     ...
                                 </a-button>
                             </a-dropdown>
@@ -306,11 +306,12 @@ export default {
                             id: objectivesAux[jndex].id,
                             name: items[index].collaboratorFullName,
                             status: this.selectStatusName(objectivesAux[jndex].status),
+                            evaluable: objectivesAux[jndex].isNotEvaluable,
                             objective: {
                                 title: objectivesAux[jndex].name,
                                 binnacle,
                             },
-                            endDate: objectivesAux[jndex].deliveryDate,
+                            endDate: new Date(objectivesAux[jndex].deliveryDate).toLocaleDateString(),
                         });
                     }
                     this.data.push({

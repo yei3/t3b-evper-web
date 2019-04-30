@@ -1,7 +1,7 @@
 <template>
     <div class="collapse">
-        <a-row class="collapse-title-old">
-            <a-col :span="23" class="text-center">
+        <a-row class="collapse-title-old2">
+            <a-col :span="23">
                 Objetivos Anteriores
             </a-col>
             <a-col :span="1" style="text-align: right;">
@@ -78,16 +78,6 @@
                                 <a-menu slot="overlay">
                                     <a-menu-item key="1" @click="toggleViewProgressModal(record)">
                                         Ver avances
-                                    </a-menu-item>
-                                    <a-menu-divider />
-                                    <a-menu-item
-                                        key="2"
-                                        :disabled="
-                                            record.status === 'En proceso' ||
-                                            record.status === 'No iniciado'"
-                                        @click="toggleFinishObjectiveModal(record)"
-                                    >
-                                        {{transformStatus(record.status)}}
                                     </a-menu-item>
                                 </a-menu>
                                 <a-button class="ant-btn-small">
@@ -283,7 +273,7 @@ export default {
             this.spin = true;
             let response = null;
             try {
-                response = await client3B.dashboard.getSupervisor();
+                response = await client3B.dashboard.getSupervisorHistory();
                 const items = response.data.result.collaboratorsObjectivesSummary;
                 // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
@@ -310,7 +300,7 @@ export default {
                                 title: objectivesAux[jndex].name,
                                 binnacle,
                             },
-                            endDate: objectivesAux[jndex].deliveryDate,
+                            endDate: new Date(objectivesAux[jndex].deliveryDate).toLocaleDateString(),
                         });
                     }
                     this.data.push({

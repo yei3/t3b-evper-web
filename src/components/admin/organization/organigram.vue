@@ -2,12 +2,12 @@
     <div>
         <a-row :gutter="32"  class="breadcrumb-wrapper">
             <a-col :h2="24">
-                <h1 class="breadcrumb-header">Crear Formato</h1>
+                <h1 class="breadcrumb-header">Organigrama</h1>
             </a-col>
             <a-col :h2="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-home' }"
+                        <router-link :to="{ name: 'admin-organigram' }"
                             class="breadcrumb-path"
                         >
                             Organigrama
@@ -18,14 +18,8 @@
         </a-row>
         <div class="collapse-content"
             style="background-color: white;
-            margin: 30px 30px;"
+            margin: 30px 30px; padding-top: 40px;"
         >
-            <a-row>
-                <a-col span="24">
-                    <h1>Organigrama</h1>
-                </a-col>
-                <a-divider />
-            </a-row>
             <a-row style="overflow-x: scroll;">
                 <div class="collapse" v-show="spin" style="text-align: center; padding: 50px;">
                     <a-spin tip="Cargando..." size="large" />

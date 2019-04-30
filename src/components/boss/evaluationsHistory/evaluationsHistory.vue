@@ -2,7 +2,7 @@
     <div class="users">
         <a-row class="breadcrumb-wrapper">
             <a-col :span="24">
-                <h1 class="breadcrumb-header">Historial de Evaluaciones y Objetivos</h1>
+                <h1 class="breadcrumb-header">Historial</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
@@ -18,19 +18,48 @@
         </a-row>
         <div class="collapse-content">
             <div>
+                <a-row class="steps">
+                    <span class="breadcrumb-header" style="font-weight: 120;">
+                        Objetivos
+                    </span>
+
+                </a-row>
+                <a-divider />
+
+            </div>
+
+            <!-- Edit form -->
+            <div>
                 <a-row style="margin-top: 30px;">
+
                     <a-col :span="24">
-                        <history-objectives/>
+                        <history-objectives />
                     </a-col>
+
                 </a-row>
             </div>
             <div>
+                <a-row class="steps">
+                    <span class="breadcrumb-header" style="font-weight: 120;">
+                        Evaluaciones
+                    </span>
+
+                </a-row>
+                <a-divider />
+
+            </div>
+
+            <!-- Edit form -->
+            <div>
                 <a-row style="margin-top: 30px;">
+
                     <a-col :span="24">
-                        <closed-evaluations/>
+                        <closed-evaluations />
                     </a-col>
+
                 </a-row>
             </div>
+        </div>
         </div>
     </div>
 </template>

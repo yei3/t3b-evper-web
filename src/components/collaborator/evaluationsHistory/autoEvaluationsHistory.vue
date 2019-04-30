@@ -1,7 +1,7 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title-old">
-            <a-col :span=23>
+            <a-col :span="23">
                 Evaluaciones Anteriores
             </a-col>
             <a-col :span=1 style="text-align: right; color: #fff;">
@@ -177,13 +177,17 @@ export default {
                     return 'En proceso';
                 case 2:
                     return 'Finalizado';
-                case 3:
-                    return 'Pte. revisión';
                 case 4:
+                    return 'Pte. revisión';
+                case 3:
                     return 'Cerrada';
                 default:
                     return 'No iniciado';
             }
+        },
+        printEvaluation(input) {
+            let id = input.id;
+            this.$router.push({ name: 'print-assessment', params: { id } });
         },
     },
 };

@@ -9,6 +9,8 @@ function beforeEnter(role) {
     return (to, from, next) => {
         // Validate that the user can access to the route
         if (!authService.validateAccessToken()) {
+            authService.removeAuthData();
+            authService.removeUserData();
             return next({ name: 'login' });
         }
         // Validate that the current role can access to the route

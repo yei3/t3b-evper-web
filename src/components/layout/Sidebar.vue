@@ -102,6 +102,7 @@
 
 <script>
 import authService from '@/services/auth';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'Sidebar',
@@ -127,7 +128,13 @@ export default {
                     role: authService.ROLES.COLLABORATOR,
                     to: 'collaborator-evaluationsHistory',
                     icon: 'search',
-                    text: 'Historial de evaluaciones',
+                    text: 'Historial',
+                },
+                {
+                    role: authService.ROLES.COLLABORATOR,
+                    to: 'collaborator-help',
+                    icon: 'question',
+                    text: 'Ayuda',
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
@@ -137,15 +144,15 @@ export default {
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
-                    to: 'boss-closedEvaluationsHistory',
-                    icon: 'search',
-                    text: 'Historial',
-                },
-                {
-                    role: authService.ROLES.SUPERVISOR,
                     to: 'boss-reports',
                     icon: 'line-chart',
                     text: 'Resultados',
+                },
+                {
+                    role: authService.ROLES.SUPERVISOR,
+                    to: 'boss-closedEvaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial',
                 },
                 /*
                 {
@@ -175,6 +182,18 @@ export default {
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-evaluationsHistory',
+                    icon: 'search',
+                    text: 'Historial de evaluaciones',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
+                    to: 'admin-reports',
+                    icon: 'line-chart',
+                    text: 'Resultados',
+                },
+                {
+                    role: authService.ROLES.ADMINISTRATOR,
                     to: 'admin-organigram',
                     icon: 'cluster',
                     text: 'Organigrama',
@@ -191,7 +210,7 @@ export default {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: 'admin-evaluationsHistory',
                     icon: 'search',
-                    text: 'Historial de evaluaciones',
+                    text: 'Historial',
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
@@ -230,6 +249,7 @@ export default {
         setCurrentRole(role) {
             authService.setCurrentRole(role);
             this.userCurrentRole = role;
+            this.$store.state.userProfile = this.roleToEs(role);
             this.$router.push({ name: 'home' });
         },
         logout() {

@@ -9,6 +9,7 @@ import Users from '@/components/admin/users/users.vue';
 import Organigram from '@/components/admin/organization/organigram.vue';
 import Notifications from '@/components/admin/notifications/notifications.vue';
 import EvaluationsHistory from '@/components/admin/evaluationsHistory/evaluationsHistory.vue';
+import Reports from '@/components/admin/reports/layout.vue';
 
 export default [
     {
@@ -63,6 +64,12 @@ export default [
         path: 'admin/evaluationsHistory',
         name: 'admin-evaluationsHistory',
         component: EvaluationsHistory,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: 'admin/reports',
+        name: 'admin-reports',
+        component: Reports,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
 ];
