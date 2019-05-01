@@ -42,31 +42,31 @@
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Región:</h5>
             <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
-              <a-select-option
-                v-for="region in regions"
-                :key="region.id"
-                :value="region.id"
-              >{{ region.displayName }}</a-select-option>
+              <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                {{
+                region.displayName
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Área:</h5>
             <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
-              <a-select-option
-                v-for="area in leftAreas"
-                :key="area.id"
-                :value="area.id"
-              >{{ area.displayName }}</a-select-option>
+              <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
+                {{
+                area.displayName
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Puesto:</h5>
             <a-select style="width: 100%" v-model="left.person">
-              <a-select-option
-                v-for="person in leftPeople"
-                :key="person.id"
-                :value="person.id"
-              >{{ person.jobDescription }}</a-select-option>
+              <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
+                {{
+                person.jobDescription
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -77,11 +77,11 @@
               showSearch
               :filterOption="filterOption"
             >
-              <a-select-option
-                v-for="person in leftPeople"
-                :key="person.id"
-                :value="person.id"
-              >{{ person.fullName }}</a-select-option>
+              <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
+                {{
+                person.fullName
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -97,31 +97,31 @@
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Región:</h5>
             <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
-              <a-select-option
-                v-for="region in regions"
-                :key="region.id"
-                :value="region.id"
-              >{{ region.displayName }}</a-select-option>
+              <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                {{
+                region.displayName
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Área:</h5>
             <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
-              <a-select-option
-                v-for="area in rightAreas"
-                :key="area.id"
-                :value="area.id"
-              >{{ area.displayName }}</a-select-option>
+              <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
+                {{
+                area.displayName
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Puesto:</h5>
             <a-select style="width: 100%" v-model="right.person">
-              <a-select-option
-                v-for="person in rightPeople"
-                :key="person.id"
-                :value="person.id"
-              >{{ person.jobDescription }}</a-select-option>
+              <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
+                {{
+                person.jobDescription
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -132,11 +132,11 @@
               showSearch
               :filterOption="filterOption"
             >
-              <a-select-option
-                v-for="person in rightPeople"
-                :key="person.id"
-                :value="person.id"
-              >{{ person.fullName }}</a-select-option>
+              <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
+                {{
+                person.fullName
+                }}
+              </a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -334,14 +334,28 @@ export default {
             this.$printHtml("printReport");
         },
         async init() {
-            let response = await client3B.organizationUnit.getAllRegions().catch((error) => errorHandler(this, error));
-            this.regions = response.data.result;
-
-            response = await client3B.organizationUnit.getAllAreas().catch((error) => errorHandler(this, error));
-            this.areas = response.data.result;
-
-            response = await client3B.organizationUnit.getOrganigram().catch((error) => errorHandler(this, error));
-            this.organigram = response.data.result;
+            try {
+                const [
+                    {
+                        data: { result: regions },
+                    },
+                    {
+                        data: { result: areas },
+                    },
+                    {
+                        data: { result: organigram },
+                    },
+                ] = await Promise.all([
+                    client3B.organizationUnit.getAllRegions(),
+                    client3B.organizationUnit.getAllAreas(),
+                    client3B.organizationUnit.getOrganigram(),
+                ]);
+                this.regions = regions;
+                this.areas = areas;
+                this.organigram = organigram;
+            } catch (error) {
+                errorHandler(this, error);
+            }
         },
         filterOption(input, option) {
             return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -365,86 +379,69 @@ export default {
                 return;
             }
 
-            // Objectives - Capabilities Left-Report
-            let AreaId = 0;
-            let RegionId = this.left.region;
-            if (this.left.area) AreaId = this.left.area;
+            try {
+                // Objectives - Capabilities Left-Report
+                let AreaId = 0;
+                let RegionId = this.left.region;
+                if (this.left.area) AreaId = this.left.area;
+                const [
+                    {
+                        data: { result: leftReport },
+                    },
+                    {
+                        data: { result: leftObjectives },
+                    },
+                ] = await this.getCapabilitiesReport(RegionId, AreaId);
 
-            let response = await client3B.report
-                .getAdminReport({
+                // Objectives - Capabilities Right-Report
+                RegionId = this.left.region;
+                if (this.right.area) AreaId = this.right.area;
+                const [
+                    {
+                        data: { result: rightReport },
+                    },
+                    {
+                        data: { result: rightObjectives },
+                    },
+                ] = await this.getCapabilitiesReport(RegionId, AreaId);
+
+                // Left Doughnut Chart
+                this.populateLeftObjectivesChart(leftObjectives);
+                // Right Doughnut Chart
+                this.populateRightObjectivesChart(rightObjectives);
+
+                // Left Horizontal Bar Chart
+                this.populateLeftHorizontalChart(leftReport);
+                // Right Horizontal Bar Chart
+                this.populateRightHorizontalChart(rightReport);
+
+                this.loading = false;
+            } catch (error) {
+                errorHandler(this, error);
+                this.loading = false;
+            }
+        },
+        getCapabilitiesReport(RegionId, AreaId) {
+            return Promise.all([
+                client3B.report.getAdminReport({
                     RegionId,
                     AreaId,
                     JobDescription: this.left.person,
                     StarTime: this.left.start.toISOString(),
                     EndDateTime: this.left.end.toISOString(),
                     UserId: this.left.person,
-                })
-                .catch((error) => errorHandler(this, error));
-            const leftReport = response.data.result;
-
-            response = await client3B.report
-                .getAdminObjectivesReport({
+                }),
+                client3B.report.getAdminObjectivesReport({
                     RegionId,
                     AreaId,
                     JobDescription: this.right.person,
                     StarTime: this.right.start.toISOString(),
                     EndDateTime: this.right.end.toISOString(),
                     UserId: this.right.person,
-                })
-                .catch((error) => errorHandler(this, error));
-            const leftObjectives = response.data.result;
-
-            // Objectives - Capabilities Right-Report
-            AreaId = 0;
-            RegionId = this.left.region;
-            if (this.right.area) AreaId = this.right.area;
-            response = await client3B.report
-                .getAdminReport({
-                    RegionId,
-                    AreaId,
-                    JobDescription: this.right.person,
-                    StarTime: this.right.start.toISOString(),
-                    EndDateTime: this.right.end.toISOString(),
-                    UserId: this.right.person,
-                })
-                .catch((error) => errorHandler(this, error));
-            const rightReport = response.data.result;
-
-            response = await client3B.report
-                .getAdminObjectivesReport({
-                    RegionId,
-                    AreaId,
-                    JobDescription: this.right.person,
-                    StarTime: this.right.start.toISOString(),
-                    EndDateTime: this.right.end.toISOString(),
-                    UserId: this.right.person,
-                })
-                .catch((error) => errorHandler(this, error));
-            const rightObjectives = response.data.result;
-
-            // Left Chart
-            const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
-            this.leftObjectivesData = {
-                datasets: [
-                    {
-                        data: [leftObjectives.validatedObjectives, leftU],
-                        backgroundColor: ["#00b880", "#ff3b3b"],
-                    },
-                ],
-                labels: ["Cumplidos", "No cumplidos"],
-            };
-            // Right Chart
-            const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
-            this.rightObjectivesData = {
-                datasets: [
-                    {
-                        data: [rightObjectives.validatedObjectives, rightU],
-                        backgroundColor: ["#00b880", "#ff3b3b"],
-                    },
-                ],
-                labels: ["Cumplidos", "No cumplidos"],
-            };
-
+                }),
+            ]);
+        },
+        populateLeftHorizontalChart(leftReport) {
             this.leftChartData = {
                 labels: leftReport.map((item) => item.name),
                 datasets: [
@@ -465,7 +462,8 @@ export default {
                     },
                 ],
             };
-
+        },
+        populateRightHorizontalChart(rightReport) {
             this.rightChartData = {
                 labels: rightReport.map((item) => item.name),
                 datasets: [
@@ -486,8 +484,30 @@ export default {
                     },
                 ],
             };
-
-            this.loading = false;
+        },
+        populateLeftObjectivesChart(leftObjectives) {
+            const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
+            this.leftObjectivesData = {
+                datasets: [
+                    {
+                        data: [leftObjectives.validatedObjectives, leftU],
+                        backgroundColor: ["#00b880", "#ff3b3b"],
+                    },
+                ],
+                labels: ["Cumplidos", "No cumplidos"],
+            };
+        },
+        populateRightObjectivesChart(rightObjectives) {
+            const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
+            this.rightObjectivesData = {
+                datasets: [
+                    {
+                        data: [rightObjectives.validatedObjectives, rightU],
+                        backgroundColor: ["#00b880", "#ff3b3b"],
+                    },
+                ],
+                labels: ["Cumplidos", "No cumplidos"],
+            };
         },
     },
     computed: {
