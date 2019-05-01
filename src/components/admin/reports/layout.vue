@@ -15,7 +15,7 @@
           </a-breadcrumb>
         </a-col>
         <a-col :span="3">
-          <a-button class="btn-blue" @click="print">
+          <a-button class="btn-blue" @click="print" :disabled="leftObjectivesData === null">
             <a-icon type="printer"/>Imprimir
           </a-button>
         </a-col>
@@ -42,31 +42,31 @@
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Región:</h5>
             <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
-              <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
-                {{
-                region.displayName
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="region in regions"
+                :key="region.id"
+                :value="region.id"
+              >{{ region.displayName }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Área:</h5>
             <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
-              <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
-                {{
-                area.displayName
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="area in leftAreas"
+                :key="area.id"
+                :value="area.id"
+              >{{ area.displayName }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Puesto:</h5>
             <a-select style="width: 100%" v-model="left.person">
-              <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
-                {{
-                person.jobDescription
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="person in leftPeople"
+                :key="person.id"
+                :value="person.id"
+              >{{ person.jobDescription }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -77,11 +77,11 @@
               showSearch
               :filterOption="filterOption"
             >
-              <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
-                {{
-                person.fullName
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="person in leftPeople"
+                :key="person.id"
+                :value="person.id"
+              >{{ person.fullName }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -97,31 +97,31 @@
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Región:</h5>
             <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
-              <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
-                {{
-                region.displayName
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="region in regions"
+                :key="region.id"
+                :value="region.id"
+              >{{ region.displayName }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Área:</h5>
             <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
-              <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
-                {{
-                area.displayName
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="area in rightAreas"
+                :key="area.id"
+                :value="area.id"
+              >{{ area.displayName }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
             <h5>Puesto:</h5>
             <a-select style="width: 100%" v-model="right.person">
-              <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
-                {{
-                person.jobDescription
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="person in rightPeople"
+                :key="person.id"
+                :value="person.id"
+              >{{ person.jobDescription }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
@@ -132,11 +132,11 @@
               showSearch
               :filterOption="filterOption"
             >
-              <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
-                {{
-                person.fullName
-                }}
-              </a-select-option>
+              <a-select-option
+                v-for="person in rightPeople"
+                :key="person.id"
+                :value="person.id"
+              >{{ person.fullName }}</a-select-option>
             </a-select>
           </a-col>
           <a-col :sm="24" :md="24" :lg="24" :xl="12">
