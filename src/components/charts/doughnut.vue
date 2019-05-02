@@ -1,5 +1,5 @@
 <script>
-import { Doughnut } from 'vue-chartjs';
+import { Doughnut } from "vue-chartjs";
 
 export default {
     extends: Doughnut,
@@ -13,6 +13,9 @@ export default {
             default: null,
         },
     },
+    data: () => ({
+        htmlLegend: null,
+    }),
     mounted() {
         this.renderChart(this.chartdata, this.options);
     },
