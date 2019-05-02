@@ -77,6 +77,15 @@
                                 :questionStatus="getQuestionStatus(qstTemplate.id)"
                                 :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
                             />
+                            <question-remark
+                                v-if="qstTemplate.questionType == 6"
+                                :index="index + 1"
+                                :onlyLecture="onlyLecture"
+                                :questionText="qstTemplate.text"
+                                :questionId="getQuestionId(qstTemplate.id)"
+                                :questionStatus="getQuestionStatus(qstTemplate.id)"
+                                :answer="getAnswer(qstTemplate.id, qstTemplate.questionType)"
+                            />
                         </a-row>
                     </a-col>
                 </a-row>
@@ -87,11 +96,12 @@
 
 <script>
 import questionOpen from '@/components/collaborator/applyPerformanceEvaluations/questionOpen.vue';
-import questionOpenMultiple from '@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue';
-import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
-import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
-import questionObjective from '@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue';
 import questionAction from '@/components/collaborator/applyPerformanceEvaluations/questionAction.vue';
+import questionRemark from '@/components/collaborator/applyPerformanceEvaluations/questionRemark.vue';
+import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
+import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
+import questionObjective from '@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue';
+import questionOpenMultiple from '@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue';
 
 export default {
     props: {
@@ -110,11 +120,12 @@ export default {
     },
     components: {
         questionOpen,
-        questionOpenMultiple,
-        questionOneSelect,
-        questionBoolean,
-        questionObjective,
         questionAction,
+        questionRemark,
+        questionBoolean,
+        questionOneSelect,
+        questionObjective,
+        questionOpenMultiple,
     },
     methods: {
         getQuestionStatus(questionId) {

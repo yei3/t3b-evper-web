@@ -24,5 +24,9 @@ module.exports = {
             label: 'Si / No',
             value: 4,
         },
+        {
+            label: 'Si / No - Observaciones',
+            value: 6,
+        },
     ],
 };
