@@ -171,7 +171,7 @@
           <div class="small">
             <doughnut-chart
               v-if="leftObjectivesData"
-              :chartdata="leftObjectivesData"
+              :chartData="leftObjectivesData"
               :options="leftObjectivesOptions"
             />
           </div>
@@ -180,7 +180,7 @@
           <div class="small">
             <doughnut-chart
               v-if="rightObjectivesData"
-              :chartdata="rightObjectivesData"
+              :chartData="rightObjectivesData"
               :options="rightObjectivesOptions"
             />
           </div>
@@ -414,10 +414,9 @@ export default {
                 this.populateLeftHorizontalChart(leftReport);
                 // Right Horizontal Bar Chart
                 this.populateRightHorizontalChart(rightReport);
-
-                this.loading = false;
             } catch (error) {
                 errorHandler(this, error);
+            } finally {
                 this.loading = false;
             }
         },
@@ -486,6 +485,7 @@ export default {
             };
         },
         populateLeftObjectivesChart(leftObjectives) {
+            console.log(leftObjectives);
             const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
             this.leftObjectivesData = {
                 datasets: [
@@ -498,6 +498,7 @@ export default {
             };
         },
         populateRightObjectivesChart(rightObjectives) {
+            console.log(rightObjectives);
             const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
             this.rightObjectivesData = {
                 datasets: [
