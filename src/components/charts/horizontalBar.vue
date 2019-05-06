@@ -13,9 +13,6 @@ export default {
             default: undefined,
         },
     },
-    data: () => ({
-        htmlLegend: null,
-    }),
     mounted() {
         this.addPlugin({ ChartDataLabels });
         this.renderChart(this.chartData, this.options);

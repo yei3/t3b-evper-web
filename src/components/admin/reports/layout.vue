@@ -171,7 +171,7 @@
           <div class="small">
             <doughnut-chart
               v-if="leftObjectivesData"
-              :chartdata="leftObjectivesData"
+              :chartData="leftObjectivesData"
               :options="leftObjectivesOptions"
             />
           </div>
@@ -180,7 +180,7 @@
           <div class="small">
             <doughnut-chart
               v-if="rightObjectivesData"
-              :chartdata="rightObjectivesData"
+              :chartData="rightObjectivesData"
               :options="rightObjectivesOptions"
             />
           </div>
@@ -307,7 +307,6 @@ export default {
                 yAxes: [
                     {
                         stacked: true,
-                        // barThickness: 10,
                     },
                 ],
             },
@@ -414,10 +413,9 @@ export default {
                 this.populateLeftHorizontalChart(leftReport);
                 // Right Horizontal Bar Chart
                 this.populateRightHorizontalChart(rightReport);
-
-                this.loading = false;
             } catch (error) {
                 errorHandler(this, error);
+            } finally {
                 this.loading = false;
             }
         },
