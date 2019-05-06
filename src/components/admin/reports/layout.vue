@@ -307,7 +307,6 @@ export default {
                 yAxes: [
                     {
                         stacked: true,
-                        // barThickness: 10,
                     },
                 ],
             },
