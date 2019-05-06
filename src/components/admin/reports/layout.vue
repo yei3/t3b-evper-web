@@ -485,7 +485,6 @@ export default {
             };
         },
         populateLeftObjectivesChart(leftObjectives) {
-            console.log(leftObjectives);
             const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
             this.leftObjectivesData = {
                 datasets: [
@@ -498,7 +497,6 @@ export default {
             };
         },
         populateRightObjectivesChart(rightObjectives) {
-            console.log(rightObjectives);
             const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
             this.rightObjectivesData = {
                 datasets: [
