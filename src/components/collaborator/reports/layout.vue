@@ -21,8 +21,9 @@
             <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                 <p>2019-1</p>
                 <div class="small">
-                    <chart v-if="isObjectivesLoaded"
-                        :chartdata="currentData"
+                    <doughnut-chart
+                        v-if="isObjectivesLoaded"
+                        :chartData="currentData"
                         :options="currentOptions"
                     />
                 </div>
@@ -30,8 +31,9 @@
             <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                 <p>2018-2</p>
                 <div class="small">
-                    <chart v-if="isObjectivesLoaded"
-                        :chartdata="previousData"
+                    <doughnut-chart
+                        v-if="isObjectivesLoaded"
+                        :chartData="previousData"
                         :options="previousOptions"
                     />
                 </div>
@@ -66,13 +68,13 @@
                 <h4 class="breadcrumb-header">Periodo actual</h4>
                 <div class="radar--size" v-show="competencesChartType == 'radar'">
                     <radar-chart v-if="isCompentecesLoaded"
-                        :chartdata="currentCompentecesData"
+                        :chartData="currentCompentecesData"
                         :options="currentCompentecesOptions"
                     />
                 </div>
                 <div class="radar--size" v-show="competencesChartType == 'bar'">
                     <bar-chart v-if="isCompentecesLoaded"
-                        :chartdata="currentCompentecesData"
+                        :chartData="currentCompentecesData"
                         :options="currentCompentecesOptions"
                     />
                 </div>
@@ -88,13 +90,13 @@
                 <h4 class="breadcrumb-header">Periodo anterior</h4>
                 <div class="radar--size" v-show="competencesChartType == 'radar'">
                     <radar-chart v-if="isCompentecesLoaded"
-                        :chartdata="previousCompetencesData"
+                        :chartData="previousCompetencesData"
                         :options="previousCompentecesOptions"
                     />
                 </div>
                 <div class="radar--size" v-show="competencesChartType == 'bar'">
                     <bar-chart v-if="isCompentecesLoaded"
-                        :chartdata="previousCompetencesData"
+                        :chartData="previousCompetencesData"
                         :options="previousCompentecesOptions"
                     />
                 </div>
@@ -109,13 +111,13 @@ import client3B from '@/api/client3B';
 import authService from '@/services/auth';
 import errorHandler from '@/views/errorHandler';
 import BarChart from '@/components/charts/bar.vue';
-import Chart from '@/components/charts/doughnut.vue';
 import RadarChart from '@/components/charts/radar.vue';
+import DoughnutChart from '@/components/charts/doughnut.vue';
 
 export default {
     name: 'Objectives',
     components: {
-        Chart,
+        DoughnutChart,
         RadarChart,
         BarChart,
     },
