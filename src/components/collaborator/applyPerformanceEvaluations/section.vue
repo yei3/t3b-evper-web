@@ -2,17 +2,13 @@
     <a-col class="form-autoevaluation">
         <a-row class="form-tittle">
             <a-col :span="24">
-                <h1>{{section.name}}</h1>
+                <h1>{{ section.name }}</h1>
             </a-col>
             <a-col :span="24">
-                <a-row
-                    class="form-section"
-                    v-for="subsection in section.childSections"
-                    :key="subsection.id"
-                >
+                <a-row class="form-section" v-for="subsection in section.childSections" :key="subsection.id">
                     <a-col :span="24" class="form-section-tittle" v-show="subsection.displayName">
                         <h2 style="margin: 20px 0px 0px 0px; font-size: 20px;">
-                            {{subsection.name}}
+                            {{ subsection.name }}
                         </h2>
                     </a-col>
                     <a-col :span="24">
@@ -95,13 +91,13 @@
 </template>
 
 <script>
-import questionOpen from '@/components/collaborator/applyPerformanceEvaluations/questionOpen.vue';
-import questionAction from '@/components/collaborator/applyPerformanceEvaluations/questionAction.vue';
-import questionRemark from '@/components/collaborator/applyPerformanceEvaluations/questionRemark.vue';
-import questionBoolean from '@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue';
-import questionOneSelect from '@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue';
-import questionObjective from '@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue';
-import questionOpenMultiple from '@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue';
+import questionOpen from "@/components/collaborator/applyPerformanceEvaluations/questionOpen.vue";
+import questionAction from "@/components/collaborator/applyPerformanceEvaluations/questionAction.vue";
+import questionRemark from "@/components/collaborator/applyPerformanceEvaluations/questionRemark.vue";
+import questionBoolean from "@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue";
+import questionOneSelect from "@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue";
+import questionObjective from "@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue";
+import questionOpenMultiple from "@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue";
 
 export default {
     props: {
@@ -129,15 +125,15 @@ export default {
     },
     methods: {
         getQuestionStatus(questionId) {
-            const answer = this.questions.find(qst => qst.evaluationQuestionId === questionId);
+            const answer = this.questions.find((qst) => qst.evaluationQuestionId === questionId);
             return answer.status;
         },
         getQuestionId(questionId) {
-            const answer = this.questions.find(qst => qst.evaluationQuestionId === questionId);
+            const answer = this.questions.find((qst) => qst.evaluationQuestionId === questionId);
             return answer.id;
         },
         getAnswer(questionId, questionType) {
-            const answer = this.questions.find(qst => qst.evaluationQuestionId === questionId);
+            const answer = this.questions.find((qst) => qst.evaluationQuestionId === questionId);
             if (questionType === 3) {
                 return answer.measuredAnswer;
             }
@@ -148,9 +144,6 @@ export default {
         },
     },
 };
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

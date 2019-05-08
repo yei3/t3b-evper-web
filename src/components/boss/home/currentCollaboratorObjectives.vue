@@ -6,20 +6,10 @@
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
                 </a>
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
                 </a>
             </a-col>
         </a-row>
@@ -29,49 +19,54 @@
             </div>
         </a-row>
         <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">
-            <a-row :key="collaborator.id" v-for="(collaborator, index) in data"
-                class="collapse-single-wrapper"
-            >
+            <a-row :key="collaborator.id" v-for="(collaborator, index) in data" class="collapse-single-wrapper">
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
                         <a-avatar shape="circle" :src="collaboratorImgUrl(collaborator.number)" />
-                        <a class="table-link" style="margin-left: 5px;"
-                            @click="currentCollaborator = (index !== currentCollaborator)?
-                                index:-1">
-                            {{collaborator.name}}
+                        <a
+                            class="table-link"
+                            style="margin-left: 5px;"
+                            @click="currentCollaborator = index !== currentCollaborator ? index : -1"
+                        >
+                            {{ collaborator.name }}
                         </a>
                     </a-col>
                     <a-col :span="4">
-                        <p><a-progress
-                            strokeColor="#1ab394"
-                            :percent="objectivesPercet(collaborator.objectives)"
-                            :showInfo="false"
-                            size="small"
-                        /></p>
-                        <p><small>({{objectivesCount(collaborator.objectives)}})</small></p>
+                        <p>
+                            <a-progress
+                                strokeColor="#1ab394"
+                                :percent="objectivesPercet(collaborator.objectives)"
+                                :showInfo="false"
+                                size="small"
+                            />
+                        </p>
+                        <p>
+                            <small>({{ objectivesCount(collaborator.objectives) }})</small>
+                        </p>
                     </a-col>
                 </a-col>
-                <a-col :span="24" class="collapse-single-content"
-                    v-show="currentCollaborator == index">
+                <a-col :span="24" class="collapse-single-content" v-show="currentCollaborator == index">
                     <a-table
                         :columns="columns"
                         :dataSource="collaborator.objectives"
-                        :pagination=false
+                        :pagination="false"
                         :scroll="{ x: true }"
                     >
                         <span slot="status" slot-scope="status">
-                            <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                            <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                         </span>
                         <span slot="objective" slot-scope="objective, record">
                             <p>
-                            <!-- <a
+                                <!-- <a
                                 class="table-link"
                                 @click="toggleViewProgressModal(record)"
                             > -->
-                                {{objective.title}}
-                            <!-- </a> -->
+                                {{ objective.title }}
+                                <!-- </a> -->
                             </p>
-                            <p><small>{{objective.subtitle}}</small></p>
+                            <p>
+                                <small>{{ objective.subtitle }}</small>
+                            </p>
                         </span>
                         <span slot="action" slot-scope="text, record">
                             <a-dropdown>
@@ -82,12 +77,10 @@
                                     <a-menu-divider />
                                     <a-menu-item
                                         key="2"
-                                        :disabled="
-                                            record.status === 'En proceso' ||
-                                            record.status === 'No iniciado'"
+                                        :disabled="record.status === 'En proceso' || record.status === 'No iniciado'"
                                         @click="toggleFinishObjectiveModal(record)"
                                     >
-                                        {{transformStatus(record.status)}}
+                                        {{ transformStatus(record.status) }}
                                     </a-menu-item>
                                 </a-menu>
                                 <a-button class="ant-btn-small" v-show="record.evaluable">
@@ -100,11 +93,7 @@
             </a-row>
         </div>
 
-        <a-modal
-            v-model="viewProgressModal.show"
-            onOk="toggleViewProgressModal"
-            width="600px"
-        >
+        <a-modal v-model="viewProgressModal.show" onOk="toggleViewProgressModal" width="600px">
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-header">
@@ -116,13 +105,15 @@
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item v-for="(item, index) in viewProgressModal.binnacle" :key="index"
+                        <a-timeline-item
+                            v-for="(item, index) in viewProgressModal.binnacle"
+                            :key="index"
                             color="gray"
                             class="timeline-item"
                         >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
                                 {{ item.username }}
                                 <small>{{ item.created }}</small>
                             </p>
@@ -134,23 +125,13 @@
                 </a-col>
             </a-row>
             <template slot="footer">
-                <a-button
-                    class="modal-button-ok"
-                    key="submit"
-                    type="primary"
-                    @click="viewProgressModal.show = false"
-                >
+                <a-button class="modal-button-ok" key="submit" type="primary" @click="viewProgressModal.show = false">
                     OK
                 </a-button>
-
             </template>
         </a-modal>
 
-        <a-modal
-            v-model="finishObjectiveModal.show"
-            onOk="toggleFinishObjectiveModal"
-            width="600px"
-        >
+        <a-modal v-model="finishObjectiveModal.show" onOk="toggleFinishObjectiveModal" width="600px">
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -168,15 +149,14 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario con respecto al cumplimiento del
-                        objetivo por parte del evaluado.
+                        Agregue un comentario con respecto al cumplimiento del objetivo por parte del evaluado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
-                     ¿Está seguro que desea validar o reabrir el objetivo indicado?
+                    ¿Está seguro que desea validar o reabrir el objetivo indicado?
                 </a-col>
             </a-row>
 
@@ -203,30 +183,32 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 const columns = [
     {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
-    }, {
-        title: 'Objetivo',
-        dataIndex: 'objective',
-        key: 'objective',
-        scopedSlots: { customRender: 'objective' },
-    }, {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
+        title: "Estatus",
+        dataIndex: "status",
+        key: "status",
+        scopedSlots: { customRender: "status" },
     },
     {
-        title: '',
-        key: 'action',
-        scopedSlots: { customRender: 'action' },
-        align: 'right',
+        title: "Objetivo",
+        dataIndex: "objective",
+        key: "objective",
+        scopedSlots: { customRender: "objective" },
+    },
+    {
+        title: "Fecha fin",
+        dataIndex: "endDate",
+        key: "endDate",
+    },
+    {
+        title: "",
+        key: "action",
+        scopedSlots: { customRender: "action" },
+        align: "right",
     },
 ];
 
@@ -240,17 +222,17 @@ export default {
             viewProgressModal: {
                 show: false,
                 enableButton: true,
-                objectiveName: '',
-                evaluatedName: '',
+                objectiveName: "",
+                evaluatedName: "",
                 binnacle: [],
             },
             finishObjectiveModal: {
                 show: false,
                 enableButton: true,
                 objectiveId: 0,
-                objectiveName: '',
-                evaluatedName: '',
-                message: '',
+                objectiveName: "",
+                evaluatedName: "",
+                message: "",
             },
             data: [],
         };
@@ -260,24 +242,24 @@ export default {
     },
     methods: {
         async openOrValidateObjective(objectiveId, status) {
-            await client3B.objective.updateStatus(
-                {
+            await client3B.objective
+                .updateStatus({
                     id: objectiveId,
                     status: status,
-                },
-            ).catch(error => errorHandler(this, error));
-            let action = (status === 2) ? 'reabierto' : 'validado';
-            this.$message.success('El objetivo se ha '+action+' correctamente');
+                })
+                .catch((error) => errorHandler(this, error));
+            let action = status === 2 ? "reabierto" : "validado";
+            this.$message.success("El objetivo se ha " + action + " correctamente");
         },
         async addObjetiveMessage(objectiveId, message) {
-            await client3B.binnacle.createMessage(
-                {
+            await client3B.binnacle
+                .createMessage({
                     evaluationQuestionId: objectiveId,
                     text: message,
-                },
-            ).catch(error => errorHandler(this, error));
-            this.message = '';
-            this.$message.success('El mensaje se ha guardado correctamente');
+                })
+                .catch((error) => errorHandler(this, error));
+            this.message = "";
+            this.$message.success("El mensaje se ha guardado correctamente");
         },
         async getCollaboratorsObjectives() {
             this.spin = true;
@@ -328,7 +310,7 @@ export default {
             this.spin = false;
         },
         async toggleViewProgressModal(input) {
-            console.log('cargando');
+            console.log("cargando");
             this.viewProgressModal.evaluatedName = input.name;
             this.viewProgressModal.binnacle = input.objective.binnacle;
             this.viewProgressModal.objectiveName = input.objective.title;
@@ -344,70 +326,82 @@ export default {
             if (input) {
                 await this.addObjetiveMessage(
                     this.finishObjectiveModal.objectiveId,
-                    'Objetivo validado: ' + this.finishObjectiveModal.message
-                ).catch(error => errorHandler(this, error));
-                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4)
-                    .catch(error => errorHandler(this, error));
+                    "Objetivo validado: " + this.finishObjectiveModal.message,
+                ).catch((error) => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4).catch((error) =>
+                    errorHandler(this, error),
+                );
                 let obj = null;
                 for (let i = 0; i < this.data.length; i++) {
-                    if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
-                        obj = this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                    if (
+                        typeof this.data[i].objectives.find(
+                            (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                        ) !== "undefined"
+                    ) {
+                        obj = this.data[i].objectives.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
                     }
                 }
                 obj.status = this.selectStatusName(4);
             } else {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, 'Objetivo Reabierto: ' + this.finishObjectiveModal.message)
-                    .catch(error => errorHandler(this, error));
-                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2)
-                    .catch(error => errorHandler(this, error));
+                await this.addObjetiveMessage(
+                    this.finishObjectiveModal.objectiveId,
+                    "Objetivo Reabierto: " + this.finishObjectiveModal.message,
+                ).catch((error) => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2).catch((error) =>
+                    errorHandler(this, error),
+                );
                 let obj = null;
                 for (let i = 0; i < this.data.length; i++) {
-                    if (typeof (this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId)) !== 'undefined') {
-                        obj = this.data[i].objectives.find(tmp => tmp.id === this.finishObjectiveModal.objectiveId);
+                    if (
+                        typeof this.data[i].objectives.find(
+                            (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                        ) !== "undefined"
+                    ) {
+                        obj = this.data[i].objectives.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
                     }
                 }
                 obj.status = this.selectStatusName(2);
             }
             this.finishObjectiveModal.show = false;
-            this.finishObjectiveModal.message = '';
+            this.finishObjectiveModal.message = "";
         },
         selectTagColor(status) {
             switch (status) {
-            case 'No iniciado':
-                return 'ant-tag-red';
-            case 'En proceso':
-                return 'ant-tag-yellow';
-            case 'Completado':
-                return 'ant-tag-green';
-            case 'Validado':
-                return 'ant-tag-blue';
-            default:
-                return 'ant-tag-gray';
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Completado":
+                    return "ant-tag-green";
+                case "Validado":
+                    return "ant-tag-blue";
+                default:
+                    return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-            case 0:
-                return 'No iniciado';
-            case 1:
-                return 'No iniciado';
-            case 2:
-                return 'En proceso';
-            case 3:
-                return 'Completado';
-            case 4:
-                return 'Validado';
-            default:
-                return 'No iniciado';
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "No iniciado";
+                case 2:
+                    return "En proceso";
+                case 3:
+                    return "Completado";
+                case 4:
+                    return "Validado";
+                default:
+                    return "No iniciado";
             }
         },
         transformStatus(status) {
-            return (status === 'Validado') ? 'Reabrir objetivo' : 'Validar objetivo';
+            return status === "Validado" ? "Reabrir objetivo" : "Validar objetivo";
         },
         objectivesCount(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Validado') {
+                if (objective.status === "Validado") {
                     completed += 1;
                 }
             });
@@ -417,7 +411,7 @@ export default {
         objectivesPercet(objectives) {
             let completed = 0;
             objectives.forEach((objective) => {
-                if (objective.status === 'Validado') {
+                if (objective.status === "Validado") {
                     completed += 1;
                 }
             });
@@ -430,6 +424,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
