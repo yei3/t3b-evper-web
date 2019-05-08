@@ -1,4 +1,4 @@
-import Http from './Http';
+import Http from "./Http";
 
 /**
  * Class to make operations to the Reports entity
@@ -6,21 +6,11 @@ import Http from './Http';
 class Reports extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/EvaluationReport';
+        this.entityPath = "/api/services/app/EvaluationReport";
     }
 
     /*
-     * Request for the information for a User Reports
-     *
-     * @return {Promise}        Http Response
-     */
-    getCollaboratorReport() {
-        const path = `${this.entityPath}/GetEvaluationCollaboratorResults`;
-        return this.request(path, this.methods.get, {});
-    }
-
-    /*
-     * Request for the information for a User Reports
+     * Request for the Objectives for a current logged User
      *
      * @return {Promise}        Http Response
      */
@@ -30,35 +20,13 @@ class Reports extends Http {
     }
 
     /*
-     * Request for the information for a User Reports
+     * Request for the Competences for a current logged User
      *
      * @return {Promise}        Http Response
      */
-    getSupervisorReports() {
-        const path = `${this.entityPath}/GetEvaluationResults`;
-        return this.request(path, this.methods.get, {});
-    }
-
-    /*
-     * Request for the information for a User Reports Details
-     *
-     * @return {Promise}        Http Response
-     */
-    getReportsDeatails() {
-        const path = `${this.entityPath}/GetEvaluationResultDetail`;
-        return this.request(path, this.methods.get, {});
-    }
-
-    /*
-     * Request for the information for a User Reports by Id
-     *
-     * @param {Object} data   Id for the user
-     *
-     * @return {Promise}        Http Response
-     */
-    getCollaboratorReportById(data) {
-        const path = `${this.entityPath}/GetEvaluationCollaboratorResultsById`;
-        return this.request(path, this.methods.get, data);
+    getCollaboratorCompetencesReport(period) {
+        const path = `${this.entityPath}/GetCollaboratorCompetencesReport`;
+        return this.request(path, this.methods.get, { period });
     }
 
     /*
@@ -73,12 +41,22 @@ class Reports extends Http {
         return this.request(path, this.methods.get, data);
     }
 
+    /*
+     * Request for the Objectives report
+     *
+     * @return {Promise}        Http Response
+     */
     getAdminObjectivesReport(data) {
         const path = `${this.entityPath}/GetAdministratorObjectivesReport`;
         return this.request(path, this.methods.get, data);
     }
 
-    getAdminReport(data) {
+    /*
+     * Request for the Capabilities report
+     *
+     * @return {Promise}        Http Response
+     */
+    getAdminCapabilitiesReport(data) {
         const path = `${this.entityPath}/GetAdministratorCapabilitiesReport`;
         return this.request(path, this.methods.get, data);
     }
