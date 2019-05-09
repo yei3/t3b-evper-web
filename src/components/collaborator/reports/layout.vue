@@ -16,13 +16,13 @@
             <a-row class="main-content">
                 <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
-                    <p>2019-1</p>
+                    <p>Perido actual</p>
                     <div class="small">
                         <doughnut-chart v-if="isObjectivesLoaded" :chartData="currentData" :options="currentOptions" />
                     </div>
                 </a-col>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
-                    <p>2018-2</p>
+                    <p>Periodo anterior</p>
                     <div class="small">
                         <doughnut-chart
                             v-if="isObjectivesLoaded"
@@ -39,65 +39,63 @@
             </a-row>
             <a-divider />
             <a-row class="main-content">
-                <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
-                <a-col :span="7" class="text-left">
-                    <a-select
-                        defaultValue="radar"
-                        style="width: 200px"
-                        @change="(option) => (competencesChartType = option)"
-                    >
-                        <a-select-option value="radar">Gráfica Radar</a-select-option>
-                        <a-select-option value="bar">Gráfica de Barras</a-select-option>
-                    </a-select>
-
-                    <a-list itemLayout="horizontal" :dataSource="competencesSections">
-                        <a-list-item slot="renderItem" slot-scope="item, index">
-                            {{ item.title }}
-                        </a-list-item>
-                    </a-list>
-                </a-col>
-                <a-col :span="12" class="text-center">
-                    <h4 class="breadcrumb-header">Periodo actual</h4>
-                    <div class="radar--size" v-show="competencesChartType == 'radar'">
-                        <radar-chart
-                            v-if="isCompentecesLoaded"
-                            :chartData="currentCompentecesData"
-                            :options="currentCompentecesOptions"
-                        />
-                    </div>
-                    <div class="radar--size" v-show="competencesChartType == 'bar'">
-                        <bar-chart
-                            v-if="isCompentecesLoaded"
-                            :chartData="currentCompentecesData"
-                            :options="currentCompentecesOptions"
-                        />
-                    </div>
-                </a-col>
-                <a-col :span="5"></a-col>
-                <a-col :span="7"></a-col>
-                <a-col :span="12" class="text-center">
-                    <a-row v-show="competenceSpin">
-                        <div style="text-align: center; margin-top: 20px;">
-                            <a-spin tip="Cargando..." size="small" />
+                <a-row>
+                    <a-col :span="17">
+                        <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
+                    </a-col>
+                    <a-col :span="7" class="text-right">
+                        Tipo de gráfica
+                        <a-select
+                            defaultValue="bar"
+                            style="width: 200px"
+                            @change="(option) => (competencesChartType = option)"
+                        >
+                            <a-select-option value="radar">Gráfica Radar</a-select-option>
+                            <a-select-option value="bar">Gráfica de Barras</a-select-option>
+                        </a-select>
+                    </a-col>
+                </a-row>
+                <a-row class="chart--capabilities">
+                    <a-col :span="12" class="text-center">
+                        <p class="breadcrumb-header">Periodo actual</p>
+                        <div class="radar--size" v-show="competencesChartType == 'radar'">
+                            <radar-chart
+                                v-if="isCompentecesLoaded"
+                                :chartData="currentCompentecesData"
+                                :options="currentCompentecesOptions"
+                            />
                         </div>
-                    </a-row>
-                    <h4 class="breadcrumb-header">Periodo anterior</h4>
-                    <div class="radar--size" v-show="competencesChartType == 'radar'">
-                        <radar-chart
-                            v-if="isCompentecesLoaded"
-                            :chartData="previousCompetencesData"
-                            :options="previousCompentecesOptions"
-                        />
-                    </div>
-                    <div class="radar--size" v-show="competencesChartType == 'bar'">
-                        <bar-chart
-                            v-if="isCompentecesLoaded"
-                            :chartData="previousCompetencesData"
-                            :options="previousCompentecesOptions"
-                        />
-                    </div>
-                </a-col>
-                <a-col :span="5"></a-col>
+                        <div class="radar--size" v-show="competencesChartType == 'bar'">
+                            <bar-chart
+                                v-if="isCompentecesLoaded"
+                                :chartData="currentCompentecesData"
+                                :options="currentCompentecesOptions"
+                            />
+                        </div>
+                    </a-col>
+                    <a-col :span="12" class="text-center">
+                        <a-row v-show="competenceSpin">
+                            <div style="text-align: center; margin-top: 20px;">
+                                <a-spin tip="Cargando..." size="small" />
+                            </div>
+                        </a-row>
+                        <p class="breadcrumb-header">Periodo anterior</p>
+                        <div class="radar--size" v-show="competencesChartType == 'radar'">
+                            <radar-chart
+                                v-if="isCompentecesLoaded"
+                                :chartData="previousCompetencesData"
+                                :options="previousCompentecesOptions"
+                            />
+                        </div>
+                        <div class="radar--size" v-show="competencesChartType == 'bar'">
+                            <bar-chart
+                                v-if="isCompentecesLoaded"
+                                :chartData="previousCompetencesData"
+                                :options="previousCompentecesOptions"
+                            />
+                        </div>
+                    </a-col>
+                </a-row>
             </a-row>
         </div>
     </div>
@@ -139,6 +137,18 @@ export default {
             },
             responsive: true,
             maintainAspectRatio: true,
+            plugins: {
+                datalabels: {
+                    font: {
+                        weight: "bold",
+                    },
+                    color: (context) => {
+                        const index = context.dataIndex;
+                        const value = context.dataset.data[index];
+                        return value <= 0 ? "transparent" : "white";
+                    },
+                },
+            },
         },
         previousData: {
             datasets: [
@@ -156,6 +166,18 @@ export default {
             },
             responsive: true,
             maintainAspectRatio: true,
+            plugins: {
+                datalabels: {
+                    font: {
+                        weight: "bold",
+                    },
+                    color: (context) => {
+                        const index = context.dataIndex;
+                        const value = context.dataset.data[index];
+                        return value <= 0 ? "transparent" : "white";
+                    },
+                },
+            },
         },
         competencesChartType: "bar",
         currentCompentecesData: {
@@ -332,5 +354,8 @@ export default {
     color: black;
     font-weight: bold;
     font-size: 13px;
+}
+.chart--capabilities {
+    padding: 32px 0 0 0;
 }
 </style>
