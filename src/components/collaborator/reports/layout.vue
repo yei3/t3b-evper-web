@@ -40,10 +40,10 @@
             <a-divider />
             <a-row class="main-content">
                 <a-row>
-                    <a-col :span="17">
+                    <a-col :span="12">
                         <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
                     </a-col>
-                    <a-col :span="7" class="text-right">
+                    <a-col :span=12 class="text-right">
                         Tipo de gráfica
                         <a-select
                             defaultValue="bar"
@@ -56,7 +56,12 @@
                     </a-col>
                 </a-row>
                 <a-row class="chart--capabilities">
-                    <a-col :span="12" class="text-center">
+                    <a-row v-show="competenceSpin">
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a-spin tip="Cargando..." size="small" />
+                        </div>
+                    </a-row>
+                    <a-col v-show="!competenceSpin" :span="12" class="text-center">
                         <p class="breadcrumb-header">Periodo actual</p>
                         <div class="radar--size" v-show="competencesChartType == 'radar'">
                             <radar-chart
@@ -73,12 +78,7 @@
                             />
                         </div>
                     </a-col>
-                    <a-col :span="12" class="text-center">
-                        <a-row v-show="competenceSpin">
-                            <div style="text-align: center; margin-top: 20px;">
-                                <a-spin tip="Cargando..." size="small" />
-                            </div>
-                        </a-row>
+                    <a-col v-show="!competenceSpin" :span="12" class="text-center">
                         <p class="breadcrumb-header">Periodo anterior</p>
                         <div class="radar--size" v-show="competencesChartType == 'radar'">
                             <radar-chart
@@ -196,15 +196,6 @@ export default {
             responsive: false,
             maintainAspectRatio: false,
         },
-        competencesSections: [
-            { title: "Orientación a resultados" },
-            { title: "Eficiencia" },
-            { title: "Orientación al detalle" },
-            { title: "Comunicación" },
-            { title: "Capacidad de análisis y solución de problemas" },
-            { title: "Negociación" },
-            { title: "Cultura 3B" },
-        ],
     }),
     mounted() {
         this.init();
