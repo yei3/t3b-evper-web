@@ -8,13 +8,30 @@
                 <span class="question-label">{{index}}. {{questionText}}:</span>
             </a-col>
             <a-col :xxl="15" :xl="15" :lg="17" :md="24" :sm="24">
-                <span style="font-size: 14px; font-weight: 600" v-show="value">
+                <span class="switch-answer" v-show="value">
                     SI
                 </span>
-                <span style="font-size: 14px; font-weight: 600" v-show="!value">
+                <span class="switch-answer" v-show="!value">
                     NO
                 </span>
-                <a-switch v-model="value" :disabled="loading || onlyLecture" @change="save"/>
+                <a-switch
+                    class="switch"
+                    v-model="value" :disabled="loading || onlyLecture"
+                />
+                <a-input
+                    placeholder="Observaciones"
+                    v-model="remark"
+                    :disabled="onlyLecture"
+                    @keyup="edited=true"
+                    @keypress.enter.prevent="save"
+                >
+                    <a-icon class="input-save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                        @click="save"
+                    />
+                </a-input>
             </a-col>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
             <a-icon v-show="loading"
@@ -67,6 +84,7 @@ export default {
             edited: false,
             loading: false,
             value: false,
+            remark: '',
             configurable: true,
         };
     },
@@ -78,8 +96,9 @@ export default {
             e.prevent();
         },
         parseAnswer() {
-            if (this.answer.text) {
-                this.value = this.answer.text === 'true';
+            if (this.answer.action) {
+                this.value = this.answer.action === 'true';
+                this.remark = this.answer.text;
             }
             if (this.questionStatus === 1) {
                 this.edited = true;
@@ -95,7 +114,8 @@ export default {
             const response = await client3B.evaluation.answer.update({
                 id: this.answer.id,
                 evaluationQuestionId: this.questionId,
-                text: String(this.value),
+                text: this.remark,
+                action: String(this.value),
                 evaluationUnmeasuredQuestion: {
                     status: 2,
                 },
@@ -126,5 +146,22 @@ export default {
 .input-delete:hover {
     color: #db0000;
     cursor: pointer;
+}
+.input-save {
+    color: green;
+}
+.input-save:hover {
+    color: #005f00;
+    cursor: pointer;
+}
+.switch {
+    margin: 4px 12px 0 0;
+}
+.switch-answer {
+    font-size: 14px;
+    font-weight: 600;
+}
+.ant-input-group-wrapper {
+    width: 86%;
 }
 </style>
