@@ -43,7 +43,7 @@
                     <a-col :span="12">
                         <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
                     </a-col>
-                    <a-col :span=12 class="text-right">
+                    <a-col :span="12" class="text-right">
                         Tipo de gráfica
                         <a-select
                             defaultValue="bar"
