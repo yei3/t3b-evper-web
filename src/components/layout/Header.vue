@@ -2,66 +2,47 @@
     <a-layout-header class="header" style="background: white; padding: 0px; height: 60px;">
         <a-row>
             <a-col :span="12">
-                <a-icon
-                    class="trigger"
-                    :type="sidebarCollapsed ? 'menu-unfold' : 'menu-fold'"
-                    @click="toggleSidebar"
-                />
+                <a-icon class="trigger" :type="sidebarCollapsed ? 'menu-unfold' : 'menu-fold'" @click="toggleSidebar" />
             </a-col>
             <a-col :span="12">
                 <a-row>
-                   <a-col  style="text-align: right;">
-                       <a-button
-                            icon="user"
-                            style="border-style: none; cursor: unset;"
-                            class="logout-buttom"
-                        >
-                        {{ userProfile }}
+                    <a-col style="text-align: right;">
+                        <a-button icon="user" style="border-style: none; cursor: unset;" class="logout-buttom">
+                            {{ userProfile }}
                         </a-button>
-                       <a-button @click="showDrawer">
+                        <a-button @click="showDrawer">
                             <a-badge :count="countNotif">
                                 <a-icon type="bell" theme="filled" style="font-size: 25px;" />
                             </a-badge>
                         </a-button>
-                       <a-button
-                            icon="logout"
-                            style="border-style: none"
-                            class="logout-buttom"
-                            @click="logout()"
-                        >
+                        <a-button icon="logout" style="border-style: none" class="logout-buttom" @click="logout()">
                             Cerrar sesión
                         </a-button>
                     </a-col>
                 </a-row>
             </a-col>
         </a-row>
-        <a-drawer
-            title="Notificaciones"
-            placement="right"
-            :closable="false"
-            @close="onClose"
-            :visible="visible"
-            >
+        <a-drawer title="Notificaciones" placement="right" :closable="false" @close="onClose" :visible="visible">
             <div v-for="item in data" :key="item.id">
                 <a-icon type="bell" theme="filled" style="font-size: 14px;" />
-                <strong>   {{ item.id  }}</strong>
-                <br>
+                <strong> {{ item.id }}</strong>
+                <br />
                 {{ item.status }}
-                <br>
+                <br />
                 <p style="text-align:right;">{{ item.endDate }}</p>
             </div>
-            <br><br>
-            <div  class="text-lg-right">
+            <br /><br />
+            <div class="text-lg-right">
                 <a-button @click="onClose">Cerrar</a-button>
             </div>
         </a-drawer>
     </a-layout-header>
 </template>
 <script>
-import client3B from '@/api/client3B';
-import { mapActions, mapGetters } from 'vuex';
-import authService from '@/services/auth';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import { mapActions, mapGetters } from "vuex";
+import authService from "@/services/auth";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     data() {
@@ -77,12 +58,12 @@ export default {
     },
     methods: {
         ...mapActions({
-            toggleSidebar: 'toggleSideBar',
+            toggleSidebar: "toggleSideBar",
         }),
         logout() {
             authService.removeAuthData();
             authService.removeUserData();
-            this.$router.push({ name: 'login' });
+            this.$router.push({ name: "login" });
         },
         showDrawer() {
             this.visible = true;
@@ -108,8 +89,7 @@ export default {
                             subtitle: items[index].state,
                         },
                         collaborator: items[index].userId,
-                        endDate: new Date(items[index].notification.creationTime)
-                            .toLocaleDateString(),
+                        endDate: new Date(items[index].notification.creationTime).toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -121,21 +101,21 @@ export default {
     },
     computed: {
         ...mapGetters({
-            sidebarCollapsed: 'sidebarCollapsed',
-            userProfile: 'userProfile',
+            sidebarCollapsed: "sidebarCollapsed",
+            userProfile: "userProfile",
         }),
     },
 };
 </script>
 <style>
-    .beta-tag {
-        font-size: 10px;
-        padding: 2px 8px;
-        text-align: center;
-        background: #dddddd;
-        border-radius: 2px;
-    }
-    .logout-buttom:hover {
-        color: #000;
-    }
+.beta-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    text-align: center;
+    background: #dddddd;
+    border-radius: 2px;
+}
+.logout-buttom:hover {
+    color: #000;
+}
 </style>

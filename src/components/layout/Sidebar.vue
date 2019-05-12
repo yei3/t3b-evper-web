@@ -1,56 +1,47 @@
 <template>
-    <a-layout-sider breakpoint="lg" :trigger="null" collapsible v-model="sidebarCollapsed"
-        theme="dark" width=250
-    >
-        <a-row style="padding: 25px 0px 20px 15px; background-color: #ff0000"
-            v-show="sidebarCollapsed"
-        >
+    <a-layout-sider breakpoint="lg" :trigger="null" collapsible v-model="sidebarCollapsed" theme="dark" width="250">
+        <a-row style="padding: 25px 0px 20px 15px; background-color: #ff0000" v-show="sidebarCollapsed">
             <a-col class="ant-dropdown-link">
-                <a-avatar shape="square" :size="48" src="/favicon.ico"/>
+                <a-avatar shape="square" :size="48" src="/favicon.ico" />
             </a-col>
         </a-row>
-        <a-row style="padding: 35px 25px 23px 8px; background-color: #ff0000;
+        <a-row
+            style="padding: 35px 25px 23px 8px; background-color: #ff0000;
                     background-image: url('/img/header-profile-skin.png');"
             v-show="!sidebarCollapsed"
         >
             <a-col>
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
-                        <a-avatar :size="60" :src="imageUrl" class="avatar--border"/>
+                        <a-avatar :size="60" :src="imageUrl" class="avatar--border" />
                     </a-col>
                 </a-row>
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col style="margin-top: 5px;">
                         <strong style=" font-size: 13px; font-weight: 600; color: #fff;">
-                            {{username}}
+                            {{ username }}
                         </strong>
                     </a-col>
                 </a-row>
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
                         <a-dropdown>
-                            <a class="ant-dropdown-link" href="#">
-                                {{roleEs}} <a-icon type="down" />
-                            </a>
+                            <a class="ant-dropdown-link" href="#"> {{ roleEs }} <a-icon type="down" /> </a>
                             <a-menu slot="overlay">
-                                <a-menu-item v-for="arole in user.roles" :key="arole"
+                                <a-menu-item
+                                    v-for="arole in user.roles"
+                                    :key="arole"
                                     v-show="arole !== userCurrentRole"
                                 >
-                                    <a @click="setCurrentRole(arole)">
-                                        <a-icon type="user" /> {{roleToEs(arole)}}
-                                    </a>
+                                    <a @click="setCurrentRole(arole)"> <a-icon type="user" /> {{ roleToEs(arole) }} </a>
                                 </a-menu-item>
-                                <a-menu-divider/>
+                                <a-menu-divider />
                                 <a-menu-item>
-                                    <a @click="updateProfile">
-                                        <a-icon type="form" /> Editar perfil
-                                    </a>
+                                    <a @click="updateProfile"> <a-icon type="form" /> Editar perfil </a>
                                 </a-menu-item>
-                                <a-menu-divider/>
+                                <a-menu-divider />
                                 <a-menu-item>
-                                    <a @click="logout">
-                                        <a-icon type="logout" /> Cerrar Sesión
-                                    </a>
+                                    <a @click="logout"> <a-icon type="logout" /> Cerrar Sesión </a>
                                 </a-menu-item>
                             </a-menu>
                         </a-dropdown>
@@ -60,38 +51,29 @@
         </a-row>
         <a-row>
             <a-col>
-                <a-menu mode="inline" theme="dark" :selectedKeys="selectedKeys" >
+                <a-menu mode="inline" theme="dark" :selectedKeys="selectedKeys">
                     <a-sub-menu key="sub2" v-show="sidebarCollapsed">
                         <span slot="title">
                             <a-icon type="safety-certificate" />
                             <span>Tipo de rol</span>
                         </span>
-                        <a-menu-item v-for="arole in user.roles" :key="arole"
-                            v-show="arole !== userCurrentRole"
-                        >
-                            <a @click="setCurrentRole(arole)">
-                                <a-icon type="user" /> {{roleToEs(arole)}}
-                            </a>
+                        <a-menu-item v-for="arole in user.roles" :key="arole" v-show="arole !== userCurrentRole">
+                            <a @click="setCurrentRole(arole)"> <a-icon type="user" /> {{ roleToEs(arole) }} </a>
                         </a-menu-item>
-                        <a-menu-divider style="background-color: #666;"/>
+                        <a-menu-divider style="background-color: #666;" />
                         <a-menu-item>
-                            <a @click="updateProfile">
-                                <a-icon type="form" /> Editar perfil
-                            </a>
+                            <a @click="updateProfile"> <a-icon type="form" /> Editar perfil </a>
                         </a-menu-item>
-                        <a-menu-divider style="background-color: #666;"/>
+                        <a-menu-divider style="background-color: #666;" />
                         <a-menu-item>
-                            <a @click="logout">
-                                <a-icon type="logout" /> Cerrar Sesión
-                            </a>
+                            <a @click="logout"> <a-icon type="logout" /> Cerrar Sesión </a>
                         </a-menu-item>
                     </a-sub-menu>
 
-                    <a-menu-item v-for="(item, index) in sidebarItems"
-                        :key="String(index)" v-show="role == item.role">
+                    <a-menu-item v-for="(item, index) in sidebarItems" :key="String(index)" v-show="role == item.role">
                         <router-link :to="{ name: item.to }">
                             <a-icon :type="item.icon" />
-                            <span>{{item.text}}</span>
+                            <span>{{ item.text }}</span>
                         </router-link>
                     </a-menu-item>
                 </a-menu>
@@ -101,11 +83,11 @@
 </template>
 
 <script>
-import authService from '@/services/auth';
-import { mapGetters } from 'vuex';
+import authService from "@/services/auth";
+import { mapGetters } from "vuex";
 
 export default {
-    name: 'Sidebar',
+    name: "Sidebar",
     data() {
         return {
             selectedKeys: [],
@@ -114,45 +96,45 @@ export default {
             sidebarItems: [
                 {
                     role: authService.ROLES.COLLABORATOR,
-                    to: 'collaborator-home',
-                    icon: 'home',
-                    text: 'Home',
+                    to: "collaborator-home",
+                    icon: "home",
+                    text: "Home",
                 },
                 {
                     role: authService.ROLES.COLLABORATOR,
-                    to: 'collaborator-reports',
-                    icon: 'line-chart',
-                    text: 'Resultados',
+                    to: "collaborator-reports",
+                    icon: "line-chart",
+                    text: "Resultados",
                 },
                 {
                     role: authService.ROLES.COLLABORATOR,
-                    to: 'collaborator-evaluationsHistory',
-                    icon: 'search',
-                    text: 'Historial',
+                    to: "collaborator-evaluationsHistory",
+                    icon: "search",
+                    text: "Historial",
                 },
                 {
                     role: authService.ROLES.COLLABORATOR,
-                    to: 'collaborator-help',
-                    icon: 'question',
-                    text: 'Ayuda',
+                    to: "collaborator-help",
+                    icon: "question",
+                    text: "Ayuda",
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
-                    to: 'boss-home',
-                    icon: 'home',
-                    text: 'Home',
+                    to: "boss-home",
+                    icon: "home",
+                    text: "Home",
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
-                    to: 'boss-reports',
-                    icon: 'line-chart',
-                    text: 'Resultados',
+                    to: "boss-reports",
+                    icon: "line-chart",
+                    text: "Resultados",
                 },
                 {
                     role: authService.ROLES.SUPERVISOR,
-                    to: 'boss-closedEvaluationsHistory',
-                    icon: 'search',
-                    text: 'Historial',
+                    to: "boss-closedEvaluationsHistory",
+                    icon: "search",
+                    text: "Historial",
                 },
                 /*
                 {
@@ -170,33 +152,33 @@ export default {
                 */
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-home',
-                    icon: 'file-text',
-                    text: 'Formatos',
+                    to: "admin-home",
+                    icon: "file-text",
+                    text: "Formatos",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-evaluations',
-                    icon: 'form',
-                    text: 'Evaluaciones',
+                    to: "admin-evaluations",
+                    icon: "form",
+                    text: "Evaluaciones",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-evaluationsHistory',
-                    icon: 'search',
-                    text: 'Historial de evaluaciones',
+                    to: "admin-evaluationsHistory",
+                    icon: "search",
+                    text: "Historial de evaluaciones",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-reports',
-                    icon: 'line-chart',
-                    text: 'Resultados',
+                    to: "admin-reports",
+                    icon: "line-chart",
+                    text: "Resultados",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-organigram',
-                    icon: 'cluster',
-                    text: 'Organigrama',
+                    to: "admin-organigram",
+                    icon: "cluster",
+                    text: "Organigrama",
                 },
                 /*
                 {
@@ -208,21 +190,21 @@ export default {
                 */
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-evaluationsHistory',
-                    icon: 'search',
-                    text: 'Historial',
+                    to: "admin-evaluationsHistory",
+                    icon: "search",
+                    text: "Historial",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-users',
-                    icon: 'user',
-                    text: 'Usuarios',
+                    to: "admin-users",
+                    icon: "user",
+                    text: "Usuarios",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: 'admin-notifications',
-                    icon: 'bell',
-                    text: 'Avisos',
+                    to: "admin-notifications",
+                    icon: "bell",
+                    text: "Avisos",
                 },
             ],
         };
@@ -234,41 +216,41 @@ export default {
         }, 10000);
     },
     watch: {
-        $route: 'getSelectedItem',
+        $route: "getSelectedItem",
     },
     methods: {
         getSelectedItem() {
-            const selectedkey = this.sidebarItems.findIndex(item => item.to === this.$route.name);
+            const selectedkey = this.sidebarItems.findIndex((item) => item.to === this.$route.name);
             if (selectedkey !== -1) {
                 this.selectedKeys = [String(selectedkey)];
             }
         },
         updateProfile() {
-            this.$router.push({ name: 'update-profile' });
+            this.$router.push({ name: "update-profile" });
         },
         setCurrentRole(role) {
             authService.setCurrentRole(role);
             this.userCurrentRole = role;
             this.$store.state.userProfile = this.roleToEs(role);
-            this.$router.push({ name: 'home' });
+            this.$router.push({ name: "home" });
         },
         logout() {
             authService.removeAuthData();
             authService.removeUserData();
-            this.$router.push({ name: 'login' });
+            this.$router.push({ name: "login" });
         },
         roleToEs(role) {
             if (role === authService.ROLES.ADMINISTRATOR) {
-                return 'Administrador';
+                return "Administrador";
             }
             if (role === authService.ROLES.SUPERVISOR) {
-                return 'Evaluador';
+                return "Evaluador";
             }
             if (role === authService.ROLES.COLLABORATOR) {
-                return 'Evaluado';
+                return "Evaluado";
             }
 
-            return 'Evaluado';
+            return "Evaluado";
         },
     },
     computed: {
@@ -277,7 +259,7 @@ export default {
                 return this.$store.getters.sidebarCollapsed;
             },
             set(value) {
-                return this.$store.dispatch('toggleSideBar', value);
+                return this.$store.dispatch("toggleSideBar", value);
             },
         },
         imageUrl() {
@@ -297,12 +279,10 @@ export default {
 };
 </script>
 
-
 <style>
-
 .avatar--border {
     border: solid 2px;
-    background: #565656;;
+    background: #565656;
 }
 
 .ant-layout-sider,
@@ -322,8 +302,7 @@ export default {
 .ant-menu-dark .ant-menu-submenu-title:hover,
 .ant-menu-dark .ant-menu-item:hover,
 .ant-menu-vertical .ant-menu-item:hover,
-.ant-menu-vertical .ant-menu-item:not(:last-child)
-.ant-menu-item:hover,
+.ant-menu-vertical .ant-menu-item:not(:last-child) .ant-menu-item:hover,
 .ant-menu-item-active:hover {
     color: #fff;
     background-color: #000;
@@ -391,7 +370,7 @@ export default {
     color: #fff;
     opacity: 0.8;
     font-size: 12px;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 .ant-menu.ant-menu-dark .ant-menu-item-selected {

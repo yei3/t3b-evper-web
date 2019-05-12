@@ -1,208 +1,173 @@
 <template>
-  <div id="printReport">
-    <a-row class="breadcrumb-wrapper">
-      <a-row :gutter="32">
-        <a-col :h2="24">
-          <h1 class="breadcrumb-header">Resultados de Evaluación | Análisis Comparativo</h1>
-        </a-col>
-      </a-row>
-      <a-row :gutter="32">
-        <a-col :span="21">
-          <a-breadcrumb>
-            <a-breadcrumb-item>
-              <router-link :to="{ name: 'admin-reports' }" class="breadcrumb-path">Resultados</router-link>
-            </a-breadcrumb-item>
-          </a-breadcrumb>
-        </a-col>
-        <a-col :span="3">
-          <a-button class="btn-blue" @click="print" :disabled="leftObjectivesData === null">
-            <a-icon type="printer"/>Imprimir
-          </a-button>
-        </a-col>
-      </a-row>
-    </a-row>
-    <div
-      class="collapse-content"
-      style="background-color: white;
+    <div id="printReport">
+        <a-row class="breadcrumb-wrapper">
+            <a-row :gutter="32">
+                <a-col :h2="24">
+                    <h1 class="breadcrumb-header">Resultados de Evaluación | Análisis Comparativo</h1>
+                </a-col>
+            </a-row>
+            <a-row :gutter="32">
+                <a-col :span="21">
+                    <a-breadcrumb>
+                        <a-breadcrumb-item>
+                            <router-link :to="{ name: 'admin-reports' }" class="breadcrumb-path"
+                                >Resultados</router-link
+                            >
+                        </a-breadcrumb-item>
+                    </a-breadcrumb>
+                </a-col>
+                <a-col :span="3">
+                    <a-button class="btn-blue" @click="print" :disabled="leftObjectivesData === null">
+                        <a-icon type="printer" />Imprimir
+                    </a-button>
+                </a-col>
+            </a-row>
+        </a-row>
+        <div
+            class="collapse-content"
+            style="background-color: white;
             margin: 30px 30px; padding-top: 20px;:"
-    >
-      <a-row>
-        <a-col :md="11" style="text-align:center;">
-          <h4 style="color: red;">Evaluado A</h4>
-        </a-col>
-        <a-col :md="2" style="text-align:center;">
-          <h4 style="color: red;">vs</h4>
-        </a-col>
-        <a-col :md="11" style="text-align:center;">
-          <h4 style="color: red;">Evaluado B</h4>
-        </a-col>
-      </a-row>
-      <a-row :gutter="16">
-        <a-col :sm="24" :md="12">
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Región:</h5>
-            <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
-              <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
-                {{
-                region.displayName
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Área:</h5>
-            <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
-              <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
-                {{
-                area.displayName
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Puesto:</h5>
-            <a-select style="width: 100%" v-model="left.person">
-              <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
-                {{
-                person.jobDescription
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Evaluado:</h5>
-            <a-select
-              style="width: 100%"
-              v-model="left.person"
-              showSearch
-              :filterOption="filterOption"
-            >
-              <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
-                {{
-                person.fullName
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Fecha Inicio:</h5>
-            <a-date-picker placeholder="Fecha Inicio" v-model="left.start"/>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Fecha Fin:</h5>
-            <a-date-picker placeholder="Fecha Fin" v-model="left.end"/>
-          </a-col>
-        </a-col>
-        <a-col :sm="24" :md="12">
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Región:</h5>
-            <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
-              <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
-                {{
-                region.displayName
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Área:</h5>
-            <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
-              <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
-                {{
-                area.displayName
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Puesto:</h5>
-            <a-select style="width: 100%" v-model="right.person">
-              <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
-                {{
-                person.jobDescription
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Evaluado:</h5>
-            <a-select
-              style="width: 100%"
-              v-model="right.person"
-              showSearch
-              :filterOption="filterOption"
-            >
-              <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
-                {{
-                person.fullName
-                }}
-              </a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Fecha Inicio:</h5>
-            <a-date-picker placeholder="Fecha Inicio" v-model="right.start"/>
-          </a-col>
-          <a-col :sm="24" :md="24" :lg="24" :xl="12">
-            <h5>Fecha Fin:</h5>
-            <a-date-picker placeholder="Fecha Fin" v-model="right.end"/>
-          </a-col>
-        </a-col>
-        <a-col :md="24" style="text-align: center; padding-top: 20px;">
-          <a-alert v-show="bannerError" banner closable :message="bannerError"/>
-          <br>
-          <a-button
-            type="primary"
-            @click="getReport"
-            :loading="loading"
-            :disabled="loading"
-          >Comparar</a-button>
-        </a-col>
-      </a-row>
+        >
+            <a-row>
+                <a-col :md="11" style="text-align:center;">
+                    <h4 style="color: red;">Evaluado A</h4>
+                </a-col>
+                <a-col :md="2" style="text-align:center;">
+                    <h4 style="color: red;">vs</h4>
+                </a-col>
+                <a-col :md="11" style="text-align:center;">
+                    <h4 style="color: red;">Evaluado B</h4>
+                </a-col>
+            </a-row>
+            <a-row :gutter="16">
+                <a-col :sm="24" :md="12">
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Región:</h5>
+                        <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
+                            <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                                {{ region.displayName }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Área:</h5>
+                        <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
+                            <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
+                                {{ area.displayName }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Puesto:</h5>
+                        <a-select style="width: 100%" v-model="left.person">
+                            <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
+                                {{ person.jobDescription }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Evaluado:</h5>
+                        <a-select style="width: 100%" v-model="left.person" showSearch :filterOption="filterOption">
+                            <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
+                                {{ person.fullName }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Fecha Inicio:</h5>
+                        <a-date-picker placeholder="Fecha Inicio" v-model="left.start" />
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Fecha Fin:</h5>
+                        <a-date-picker placeholder="Fecha Fin" v-model="left.end" />
+                    </a-col>
+                </a-col>
+                <a-col :sm="24" :md="12">
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Región:</h5>
+                        <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
+                            <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                                {{ region.displayName }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Área:</h5>
+                        <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
+                            <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
+                                {{ area.displayName }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Puesto:</h5>
+                        <a-select style="width: 100%" v-model="right.person">
+                            <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
+                                {{ person.jobDescription }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Evaluado:</h5>
+                        <a-select style="width: 100%" v-model="right.person" showSearch :filterOption="filterOption">
+                            <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
+                                {{ person.fullName }}
+                            </a-select-option>
+                        </a-select>
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Fecha Inicio:</h5>
+                        <a-date-picker placeholder="Fecha Inicio" v-model="right.start" />
+                    </a-col>
+                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                        <h5>Fecha Fin:</h5>
+                        <a-date-picker placeholder="Fecha Fin" v-model="right.end" />
+                    </a-col>
+                </a-col>
+                <a-col :md="24" style="text-align: center; padding-top: 20px;">
+                    <a-alert v-show="bannerError" banner closable :message="bannerError" />
+                    <br />
+                    <a-button type="primary" @click="getReport" :loading="loading" :disabled="loading"
+                        >Comparar</a-button
+                    >
+                </a-col>
+            </a-row>
+        </div>
+        <div class="collapse-content" v-if="leftObjectivesData" style="background-color: white; margin: 30px 30px;">
+            <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
+            <a-row>
+                <a-col :span="12" class="text-center">
+                    <div class="small">
+                        <doughnut-chart
+                            v-if="leftObjectivesData"
+                            :chartData="leftObjectivesData"
+                            :options="leftObjectivesOptions"
+                        />
+                    </div>
+                </a-col>
+                <a-col :span="12" class="text-center">
+                    <div class="small">
+                        <doughnut-chart
+                            v-if="rightObjectivesData"
+                            :chartData="rightObjectivesData"
+                            :options="rightObjectivesOptions"
+                        />
+                    </div>
+                </a-col>
+            </a-row>
+        </div>
+        <div v-if="leftChartData" class="collapse-content" style="background-color: white; margin: 30px 30px;">
+            <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
+            <a-row>
+                <a-col :sm="24" :md="12">
+                    <bar-chart v-if="leftChartData" :chartData="leftChartData" :options="barOptions" />
+                </a-col>
+                <a-col :sm="24" :md="12">
+                    <bar-chart v-if="rightChartData" :chartData="rightChartData" :options="barOptions" />
+                </a-col>
+            </a-row>
+        </div>
     </div>
-    <div
-      class="collapse-content"
-      v-if="leftObjectivesData"
-      style="background-color: white; margin: 30px 30px;"
-    >
-      <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
-      <a-row>
-        <a-col :span="12" class="text-center">
-          <div class="small">
-            <doughnut-chart
-              v-if="leftObjectivesData"
-              :chartData="leftObjectivesData"
-              :options="leftObjectivesOptions"
-            />
-          </div>
-        </a-col>
-        <a-col :span="12" class="text-center">
-          <div class="small">
-            <doughnut-chart
-              v-if="rightObjectivesData"
-              :chartData="rightObjectivesData"
-              :options="rightObjectivesOptions"
-            />
-          </div>
-        </a-col>
-      </a-row>
-    </div>
-    <div
-      v-if="leftChartData"
-      class="collapse-content"
-      style="background-color: white; margin: 30px 30px;"
-    >
-      <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
-      <a-row>
-        <a-col :sm="24" :md="12">
-          <bar-chart v-if="leftChartData" :chartData="leftChartData" :options="barOptions"/>
-        </a-col>
-        <a-col :sm="24" :md="12">
-          <bar-chart v-if="rightChartData" :chartData="rightChartData" :options="barOptions"/>
-        </a-col>
-      </a-row>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -421,7 +386,7 @@ export default {
         },
         getCapabilitiesReport(RegionId, AreaId) {
             return Promise.all([
-                client3B.report.getAdminReport({
+                client3B.report.getAdminCapabilitiesReport({
                     RegionId,
                     AreaId,
                     JobDescription: this.left.person,

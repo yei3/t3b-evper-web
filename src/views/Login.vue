@@ -1,33 +1,24 @@
 <template>
-    <a-layout id="login-layout" style="min-height: 100vh" >
+    <a-layout id="login-layout" style="min-height: 100vh">
         <a-layout-content class="login-back">
-            <a-row
-                type="flex"
-                justify="center"
-                align="middle"
-                style="min-height: 90vh"
-            >
+            <a-row type="flex" justify="center" align="middle" style="min-height: 90vh">
                 <a-col>
-                    <a-row
-                        type="flex"
-                        justify="center"
-                        align="middle"
-                    >
-                        <a-col :md="{ span:12 }" :lg="{ span:9 }" class="login-img">
+                    <a-row type="flex" justify="center" align="middle">
+                        <a-col :md="{ span: 12 }" :lg="{ span: 9 }" class="login-img">
                             <img
                                 alt="image"
                                 src="@/assets/img/login-imagen.png"
                                 style="max-width: 80%; height: auto;"
-                            >
+                            />
                         </a-col>
-                        <a-col :md="{ span:12 }" :lg="{ span:9 }" class="login-form">
+                        <a-col :md="{ span: 12 }" :lg="{ span: 9 }" class="login-form">
                             <a-row>
                                 <a-col :span="24" style="text-aling: center;">
                                     <img
                                         alt="image"
                                         src="@/assets/img/logo-tipografia.png"
                                         style="max-width: 30%; height: auto; padding-top: 80px;"
-                                    >
+                                    />
                                 </a-col>
                             </a-row>
                             <a-row>
@@ -39,24 +30,20 @@
                                 </a-col>
                             </a-row>
                             <a-row type="flex" justify="center" align="middle">
-                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
+                                <a-col
+                                    :md="{ span: 14 }"
+                                    :sm="{ span: 24 }"
                                     v-if="!showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 v-model="user.id"
                                                 class="form-input"
                                                 placeholder="Número de Empleado"
                                             />
                                         </a-form-item>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 type="password"
                                                 v-model="user.password"
@@ -67,7 +54,7 @@
                                         <a-form-item>
                                             <a-button
                                                 block
-                                                htmlType='submit'
+                                                htmlType="submit"
                                                 class="login-buttom"
                                                 :loading="loading"
                                                 @click="login"
@@ -77,7 +64,9 @@
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
-                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }"
+                                <a-col
+                                    :md="{ span: 14 }"
+                                    :sm="{ span: 24 }"
                                     v-if="showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
@@ -88,10 +77,7 @@
                                                 </h4>
                                             </label>
                                         </a-form-item>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 v-model="user.email"
                                                 class="form-input"
@@ -99,10 +85,7 @@
                                                 type="email"
                                             />
                                         </a-form-item>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 type="password"
                                                 v-model="user.newPassword"
@@ -110,10 +93,7 @@
                                                 placeholder="Nueva Contraseña"
                                             />
                                         </a-form-item>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 type="password"
                                                 v-model="user.newPasswordConfirmation"
@@ -124,7 +104,7 @@
                                         <a-form-item style="margin-bottom: 0px;">
                                             <a-button
                                                 block
-                                                htmlType='submit'
+                                                htmlType="submit"
                                                 class="login-buttom"
                                                 :loading="loading"
                                                 @click="updatePassword"
@@ -133,31 +113,22 @@
                                             </a-button>
                                         </a-form-item>
                                         <a-form-item>
-                                            <a
-                                                style="color: #666; text-decoration: underline;"
-                                                @click="redirectToHome"
-                                            >
+                                            <a style="color: #666; text-decoration: underline;" @click="redirectToHome">
                                                 Cancelar
                                             </a>
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
-                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="showRecovPass" >
+                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="showRecovPass">
                                     <a-form>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 v-model="user.id"
                                                 class="form-input"
                                                 placeholder="Número de Empleado"
                                             />
                                         </a-form-item>
-                                        <a-form-item
-                                            hasFeedback
-                                            :validateStatus="errors.length? 'error': ''"
-                                        >
+                                        <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
                                             <a-input
                                                 type="email"
                                                 v-model="user.email"
@@ -168,7 +139,7 @@
                                         <a-form-item>
                                             <a-button
                                                 block
-                                                htmlType='submit'
+                                                htmlType="submit"
                                                 class="login-buttom"
                                                 :loading="loading"
                                                 @click="passwordRecovery"
@@ -181,16 +152,14 @@
                             </a-row>
                             <a-row v-show="!showFormConfirmPassword && !showRecovPass">
                                 <a-col>
-                                    <a @click="showRecovPass = true"
-                                        style="color: #666; text-decoration: underline;">
+                                    <a @click="showRecovPass = true" style="color: #666; text-decoration: underline;">
                                         ¿Olvidó su contraseña?
                                     </a>
                                 </a-col>
                             </a-row>
                             <a-row v-show="showRecovPass">
                                 <a-col>
-                                    <a @click="showRecovPass = false"
-                                        style="color: #666; text-decoration: underline;">
+                                    <a @click="showRecovPass = false" style="color: #666; text-decoration: underline;">
                                         Iniciar Sesión
                                     </a>
                                 </a-col>
@@ -198,11 +167,7 @@
                         </a-col>
                     </a-row>
                     <a-divider />
-                    <a-row
-                        type="flex"
-                        justify="center"
-                        align="middle"
-                    >
+                    <a-row type="flex" justify="center" align="middle">
                         <a-col :span="17">
                             <small> Tiendas 3B © 2019 </small>
                         </a-col>
@@ -219,9 +184,9 @@
 </template>
 
 <script>
-import Footer from '@/components/layout/Footer.vue';
-import client3B from '@/api/client3B';
-import authService from '@/services/auth';
+import Footer from "@/components/layout/Footer.vue";
+import client3B from "@/api/client3B";
+import authService from "@/services/auth";
 
 export default {
     components: {
@@ -230,11 +195,11 @@ export default {
     data() {
         return {
             user: {
-                id: '',
-                password: '',
-                email: '',
-                newPassword: '',
-                newPasswordConfirmation: '',
+                id: "",
+                password: "",
+                email: "",
+                newPassword: "",
+                newPasswordConfirmation: "",
             },
             showFormConfirmPassword: false,
             showRecovPass: false,
@@ -247,7 +212,7 @@ export default {
     methods: {
         redirectToHome() {
             this.loading = false;
-            this.$router.go('/');
+            this.$router.go("/");
         },
         async login() {
             this.loading = true;
@@ -283,8 +248,7 @@ export default {
             authService.removeAuthData();
             this.userData = response.data.result.user;
             this.userData.roles = response.data.result.roles;
-            if (this.authData.isFirstTimeLogin
-                && this.userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
+            if (this.authData.isFirstTimeLogin && this.userData.roles[0] !== authService.ROLES.ADMINISTRATOR) {
                 this.showFormConfirmPassword = true;
                 this.loading = false;
                 return;
@@ -305,8 +269,7 @@ export default {
                 password: this.user.newPassword,
                 confirmPassword: this.user.newPasswordConfirmation,
             };
-            if(this.validatePass(update.password))
-            {
+            if (this.validatePass(update.password)) {
                 authService.storeAuthData(this.authData);
                 try {
                     await client3B.account.firstTimeLogin(update);
@@ -318,24 +281,24 @@ export default {
                 }
                 this.saveSession();
             } else {
-                this.$message.error("La contraseña debe tener al menos un número, una mayúscula y un símbolo.")
+                this.$message.error("La contraseña debe tener al menos un número, una mayúscula y un símbolo.");
                 this.loading = false;
             }
-
-            
         },
         async passwordRecovery() {
             this.loading = true;
-            const response = await client3B.user.recoverPassword({
-                employeeNumber: this.user.id,
-                emailAddress: this.user.email,
-            }).catch(error => this.handleError(error));
+            const response = await client3B.user
+                .recoverPassword({
+                    employeeNumber: this.user.id,
+                    emailAddress: this.user.email,
+                })
+                .catch((error) => this.handleError(error));
             this.loading = false;
             if (!response) return;
             this.showRecovPass = false;
-            this.$message.success('Se ha enviado el correo de recuperación');
+            this.$message.success("Se ha enviado el correo de recuperación");
         },
-        validatePass(password){
+        validatePass(password) {
             var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\d]).{5,}$/;
             return regex.test(password);
         },
@@ -344,7 +307,8 @@ export default {
             this.errors = [];
             if (error.response) {
                 this.handleError(error.response.data.error);
-            } if (error.validationErrors) {
+            }
+            if (error.validationErrors) {
                 error.validationErrors.forEach((err) => {
                     this.$message.error(err.message, time);
                     this.errors.push(err.message);
@@ -364,7 +328,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 #login-layout {
     padding: 0px 46px 0px 46px;
@@ -372,7 +335,7 @@ export default {
 }
 
 .login-back {
-    background-image: url('../../src/assets/img/login-background.png');
+    background-image: url("../../src/assets/img/login-background.png");
     background-color: white;
     background-repeat: no-repeat;
     background-position: center;
@@ -391,9 +354,9 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
-  .login-img {
-    display: none;
-  }
+    .login-img {
+        display: none;
+    }
 }
 
 .login-form {
@@ -430,5 +393,4 @@ export default {
     border-color: #1ab394;
     box-shadow: 0 0 0 1px rgb(26, 179, 148);
 }
-
 </style>

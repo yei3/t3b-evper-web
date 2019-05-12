@@ -1,5 +1,7 @@
 <template>
-    <div id="printEvaluation" class="collapse-content"
+    <div
+        id="printEvaluation"
+        class="collapse-content"
         style="background-color: white;
         margin: 30px 30px;"
     >
@@ -10,10 +12,7 @@
         </a-row>
         <a-row class="collapse-title" style="margin: 16px 0;">
             <a-col :span="3">
-                <a-avatar
-                    :size="120"
-                    src="https://t3b.blob.core.windows.net/t3b/images/site/logo.png"
-                />
+                <a-avatar :size="120" src="https://t3b.blob.core.windows.net/t3b/images/site/logo.png" />
             </a-col>
             <a-col :span="1"></a-col>
             <a-col :span="10">
@@ -22,60 +21,50 @@
                 <span style="font-weight: normal">
                     {{ region }}
                 </span>
-                <br>
+                <br />
                 <b>Área: </b>
                 <span style="font-weight: normal">
                     {{ area }}
                 </span>
-                <br>
+                <br />
                 <b>Puesto: </b>
                 <span style="font-weight: normal">
                     {{ jobDescription }}
                 </span>
-                <br>
+                <br />
                 <b>Tiempo en el puesto: </b>
                 <span style="font-weight: normal">
                     {{ getDiffDates(formatDate(entryDate), formatDate(reassignDate), formatDate(reviewDate)) }}
                 </span>
-                <br>
+                <br />
                 <b>Fecha de ingreso: </b>
                 <span style="font-weight: normal">
                     {{ formatDate(entryDate) }}
                 </span>
-                <br>
+                <br />
                 <b>Fecha de revisión: </b>
                 <span style="font-weight: normal">
                     {{ formatDate(reviewDate) }}
                 </span>
-                <br>
+                <br />
             </a-col>
             <a-col :span="6">
                 <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
-                <br>
+                <br />
                 <b>% Objetivos logrados:</b>
-                <span style="font-weight: normal">
-                    &emsp;&emsp;{{completed}}
-                </span>
-                <br>
+                <span style="font-weight: normal"> &emsp;&emsp;{{ completed }} </span>
+                <br />
                 <b>% Excede requerimiento:</b>
-                <span style="font-weight: normal">
-                    &emsp;{{answerER}}
-                </span>
-                <br>
+                <span style="font-weight: normal"> &emsp;{{ answerER }} </span>
+                <br />
                 <b>% Cumple requerimiento:</b>
-                <span style="font-weight: normal">
-                    &emsp;{{answerCR}}
-                </span>
-                <br>
+                <span style="font-weight: normal"> &emsp;{{ answerCR }} </span>
+                <br />
                 <b>% Insatisfactorio:</b>
-                <span style="font-weight: normal">
-                    &emsp;&emsp;{{answerIN}}
-                </span>
+                <span style="font-weight: normal"> &emsp;&emsp;{{ answerIN }} </span>
             </a-col>
             <a-col :span="3">
-                <a-button class="btn-blue"
-                    @click="print"
-                >
+                <a-button class="btn-blue" @click="print">
                     <a-icon type="printer" />
                     Imprimir
                 </a-button>
@@ -84,16 +73,13 @@
         <div class="collapse-content">
             <h2>Instrucciones</h2>
             <p>{{ evaluation.template.instructions }}</p>
-            <br><br>
-            <a-row
-            >
-                <div class="section__title" >
+            <br /><br />
+            <a-row>
+                <div class="section__title">
                     <h3>Objetivos</h3>
                     <!-- <h3>{{ section.name }}</h3> -->
                 </div>
-                <span
-                    v-for="(objective, i) in currentObjectives.objectives" :key="i"
-                >
+                <span v-for="(objective, i) in currentObjectives.objectives" :key="i">
                     <!-- <div class="subsection--padd">
                         <b
                             class="subsection"
@@ -103,10 +89,8 @@
                         </b>
                     </div> -->
                     <p class="question__border">
-                        <b>{{i+1}}.- </b>
-                        <strong>
-                            {{ objective.text }}  -  {{getStatusText(objective.status) }}
-                        </strong>
+                        <b>{{ i + 1 }}.- </b>
+                        <strong> {{ objective.text }} - {{ getStatusText(objective.status) }} </strong>
                     </p>
                     <p class="question__border">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -122,66 +106,47 @@
                     </p>
                 </span>
             </a-row>
-            <a-row
-                v-for="(section, i) in sections" :key="i"
-            >
-                <div class="section__title" >
+            <a-row v-for="(section, i) in sections" :key="i">
+                <div class="section__title">
                     <h3>{{ section.name }}</h3>
                 </div>
-                <span
-                    v-for="(subsection, j) in section.childSections" :key="j"
-                >
+                <span v-for="(subsection, j) in section.childSections" :key="j">
                     <div class="subsection--padd">
-                        <b
-                            class="subsection"
-                            v-show="isNullOrEmpty(subsection.name)"
-                        >
+                        <b class="subsection" v-show="isNullOrEmpty(subsection.name)">
                             {{ subsection.name }}
                         </b>
                     </div>
-                    <span
-                        :key="h"
-                        v-for="(question, h) in subsection.unmeasuredQuestions"
-                    >
+                    <span :key="h" v-for="(question, h) in subsection.unmeasuredQuestions">
                         <p class="question__border">
-                            <b>{{h+1}}.- </b>
+                            <b>{{ h + 1 }}.- </b>
                             <strong>{{ question.text }}</strong>
                         </p>
                         <p class="question__border">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <a-icon type="edit" />
                             &nbsp;
-                            {{findAnwer(question.id)}}
+                            {{ findAnwer(question.id) }}
                         </p>
                     </span>
-                    <span
-                        :key="h"
-                        v-for="(question, h) in subsection.measuredQuestions"
-                    >
+                    <span :key="h" v-for="(question, h) in subsection.measuredQuestions">
                         <p class="question__border">
-                            <b>Objetivo: </b>{{ question.text }}
-                            <b>Valor esperado: </b> {{question.expected || question.expectedText}}
+                            <b>Objetivo: </b>{{ question.text }} <b>Valor esperado: </b>
+                            {{ question.expected || question.expectedText }}
                             <b>Valor real: </b>
                         </p>
                     </span>
-                    <span
-                        :key="h"
-                        v-for="(question, h) in subsection.notEvaluableAnswer"
-                    >
+                    <span :key="h" v-for="(question, h) in subsection.notEvaluableAnswer">
                         <p class="question__border">{{ question.text }}</p>
                     </span>
                 </span>
                 <a-divider />
             </a-row>
-            <a-row
-            >
-                <div class="section__title" >
+            <a-row>
+                <div class="section__title">
                     <h3>Próximos Objetivos</h3>
                     <!-- <h3>{{ section.name }}</h3> -->
                 </div>
-                <span
-                    v-for="(objective, i) in nextObjectives.objectives" :key="i"
-                >
+                <span v-for="(objective, i) in nextObjectives.objectives" :key="i">
                     <!-- <div class="subsection--padd">
                         <b
                             class="subsection"
@@ -191,7 +156,7 @@
                         </b>
                     </div> -->
                     <p class="question__border">
-                        <b>{{i+1}}.- </b>
+                        <b>{{ i + 1 }}.- </b>
                         <strong>{{ objective.text }}</strong>
                     </p>
                     <p class="question__border">
@@ -208,35 +173,34 @@
                     </p>
                 </span>
             </a-row>
-            <a-row
-                v-show="isClosed"
-            >
-                <div class="section__title" >
+            <a-row v-show="isClosed">
+                <div class="section__title">
                     <h3>Comentario de cierre</h3>
                 </div>
-                <span><p class="question__border">{{evaluation.closingComment}}</p></span>
+                <span
+                    ><p class="question__border">{{ evaluation.closingComment }}</p></span
+                >
             </a-row>
-
         </div>
         <div class="collapse-content">
             <a-row class="" style="padding: 0 0 8px;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He preparado esta auto evaluación de desempeño con detenimiento,
-                         la he explicado claramente y discutido en detalle con mi Evaluador.
+                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y
+                        discutido en detalle con mi Evaluador.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He preparado esta evaluación de desempeño con detenimiento,
-                         la he explicado claramente y discutido en detalle con el Evaluado.
+                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y
+                        discutido en detalle con el Evaluado.
                     </p>
-                    <br><br>
+                    <br /><br />
                     <p v-show="isAutoEvaluation" class="signature"><b>Firma de Evaluado</b></p>
                     <p v-show="!isAutoEvaluation" class="signature"><b>Firma de Evaluador</b></p>
                 </a-col>
                 <a-col :span="4"></a-col>
                 <a-col :span="6">
-                    <br><br>
-                    <br><br>
+                    <br /><br />
+                    <br /><br />
                     <p class="signature"><b>Fecha</b></p>
                 </a-col>
                 <a-col :span="1"></a-col>
@@ -244,23 +208,21 @@
             <a-row class="" style="padding: 24px 0 0 0;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He leído y comprendido esta auto evaluación de desempeño,
-                         otorgando mis recomendaciones para la mejora en el
-                          desempeño del Evaluado.
+                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la
+                        mejora en el desempeño del Evaluado.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He leído y comprendido esta evaluación de desempeño y
-                         las recomendaciones señaladas. Haré lo mejor posible
-                         para mejorar mi desempeño basado en estos comentarios.
+                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo
+                        mejor posible para mejorar mi desempeño basado en estos comentarios.
                     </p>
-                    <br><br>
+                    <br /><br />
                     <p v-show="isAutoEvaluation" class="signature"><b>Firma de Evaluador</b></p>
                     <p v-show="!isAutoEvaluation" class="signature"><b>Firma de Evaluado</b></p>
                 </a-col>
                 <a-col :span="4"></a-col>
                 <a-col :span="6">
-                    <br><br>
-                    <br><br>
+                    <br /><br />
+                    <br /><br />
                     <p class="signature"><b>Fecha</b></p>
                 </a-col>
                 <a-col :span="1"></a-col>
@@ -270,30 +232,28 @@
 </template>
 
 <script>
-
-import client3B from '@/api/client3B';
-import print from '@/modules/mixin/print';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import print from "@/modules/mixin/print";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     mixins: [print],
-    components: {
-    },
+    components: {},
     data() {
         return {
             spin: false,
             loading: false,
             collapsed: false,
-            region: '',
-            area: '',
-            jobDescription: '',
-            reviewDate: '',
-            entryDate: '',
-            reassignDate: '',
-            collaboratorName: '',
+            region: "",
+            area: "",
+            jobDescription: "",
+            reviewDate: "",
+            entryDate: "",
+            reassignDate: "",
+            collaboratorName: "",
             isAutoEvaluation: true,
             isClosed: false,
-            completed: '',
+            completed: "",
             answerER: 0,
             answerCR: 0,
             answerIN: 0,
@@ -301,9 +261,9 @@ export default {
             sections: [],
             evaluation: {
                 template: {
-                    name: '',
-                    description: '',
-                    instructions: '',
+                    name: "",
+                    description: "",
+                    instructions: "",
                 },
             },
             nextObjectives: {
@@ -316,16 +276,16 @@ export default {
             },
             selectOptions: [
                 {
-                    value: '-70',
-                    label: 'Insatisfactorio (<70%)',
+                    value: "-70",
+                    label: "Insatisfactorio (<70%)",
                 },
                 {
-                    value: '71-99',
-                    label: 'Cumple requerimiento (71% a 99%)',
+                    value: "71-99",
+                    label: "Cumple requerimiento (71% a 99%)",
                 },
                 {
-                    value: '+100',
-                    label: 'Excede requerimiento (100%)',
+                    value: "+100",
+                    label: "Excede requerimiento (100%)",
                 },
             ],
         };
@@ -338,23 +298,23 @@ export default {
     methods: {
         print() {
             // Pass the element id here
-            this.$printHtml('printEvaluation');
+            this.$printHtml("printEvaluation");
         },
         findAnwer(questionId) {
-            let ans = '';
+            let ans = "";
             const regex = "/[\[\]']+/g";
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
                     ans = anwser.unmeasuredAnswer.text;
                 }
             });
-            ans = (ans !== null) ? ans.replace(regex, '') : '';
-            if (ans === '-70') {
-                ans = 'Insatisfactorio';
-            } else if (ans === '71-99') {
-                ans = 'Cumple requerimiento';
-            } else if (ans === '+100') {
-                ans = 'Excede requerimiento';
+            ans = ans !== null ? ans.replace(regex, "") : "";
+            if (ans === "-70") {
+                ans = "Insatisfactorio";
+            } else if (ans === "71-99") {
+                ans = "Cumple requerimiento";
+            } else if (ans === "+100") {
+                ans = "Excede requerimiento";
             }
             return ans;
         },
@@ -364,36 +324,30 @@ export default {
             this.currentObjectives.objectives = [];
             sections.forEach((section) => {
                 if (this.isObjectiveSection(section)) {
-                    this.sections.push(
-                        section,
-                    );
+                    this.sections.push(section);
                 }
             });
             this.anwsers.forEach((anwser) => {
                 if (anwser.notEvaluableAnswer !== null) {
                     if (anwser.sectionId === this.nextObjectives.sectionId) {
-                        this.nextObjectives.objectives.push(
-                            anwser,
-                        );
+                        this.nextObjectives.objectives.push(anwser);
                     }
                     if (anwser.sectionId === this.currentObjectives.sectionId) {
-                        this.currentObjectives.objectives.push(
-                            anwser,
-                        );
+                        this.currentObjectives.objectives.push(anwser);
                     }
                 }
             });
         },
         isNullOrEmpty(subsection) {
-            return (subsection !== null && subsection !== '');
+            return subsection !== null && subsection !== "";
         },
         isObjectiveSection(section) {
-            if (section.name === 'Objetivos') {
+            if (section.name === "Objetivos") {
                 this.currentObjectives.sectionId = section.childSections[0].id;
-            } else if (section.name === 'Próximos Objetivos') {
+            } else if (section.name === "Próximos Objetivos") {
                 this.nextObjectives.sectionId = section.childSections[0].id;
             }
-            return (section.name !== 'Próximos Objetivos' && section.name !== 'Objetivos');
+            return section.name !== "Próximos Objetivos" && section.name !== "Objetivos";
         },
         objectivesCount() {
             this.completed = 0;
@@ -404,7 +358,7 @@ export default {
                 }
             });
             if (count > 0) {
-                this.completed = ((count * 100) / this.currentObjectives.objectives.length);
+                this.completed = (count * 100) / this.currentObjectives.objectives.length;
                 this.completed = `${this.completed.toPrecision(4)}  %`;
             }
         },
@@ -418,41 +372,41 @@ export default {
             let countIN = 0;
             this.anwsers.forEach((anwser) => {
                 if (anwser.unmeasuredAnswer != null) {
-                    if (anwser.unmeasuredAnswer.text === '-70') {
+                    if (anwser.unmeasuredAnswer.text === "-70") {
                         countIN += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.text === '71-99') {
+                    } else if (anwser.unmeasuredAnswer.text === "71-99") {
                         countCR += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.text === '+100') {
+                    } else if (anwser.unmeasuredAnswer.text === "+100") {
                         countER += 1;
                         total += 1;
                     }
                 }
             });
             if (countIN > 0) {
-                this.answerIN = ((countIN * 100) / total);
+                this.answerIN = (countIN * 100) / total;
                 this.answerIN = `${this.answerIN.toPrecision(4)}  %`;
             }
             if (countCR > 0) {
-                this.answerCR = ((countCR * 100) / total);
+                this.answerCR = (countCR * 100) / total;
                 this.answerCR = `${this.answerCR.toPrecision(4)}  %`;
             }
             if (countCR > 0) {
-                this.answerER = ((countER * 100) / total);
+                this.answerER = (countER * 100) / total;
                 this.answerER = `${this.answerER.toPrecision(4)}  %`;
             }
         },
         getStatusText(status) {
-            let res = '';
+            let res = "";
             if (status === 1) {
-                res = 'No iniciado';
+                res = "No iniciado";
             } else if (status === 2) {
-                res = 'En proceso';
+                res = "En proceso";
             } else if (status === 3) {
-                res = 'Completado';
+                res = "Completado";
             } else if (status === 4) {
-                res = 'Validado';
+                res = "Validado";
             }
             return res;
         },
@@ -466,7 +420,7 @@ export default {
         getDiffDates(entry, reassign, review) {
             const fecha1 = new Date(entry);
             let fecha2 = new Date();
-            if (reassign === '0001-01-01') {
+            if (reassign === "0001-01-01") {
                 fecha2 = fecha1;
             } else {
                 fecha2 = new Date(reassign);
@@ -474,17 +428,16 @@ export default {
             const resta = new Date(review).getTime() - fecha2.getTime();
             const dias = Math.round(resta / (1000 * 60 * 60 * 24));
             const anios = dias / 365;
-            const meses = ((dias - (Math.trunc(anios) * 365)) / 30.4);
-            const numDias = dias - (Math.trunc(anios) * 365) - (Math.trunc(meses) * 30.4);
+            const meses = (dias - Math.trunc(anios) * 365) / 30.4;
+            const numDias = dias - Math.trunc(anios) * 365 - Math.trunc(meses) * 30.4;
             return `${Math.floor(anios)} años ${Math.floor(meses)} meses ${numDias.toFixed(0)} días.`;
         },
         async fetchEvaluation() {
             this.spin = true;
-            const response = await client3B.evaluation.get(this.$route.params.id)
-                .catch((error) => {
-                    this.spin = false;
-                    errorHandler(this, error);
-                });
+            const response = await client3B.evaluation.get(this.$route.params.id).catch((error) => {
+                this.spin = false;
+                errorHandler(this, error);
+            });
             if (!response) return;
             this.evaluation = response.data.result;
             this.anwsers = this.evaluation.questions;
@@ -505,30 +458,30 @@ export default {
 </script>
 
 <style scoped>
-    .signature {
-        text-align: center;
-        border-top: solid 1px black;
-    }
-    .subsection {
-        color: #00b490;
-        font-size: 15px;
-        padding: 1px 8px;
-        margin: 0 0 0 20px;
-        border-radius: 4px;
-        border: 1px solid #adadad
-    }
-    .subsection--padd {
-        padding: 32px 0 16px 0;
-    }
-    .section__title {
-        padding: 0px 8px;
-        font-size: 15px;
-        border-radius: 3px;
-        color: #000000;
-        background-color: #6fd1bd;
-        text-align: center;
-    }
-    .question__border {
-        margin: 0 0 0 30px;
-    }
+.signature {
+    text-align: center;
+    border-top: solid 1px black;
+}
+.subsection {
+    color: #00b490;
+    font-size: 15px;
+    padding: 1px 8px;
+    margin: 0 0 0 20px;
+    border-radius: 4px;
+    border: 1px solid #adadad;
+}
+.subsection--padd {
+    padding: 32px 0 16px 0;
+}
+.section__title {
+    padding: 0px 8px;
+    font-size: 15px;
+    border-radius: 3px;
+    color: #000000;
+    background-color: #6fd1bd;
+    text-align: center;
+}
+.question__border {
+    margin: 0 0 0 30px;
+}
 </style>

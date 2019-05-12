@@ -1,10 +1,10 @@
 <script>
-import { Line } from 'vue-chartjs';
+import { Line } from "vue-chartjs";
 
 export default {
     extends: Line,
     props: {
-        chartdata: {
+        chartData: {
             type: Object,
             default: null,
         },
@@ -14,7 +14,7 @@ export default {
         },
     },
     mounted() {
-        this.renderChart(this.chartdata, this.options);
+        this.renderChart(this.chartData, this.options);
     },
 };
 </script>
