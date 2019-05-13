@@ -15,7 +15,10 @@
         <a-row style="margin-top: 30px;">
             <a-col :span="24">
                 <current-objectives />
-            </a-col>            
+            </a-col>
+            <a-col :span="24">
+                <current-actions />
+            </a-col>
             <a-col :span="24">
                 <pending-auto-evaluations />
             </a-col>
@@ -27,11 +30,12 @@
 </template>
 
 <script>
-import nextEvaluationPeriod from '@/components/collaborator/home/nextEvaluationPeriod.vue';
-import collaboratorIssues from '@/components/collaborator/home/collaboratorIssues.vue';
-import pendingAutoEvaluations from '@/components/collaborator/home/pendingAutoEvaluations.vue';
-import bossEvaluations from '@/components/collaborator/home/bossEvaluations.vue';
-import currentObjectives from '@/components/collaborator/home/currentObjectives.vue';
+import nextEvaluationPeriod from "@/components/collaborator/home/nextEvaluationPeriod.vue";
+import collaboratorIssues from "@/components/collaborator/home/collaboratorIssues.vue";
+import pendingAutoEvaluations from "@/components/collaborator/home/pendingAutoEvaluations.vue";
+import bossEvaluations from "@/components/collaborator/home/bossEvaluations.vue";
+import currentObjectives from "@/components/collaborator/home/currentObjectives.vue";
+import currentActions from "@/components/collaborator/home/currentActions.vue";
 
 export default {
     components: {
@@ -40,6 +44,7 @@ export default {
         pendingAutoEvaluations,
         bossEvaluations,
         currentObjectives,
+        currentActions,
     },
 };
 </script>
