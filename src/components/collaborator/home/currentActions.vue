@@ -1,26 +1,15 @@
 <template>
     <div class="collapse" v-show="data.length > 0">
         <a-row class="collapse-title background--title">
-            <a-col :span=23>
+            <a-col :span="23">
                 Seguimiento de acciones
             </a-col>
-            <a-col :span=1 style="text-align: right; color: #fff;">
-
+            <a-col :span="1" style="text-align: right; color: #fff;">
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
                 </a>
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
                 </a>
             </a-col>
         </a-row>
@@ -30,10 +19,7 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false"
-                :scroll="{ x: true }"
-            >
-            </a-table>
+            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }"> </a-table>
         </a-row>
     </div>
 </template>
@@ -92,7 +78,7 @@ export default {
                         key: index + 1,
                         id: items[index].id,
                         action: items[index].description,
-                        responsibe: items[index].responsible,
+                        responsible: items[index].responsible,
                         deliveryDate: new Date(items[index].deliveryDate).toLocaleDateString(),
                     });
                 }
@@ -106,10 +92,10 @@ export default {
 </script>
 
 <style scoped>
-    @media only screen and (max-width: 660px) {
-        .text-padding {
-            text-align: center;
-            padding: 0px;
-        }
+@media only screen and (max-width: 660px) {
+    .text-padding {
+        text-align: center;
+        padding: 0px;
     }
+}
 </style>
