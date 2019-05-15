@@ -92,7 +92,7 @@ export default {
                         key: index + 1,
                         id: items[index].id,
                         action: items[index].description,
-                        responsibe: items[index].responsible,
+                        responsible: items[index].responsible,
                         deliveryDate: new Date(items[index].deliveryDate).toLocaleDateString(),
                     });
                 }
