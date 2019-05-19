@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style scoped>
-    .dropdown-icon {
-        color: #fff;
-    }
+.dropdown-icon {
+    color: #fff;
+}
 </style>

@@ -13,7 +13,8 @@ export default {
             html2canvas(element, {
                 useCORS: true,
                 logging: false,
-                ignoreElements: (ignoredElement) => ignoredElement.classList.contains("btn-blue"),
+                ignoreElements: this.ignoreElements,
+                onclone: this.onCloned,
             })
                 .then((canvas) => {
                     const canvasWidth = canvas.width;
@@ -24,12 +25,35 @@ export default {
                     });
                     const width = doc.internal.pageSize.getWidth();
                     const height = doc.internal.pageSize.getHeight();
-                    doc.addImage(canvas, "JPEG", 0, 0, width, height);
+                    doc.addImage(canvas, "JPEG", 0, 0, width, height, "", "NONE");
                     doc.save("report.pdf");
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 });
+        },
+        ignoreElements(element) {
+            return (
+                element.classList.contains("btn-blue") ||
+                element.classList.contains("ant-layout-sider") ||
+                element.classList.contains("custom-footer")
+            );
+        },
+        onCloned(cloned) {
+            /**
+             ** Here is where the magic happens
+             ** Here we modify the resulting HTML document styles from `html2canvas`
+             ** https://github.com/niklasvh/html2canvas/issues/1661
+             */
+            const modified = cloned;
+            if (modified.querySelector("#printEvaluation")) {
+                modified.querySelector("#printEvaluation").style =
+                    "font-family: 'Quicksand', sans-serif; font-variant: normal;";
+            } else if (modified.querySelector("#printReport")) {
+                modified.querySelector("#printReport").style =
+                    "font-family: 'Quicksand', sans-serif; font-variant: normal;";
+            }
+            return modified;
         },
     },
 };
