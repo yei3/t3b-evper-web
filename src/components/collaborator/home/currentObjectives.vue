@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse">
+    <div class="collapse" v-show="!hideSection">
         <a-row class="collapse-title background--title">
             <a-col :xs="12" :sm="14" :md="16" :lg="18" class="text-padding">
                 <span>Seguimiento a Objetivos Actuales</span>
@@ -246,6 +246,7 @@ export default {
             spin: false,
             collapsed: false,
             loaded: false,
+            hideSection: false,
             data: [],
             columns,
             username: "",
@@ -343,6 +344,9 @@ export default {
                         evaluable: items[index].isNotEvaluable,
                         endDate: new Date(items[index].deliveryDate).toLocaleDateString(),
                     });
+                    if (items[index].isNotEvaluable === false) {
+                        this.hideSection = true;
+                    }
                 }
             } catch (error) {
                 errorHandler(this, error);

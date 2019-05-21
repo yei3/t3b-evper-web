@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse">
+    <div class="collapse" v-show="!hideSection">
         <a-row class="collapse-title-boss">
             <a-col :span="23" class="text-center">
                 Seguimiento a Objetivos Actuales
@@ -217,6 +217,7 @@ export default {
         return {
             spin: false,
             collapsed: false,
+            hideSection: false,
             currentCollaborator: -1,
             columns,
             viewProgressModal: {
@@ -303,6 +304,9 @@ export default {
                         objectives,
                         totalPendingObjectives: items[index].totalPendingObjectives,
                     });
+                    if (this.data.length <= 0) {
+                        this.hideSection = true;
+                    }
                 }
             } catch (error) {
                 errorHandler(this, error);
