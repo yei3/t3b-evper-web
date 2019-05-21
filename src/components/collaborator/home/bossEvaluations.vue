@@ -1,25 +1,15 @@
 <template>
-    <div class="collapse" v-show="data.length > 0 ">
+    <div class="collapse" v-show="data.length > 0">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
                 Cierre de Evaluaciones
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
                 </a>
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
                 </a>
             </a-col>
         </a-row>
@@ -29,22 +19,22 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination=false
-                :scroll="{ x: true }"
-            >
+            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
                 <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                    <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                    <!-- <a
+                        <!-- <a
                         class="table-link"
                         @click="toggleCBEModal()"
                     > -->
-                        {{evaluation.title}}
-                    <!-- </a> -->
+                        {{ evaluation.title }}
+                        <!-- </a> -->
                     </p>
-                    <p><small>{{evaluation.subtitle}}</small></p>
+                    <p>
+                        <small>{{ evaluation.subtitle }}</small>
+                    </p>
                 </span>
                 <span slot="action" slot-scope="text, record">
                     <a-button
@@ -59,11 +49,7 @@
             </a-table>
         </a-row>
 
-        <a-modal
-            v-model="CBEModal.show"
-            onOk="toggleCBEModal"
-            width="600px"
-        >
+        <a-modal v-model="CBEModal.show" onOk="toggleCBEModal" width="600px">
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -71,7 +57,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Cerrar Evaluación</h1>
-                        <small>{{CBEModal.evaluationName}}</small>
+                        <small>{{ CBEModal.evaluationName }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -79,24 +65,22 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida por mi Evaluador.
+                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida
+                        por mi Evaluador.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="CBEModal.evaluationCloseMsg"/>
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="CBEModal.evaluationCloseMsg" />
                 </a-col>
                 <a-col class="modal-content-seccion">
                     <a-checkbox
                         :checked="CBEModal.enableButton"
-                        @change="CBEModal.enableButton = !CBEModal.enableButton"    
+                        @change="CBEModal.enableButton = !CBEModal.enableButton"
                     >
                         <strong style="font-size: 13px;">
-                            He preparado los objetivos para el próximo periodo.
+                            ¿Estás seguro que deseas cerrar tu evaluación?
                         </strong>
                     </a-checkbox>
-                </a-col>
-                <a-col class="modal-content-seccion-bottom">
-                    <p>¿Está seguro que desea cerrar la evaluación indicada?</p>
                 </a-col>
             </a-row>
 
@@ -122,35 +106,37 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 const columns = [
     {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
-    }, {
-        title: 'Evaluación',
-        dataIndex: 'evaluation',
-        key: 'evaluation',
-        scopedSlots: { customRender: 'evaluation' },
-    }, {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
+        title: "Estatus",
+        dataIndex: "status",
+        key: "status",
+        scopedSlots: { customRender: "status" },
     },
     {
-        title: 'Fecha de revisión',
-        key: 'reviewDate',
-        dataIndex: 'reviewDate',
+        title: "Evaluación",
+        dataIndex: "evaluation",
+        key: "evaluation",
+        scopedSlots: { customRender: "evaluation" },
     },
     {
-        title: '',
-        key: 'action',
-        scopedSlots: { customRender: 'action' },
-        align: 'right',
+        title: "Fecha fin",
+        dataIndex: "endDate",
+        key: "endDate",
+    },
+    {
+        title: "Fecha de revisión",
+        key: "reviewDate",
+        dataIndex: "reviewDate",
+    },
+    {
+        title: "",
+        key: "action",
+        scopedSlots: { customRender: "action" },
+        align: "right",
     },
 ];
 
@@ -163,8 +149,8 @@ export default {
                 show: false,
                 enableButton: false,
                 evaluationId: 0,
-                evaluationName: '',
-                evaluationCloseMsg: '',
+                evaluationName: "",
+                evaluationCloseMsg: "",
             },
             data: [],
             columns,
@@ -175,13 +161,13 @@ export default {
     },
     methods: {
         async addClosingMessage(evaluationId, message) {
-            await client3B.evaluation.closeComment(
-                {
+            await client3B.evaluation
+                .closeComment({
                     comment: message,
-                    id: evaluationId
-                }
-            ).catch(error => errorHandler(this, error));
-            this.$message.success('El mensaje se ha guardado correctamente');
+                    id: evaluationId,
+                })
+                .catch((error) => errorHandler(this, error));
+            this.$message.success("El mensaje se ha guardado correctamente");
         },
         async getRevisionSummary() {
             this.spin = true;
@@ -200,12 +186,13 @@ export default {
                             subtitle: evaluation.description,
                         },
                         endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
-                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString(
-                            [],
-                            {
-                                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
-                            },
-                        ),
+                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString([], {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        }),
                     });
                 });
             } catch (error) {
@@ -215,9 +202,9 @@ export default {
             }
         },
         async sendBossCloseEvaluationNotification() {
-            await client3B.notifications.sendBossCloseEvaluationNotification(
-                {},
-            ).catch(error => errorHandler(this, error));
+            await client3B.notifications
+                .sendBossCloseEvaluationNotification({})
+                .catch((error) => errorHandler(this, error));
         },
         async toggleCBEModal(input) {
             if (!this.CBEModal.show) {
@@ -230,45 +217,45 @@ export default {
                 this.sendBossCloseEvaluationNotification();
                 this.CBEModal.show = !this.CBEModal.show;
                 // this.data.splice( this.data.indexOf(this.CBEModal.evaluationId), 1);
-                // console.log(this.data);    
+                // console.log(this.data);
             }
         },
         disableButton(status) {
-            if (status === 'No iniciado' || status === 'En proceso') {
+            if (status === "No iniciado" || status === "En proceso") {
                 return true;
             }
             return false;
         },
         selectTagColor(status) {
             switch (status) {
-            case 'No iniciado':
-                return 'ant-tag-red';
-            case 'En proceso':
-                return 'ant-tag-yellow';
-            case 'Finalizado':
-                return 'ant-tag-green';
-            case 'Pte. revisión':
-                return 'ant-tag-gray';
-            case 'Validado':
-                return 'ant-tag-blue';
-            default:
-                return 'ant-tag-white';
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Finalizado":
+                    return "ant-tag-green";
+                case "Pte. revisión":
+                    return "ant-tag-gray";
+                case "Validado":
+                    return "ant-tag-blue";
+                default:
+                    return "ant-tag-white";
             }
         },
         selectStatusName(status) {
             switch (status) {
-            case 0:
-                return 'No iniciado';
-            case 1:
-                return 'En proceso';
-            case 2:
-                return 'Finalizado';
-            case 4:
-                return 'Pte. revisión';
-            case 3:
-                return 'Validado';
-            default:
-                return 'No iniciado';
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "En proceso";
+                case 2:
+                    return "Finalizado";
+                case 4:
+                    return "Pte. revisión";
+                case 3:
+                    return "Validado";
+                default:
+                    return "No iniciado";
             }
         },
     },
@@ -276,15 +263,15 @@ export default {
 </script>
 
 <style scoped>
-    .btn--close-evaluations {
-        border: none;
-        background: #00d5af;
-        color: #000;
-        font-size: 11px;
-        width: 82px;
-    }
-    .btn--start-evaluations:hover {
-        background: #00af8f;
-        color: #fff;
-    }
+.btn--close-evaluations {
+    border: none;
+    background: #00d5af;
+    color: #000;
+    font-size: 11px;
+    width: 82px;
+}
+.btn--start-evaluations:hover {
+    background: #00af8f;
+    color: #fff;
+}
 </style>
