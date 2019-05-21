@@ -91,12 +91,9 @@
                         @change="CBEModal.enableButton = !CBEModal.enableButton"    
                     >
                         <strong style="font-size: 13px;">
-                            He preparado los objetivos para el próximo periodo.
+                            ¿Estás seguro que deseas cerrar tu evaluación?
                         </strong>
                     </a-checkbox>
-                </a-col>
-                <a-col class="modal-content-seccion-bottom">
-                    <p>¿Está seguro que desea cerrar la evaluación indicada?</p>
                 </a-col>
             </a-row>
 
