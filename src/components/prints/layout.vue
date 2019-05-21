@@ -38,7 +38,7 @@
                 <span style="font-weight: normal">{{ formatDate(reviewDate) }}</span>
                 <br />
             </a-col>
-            <a-col :span="6">
+            <a-col :span="6" v-show="includePastObjectives">
                 <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
                 <br />
                 <b>% Objetivos logrados:</b>
@@ -53,6 +53,13 @@
                 <b>% Insatisfactorio:</b>
                 <span style="font-weight: normal">&emsp;&emsp;{{ answerIN }}</span>
             </a-col>
+            <a-col :span="6" v-show="!includePastObjectives">
+                <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
+                <br />
+                <br />
+                <b>Evaluación Global:</b>
+                <span style="font-weight: normal"> &emsp;&emsp;{{ answerEG }} </span>
+            </a-col>
             <a-col :span="3">
                 <a-button class="btn-blue" @click="print"> <a-icon type="printer" />Imprimir </a-button>
             </a-col>
@@ -62,7 +69,7 @@
             <p>{{ evaluation.template.instructions }}</p>
             <br />
             <br />
-            <a-row>
+            <a-row v-show="includePastObjectives">
                 <div class="section__title">
                     <h3>Objetivos</h3>
                     <!-- <h3>{{ section.name }}</h3> -->
@@ -121,6 +128,12 @@
                             <b>Valor esperado:</b>
                             {{ question.expected || question.expectedText }}
                             <b>Valor real:</b>
+                            {{ getValorReal(question.id) }}
+                            <b>Resultado: </b>
+                            {{ getResultado(question.id) }}
+                            <br/>
+                            <b>Observaciones: </b>
+                            {{ getObservaciones(question.id) }}
                         </p>
                     </span>
                     <span :key="h" v-for="(question, h) in subsection.notEvaluableAnswer">
@@ -129,7 +142,7 @@
                 </span>
                 <a-divider />
             </a-row>
-            <a-row>
+            <a-row  v-show="includePastObjectives">
                 <div class="section__title">
                     <h3>Próximos Objetivos</h3>
                     <!-- <h3>{{ section.name }}</h3> -->
@@ -258,11 +271,13 @@ export default {
             reassignDate: "",
             collaboratorName: "",
             isAutoEvaluation: true,
+            includePastObjectives: false,
             isClosed: false,
             completed: "",
             answerER: 0,
             answerCR: 0,
             answerIN: 0,
+            answerEG: 0,
             anwsers: [],
             sections: [],
             evaluation: {
@@ -297,7 +312,10 @@ export default {
         };
     },
     async created() {
-        await Promise.all([this.fetchEvaluation(), this.objectivesCount(), this.answersCount()]);
+        await this.fetchEvaluation();
+        await this.objectivesCount();
+        await this.answersCount();
+        
     },
     methods: {
         print() {
@@ -309,7 +327,17 @@ export default {
             const regex = "/[[]']+/g";
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
-                    ans = anwser.unmeasuredAnswer.text;
+                    if (anwser.unmeasuredAnswer.action === "true") {
+                        ans = `Sí. ${anwser.unmeasuredAnswer.text}`;
+                    } else if (anwser.unmeasuredAnswer.action === "false") {
+                        ans = `No. ${anwser.unmeasuredAnswer.text}`;
+                    } else if (anwser.unmeasuredAnswer.action === null) {
+                        ans = anwser.unmeasuredAnswer.text;
+                    } else {
+                        ans = `ACCIÓN: ${anwser.unmeasuredAnswer.action}  |   RESPONSABLE: ${
+                            anwser.unmeasuredAnswer.text
+                        }        FECHA COMPROMISO: ${this.formatDate(anwser.unmeasuredAnswer.commitmentDate)}`;
+                    }
                 }
             });
             ans = ans !== null ? ans.replace(regex, "") : "";
@@ -321,6 +349,33 @@ export default {
                 ans = "Excede requerimiento";
             }
             return ans;
+        },
+        getValorReal(questionId) {
+            let res = "";
+            this.anwsers.forEach((anwser) => {
+                if (anwser.evaluationQuestionId === questionId) {
+                    res = anwser.measuredAnswer.real;
+                }
+            });
+            return res;
+        },
+        getObservaciones(questionId) {
+            let res = "";
+            this.anwsers.forEach((anwser) => {
+                if (anwser.evaluationQuestionId === questionId) {
+                    res = anwser.measuredAnswer.observations;
+                }
+            });
+            return res;
+        },
+        getResultado(questionId) {
+            let res = "";
+            this.anwsers.forEach((anwser) => {
+                if (anwser.evaluationQuestionId === questionId) {
+                    res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                }
+            });
+            return res;
         },
         clearSections(sections) {
             this.sections = [];
@@ -370,10 +425,12 @@ export default {
             this.answerER = 0;
             this.answerCR = 0;
             this.answerIN = 0;
+            this.answerEG = 0;
             let total = 0;
             let countER = 0;
             let countCR = 0;
             let countIN = 0;
+            let countEG = 0;
             this.anwsers.forEach((anwser) => {
                 if (anwser.unmeasuredAnswer != null) {
                     if (anwser.unmeasuredAnswer.text === "-70") {
@@ -385,6 +442,11 @@ export default {
                     } else if (anwser.unmeasuredAnswer.text === "+100") {
                         countER += 1;
                         total += 1;
+                    } else if (anwser.unmeasuredAnswer.action != null) {
+                        total += 1;
+                        if (anwser.unmeasuredAnswer.action === "true") {
+                            countEG += 1;
+                        }
                     }
                 }
             });
@@ -399,6 +461,10 @@ export default {
             if (countCR > 0) {
                 this.answerER = (countER * 100) / total;
                 this.answerER = `${this.answerER.toPrecision(4)}  %`;
+            }
+            if (countEG > 0) {
+                this.answerEG = (countEG * 100) / total;
+                this.answerEG = `${this.answerEG.toPrecision(4)} %`;
             }
         },
         getStatusText(status) {
@@ -453,6 +519,7 @@ export default {
             this.reassignDate = this.evaluation.user.reassignDate;
             this.collaboratorName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
+            this.includePastObjectives = this.evaluation.template.includePastObjectives;
             this.isClosed = this.evaluation.status === 4;
             await this.clearSections(this.evaluation.template.sections);
             this.spin = false;
