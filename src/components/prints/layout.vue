@@ -131,7 +131,7 @@
                             {{ getValorReal(question.id) }}
                             <b>Resultado: </b>
                             {{ getResultado(question.id) }}
-                            <br/>
+                            <br />
                             <b>Observaciones: </b>
                             {{ getObservaciones(question.id) }}
                         </p>
@@ -142,7 +142,7 @@
                 </span>
                 <a-divider />
             </a-row>
-            <a-row  v-show="includePastObjectives">
+            <a-row v-show="includePastObjectives">
                 <div class="section__title">
                     <h3>Próximos Objetivos</h3>
                     <!-- <h3>{{ section.name }}</h3> -->
@@ -315,7 +315,6 @@ export default {
         await this.fetchEvaluation();
         await this.objectivesCount();
         await this.answersCount();
-        
     },
     methods: {
         print() {
