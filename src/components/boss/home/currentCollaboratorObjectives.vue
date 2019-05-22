@@ -296,6 +296,9 @@ export default {
                             },
                             endDate: new Date(objectivesAux[jndex].deliveryDate).toLocaleDateString(),
                         });
+                        if (objectivesAux[jndex].isNotEvaluable === false) {
+                            this.hideSection = true;
+                        }
                     }
                     this.data.push({
                         key: index + 1,
@@ -371,32 +374,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Completado":
-                    return "ant-tag-green";
-                case "Validado":
-                    return "ant-tag-blue";
-                default:
-                    return "ant-tag-gray";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Completado":
+                return "ant-tag-green";
+            case "Validado":
+                return "ant-tag-blue";
+            default:
+                return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "No iniciado";
-                case 2:
-                    return "En proceso";
-                case 3:
-                    return "Completado";
-                case 4:
-                    return "Validado";
-                default:
-                    return "No iniciado";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "No iniciado";
+            case 2:
+                return "En proceso";
+            case 3:
+                return "Completado";
+            case 4:
+                return "Validado";
+            default:
+                return "No iniciado";
             }
         },
         transformStatus(status) {
