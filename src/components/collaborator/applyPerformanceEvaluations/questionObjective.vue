@@ -69,7 +69,7 @@
                 :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
                 :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
-                    initialValue: '',
+                    initialValue: observations,
                     rules: [
                         {
                             required: false,
@@ -79,6 +79,7 @@
                 }"
             >
                 <a-textarea :autosize="{ minRows: 2, maxRows: 6 }"
+                    v-model="observations"
                     placeholder="Observaciones..."
                     @keyup="edited=true"
                     @keypress.enter.prevent="save"
@@ -142,6 +143,7 @@ export default {
             loading: false,
             expectedValue: null,
             value: 0,
+            observations: '',
             numeric: false,
             configurable: true,
         };
@@ -167,6 +169,7 @@ export default {
             if (this.questionStatus === 1) {
                 this.edited = true;
             }
+            this.observations = this.answer.observations || '';
         },
         save() {
             if (this.onlyLecture) return;
@@ -190,6 +193,7 @@ export default {
                 evaluationMeasuredQuestion: {
                     status: 2,
                 },
+                observations: this.observations
             }, { measured: true }).catch(error => errorHandler(this, error));
             this.loading = false;
             if (!response) return;
