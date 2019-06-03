@@ -15,6 +15,8 @@ export default {
                 logging: false,
                 ignoreElements: this.ignoreElements,
                 onclone: this.onCloned,
+                windowWidth: 1920,
+                windowHeight: 1080,
             })
                 .then((canvas) => {
                     const canvasWidth = canvas.width;
