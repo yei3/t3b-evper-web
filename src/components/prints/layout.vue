@@ -58,7 +58,7 @@
                 <br />
                 <br />
                 <b>Evaluación Global:</b>
-                <span style="font-weight: normal"> &emsp;&emsp;{{ answerEG }} </span>
+                <span style="font-weight: normal"> &emsp;&emsp;{{ textEG }} </span>
             </a-col>
             <a-col :span="3">
                 <a-button class="btn-blue" @click="print"> <a-icon type="printer" />Imprimir </a-button>
@@ -270,6 +270,7 @@ export default {
             entryDate: "",
             reassignDate: "",
             collaboratorName: "",
+            textEG: "",
             isAutoEvaluation: true,
             includePastObjectives: false,
             isClosed: false,
@@ -463,7 +464,10 @@ export default {
             }
             if (countEG > 0) {
                 this.answerEG = (countEG * 100) / total;
-                this.answerEG = `${this.answerEG.toPrecision(4)} %`;
+                this.answerEG = `${this.answerEG.toPrecision(4)}`;
+                this.textEG = `${this.answerEG} %   ${
+                    this.answerEG < 70 ? "Insatisfactorio" : this.answerEG < 90 ? "Satistactorio" : "Excelente"
+                }`;
             }
         },
         getStatusText(status) {
