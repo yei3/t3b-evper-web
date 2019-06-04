@@ -465,8 +465,9 @@ export default {
             if (countEG > 0) {
                 this.answerEG = (countEG * 100) / total;
                 this.answerEG = `${this.answerEG.toPrecision(4)}`;
-                this.textEG = `${this.answerEG} %   ${this.answerEG < 70 ? 'Insatisfactorio' : 
-                                    this.answerEG < 90 ? 'Satistactorio' : 'Excelente'}`;
+                this.textEG = `${this.answerEG} %   ${
+                    this.answerEG < 70 ? "Insatisfactorio" : this.answerEG < 90 ? "Satistactorio" : "Excelente"
+                }`;
             }
         },
         getStatusText(status) {
