@@ -7,7 +7,7 @@
                         <a-col :md="{ span: 12 }" :lg="{ span: 9 }" class="login-img">
                             <img
                                 alt="image"
-                                src="@/assets/img/login-imagen.png"
+                                src="@/assets/img/login-imagen2.png"
                                 style="max-width: 80%; height: auto;"
                             />
                         </a-col>
