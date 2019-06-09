@@ -164,12 +164,6 @@ export default {
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: "admin-evaluationsHistory",
-                    icon: "search",
-                    text: "Historial de evaluaciones",
-                },
-                {
-                    role: authService.ROLES.ADMINISTRATOR,
                     to: "admin-reports",
                     icon: "line-chart",
                     text: "Resultados",
@@ -179,20 +173,6 @@ export default {
                     to: "admin-organigram",
                     icon: "cluster",
                     text: "Organigrama",
-                },
-                /*
-                {
-                    role: authService.ROLES.ADMINISTRATOR,
-                    to: 'onWork',
-                    icon: 'line-chart',
-                    text: 'Resultados',
-                },
-                */
-                {
-                    role: authService.ROLES.ADMINISTRATOR,
-                    to: "admin-evaluationsHistory",
-                    icon: "search",
-                    text: "Historial",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,

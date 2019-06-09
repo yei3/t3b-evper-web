@@ -523,7 +523,7 @@ export default {
             this.collaboratorName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
             this.includePastObjectives = this.evaluation.template.includePastObjectives;
-            this.isClosed = this.evaluation.closingComment.length > 0;
+            this.isClosed = this.evaluation.closingComment != null && this.evaluation.closingComment.length > 0;
             await this.clearSections(this.evaluation.template.sections);
             this.spin = false;
         },
