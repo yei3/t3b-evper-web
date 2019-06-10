@@ -38,6 +38,16 @@ class OrganizationUnit extends Http {
         const path = `${this.entityPath}/GetAllAreaOrganizationUnits`;
         return this.request(path, this.methods.get, {});
     }
+
+    /**
+     * Request for the information for AllRegionsOrganizationUnits
+     *
+     * @return {Promise}        Http Response
+     */
+    getMyRegion() {
+        const path = `${this.entityPath}/GetMyRegionOrganizationUnit`;
+        return this.request(path, this.methods.get, {});
+    }
 }
 
 export default OrganizationUnit;
