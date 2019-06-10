@@ -8,10 +8,6 @@ pool:
   demands: azureps
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '11.x'
-  displayName: 'Install Node.js'
   
 - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@2
   inputs:
@@ -24,7 +20,7 @@ steps:
 - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
   displayName: 'Yarn Build'
   inputs:
-    Arguments: build
+    Arguments: build --fix
 
 - powershell: 'Install-Module -Name AzureRM -AllowClobber -Force'
   displayName: 'PowerShell Script'
@@ -32,9 +28,9 @@ steps:
 - task: AzureFileCopy@3
   inputs:
     SourcePath: 'd:\a\1\s\dist\'
-    azureSubscription: Tiendas3B
-    Destination: AzureBlob
-    storage: tiendas3b
+    azureSubscription: 'Tiendas3B'
+    Destination: 'AzureBlob'
+    storage: 'tiendas3b'
     ContainerName: '$web'
   displayName: 'AzureBlob File Copy'
   
