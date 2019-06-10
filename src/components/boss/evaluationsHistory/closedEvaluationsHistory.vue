@@ -216,7 +216,13 @@ export default {
                 },
             ).catch(error => errorHandler(this, error));
             // send notification
-            this.sendReviewNotification(evaluationId, this.dateString);
+            this.sendReviewNotification(evaluationId, this.dateString.toLocaleString([], {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        }));
             // change status on real-time XD
             const obj = this.data.find(tmp => tmp.id === evaluationId);
             obj.status = this.selectStatusName(4);
