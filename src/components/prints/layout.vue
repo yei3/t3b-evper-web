@@ -128,9 +128,9 @@
                             <b>Valor esperado:</b>
                             {{ question.expected || question.expectedText }}
                             <b>Valor real:</b>
-                            {{ getValorReal(question.id) }}
+                            {{ getValorReal(question.id, question.relation) }}
                             <b>Resultado: </b>
-                            {{ getResultado(question.id) }}
+                            {{ getResultado(question.id, question.relation, question.expected || question.expectedText) }}
                             <br />
                             <b>Observaciones: </b>
                             {{ getObservaciones(question.id) }}
@@ -350,11 +350,15 @@ export default {
             }
             return ans;
         },
-        getValorReal(questionId) {
+        getValorReal(questionId, relation) {
             let res = "";
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
-                    res = anwser.measuredAnswer.real;
+                    if (relation == 3) {
+                        res = anwser.measuredAnswer.text;
+                    }else {
+                        res = anwser.measuredAnswer.real;
+                    }
                 }
             });
             return res;
@@ -368,11 +372,23 @@ export default {
             });
             return res;
         },
-        getResultado(questionId) {
+        getResultado(questionId, relation, expected) {
             let res = "";
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
-                    res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                    if (relation == 5) {
+                        res = anwser.measuredAnswer.real <= expected ? "No Cumplido" : "Cumplido";
+                    } else if (relation == 2) {
+                        res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 3) {
+                        res = anwser.measuredAnswer.text == expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 1) {
+                        res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 4) {
+                        res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido";
+                    }else {
+                        res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                    }
                 }
             });
             return res;
