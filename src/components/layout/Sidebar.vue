@@ -191,8 +191,9 @@ export default {
     },
     created() {
         this.getSelectedItem();
+        const vm = this;
         setTimeout(() => {
-            this.sidebarCollapsed = false;
+            vm.$store.dispatch("hideSideBar", true);
         }, 10000);
     },
     watch: {
