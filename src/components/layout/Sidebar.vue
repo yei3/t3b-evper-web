@@ -13,7 +13,7 @@
             <a-col>
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
-                        <a-avatar :size="60" :src="imageUrl" class="avatar--border" />
+                        <a-avatar :size="60" :src="imageUrl" class="avatar--border" :loadError="resetImageUrl" />
                     </a-col>
                 </a-row>
                 <a-row type="flex" justify="space-around" align="middle">
@@ -90,6 +90,7 @@ export default {
     name: "Sidebar",
     data() {
         return {
+            useDefaultAvatar: false,
             selectedKeys: [],
             user: authService.getUserData(),
             userCurrentRole: authService.getCurrentRole(),
@@ -232,6 +233,11 @@ export default {
 
             return "Evaluado";
         },
+        resetImageUrl() {
+            console.log("falló");
+            this.useDefaultAvatar = true;
+            return false;
+        },
     },
     computed: {
         sidebarCollapsed: {
@@ -243,6 +249,9 @@ export default {
             },
         },
         imageUrl() {
+            if (this.useDefaultAvatar) {
+                return "/user2.png";
+            }
             return `${process.env.VUE_APP_PROFILES_IMG_URL}/${this.user.userName}.png`;
         },
         username() {
