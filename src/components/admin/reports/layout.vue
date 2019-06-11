@@ -127,9 +127,7 @@
                 <a-col :md="24" style="text-align: center; padding-top: 20px;">
                     <a-alert v-show="bannerError" banner closable :message="bannerError" />
                     <br />
-                    <a-button block @click="getReport" :loading="loading" :disabled="loading"
-                        >C o m p a r a r</a-button
-                    >
+                    <a-button block @click="getReport" :loading="loading" :disabled="loading">C o m p a r a r</a-button>
                 </a-col>
             </a-row>
         </div>
@@ -333,10 +331,10 @@ export default {
                 return;
             }
             if (
-                this.left.start === undefined
-                || this.right.start === undefined
-                || this.left.end === undefined
-                || this.right.end === undefined
+                this.left.start === undefined ||
+                this.right.start === undefined ||
+                this.left.end === undefined ||
+                this.right.end === undefined
             ) {
                 this.bannerError = "Selecciona un rango de fechas correcto";
                 this.loading = false;
@@ -348,7 +346,7 @@ export default {
                 let AreaId = 0;
                 let RegionId = this.left.region;
                 if (this.left.area) AreaId = this.left.area;
-                const [                    
+                const [
                     {
                         data: { result: leftObjectives },
                     },
@@ -400,7 +398,7 @@ export default {
                     StarTime: this.left.start.toISOString(),
                     EndDateTime: this.left.end.toISOString(),
                     UserId: this.left.person,
-                }),                
+                }),
             ]);
         },
         getAdminRightReport(RegionId, AreaId) {
@@ -528,6 +526,6 @@ export default {
     border-color: #1ab394;
 }
 .column--width {
-    width: 100%
+    width: 100%;
 }
 </style>
