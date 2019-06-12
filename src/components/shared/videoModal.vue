@@ -12,7 +12,7 @@
         >
             <video ref="video" controls width="100%">
                 <source
-                    v-if="userType === 'Supervisor'"
+                    v-if="userRole === 'Supervisor'"
                     src="https://tiendas3b.blob.core.windows.net/t3b/compressed.mp4"
                     type="video/mp4"
                 />
@@ -29,7 +29,7 @@ import videoPreference from "@/services/videoPreference";
 export default {
     name: "videoModalComponent",
     props: {
-        userType: {
+        userRole: {
             required: true,
             type: String,
         },
