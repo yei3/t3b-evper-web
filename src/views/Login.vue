@@ -23,9 +23,9 @@
                             </a-row>
                             <a-row>
                                 <a-col style="text-align: center;">
-                                    <label style="font-size: 30px; font-weight: 900; color: black;">
-                                        Evaluación de desempeño
-                                    </label>
+                                    <label style="font-size: 30px; font-weight: 900; color: black;"
+                                        >Evaluación de desempeño</label
+                                    >
                                     <a-divider />
                                 </a-col>
                             </a-row>
@@ -58,9 +58,8 @@
                                                 class="login-buttom"
                                                 :loading="loading"
                                                 @click="login"
+                                                >Ingresar</a-button
                                             >
-                                                Ingresar
-                                            </a-button>
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
@@ -71,7 +70,7 @@
                                 >
                                     <a-form>
                                         <a-form-item style="margin: 0px;">
-                                            <label for="">
+                                            <label for>
                                                 <h4 style="color: red; margin: 0px;">
                                                     Para continuar actualiza tus datos
                                                 </h4>
@@ -108,14 +107,13 @@
                                                 class="login-buttom"
                                                 :loading="loading"
                                                 @click="updatePassword"
+                                                >Actualizar datos</a-button
                                             >
-                                                Actualizar datos
-                                            </a-button>
                                         </a-form-item>
                                         <a-form-item>
-                                            <a style="color: #666; text-decoration: underline;" @click="redirectToHome">
-                                                Cancelar
-                                            </a>
+                                            <a style="color: #666; text-decoration: underline;" @click="redirectToHome"
+                                                >Cancelar</a
+                                            >
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
@@ -143,25 +141,24 @@
                                                 class="login-buttom"
                                                 :loading="loading"
                                                 @click="passwordRecovery"
+                                                >Enviar correo de recuperación</a-button
                                             >
-                                                Enviar correo de recuperación
-                                            </a-button>
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
                             </a-row>
                             <a-row v-show="!showFormConfirmPassword && !showRecovPass">
                                 <a-col>
-                                    <a @click="showRecovPass = true" style="color: #666; text-decoration: underline;">
-                                        ¿Olvidó su contraseña?
-                                    </a>
+                                    <a @click="showRecovPass = true" style="color: #666; text-decoration: underline;"
+                                        >¿Olvidó su contraseña?</a
+                                    >
                                 </a-col>
                             </a-row>
                             <a-row v-show="showRecovPass">
                                 <a-col>
-                                    <a @click="showRecovPass = false" style="color: #666; text-decoration: underline;">
-                                        Iniciar Sesión
-                                    </a>
+                                    <a @click="showRecovPass = false" style="color: #666; text-decoration: underline;"
+                                        >Iniciar Sesión</a
+                                    >
                                 </a-col>
                             </a-row>
                         </a-col>
@@ -169,11 +166,14 @@
                     <a-divider />
                     <a-row type="flex" justify="center" align="middle">
                         <a-col :span="17">
-                            <small> Tiendas 3B © 2019 </small>
+                            <small>Tiendas 3B © 2019</small>
                         </a-col>
                         <a-col style="text-align: rigth;">
-                            <a href="" style="color: #666;">
-                                <small>Yei<b>3</b> Software</small>
+                            <a href style="color: #666;">
+                                <small>
+                                    Yei
+                                    <b>3</b> Software
+                                </small>
                             </a>
                         </a-col>
                     </a-row>
@@ -187,6 +187,7 @@
 import Footer from "@/components/layout/Footer.vue";
 import client3B from "@/api/client3B";
 import authService from "@/services/auth";
+import loginDates from "@/services/loginDates";
 
 export default {
     components: {
@@ -257,6 +258,7 @@ export default {
             this.saveSession();
         },
         saveSession() {
+            loginDates.storeLastLoginDate();
             authService.storeAuthData(this.authData);
             authService.storeUserData(this.userData);
             this.redirectToHome();
