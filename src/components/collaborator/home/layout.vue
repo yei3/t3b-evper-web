@@ -4,7 +4,7 @@
             <!-- <a-col :lg="6" :sm="24" style="text-align: center">
                 <br/>
                 <h2></h2>
-            </a-col> -->
+      </a-col>-->
             <a-col :lg="6" :sm="24"></a-col>
             <a-col :lg="12" :sm="24">
                 <next-evaluation-period />
@@ -26,16 +26,22 @@
                 <boss-evaluations />
             </a-col>
         </a-row>
+        <video-modal-component ref="videoModal" userType="'collaborator'"></video-modal-component>
     </div>
 </template>
 
 <script>
+// *Utilities
+import loginDates from "@/services/loginDates";
+import videoPreference from "@/services/videoPreference";
+// *Components
 import nextEvaluationPeriod from "@/components/collaborator/home/nextEvaluationPeriod.vue";
 import collaboratorIssues from "@/components/collaborator/home/collaboratorIssues.vue";
 import pendingAutoEvaluations from "@/components/collaborator/home/pendingAutoEvaluations.vue";
 import bossEvaluations from "@/components/collaborator/home/bossEvaluations.vue";
 import currentObjectives from "@/components/collaborator/home/currentObjectives.vue";
 import currentActions from "@/components/collaborator/home/currentActions.vue";
+import videoModalComponent from "@/components/shared/videoModal.vue";
 
 export default {
     components: {
@@ -45,6 +51,15 @@ export default {
         bossEvaluations,
         currentObjectives,
         currentActions,
+        videoModalComponent,
+    },
+    mounted() {
+        if (!videoPreference.getShouldNeverDisplayVideo()) {
+            const lastLoginDate = loginDates.getLastLoginDate();
+            if (videoPreference.getVideoPreference() || loginDates.hasMoreThanOneDay(lastLoginDate)) {
+                this.$refs.videoModal.showModal();
+            }
+        }
     },
 };
 </script>
