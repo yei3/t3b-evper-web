@@ -62,7 +62,7 @@ export default {
     mounted() {
         if (!videoPreference.getShouldNeverDisplayVideo()) {
             this.role = authService.getCurrentRole();
-            const lastLoginDate = loginDates.getLastLoginDate();
+            const lastLoginDate = loginDates.getPreviousLoginDate();
             if (videoPreference.getVideoPreference() || loginDates.hasMoreThanOneDay(lastLoginDate)) {
                 this.$refs.videoModal.showModal();
             }

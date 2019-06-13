@@ -13,6 +13,13 @@ function hasMoreThanOneDay(storedDate) {
 /**
  * Retrieve the last login date from the local storage
  */
+function getPreviousLoginDate() {
+    return localStorage.getItem("previousLoginDate");
+}
+
+/**
+ * Retrieve the last login date from the local storage
+ */
 function getLastLoginDate() {
     return localStorage.getItem("lastLoginDate");
 }
@@ -25,11 +32,13 @@ function storeLastLoginDate() {
     if (storedDate !== null && !hasMoreThanOneDay(storedDate)) {
         return;
     }
+    localStorage.setItem("previousLoginDate", getLastLoginDate());
     localStorage.setItem("lastLoginDate", new Date());
 }
 
 export default {
     storeLastLoginDate,
     getLastLoginDate,
+    getPreviousLoginDate,
     hasMoreThanOneDay,
 };
