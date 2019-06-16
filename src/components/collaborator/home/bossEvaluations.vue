@@ -217,7 +217,6 @@ export default {
                 this.sendBossCloseEvaluationNotification();
                 this.CBEModal.show = !this.CBEModal.show;
                 // this.data.splice( this.data.indexOf(this.CBEModal.evaluationId), 1);
-                // console.log(this.data);
             }
         },
         disableButton(status) {

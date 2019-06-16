@@ -275,7 +275,6 @@ export default {
             try {
                 response = await client3B.dashboard.getSupervisorHistory();
                 const items = response.data.result.collaboratorsObjectivesSummary;
-                // console.log(response.data.result.collaboratorsObjectivesSummary);
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
                     let objectives = [];
@@ -317,7 +316,6 @@ export default {
             this.spin = false;
         },
         async toggleViewProgressModal(input) {
-            console.log('cargando');
             this.viewProgressModal.evaluatedName = input.name;
             this.viewProgressModal.binnacle = input.objective.binnacle;
             this.viewProgressModal.objectiveName = input.objective.title;
