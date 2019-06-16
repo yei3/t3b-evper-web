@@ -379,7 +379,7 @@ export default {
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
                     if (relation == 5) {
-                        res = anwser.measuredAnswer.real <= expected ? "No Cumplido" : "Cumplido";
+                        res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido";
                     } else if (relation == 2) {
                         res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido";
                     } else if (relation == 3) {
