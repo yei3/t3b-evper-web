@@ -251,7 +251,8 @@ export default {
         },
         imageUrl() {
             if (this.useDefaultAvatar) {
-                return "/user2.png";
+                if (this.user.isMale) return "/male.png";
+                return "/female.png";
             }
             return `${process.env.VUE_APP_PROFILES_IMG_URL}/${this.user.userName}.png`;
         },
