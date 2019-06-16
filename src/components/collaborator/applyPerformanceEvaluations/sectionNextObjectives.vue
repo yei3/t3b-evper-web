@@ -284,7 +284,6 @@ export default {
         async deleteQuestion(_question, index) {
             const question = _question;
             question.loading = true;
-            console.log(question.id);
             if (question.id) {
                 const response = await client3B.question.delete({
                     id: question.id,

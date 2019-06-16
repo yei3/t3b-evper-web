@@ -104,24 +104,6 @@ export default {
             }
             this.spin = false;
         },
-        editUser() {
-            console.log("OK");
-        },
-        update() {
-            this.loading = true;
-        },
-        onSearch (value) {
-            console.log(value)
-        },
-        handleSubmit  (e) {
-            e.preventDefault()
-            this.form.validateFieldsAndScroll((err, values) => {
-                if (!err) {
-                    console.log('Received values of form: ', values)
-                }
-                console.log(values);
-            })
-        },
     },
 };
 </script>
