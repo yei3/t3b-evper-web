@@ -69,6 +69,7 @@ export default {
     },
     mounted() {
         this.parseAnswer();
+        this.setStatus();
     },
     data() {
         return {
@@ -80,7 +81,10 @@ export default {
         };
     },
     methods: {
-        ...mapMutations(["evaluationSetQuestionsAsAnswered"]),
+        ...mapMutations([
+            "evaluationSetQuestionsAsAnswered",
+            "evaluationAddQuestionStatus",
+        ]),
         handleForm(e) {
             e.prevent();
         },
@@ -92,6 +96,12 @@ export default {
             if (this.questionStatus === 1) {
                 this.edited = true;
             }
+        },
+        setStatus() {
+            this.evaluationAddQuestionStatus({
+                id: this.questionId,
+                answered: this.questionStatus !== 1,
+            });
         },
         save() {
             this.edited = true;

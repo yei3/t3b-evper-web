@@ -188,7 +188,6 @@ export default {
     },
     async created() {
         await this.fetchEvaluation();
-        this.setQuestionsStatus();
     },
     methods: {
         ...mapMutations([
@@ -253,24 +252,11 @@ export default {
             }
             this.data.lastStep = Math.max(this.data.currentStep, this.data.lastStep);
         },
-        setQuestionsStatus() {
-            const questions = this.getQuestions();
-            // Ignorar objetivos no evaluables, tienen status == 0
-            const statuses = questions.filter(qst => qst.status !== 0).map(qst => ({
-                id: qst.id,
-                answered: qst.status !== 1,
-            }));
-            this.evaluationSetQuestions(statuses);
-        },
-        isEvaluationCompleted() {
-            for (let i = 0; i < this.questionsStatuses.length; i += 1) {
-                if (this.questionsStatuses[i].answered === false) {
-                    return false;
-                }
-            }
-            return true;
-        },
         async finishEvaluation() {
+            if (!this.evaluationIsComplete) {
+                errorHandler(this, 'Lo sentimos pero aún te quedan preguntas por responder');
+                return;
+            }
             this.loading = true;
             await client3B.evaluation.revision.finish(this.$route.params.id)
                 .catch(error => errorHandler(this, error));
@@ -305,6 +291,7 @@ export default {
     computed: {
         ...mapGetters({
             questionsStatuses: 'questions',
+            evaluationIsComplete: "evaluationIsComplete",
         }),
         viewSteps() {
             const steps = [
