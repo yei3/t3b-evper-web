@@ -81,10 +81,7 @@ export default {
         };
     },
     methods: {
-        ...mapMutations([
-            "evaluationSetQuestionsAsAnswered",
-            "evaluationAddQuestionStatus",
-        ]),
+        ...mapMutations(["evaluationSetQuestionsAsAnswered", "evaluationAddQuestionStatus"]),
         handleForm(e) {
             e.prevent();
         },

@@ -154,10 +154,7 @@ export default {
         this.setStatus();
     },
     methods: {
-        ...mapMutations([
-            "evaluationSetQuestionsAsAnswered",
-            "evaluationAddQuestionStatus",
-        ]),
+        ...mapMutations(["evaluationSetQuestionsAsAnswered", "evaluationAddQuestionStatus"]),
         handleForm(e) {
             e.prevent();
         },

@@ -3,7 +3,7 @@ export default {
         questions: [],
     },
     getters: {
-        questions: state => state.questions,
+        questions: (state) => state.questions,
         evaluationIsComplete: (state) => {
             for (let i = 0; i < state.questions.length; i += 1) {
                 if (state.questions[i].answered === false) {
@@ -11,7 +11,7 @@ export default {
                 }
             }
             return true;
-        }
+        },
     },
     mutations: {
         evaluationSetQuestions: (_state, questions) => {
@@ -24,11 +24,9 @@ export default {
         },
         evaluationSetQuestionsAsAnswered: (_state, questionId) => {
             const state = _state;
-            const question = state.questions.find(qst => qst.id === questionId);
+            const question = state.questions.find((qst) => qst.id === questionId);
             question.answered = true;
         },
     },
-    actions: {
-
-    },
+    actions: {},
 };

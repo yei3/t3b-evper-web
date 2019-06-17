@@ -7,10 +7,7 @@
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link
-                            class="breadcrumb-path"
-                            :to="{ name: 'collaborator-home' }"
-                        >
+                        <router-link class="breadcrumb-path" :to="{ name: 'collaborator-home' }">
                             Home
                         </router-link>
                     </a-breadcrumb-item>
@@ -30,15 +27,14 @@
                 <div class="collapse" v-show="!spin">
                     <a-row class="collapse-title">
                         <a-col :sm="24" :md="12">
-                            <h1>{{evaluationName}}</h1>
+                            <h1>{{ evaluationName }}</h1>
                         </a-col>
                         <a-col :sm="12" :md="6" style="text-align: right;">
-                            <h3 v-show="!isAutoEvaluation">  {{evaluatedName}}</h3>
+                            <h3 v-show="!isAutoEvaluation">{{ evaluatedName }}</h3>
                         </a-col>
-                        <a-col :sm="12" :md="6"
-                            style="text-align: right; padding-right: 31px; padding-top: 5px;"
-                        >
-                            <a-button class="btn-blue"
+                        <a-col :sm="12" :md="6" style="text-align: right; padding-right: 31px; padding-top: 5px;">
+                            <a-button
+                                class="btn-blue"
                                 @click="finishEvaluation"
                                 :loading="loading"
                                 v-show="!onlyLecture"
@@ -46,11 +42,7 @@
                                 <a-icon type="file-text" />
                                 Finalizar Evaluación
                             </a-button>
-                            <a-button class="btn-blue"
-                                @click="printEvaluation"
-                                :loading="loading"
-                                v-show="onlyLecture"
-                            >
+                            <a-button class="btn-blue" @click="printEvaluation" :loading="loading" v-show="onlyLecture">
                                 <a-icon type="printer" />
                                 Imprimir Evaluación
                             </a-button>
@@ -58,54 +50,53 @@
                     </a-row>
                     <div class="collapse-content" v-show="!collapsed">
                         <a-row :gutter="16">
-                            <a-col :xxl="4" :xl="6" :lg="8" :md="12" :sm="24"
+                            <a-col
+                                :xxl="4"
+                                :xl="6"
+                                :lg="8"
+                                :md="12"
+                                :sm="24"
                                 v-for="(step, index) in viewSteps"
                                 :key="step.id"
                             >
-                                <div class="step-form step-form-done"
-                                    v-show="data.lastStep >= index &&
-                                            index !== data.currentStep"
+                                <div
+                                    class="step-form step-form-done"
+                                    v-show="data.lastStep >= index && index !== data.currentStep"
                                     @click="data.currentStep = index"
                                 >
-                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
+                                    <span>{{ index + 1 }}. {{ capitalize(step.label) }}</span>
                                 </div>
 
-                                <div class="step-form step-form-current"
-                                    v-show="data.currentStep === index"
-                                >
-                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
+                                <div class="step-form step-form-current" v-show="data.currentStep === index">
+                                    <span>{{ index + 1 }}. {{ capitalize(step.label) }}</span>
                                 </div>
 
-                                <div class="step-form step-form-not-done"
-                                    v-show="data.lastStep < index"
-                                >
-                                    <span>{{index + 1}}. {{capitalize(step.label)}}</span>
+                                <div class="step-form step-form-not-done" v-show="data.lastStep < index">
+                                    <span>{{ index + 1 }}. {{ capitalize(step.label) }}</span>
                                 </div>
                             </a-col>
                         </a-row>
-                        <a-row >
-                            <form-introduction
-                                v-show="data.currentStep == 0"
-                                :instructions="evaluationInstructions"
-                            />
+                        <a-row>
+                            <form-introduction v-show="data.currentStep == 0" :instructions="evaluationInstructions" />
                             <div v-for="(section, index) in evaluationSections" :key="section.id">
                                 <evaluation-section-objectives
                                     v-if="isSectionObjetives(section)"
-                                    v-show="(index + 1) == data.currentStep"
+                                    v-show="index + 1 == data.currentStep"
                                     :evaluationId="evaluation.id"
                                     :section="section"
                                     :onlyLecture="onlyLecture"
                                 />
                                 <evaluation-section-next-objectives
                                     v-if="isSectionNextObjetives(section)"
-                                    v-show="(index + 1) == data.currentStep"
+                                    v-show="index + 1 == data.currentStep"
                                     :evaluationId="evaluation.id"
                                     :section="section"
                                     :questions="notEvaluableQuestions(section.childSections[0].id)"
                                     :onlyLecture="false"
                                 />
-                                <evaluation-section v-if="isGenericSection(section)"
-                                    v-show="(index + 1) == data.currentStep"
+                                <evaluation-section
+                                    v-if="isGenericSection(section)"
+                                    v-show="index + 1 == data.currentStep"
                                     :section="section"
                                     :questions="getQuestions()"
                                     :onlyLecture="onlyLecture"
@@ -114,13 +105,16 @@
                         </a-row>
                         <a-row style="margin-bottom: 20px;">
                             <a-col :span="24" style="text-align: right;">
-                                <a-button @click="previousStep" :disabled="data.currentStep === 0"
+                                <a-button
+                                    @click="previousStep"
+                                    :disabled="data.currentStep === 0"
                                     class="btn-green"
                                     style="margin-right: 15px;"
                                 >
                                     Anterior
                                 </a-button>
-                                <a-button @click="nextStep"
+                                <a-button
+                                    @click="nextStep"
                                     class="btn-green"
                                     v-show="data.currentStep !== viewSteps.length - 1"
                                 >
@@ -129,11 +123,9 @@
                             </a-col>
                         </a-row>
                     </div>
-                    <div v-show="isClosed"
-                                style="margin-left: 30px;padding-bottom:30px;"
-                    >
-                        <h3>Comentario de cierre: </h3>
-                        <strong>{{closingComment}}</strong>
+                    <div v-show="isClosed" style="margin-left: 30px;padding-bottom:30px;">
+                        <h3>Comentario de cierre:</h3>
+                        <strong>{{ closingComment }}</strong>
                     </div>
                 </div>
             </a-col>
@@ -142,19 +134,22 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
-import formIntroduction from '@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue';
-import evaluationSection from '@/components/collaborator/applyPerformanceEvaluations/section.vue';
-import evaluationSectionNextObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue';
-import evaluationSectionObjectives from '@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue';
-import { mapMutations, mapGetters } from 'vuex';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
+import formIntroduction from "@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue";
+import evaluationSection from "@/components/collaborator/applyPerformanceEvaluations/section.vue";
+import evaluationSectionNextObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue";
+import evaluationSectionObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue";
+import { mapMutations, mapGetters } from "vuex";
 
-const SECTION_PROX_OBJETIVES_NAME = 'Próximos objetivos';
-const SECTION_OBJETIVES_NAME = 'Objetivos';
+const SECTION_PROX_OBJETIVES_NAME = "Próximos objetivos";
+const SECTION_OBJETIVES_NAME = "Objetivos";
 
 function normalizeStr(str) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase();
 }
 
 export default {
@@ -178,8 +173,8 @@ export default {
             evaluation: null,
             isAutoEvaluation: true,
             isClosed: false,
-            closingComment: '',
-            evaluatedName: '',
+            closingComment: "",
+            evaluatedName: "",
             data: {
                 currentStep: 0,
                 lastStep: 0,
@@ -190,16 +185,13 @@ export default {
         await this.fetchEvaluation();
     },
     methods: {
-        ...mapMutations([
-            'evaluationSetQuestions',
-        ]),
+        ...mapMutations(["evaluationSetQuestions"]),
         async fetchEvaluation() {
             this.spin = true;
-            const response = await client3B.evaluation.get(this.$route.params.id)
-                .catch((error) => {
-                    this.spin = false;
-                    errorHandler(this, error);
-                });
+            const response = await client3B.evaluation.get(this.$route.params.id).catch((error) => {
+                this.spin = false;
+                errorHandler(this, error);
+            });
             if (!response) return;
             this.spin = false;
 
@@ -208,7 +200,7 @@ export default {
                 this.isAutoEvaluation = false;
             } else {
                 if (this.evaluation.status == 4) {
-                    this.isClosed =  true;
+                    this.isClosed = true;
                     this.closingComment = this.evaluation.closingComment;
                 }
                 this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
@@ -216,22 +208,21 @@ export default {
             }
 
             // Sort sections
-            const sectNextObj = this.evaluation.template.sections
-                .find(sect => this.isSectionNextObjetives(sect));
-            this.evaluation.template.sections = this.evaluation.template.sections
-                .filter(sect => !this.isSectionNextObjetives(sect));
+            const sectNextObj = this.evaluation.template.sections.find((sect) => this.isSectionNextObjetives(sect));
+            this.evaluation.template.sections = this.evaluation.template.sections.filter(
+                (sect) => !this.isSectionNextObjetives(sect),
+            );
 
-            const sectObj = this.evaluation.template.sections
-                .find(sect => this.isSectionObjetives(sect));
-            this.evaluation.template.sections = this.evaluation.template.sections
-                .filter(sect => !this.isSectionObjetives(sect));
+            const sectObj = this.evaluation.template.sections.find((sect) => this.isSectionObjetives(sect));
+            this.evaluation.template.sections = this.evaluation.template.sections.filter(
+                (sect) => !this.isSectionObjetives(sect),
+            );
 
             if (sectObj) {
                 this.evaluation.template.sections.splice(0, 0, sectObj);
             }
             if (sectNextObj) {
-                this.evaluation.template.sections
-                    .splice(this.evaluation.template.sections.length, 0, sectNextObj);
+                this.evaluation.template.sections.splice(this.evaluation.template.sections.length, 0, sectNextObj);
             }
 
             this.data.lastStep = this.evaluationSections.length;
@@ -254,19 +245,20 @@ export default {
         },
         async finishEvaluation() {
             if (!this.evaluationIsComplete) {
-                errorHandler(this, 'Lo sentimos pero aún te quedan preguntas por responder');
+                errorHandler(this, "Lo sentimos pero aún te quedan preguntas por responder");
                 return;
             }
             this.loading = true;
-            await client3B.evaluation.revision.finish(this.$route.params.id)
-                .catch(error => errorHandler(this, error));
+            await client3B.evaluation.revision
+                .finish(this.$route.params.id)
+                .catch((error) => errorHandler(this, error));
             this.loading = false;
-            this.$message.success('La evaluación ha sido finalizada correctamente');
-            this.$router.push({ name: 'home' });
+            this.$message.success("La evaluación ha sido finalizada correctamente");
+            this.$router.push({ name: "home" });
         },
         printEvaluation() {
             const { id } = this.$route.params;
-            this.$router.push({ name: 'print-assessment', params: { id } });
+            this.$router.push({ name: "print-assessment", params: { id } });
         },
         isSectionNextObjetives(section) {
             if (!this.evaluation.template.includePastObjectives) return false;
@@ -280,28 +272,29 @@ export default {
             return !this.isSectionNextObjetives(section) && !this.isSectionObjetives(section);
         },
         capitalize(str) {
-            return str.replace(/^\w/, c => c.toUpperCase());
+            return str.replace(/^\w/, (c) => c.toUpperCase());
         },
         notEvaluableQuestions(subsectionId) {
             if (!this.evaluation) return [];
-            return this.evaluation.questions.filter(qst => qst.notEvaluableAnswer !== null
-                && qst.sectionId === subsectionId);
+            return this.evaluation.questions.filter(
+                (qst) => qst.notEvaluableAnswer !== null && qst.sectionId === subsectionId,
+            );
         },
     },
     computed: {
         ...mapGetters({
-            questionsStatuses: 'questions',
+            questionsStatuses: "questions",
             evaluationIsComplete: "evaluationIsComplete",
         }),
         viewSteps() {
             const steps = [
                 {
                     id: null,
-                    label: 'Introducción',
-                    name: 'intro',
+                    label: "Introducción",
+                    name: "intro",
                 },
             ];
-            if (!this.evaluation) return '';
+            if (!this.evaluation) return "";
 
             this.evaluation.template.sections.forEach((section) => {
                 if (section.parentId !== null) return;
@@ -316,17 +309,16 @@ export default {
         },
         evaluationSections() {
             if (!this.evaluation) return [];
-            return this.evaluation.template.sections.filter(section => section.parentId === null);
+            return this.evaluation.template.sections.filter((section) => section.parentId === null);
         },
         evaluationName() {
-            if (!this.evaluation) return '';
+            if (!this.evaluation) return "";
             return this.evaluation.name;
         },
         evaluationInstructions() {
-            if (!this.evaluation) return '';
+            if (!this.evaluation) return "";
             return this.evaluation.template.instructions;
         },
-
     },
 };
 </script>

@@ -1,13 +1,17 @@
 <template>
-    <a-col :span="24"
-        style="padding: 5px 15px 0px 15px; margin-bottom: 0px;"
-        :class="answerStatus"
-    >
-        <a-form @submit="handleForm" :autoFormCreate="(form)=>{this.form = form}">
+    <a-col :span="24" style="padding: 5px 15px 0px 15px; margin-bottom: 0px;" :class="answerStatus">
+        <a-form
+            @submit="handleForm"
+            :autoFormCreate="
+                (form) => {
+                    this.form = form;
+                }
+            "
+        >
             <a-form-item
                 fieldDecoratorId="q1"
                 style="text-align: left; margin-bottom: 0px;"
-                :label='`${index}. ${questionText}`'
+                :label="`${index}. ${questionText}`"
                 :labelCol="{ xxl: 18, xl: 12, lg: 14, md: 24, sm: 24 }"
                 :wrapperCol="{ xxl: 6, xl: 10, lg: 10, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
@@ -15,40 +19,34 @@
                     rules: [
                         {
                             required: true,
-                            message: 'Selecciona una respuesta'
-                        }
-                    ]
+                            message: 'Selecciona una respuesta',
+                        },
+                    ],
                 }"
             >
-                <a-select
-                    placeholder="Selecciona una respuesta"
-                    v-model="value"
-                    @select="save"
-                    :disabled="onlyLecture"
-                >
-                    <a-select-option v-for="(option, index) in selectOptions"
-                        :key="index"
-                        :value="option.value"
-                    >
-                        {{option.label}}
+                <a-select placeholder="Selecciona una respuesta" v-model="value" @select="save" :disabled="onlyLecture">
+                    <a-select-option v-for="(option, index) in selectOptions" :key="index" :value="option.value">
+                        {{ option.label }}
                     </a-select-option>
                 </a-select>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            <a-icon v-show="loading"
-                class='dynamic-delete-button form-icon'
+            <a-icon
+                v-show="loading"
+                class="dynamic-delete-button form-icon"
                 type="loading"
                 style="padding-left: 30px;"
-            /> <span v-show="loading"> Guardardando Respuesta </span>
+            />
+            <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>
 </template>
 
-<script >
-import errorHandler from '@/views/errorHandler';
-import client3B from '@/api/client3B';
-import { mapMutations } from 'vuex';
+<script>
+import errorHandler from "@/views/errorHandler";
+import client3B from "@/api/client3B";
+import { mapMutations } from "vuex";
 
 export default {
     props: {
@@ -85,16 +83,16 @@ export default {
             configurable: true,
             selectOptions: [
                 {
-                    value: '-70',
-                    label: 'Insatisfactorio (<70%)',
+                    value: "-70",
+                    label: "Insatisfactorio (<70%)",
                 },
                 {
-                    value: '71-99',
-                    label: 'Cumple requerimiento (71% a 99%)',
+                    value: "71-99",
+                    label: "Cumple requerimiento (71% a 99%)",
                 },
                 {
-                    value: '+100',
-                    label: 'Excede requerimiento (100%)',
+                    value: "+100",
+                    label: "Excede requerimiento (100%)",
                 },
             ],
         };
@@ -104,10 +102,7 @@ export default {
         this.setStatus();
     },
     methods: {
-        ...mapMutations([
-            'evaluationSetQuestionsAsAnswered',
-            "evaluationAddQuestionStatus",
-        ]),
+        ...mapMutations(["evaluationSetQuestionsAsAnswered", "evaluationAddQuestionStatus"]),
         handleForm(e) {
             e.prevent();
         },
@@ -130,34 +125,36 @@ export default {
                 if (this.onlyLecture) return;
                 this.edited = true;
                 this.form.validateFields((error) => {
-                    if (error || optionSelected === 'undefined') return;
+                    if (error || optionSelected === "undefined") return;
                     this.update(optionSelected);
                 });
             }, 200);
         },
         async update(optionSelected) {
             this.loading = true;
-            const response = await client3B.evaluation.answer.update({
-                id: this.answer.id,
-                evaluationQuestionId: this.questionId,
-                text: optionSelected,
-                evaluationUnmeasuredQuestion: {
-                    status: 2,
-                },
-            }).catch(error => errorHandler(this, error));
+            const response = await client3B.evaluation.answer
+                .update({
+                    id: this.answer.id,
+                    evaluationQuestionId: this.questionId,
+                    text: optionSelected,
+                    evaluationUnmeasuredQuestion: {
+                        status: 2,
+                    },
+                })
+                .catch((error) => errorHandler(this, error));
             this.loading = false;
             if (!response) return;
             this.edited = false;
             this.evaluationSetQuestionsAsAnswered(this.questionId);
-            this.$message.success('Evaluación guardada correctamente');
+            this.$message.success("Evaluación guardada correctamente");
         },
     },
     computed: {
         answerStatus() {
             if (this.edited) {
-                return 'question-row orange-bar';
+                return "question-row orange-bar";
             }
-            return 'question-row green-bar';
+            return "question-row green-bar";
         },
     },
 };
