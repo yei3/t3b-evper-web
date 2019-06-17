@@ -1,4 +1,3 @@
-
 <template>
     <div class="users">
         <a-row class="breadcrumb-wrapper">
@@ -8,9 +7,7 @@
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'collaborator-home' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'collaborator-home' }" class="breadcrumb-path">
                             Home
                         </router-link>
                     </a-breadcrumb-item>
@@ -23,20 +20,16 @@
                     <span class="breadcrumb-header" style="font-weight: 120;">
                         Objetivos
                     </span>
-
                 </a-row>
                 <a-divider />
-
             </div>
 
             <!-- Edit form -->
             <div>
                 <a-row style="margin-top: 30px;">
-
                     <a-col :span="24">
                         <objectives-history />
                     </a-col>
-
                 </a-row>
             </div>
             <div>
@@ -44,20 +37,16 @@
                     <span class="breadcrumb-header" style="font-weight: 120;">
                         Evaluaciones
                     </span>
-
                 </a-row>
                 <a-divider />
-
             </div>
 
             <!-- Edit form -->
             <div>
                 <a-row style="margin-top: 30px;">
-
                     <a-col :span="24">
                         <pending-evaluations />
                     </a-col>
-
                 </a-row>
             </div>
         </div>
@@ -65,12 +54,12 @@
 </template>
 <script>
 /* eslint-disable */
-import client3B from '@/api/client3B';
-import { mapActions, mapGetters } from 'vuex';
-import Footer from '@/components/layout/Footer.vue';
-import pendingEvaluations from '@/components/collaborator/evaluationsHistory/autoEvaluationsHistory.vue';
-import objectivesHistory from '@/components/collaborator/evaluationsHistory/objectivesHistory.vue';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import { mapActions, mapGetters } from "vuex";
+import Footer from "@/components/layout/Footer.vue";
+import pendingEvaluations from "@/components/collaborator/evaluationsHistory/autoEvaluationsHistory.vue";
+import objectivesHistory from "@/components/collaborator/evaluationsHistory/objectivesHistory.vue";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     components: {
@@ -78,8 +67,8 @@ export default {
         pendingEvaluations,
         objectivesHistory,
     },
-    beforeCreate () {
-        this.form = this.$form.createForm(this)
+    beforeCreate() {
+        this.form = this.$form.createForm(this);
     },
     data() {
         return {
@@ -109,8 +98,8 @@ export default {
 </script>
 
 <style>
-    .collapse-content {
-        margin: 32px;
-        background: white;
-    }
+.collapse-content {
+    margin: 32px;
+    background: white;
+}
 </style>

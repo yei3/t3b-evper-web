@@ -7,9 +7,7 @@
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'collaborator-home' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'collaborator-home' }" class="breadcrumb-path">
                             Home
                         </router-link>
                     </a-breadcrumb-item>
@@ -22,20 +20,16 @@
                     <span class="breadcrumb-header" style="font-weight: 120;">
                         Objetivos
                     </span>
-
                 </a-row>
                 <a-divider />
-
             </div>
 
             <!-- Edit form -->
             <div>
                 <a-row style="margin-top: 30px;">
-
                     <a-col :span="24">
                         <history-objectives />
                     </a-col>
-
                 </a-row>
             </div>
             <div>
@@ -43,34 +37,29 @@
                     <span class="breadcrumb-header" style="font-weight: 120;">
                         Evaluaciones
                     </span>
-
                 </a-row>
                 <a-divider />
-
             </div>
 
             <!-- Edit form -->
             <div>
                 <a-row style="margin-top: 30px;">
-
                     <a-col :span="24">
                         <closed-evaluations />
                     </a-col>
-
                 </a-row>
             </div>
-        </div>
         </div>
     </div>
 </template>
 <script>
 /* eslint-disable */
-import client3B from '@/api/client3B';
-import { mapActions, mapGetters } from 'vuex';
-import Footer from '@/components/layout/Footer.vue';
-import closedEvaluations from '@/components/boss/evaluationsHistory/closedEvaluationsHistory.vue';
-import historyObjectives from '@/components/boss/evaluationsHistory/pastCollaboratorObjectives.vue';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import { mapActions, mapGetters } from "vuex";
+import Footer from "@/components/layout/Footer.vue";
+import closedEvaluations from "@/components/boss/evaluationsHistory/closedEvaluationsHistory.vue";
+import historyObjectives from "@/components/boss/evaluationsHistory/pastCollaboratorObjectives.vue";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     components: {
@@ -78,8 +67,8 @@ export default {
         closedEvaluations,
         historyObjectives,
     },
-    beforeCreate () {
-        this.form = this.$form.createForm(this)
+    beforeCreate() {
+        this.form = this.$form.createForm(this);
     },
     data() {
         return {
@@ -109,8 +98,8 @@ export default {
 </script>
 
 <style>
-    .collapse-content {
-        margin: 32px;
-        background: white;
-    }
+.collapse-content {
+    margin: 32px;
+    background: white;
+}
 </style>

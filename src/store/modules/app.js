@@ -3,7 +3,7 @@ export default {
         sidebarCollapsed: false,
     },
     getters: {
-        sidebarCollapsed: state => state.sidebarCollapsed,
+        sidebarCollapsed: (state) => state.sidebarCollapsed,
     },
     mutations: {
         toggleSideBar: (state) => {
