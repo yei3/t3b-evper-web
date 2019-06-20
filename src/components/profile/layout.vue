@@ -1,4 +1,3 @@
-
 <template>
     <div class="users">
         <a-row class="breadcrumb-wrapper">
@@ -16,12 +15,12 @@
         <div class="collapse-content">
             <a-row class="steps">
                 <a-row style="padding: 0 0 16px 0">
-                    <span class="breadcrumb-header" >
+                    <span class="breadcrumb-header">
                         Edita tu foto de perfil
-                    </span>                   
+                    </span>
                 </a-row>
                 <a-row>
-                    <a-col :sm="{ span:24 }">
+                    <a-col :sm="{ span: 24 }">
                         <input type="file" id="fileinput" />
                         <button id="upload-button" @click="updateImgProfile">
                             <a-icon type="cloud-upload" />
@@ -57,43 +56,44 @@
                 <span style="font-size: 16px;">información de perfil de usuario</span>
             </a-row>
             <a-row class="">
-                <a-col :sm="{ span:24 }" :md="{ span:18 }" :lg="{ span:12 }">
-                    <a-form >
-                        <a-form-item
-                            label='E-mail'
-                        >
+                <a-col :sm="{ span: 24 }" :md="{ span: 18 }" :lg="{ span: 12 }">
+                    <a-form>
+                        <a-form-item label="E-mail">
                             <a-input
                                 v-model="user.email"
                                 v-decorator="[
                                     'email',
                                     {
-                                    rules: [{
-                                        type: 'email',
-                                        message: '¡Escribe un email válido, por favor!',
-                                    }]
-                                    }
+                                        rules: [
+                                            {
+                                                type: 'email',
+                                                message: '¡Escribe un email válido, por favor!',
+                                            },
+                                        ],
+                                    },
                                 ]"
                             />
                         </a-form-item>
-                        <a-form-item
-                            label='Escolaridad'
-                        >
+                        <a-form-item label="Escolaridad">
                             <a-input
                                 v-model="user.scholarship"
                                 v-decorator="[
                                     'escolaridad',
                                     {
-                                    rules: [{
-                                        type: 'text', message: 'The input is not valid!',
-                                    }]
-                                    }
+                                        rules: [
+                                            {
+                                                type: 'text',
+                                                message: 'The input is not valid!',
+                                            },
+                                        ],
+                                    },
                                 ]"
                             />
                         </a-form-item>
                         <a-form-item style="text-align: right">
                             <a-button
                                 class="btn--start-evaluations"
-                                htmlType='submit'
+                                htmlType="submit"
                                 :loading="loading"
                                 @click="updateProfile"
                             >
@@ -107,11 +107,11 @@
     </div>
 </template>
 <script>
-import authService from '@/services/auth';
-import client3B from '@/api/client3B';
-import Footer from '@/components/layout/Footer.vue';
-import errorHandler from '@/views/errorHandler';
-import '@/assets/scripts/azure-storage.blob.min';
+import authService from "@/services/auth";
+import client3B from "@/api/client3B";
+import Footer from "@/components/layout/Footer.vue";
+import errorHandler from "@/views/errorHandler";
+import "@/assets/scripts/azure-storage.blob.min";
 
 export default {
     components: {
@@ -124,19 +124,20 @@ export default {
         return {
             spin: false,
             userInfo: authService.getUserData(),
-            userData: '',
+            userData: "",
             user: {
                 id: 0,
-                email: '',
-                scholarship: '',
+                email: "",
+                scholarship: "",
             },
             loading: false,
             headers: {
-                authorization: 'authorization-text',
+                authorization: "authorization-text",
             },
             account: {
                 name: "t3bevper", // esto es algo temporal se tiene que crear una función en Azure (tipo lamdas de AWS) para obtener el SAS Token
-                sas:  "?sv=2018-03-28&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-06-20T16:42:32Z&st=2019-06-20T08:42:32Z&spr=https&sig=MgmtB8bAh4jXmQsOK1kvA0uei1lT0U5AFJat%2BrQ4pRc%3D"
+                sas:
+                    "?sv=2018-03-28&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-06-20T16:42:32Z&st=2019-06-20T08:42:32Z&spr=https&sig=MgmtB8bAh4jXmQsOK1kvA0uei1lT0U5AFJat%2BrQ4pRc%3D",
             },
         };
     },
@@ -146,26 +147,27 @@ export default {
     methods: {
         updateImgProfile() {
             this.spin = true;
-            const file = document.getElementById('fileinput').files[0];
-            const blobUri = 'https://' + this.account.name + '.blob.core.windows.net';
+            const file = document.getElementById("fileinput").files[0];
+            const blobUri = "https://" + this.account.name + ".blob.core.windows.net";
             const blobService = AzureStorage.Blob.createBlobServiceWithSas(blobUri, this.account.sas);
-            
-            if (typeof(file) != 'undefined') {
+
+            if (typeof file != "undefined") {
                 blobService.createBlockBlobFromBrowserFile(
-                    'evper',
-                    'images/profile/'+this.user.id+'.png', 
+                    "evper",
+                    "images/profile/" + this.user.id + ".png",
                     file,
                     (error, result) => {
-                        if(error) {
-                            this.$message.error('Hubo un problema al cargar tu imagen, vuele a intentarlo');
+                        if (error) {
+                            this.$message.error("Hubo un problema al cargar tu imagen, vuele a intentarlo");
                         } else {
                             this.spin = false;
-                            this.$message.success('Tu imagen fue cargada con éxito.');
+                            this.$message.success("Tu imagen fue cargada con éxito.");
                         }
-                    });                
+                    },
+                );
             } else {
-                this.$message.error('¡Selecciona una imagen por favor!');
-            }            
+                this.$message.error("¡Selecciona una imagen por favor!");
+            }
         },
         handleChange(info) {
             // updateImgProfile must be here
@@ -178,7 +180,7 @@ export default {
             };
             try {
                 await client3B.user.updateScholarshipAndEmail(update);
-                this.$message.success('¡Tu información fue guardada con éxito!');
+                this.$message.success("¡Tu información fue guardada con éxito!");
                 this.loading = false;
             } catch (error) {
                 this.handleError(error.response.data.error);
@@ -221,19 +223,19 @@ export default {
 </script>
 
 <style>
-    .collapse-content {
-        margin: 32px;
-        background: white;
-    }
-    .btn--start-evaluations {
-        border: none;
-        background: #00d5af;
-        color: #000;
-        font-size: 11px;
-        width: 128px;
-    }
-    .btn--start-evaluations:hover {
-        background: #00af8f;
-        color: #fff;
-    }
+.collapse-content {
+    margin: 32px;
+    background: white;
+}
+.btn--start-evaluations {
+    border: none;
+    background: #00d5af;
+    color: #000;
+    font-size: 11px;
+    width: 128px;
+}
+.btn--start-evaluations:hover {
+    background: #00af8f;
+    color: #fff;
+}
 </style>
