@@ -42,6 +42,11 @@
                         </a-upload-dragger> -->
                     </a-col>
                 </a-row>
+                <a-row v-show="spin">
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a-spin tip="Subiendo imagen..." size="small" />
+                    </div>
+                </a-row>
                 <!-- <span style="font-size: 16px;">de usuarios</span> -->
             </a-row>
             <a-divider />
@@ -130,8 +135,8 @@ export default {
                 authorization: 'authorization-text',
             },
             account: {
-                name: "t3b", // esto es algo temporal se tiene que crear una función en Azure (tipo lamdas de AWS) para obtener el SAS Token
-                sas:  "?sv=2018-03-28&ss=b&srt=sco&sp=rwdlac&se=2019-06-13T22:56:46Z&st=2019-03-13T15:56:46Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=j9m7xWiks1iSQjPRvZOTrlwxvMUM3GxjV0B1iLKjtlk%3D"
+                name: "t3bevper", // esto es algo temporal se tiene que crear una función en Azure (tipo lamdas de AWS) para obtener el SAS Token
+                sas:  "?sv=2018-03-28&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-06-20T16:42:32Z&st=2019-06-20T08:42:32Z&spr=https&sig=MgmtB8bAh4jXmQsOK1kvA0uei1lT0U5AFJat%2BrQ4pRc%3D"
             },
         };
     },
@@ -140,19 +145,21 @@ export default {
     },
     methods: {
         updateImgProfile() {
+            this.spin = true;
             const file = document.getElementById('fileinput').files[0];
             const blobUri = 'https://' + this.account.name + '.blob.core.windows.net';
             const blobService = AzureStorage.Blob.createBlobServiceWithSas(blobUri, this.account.sas);
             
             if (typeof(file) != 'undefined') {
                 blobService.createBlockBlobFromBrowserFile(
-                    't3b',
+                    'evper',
                     'images/profile/'+this.user.id+'.png', 
                     file,
                     (error, result) => {
                         if(error) {
                             this.$message.error('Hubo un problema al cargar tu imagen, vuele a intentarlo');
                         } else {
+                            this.spin = false;
                             this.$message.success('Tu imagen fue cargada con éxito.');
                         }
                     });                
