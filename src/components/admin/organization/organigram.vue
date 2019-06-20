@@ -72,7 +72,7 @@ export default {
                         [
                             {
                                 v: user.jobDescription,
-                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_PROFILES_IMG_URL}/${user.userName}.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${user.fullName} </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
+                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_IMAGES_URL}/profile/${user.userName}.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${user.fullName} </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
                             },
                             user.immediateSupervisor,
                             user.fullName,

@@ -12,7 +12,7 @@
         </a-row>
         <a-row class="collapse-title" style="margin: 16px 0;">
             <a-col :span="3">
-                <a-avatar :size="120" src="https://t3b.blob.core.windows.net/t3b/images/site/logo.png" />
+                <a-avatar :size="120" :src="logoImgUrl()" />
             </a-col>
             <a-col :span="1"></a-col>
             <a-col :span="10">
@@ -544,6 +544,10 @@ export default {
             this.isClosed = this.evaluation.closingComment != null && this.evaluation.closingComment.length > 0;
             await this.clearSections(this.evaluation.template.sections);
             this.spin = false;
+        },
+        logoImgUrl() {
+            console.log(`${process.env.VUE_APP_IMAGES_URL}/site/logo.png`);
+            return `${process.env.VUE_APP_IMAGES_URL}/site/logo.png`;
         },
     },
 };

@@ -235,7 +235,6 @@ export default {
             return "Evaluado";
         },
         resetImageUrl() {
-            console.log("falló");
             this.useDefaultAvatar = true;
             return false;
         },
@@ -254,7 +253,7 @@ export default {
                 if (this.user.isMale) return "/male.png";
                 return "/female.png";
             }
-            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${this.user.userName}.png`;
+            return `${process.env.VUE_APP_IMAGES_URL}/profile/${this.user.userName}.png`;
         },
         username() {
             return `${this.user.name}`;
