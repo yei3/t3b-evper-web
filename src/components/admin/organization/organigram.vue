@@ -1,22 +1,21 @@
 <template>
     <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :h2="24">
                 <h1 class="breadcrumb-header">Organigrama</h1>
             </a-col>
             <a-col :h2="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-organigram' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'admin-organigram' }" class="breadcrumb-path">
                             Organigrama
                         </router-link>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
         </a-row>
-        <div class="collapse-content"
+        <div
+            class="collapse-content"
             style="background-color: white;
             margin: 30px 30px; padding-top: 40px;"
         >
@@ -38,9 +37,9 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import { GChart } from 'vue-google-charts';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import { GChart } from "vue-google-charts";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     components: {
@@ -56,14 +55,15 @@ export default {
     },
     methods: {
         async onChartReady(chart, google) {
-            const response = await client3B.organizationUnit.getOrganigram()
-                .catch(error => errorHandler(this, error));
+            const response = await client3B.organizationUnit
+                .getOrganigram()
+                .catch((error) => errorHandler(this, error));
             if (!response) return;
 
             const data = new google.visualization.DataTable();
-            data.addColumn('string', 'name');
-            data.addColumn('string', 'manager');
-            data.addColumn('string', 'tooltip');
+            data.addColumn("string", "name");
+            data.addColumn("string", "manager");
+            data.addColumn("string", "tooltip");
 
             const items = response.data.result;
             items.forEach((area) => {
@@ -72,7 +72,11 @@ export default {
                         [
                             {
                                 v: user.jobDescription,
-                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_IMAGES_URL}/profile/${user.userName}.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${user.fullName} </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
+                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_IMAGES_URL}/profile/${
+                                    user.userName
+                                }.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${
+                                    user.fullName
+                                } </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
                             },
                             user.immediateSupervisor,
                             user.fullName,
@@ -83,7 +87,7 @@ export default {
 
             chart.draw(data, {
                 allowHtml: true,
-                nodeClass: 'org-custom-node',
+                nodeClass: "org-custom-node",
                 allowCollapse: true,
             });
             this.spin = false;
