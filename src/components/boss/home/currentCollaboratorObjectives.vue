@@ -423,7 +423,7 @@ export default {
             return (completed * 100) / objectives.length;
         },
         collaboratorImgUrl(employeeNumber) {
-            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${employeeNumber}.png`;
+            return `${process.env.VUE_APP_IMAGES_URL}/${employeeNumber}.png`;
         },
     },
 };
