@@ -398,7 +398,7 @@ export default {
     width: 200px;
 }
 .select--chart__padding {
-    padding: 8px 0 0 0;
+    padding: 8px 4px 0 0;
 }
 .results-header {
     margin: 16px 0 0 8px;
