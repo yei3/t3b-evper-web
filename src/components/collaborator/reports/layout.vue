@@ -12,17 +12,18 @@
                 <p class="results-period">Periodo 2019-1</p>
             </a-col>
         </a-row>
-        <div class="collapse-content" style="background-color: white; margin: 30px 30px; padding-top: 20px;">
-            <a-row class="main-content">
-                <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
+        <div
+            class="collapse-content"
+            style="background-color: white; margin: 30px 30px;"
+        >
+            <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
+            <a-row>                
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
-                    <p>Perido actual</p>
                     <div class="small">
                         <doughnut-chart v-if="isObjectivesLoaded" :chartData="currentData" :options="currentOptions" />
                     </div>
                 </a-col>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
-                    <p>Periodo anterior</p>
                     <div class="small">
                         <doughnut-chart
                             v-if="isObjectivesLoaded"
@@ -37,17 +38,21 @@
                     </div>
                 </a-row>
             </a-row>
-            <a-divider />
-            <a-row class="main-content">
+        </div>
+        <div
+            class="collapse-content"
+            style="background-color: white; margin: 30px 30px;"
+        >
+            <a-row>
                 <a-row>
                     <a-col :span="12">
                         <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
                     </a-col>
-                    <a-col :span="12" class="text-right">
-                        Tipo de gráfica
+                    <a-col :span="12" class="text-right select--chart__padding">
+                        <b>Tipo de gráfica: </b>
                         <a-select
                             defaultValue="bar"
-                            style="width: 200px"
+                            class="select--chart"
                             @change="(option) => (competencesChartType = option)"
                         >
                             <a-select-option value="radar">Gráfica Radar</a-select-option>
@@ -62,7 +67,6 @@
                         </div>
                     </a-row>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <p class="breadcrumb-header">Periodo actual</p>
                         <div class="radar--size" v-show="competencesChartType == 'radar'">
                             <radar-chart
                                 v-if="isCompentecesLoaded"
@@ -79,7 +83,6 @@
                         </div>
                     </a-col>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <p class="breadcrumb-header">Periodo anterior</p>
                         <div class="radar--size" v-show="competencesChartType == 'radar'">
                             <radar-chart
                                 v-if="isCompentecesLoaded"
@@ -104,8 +107,8 @@
 import client3B from "@/api/client3B";
 import authService from "@/services/auth";
 import errorHandler from "@/views/errorHandler";
-import BarChart from "@/components/charts/bar.vue";
 import RadarChart from "@/components/charts/radar.vue";
+import BarChart from "@/components/charts/horizontalBar.vue";
 import DoughnutChart from "@/components/charts/doughnut.vue";
 
 export default {
@@ -131,6 +134,10 @@ export default {
             labels: [],
         },
         currentOptions: {
+            title: {
+                display: true,
+                text: "Objetivos actuales",
+            },
             display: true,
             labels: {
                 fontColor: "rgb(255, 99, 132)",
@@ -160,6 +167,10 @@ export default {
             labels: [],
         },
         previousOptions: {
+            title: {
+                display: true,
+                text: "Objetivos anteriores",
+            },
             display: true,
             labels: {
                 fontColor: "rgb(255, 99, 132)",
@@ -185,16 +196,80 @@ export default {
             datasets: [],
         },
         currentCompentecesOptions: {
-            responsive: false,
-            maintainAspectRatio: false,
+            title: {
+                display: true,
+                text: "Reporte de Capacidades actuales",
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            tooltips: {
+                mode: "index",
+                intersect: false,
+            },
+            scales: {
+                xAxes: [
+                    {
+                        stacked: true,
+                    },
+                ],
+                yAxes: [
+                    {
+                        stacked: true,
+                    },
+                ],
+            },
+            plugins: {
+                datalabels: {
+                    font: {
+                        weight: "bold",
+                    },
+                    color: (context) => {
+                        const index = context.dataIndex;
+                        const value = context.dataset.data[index];
+                        return value <= 0 ? "transparent" : "white";
+                    },
+                },
+            },
         },
         previousCompetencesData: {
             labels: [],
             datasets: [],
         },
         previousCompentecesOptions: {
-            responsive: false,
-            maintainAspectRatio: false,
+            title: {
+                display: true,
+                text: "Reporte de Capacidades anteriores",
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            tooltips: {
+                mode: "index",
+                intersect: false,
+            },
+            scales: {
+                xAxes: [
+                    {
+                        stacked: true,
+                    },
+                ],
+                yAxes: [
+                    {
+                        stacked: true,
+                    },
+                ],
+            },
+            plugins: {
+                datalabels: {
+                    font: {
+                        weight: "bold",
+                    },
+                    color: (context) => {
+                        const index = context.dataIndex;
+                        const value = context.dataset.data[index];
+                        return value <= 0 ? "transparent" : "white";
+                    },
+                },
+            },
         },
     }),
     mounted() {
@@ -283,10 +358,6 @@ export default {
                     },
                 ],
             };
-            this.currentCompentecesOptions = {
-                responsive: true,
-                maintainAspectRatio: true,
-            };
 
             this.previousCompetencesData = {
                 labels: previousData.map((item) => item.name),
@@ -307,10 +378,6 @@ export default {
                         backgroundColor: "#2eaa79",
                     },
                 ],
-            };
-            this.previousCompentecesOptions = {
-                responsive: true,
-                maintainAspectRatio: true,
             };
 
             this.competenceSpin = false;
@@ -333,6 +400,12 @@ export default {
 .radar--size {
     color: #b6b6b688;
 }
+.select--chart {
+    width: 200px;
+}
+.select--chart__padding {
+    padding: 8px 0 0 0;
+}
 .results-header {
     margin: 16px 0 0 8px;
 }
@@ -348,5 +421,11 @@ export default {
 }
 .chart--capabilities {
     padding: 32px 0 0 0;
+}
+.ant-select-selection--single {
+    height: 25px;
+}
+.ant-select-selection__rendered {
+    line-height: none;
 }
 </style>
