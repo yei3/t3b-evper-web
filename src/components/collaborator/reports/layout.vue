@@ -12,12 +12,9 @@
                 <p class="results-period">Periodo 2019-1</p>
             </a-col>
         </a-row>
-        <div
-            class="collapse-content"
-            style="background-color: white; margin: 30px 30px;"
-        >
+        <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
             <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
-            <a-row>                
+            <a-row>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                     <div class="small">
                         <doughnut-chart v-if="isObjectivesLoaded" :chartData="currentData" :options="currentOptions" />
@@ -39,10 +36,7 @@
                 </a-row>
             </a-row>
         </div>
-        <div
-            class="collapse-content"
-            style="background-color: white; margin: 30px 30px;"
-        >
+        <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
             <a-row>
                 <a-row>
                     <a-col :span="12">
