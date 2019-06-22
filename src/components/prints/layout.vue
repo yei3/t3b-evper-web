@@ -322,7 +322,7 @@ export default {
     methods: {
         print() {
             // Pass the element id here
-            this.$printHtml("printEvaluation");
+            this.$printEvaluation("printEvaluation");
         },
         findAnwer(questionId) {
             let ans = "";
@@ -546,7 +546,6 @@ export default {
             this.spin = false;
         },
         logoImgUrl() {
-            console.log(`${process.env.VUE_APP_IMAGES_URL}/site/logo.png`);
             return `${process.env.VUE_APP_IMAGES_URL}/site/logo.png`;
         },
     },
