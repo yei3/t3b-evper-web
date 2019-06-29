@@ -42,7 +42,7 @@ class User extends Http {
         return this.request(path, this.methods.put, data);
     }
 
-    recoverPassword(data) {
+    IsUserSalesMan(data) {
         const path = `${this.entityPath}/RecoverPassword`;
         return this.request(path, this.methods.post, data);
     }
@@ -65,6 +65,16 @@ class User extends Http {
     getCollaborators() {
         const path = `${this.entityPath}/GetCollaborators`;
         return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the check if is User Sales
+     *
+     * @return {Promise}        Http Response
+     */
+    IsUserSalesMan() {
+        const path = `${this.entityPath}/IsUserSalesMan`;
+        return this.request(path, this.methods.post, {});
     }
 }
 
