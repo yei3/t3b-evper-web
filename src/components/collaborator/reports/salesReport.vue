@@ -421,7 +421,7 @@ export default {
         },
         isSatisfactory(total, value) {
             if (!total) return 0;
-            let percent = value / total;
+            const percent = value / total;
             if (percent >= 0.7 && percent < 0.9) return value;
             return 0;
         },

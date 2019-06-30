@@ -19,6 +19,7 @@
 <script>
 import client3B from "@/api/client3B";
 import authService from "@/services/auth";
+import errorHandler from "@/views/errorHandler";
 import report from "@/components/collaborator/reports/report.vue";
 import salesReport from "@/components/collaborator/reports/salesReport.vue";
 
