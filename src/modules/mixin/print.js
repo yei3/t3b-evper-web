@@ -34,12 +34,9 @@ export default {
                     console.error(err);
                 });
         },
-        $printEvaluation(el,
-            { 
-                name = "_blank",
-                replace = false,
-                specs = ["fullscreen=yes", "titlebar=no", "scrollbars=yes"],
-            } = {},
+        $printEvaluation(
+            el,
+            { name = "_blank", replace = false, specs = ["fullscreen=yes", "titlebar=no", "scrollbars=yes"] } = {},
         ) {
             const element = document.getElementById(el);
             if (!element) {
