@@ -305,55 +305,61 @@ export default {
             this.competenceSpin = true;
             this.isCompentecesLoaded = false;
 
-            // const current = await client3B.report.getCollaboratorCompetencesReport(0).catch((error) => {
-            //     this.competenceSpin = false;
-            //     errorHandler(this, error);
-            // });
+            const current = await client3B.report.GetCollaboratorAccomplishmentReport(0).catch((error) => {
+                this.competenceSpin = false;
+                errorHandler(this, error);
+            });
 
-            // const previous = await client3B.report.getCollaboratorCompetencesReport(1).catch((error) => {
-            //     this.competenceSpin = false;
-            //     errorHandler(this, error);
-            // });
+            const previous = await client3B.report.GetCollaboratorAccomplishmentReport(1).catch((error) => {
+                this.competenceSpin = false;
+                errorHandler(this, error);
+            });
+
+            if (!current) return;
+
+            const currentJobTotal = current.data.result[0].total;
+            const currentJobSuccess = current.data.result[0].satisfactory;
+            const currentCultureTotal = current.data.result[1].total;
+            const currentCultureSuccess = current.data.result[1].satisfactory;
+
+            const previousJobTotal = previous.data.result[0].total;
+            const previousJobSuccess = previous.data.result[0].satisfactory;
+            const previousCultureTotal = previous.data.result[1].total;
+            const previousCultureSuccess = previous.data.result[1].satisfactory;
 
             const currentData = [
                 {
                     name: "Competencias del puesto",
-                    total: 2,
-                    exceeds: 0,
-                    satisfactory: 8,
-                    unsatisfactory: 0,
+                    total: currentJobTotal - currentJobSuccess,
+                    exceeds: this.isExceeds(currentJobTotal, currentJobSuccess),
+                    satisfactory: this.isSatisfactory(currentJobTotal, currentJobSuccess),
+                    unsatisfactory: this.isUnsatisfactory(currentJobTotal, currentJobSuccess),
                 },
                 {
                     name: "Cultura 3B",
-                    total: 1,
-                    exceeds: 10,
-                    satisfactory: 0,
-                    unsatisfactory: 0,
+                    total: currentCultureTotal - currentCultureSuccess,
+                    exceeds: this.isExceeds(currentCultureTotal, currentCultureSuccess),
+                    satisfactory: this.isSatisfactory(currentCultureTotal, currentCultureSuccess),
+                    unsatisfactory: this.isUnsatisfactory(currentCultureTotal, currentCultureSuccess),
                 },
             ];
 
             const previousData = [
                 {
                     name: "Competencias del puesto",
-                    total: 10,
-                    exceeds: 0,
-                    satisfactory: 0,
-                    unsatisfactory: 2,
+                    total: previousJobTotal - previousJobSuccess,
+                    exceeds: this.isExceeds(previousJobTotal, previousJobSuccess),
+                    satisfactory: this.isSatisfactory(previousJobTotal, previousJobSuccess),
+                    unsatisfactory: this.isUnsatisfactory(previousJobTotal, previousJobSuccess),
                 },
                 {
                     name: "Cultura 3B",
-                    total: 2,
-                    exceeds: 0,
-                    satisfactory: 8,
-                    unsatisfactory: 0,
+                    total: previousCultureTotal - previousCultureSuccess,
+                    exceeds: this.isExceeds(previousCultureTotal, previousCultureSuccess),
+                    satisfactory: this.isSatisfactory(previousCultureTotal, previousCultureSuccess),
+                    unsatisfactory: this.isUnsatisfactory(previousCultureTotal, previousCultureSuccess),
                 },
             ];
-            this.competenceSpin = false;
-
-            // if (!current) return;
-
-            // const currentData = current.data.result;
-            // const previousData = previous.data.result;
 
             this.currentCompentecesData = {
                 labels: currentData.map((item) => item.name),
@@ -400,13 +406,32 @@ export default {
                     },
                     {
                         label: "",
-                        data: currentData.map((item) => item.total),
+                        data: previousData.map((item) => item.total),
                     },
                 ],
             };
 
             this.competenceSpin = false;
             this.isCompentecesLoaded = true;
+        },
+        isExceeds(total, value) {
+            if (!total) return 0;
+            if (value/total >= 0.9)
+                return value;
+            return 0;
+        },
+        isSatisfactory(total, value) {
+            if (!total) return 0;
+            let percent = value/total;
+            if (percent >= 0.7 && percent < 0.9)
+                return value;
+            return 0;
+        },
+        isUnsatisfactory(total, value) {
+            if (!total) return 0;
+            if (value/total < 0.7)
+                return value;
+            return 0;
         },
     },
 };

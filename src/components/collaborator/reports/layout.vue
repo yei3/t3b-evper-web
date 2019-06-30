@@ -25,6 +25,7 @@ import salesReport from "@/components/collaborator/reports/salesReport.vue";
 export default {
     data: () => ({
         user: authService.getUserData(),
+        isSalesMan: false,
     }),
     components: {
         report,
@@ -34,15 +35,20 @@ export default {
         username() {
             return `${this.user.name} ${this.user.surname}`;
         },
-        async isSalesMan() {
+    },
+    mounted() {
+        this.IsUserSalesMan();
+    },
+    methods: {
+        async IsUserSalesMan() {
             const response = await client3B.user.IsUserSalesMan().catch((error) => {
                 this.objetiveSpin = false;
                 errorHandler(this, error);
             });
-            if (!response) return false;
-            return response.data.result;
+            if (!response) this.isSalesMan = false;
+            this.isSalesMan = response.data.result;
         },
-    },
+    }
 };
 </script>
 <style>
