@@ -380,7 +380,6 @@ export default {
     },
     computed: {
         username() {
-            // return `${this.user.name}`;
             return `${this.user.name} ${this.user.surname}`;
         },
     },
