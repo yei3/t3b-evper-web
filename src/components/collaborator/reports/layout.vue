@@ -48,7 +48,7 @@ export default {
             if (!response) this.isSalesMan = false;
             this.isSalesMan = response.data.result;
         },
-    }
+    },
 };
 </script>
 <style>

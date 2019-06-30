@@ -416,21 +416,18 @@ export default {
         },
         isExceeds(total, value) {
             if (!total) return 0;
-            if (value/total >= 0.9)
-                return value;
+            if (value / total >= 0.9) return value;
             return 0;
         },
         isSatisfactory(total, value) {
             if (!total) return 0;
-            let percent = value/total;
-            if (percent >= 0.7 && percent < 0.9)
-                return value;
+            let percent = value / total;
+            if (percent >= 0.7 && percent < 0.9) return value;
             return 0;
         },
         isUnsatisfactory(total, value) {
             if (!total) return 0;
-            if (value/total < 0.7)
-                return value;
+            if (value / total < 0.7) return value;
             return 0;
         },
     },
