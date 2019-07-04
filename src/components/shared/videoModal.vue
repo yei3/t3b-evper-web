@@ -1,26 +1,30 @@
 <template>
-    <div class="video-modal">
-        <a-modal
-            :visible="visible"
-            style="top: 20px"
-            cancelText="No volver a mostrar video"
-            okText="Entendido"
-            :maskClosable="false"
-            :closable="false"
-            @cancel="handleCancel"
-            @ok="handleOk"
+  <div class="video-modal">
+    <a-modal
+      :visible="visible"
+      style="top: 20px"
+      cancelText="No volver a mostrar video"
+      okText="Entendido"
+      :maskClosable="false"
+      :closable="false"
+      @cancel="handleCancel"
+      @ok="handleOk"
+    >
+      <video ref="video" controls width="100%">
+        <source
+          v-if="userRole === 'Supervisor'"
+          src="https://tiendas3b.blob.core.windows.net/t3b/compressed.mp4"
+          type="video/mp4"
         >
-            <video ref="video" controls width="100%">
-                <source
-                    v-if="userRole === 'Supervisor'"
-                    src="https://tiendas3b.blob.core.windows.net/t3b/compressed.mp4"
-                    type="video/mp4"
-                />
-                <source v-else src="https://tiendas3b.blob.core.windows.net/t3b/slipknot.mp4" tyep="video/mp4" />
-                <p>Sorry, your browser doesn't support embedded videos.</p>
-            </video>
-        </a-modal>
-    </div>
+        <source
+          v-else
+          src="https://tiendas3b.blob.core.windows.net/t3b/evaluacion.mp4"
+          tyep="video/mp4"
+        >
+        <p>Sorry, your browser doesn't support embedded videos.</p>
+      </video>
+    </a-modal>
+  </div>
 </template>
 
 <script>

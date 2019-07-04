@@ -1,35 +1,34 @@
 # Build a Node.js project that uses Vue.
 
 trigger:
-- develop
+    - develop
 
 pool:
-  name: Hosted Windows 2019 with VS2019
-  demands: azureps
+    name: Hosted Windows 2019 with VS2019
+    demands: azureps
 
 steps:
-- task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@2
-  inputs:
-    checkLatest: true
-  displayName: 'Use Yarn 1.x'
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@2
+      inputs:
+          checkLatest: true
+      displayName: "Use Yarn 1.x"
 
-- task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
-  displayName: 'Yarn Install'
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
+      displayName: "Yarn Install"
 
-- task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
-  displayName: 'Yarn Build'
-  inputs:
-    Arguments: build
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
+      displayName: "Yarn Build"
+      inputs:
+          Arguments: build
 
-- powershell: 'Install-Module -Name AzureRM -AllowClobber -Force'
-  displayName: 'PowerShell Script'
+    - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
+      displayName: "PowerShell Script"
 
-- task: AzureFileCopy@2
-  inputs:
-    SourcePath: 'd:\a\1\s\dist\'
-    azureSubscription: Tiendas3B
-    Destination: AzureBlob
-    storage: tiendas3b
-    ContainerName: '$web'
-  displayName: 'AzureBlob File Copy'
-  
+    - task: AzureFileCopy@2
+      inputs:
+          SourcePath: 'd:\a\1\s\dist\'
+          azureSubscription: Tiendas3B
+          Destination: AzureBlob
+          storage: tiendas3b
+          ContainerName: "$web"
+      displayName: "AzureBlob File Copy"
