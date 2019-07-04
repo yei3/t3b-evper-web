@@ -13,7 +13,7 @@
             <a-col>
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
-                        <a-avatar :size="60" :src="imageUrl" class="avatar--border" />
+                        <a-avatar :size="60" :src="imageUrl" class="avatar--border" :loadError="resetImageUrl" />
                     </a-col>
                 </a-row>
                 <a-row type="flex" justify="space-around" align="middle">
@@ -54,7 +54,7 @@
                 <a-menu mode="inline" theme="dark" :selectedKeys="selectedKeys">
                     <a-sub-menu key="sub2" v-show="sidebarCollapsed">
                         <span slot="title">
-                            <a-icon type="safety-certificate" />
+                            <a-icon type="profile" />
                             <span>Tipo de rol</span>
                         </span>
                         <a-menu-item v-for="arole in user.roles" :key="arole" v-show="arole !== userCurrentRole">
@@ -90,6 +90,7 @@ export default {
     name: "Sidebar",
     data() {
         return {
+            useDefaultAvatar: false,
             selectedKeys: [],
             user: authService.getUserData(),
             userCurrentRole: authService.getCurrentRole(),
@@ -164,12 +165,6 @@ export default {
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: "admin-evaluationsHistory",
-                    icon: "search",
-                    text: "Historial de evaluaciones",
-                },
-                {
-                    role: authService.ROLES.ADMINISTRATOR,
                     to: "admin-reports",
                     icon: "line-chart",
                     text: "Resultados",
@@ -179,20 +174,6 @@ export default {
                     to: "admin-organigram",
                     icon: "cluster",
                     text: "Organigrama",
-                },
-                /*
-                {
-                    role: authService.ROLES.ADMINISTRATOR,
-                    to: 'onWork',
-                    icon: 'line-chart',
-                    text: 'Resultados',
-                },
-                */
-                {
-                    role: authService.ROLES.ADMINISTRATOR,
-                    to: "admin-evaluationsHistory",
-                    icon: "search",
-                    text: "Historial",
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
@@ -211,8 +192,9 @@ export default {
     },
     created() {
         this.getSelectedItem();
+        const vm = this;
         setTimeout(() => {
-            this.sidebarCollapsed = false;
+            vm.$store.dispatch("hideSideBar", true);
         }, 10000);
     },
     watch: {
@@ -252,6 +234,10 @@ export default {
 
             return "Evaluado";
         },
+        resetImageUrl() {
+            this.useDefaultAvatar = true;
+            return false;
+        },
     },
     computed: {
         sidebarCollapsed: {
@@ -263,7 +249,11 @@ export default {
             },
         },
         imageUrl() {
-            return `${process.env.VUE_APP_PROFILES_IMG_URL}/${this.user.userName}.png`;
+            if (this.useDefaultAvatar) {
+                if (this.user.isMale) return "/male.png";
+                return "/female.png";
+            }
+            return `${process.env.VUE_APP_IMAGES_URL}/profile/${this.user.userName}.png`;
         },
         username() {
             return `${this.user.name}`;

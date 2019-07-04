@@ -151,9 +151,10 @@ export default {
     },
     mounted() {
         this.parseAnswer();
+        this.setStatus();
     },
     methods: {
-        ...mapMutations(["evaluationSetQuestionsAsAnswered"]),
+        ...mapMutations(["evaluationSetQuestionsAsAnswered", "evaluationAddQuestionStatus"]),
         handleForm(e) {
             e.prevent();
         },
@@ -169,6 +170,12 @@ export default {
                 this.edited = true;
             }
             this.observations = this.answer.observations || "";
+        },
+        setStatus() {
+            this.evaluationAddQuestionStatus({
+                id: this.questionId,
+                answered: this.questionStatus !== 1,
+            });
         },
         save() {
             if (this.onlyLecture) return;

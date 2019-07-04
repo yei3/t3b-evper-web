@@ -43,7 +43,7 @@
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
-                        <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
+                        <a-select class="column--width" v-model="left.region" @change="left.area = null">
                             <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
                                 {{ region.displayName }}
                             </a-select-option>
@@ -51,7 +51,7 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área:</h5>
-                        <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
+                        <a-select class="column--width" v-model="left.area" @change="left.person = null">
                             <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
                                 {{ area.displayName }}
                             </a-select-option>
@@ -59,7 +59,7 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Puesto:</h5>
-                        <a-select style="width: 100%" v-model="left.person">
+                        <a-select class="column--width" v-model="left.person">
                             <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
                                 {{ person.jobDescription }}
                             </a-select-option>
@@ -67,7 +67,7 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Evaluado:</h5>
-                        <a-select style="width: 100%" v-model="left.person" showSearch :filterOption="filterOption">
+                        <a-select class="column--width" v-model="left.person" showSearch :filterOption="filterOption">
                             <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
                                 {{ person.fullName }}
                             </a-select-option>
@@ -75,17 +75,17 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Inicio:</h5>
-                        <a-date-picker placeholder="Fecha Inicio" v-model="left.start" />
+                        <a-date-picker class="column--width" placeholder="Fecha Inicio" v-model="left.start" />
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Fin:</h5>
-                        <a-date-picker placeholder="Fecha Fin" v-model="left.end" />
+                        <a-date-picker class="column--width" placeholder="Fecha Fin" v-model="left.end" />
                     </a-col>
                 </a-col>
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
-                        <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
+                        <a-select class="column--width" v-model="right.region" @change="right.area = null">
                             <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
                                 {{ region.displayName }}
                             </a-select-option>
@@ -93,7 +93,7 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área:</h5>
-                        <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
+                        <a-select class="column--width" v-model="right.area" @change="right.person = null">
                             <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
                                 {{ area.displayName }}
                             </a-select-option>
@@ -101,7 +101,7 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Puesto:</h5>
-                        <a-select style="width: 100%" v-model="right.person">
+                        <a-select class="column--width" v-model="right.person">
                             <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
                                 {{ person.jobDescription }}
                             </a-select-option>
@@ -109,7 +109,7 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Evaluado:</h5>
-                        <a-select style="width: 100%" v-model="right.person" showSearch :filterOption="filterOption">
+                        <a-select class="column--width" v-model="right.person" showSearch :filterOption="filterOption">
                             <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
                                 {{ person.fullName }}
                             </a-select-option>
@@ -117,19 +117,17 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Inicio:</h5>
-                        <a-date-picker placeholder="Fecha Inicio" v-model="right.start" />
+                        <a-date-picker class="column--width" placeholder="Fecha Inicio" v-model="right.start" />
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Fin:</h5>
-                        <a-date-picker placeholder="Fecha Fin" v-model="right.end" />
+                        <a-date-picker class="column--width" placeholder="Fecha Fin" v-model="right.end" />
                     </a-col>
                 </a-col>
                 <a-col :md="24" style="text-align: center; padding-top: 20px;">
                     <a-alert v-show="bannerError" banner closable :message="bannerError" />
                     <br />
-                    <a-button type="primary" @click="getReport" :loading="loading" :disabled="loading"
-                        >Comparar</a-button
-                    >
+                    <a-button block @click="getReport" :loading="loading" :disabled="loading">C o m p a r a r</a-button>
                 </a-col>
             </a-row>
         </div>
@@ -350,42 +348,49 @@ export default {
                 if (this.left.area) AreaId = this.left.area;
                 const [
                     {
-                        data: { result: leftReport },
-                    },
-                    {
                         data: { result: leftObjectives },
                     },
-                ] = await this.getCapabilitiesReport(RegionId, AreaId);
+                    {
+                        data: { result: leftCapabilities },
+                    },
+                ] = await this.getAdminLeftReport(RegionId, AreaId);
 
                 // Objectives - Capabilities Right-Report
                 RegionId = this.left.region;
                 if (this.right.area) AreaId = this.right.area;
                 const [
                     {
-                        data: { result: rightReport },
-                    },
-                    {
                         data: { result: rightObjectives },
                     },
-                ] = await this.getCapabilitiesReport(RegionId, AreaId);
+                    {
+                        data: { result: rightCapabilities },
+                    },
+                ] = await this.getAdminRightReport(RegionId, AreaId);
 
                 // Left Doughnut Chart
                 this.populateLeftObjectivesChart(leftObjectives);
                 // Right Doughnut Chart
                 this.populateRightObjectivesChart(rightObjectives);
-
                 // Left Horizontal Bar Chart
-                this.populateLeftHorizontalChart(leftReport);
+                this.populateLeftHorizontalChart(leftCapabilities);
                 // Right Horizontal Bar Chart
-                this.populateRightHorizontalChart(rightReport);
+                this.populateRightHorizontalChart(rightCapabilities);
             } catch (error) {
                 errorHandler(this, error);
             } finally {
                 this.loading = false;
             }
         },
-        getCapabilitiesReport(RegionId, AreaId) {
+        getAdminLeftReport(RegionId, AreaId) {
             return Promise.all([
+                client3B.report.getAdminObjectivesReport({
+                    RegionId,
+                    AreaId,
+                    JobDescription: this.left.person,
+                    StarTime: this.left.start.toISOString(),
+                    EndDateTime: this.left.end.toISOString(),
+                    UserId: this.left.person,
+                }),
                 client3B.report.getAdminCapabilitiesReport({
                     RegionId,
                     AreaId,
@@ -394,7 +399,19 @@ export default {
                     EndDateTime: this.left.end.toISOString(),
                     UserId: this.left.person,
                 }),
+            ]);
+        },
+        getAdminRightReport(RegionId, AreaId) {
+            return Promise.all([
                 client3B.report.getAdminObjectivesReport({
+                    RegionId,
+                    AreaId,
+                    JobDescription: this.right.person,
+                    StarTime: this.right.start.toISOString(),
+                    EndDateTime: this.right.end.toISOString(),
+                    UserId: this.right.person,
+                }),
+                client3B.report.getAdminCapabilitiesReport({
                     RegionId,
                     AreaId,
                     JobDescription: this.right.person,
@@ -404,46 +421,46 @@ export default {
                 }),
             ]);
         },
-        populateLeftHorizontalChart(leftReport) {
+        populateLeftHorizontalChart(leftCapabilities) {
             this.leftChartData = {
-                labels: leftReport.map((item) => item.name),
+                labels: leftCapabilities.map((item) => item.name),
                 datasets: [
                     {
                         label: "Insatisfactorio",
-                        data: leftReport.map((item) => item.unsatisfactory),
+                        data: leftCapabilities.map((item) => item.unsatisfactory),
                         backgroundColor: "#e94e6f",
                     },
                     {
                         label: "Cumple Requerimiento",
-                        data: leftReport.map((item) => item.satisfactory),
+                        data: leftCapabilities.map((item) => item.satisfactory),
                         backgroundColor: "#498bc9",
                     },
                     {
                         label: "Excede Requerimiento",
-                        data: leftReport.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
+                        data: leftCapabilities.map((item) => item.exceeds),
+                        backgroundColor: "#1ab394",
                     },
                 ],
             };
         },
-        populateRightHorizontalChart(rightReport) {
+        populateRightHorizontalChart(rightCapabilities) {
             this.rightChartData = {
-                labels: rightReport.map((item) => item.name),
+                labels: rightCapabilities.map((item) => item.name),
                 datasets: [
                     {
                         label: "Insatisfactorio",
-                        data: rightReport.map((item) => item.unsatisfactory),
+                        data: rightCapabilities.map((item) => item.unsatisfactory),
                         backgroundColor: "#e94e6f",
                     },
                     {
                         label: "Satisfactorio",
-                        data: rightReport.map((item) => item.satisfactory),
+                        data: rightCapabilities.map((item) => item.satisfactory),
                         backgroundColor: "#498bc9",
                     },
                     {
                         label: "Excede",
-                        data: rightReport.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
+                        data: rightCapabilities.map((item) => item.exceeds),
+                        backgroundColor: "#1ab394",
                     },
                 ],
             };
@@ -454,7 +471,7 @@ export default {
                 datasets: [
                     {
                         data: [leftObjectives.validatedObjectives, leftU],
-                        backgroundColor: ["#00b880", "#ff3b3b"],
+                        backgroundColor: ["#1ab394", "#ff3b3b"],
                     },
                 ],
                 labels: ["Cumplidos", "No cumplidos"],
@@ -466,7 +483,7 @@ export default {
                 datasets: [
                     {
                         data: [rightObjectives.validatedObjectives, rightU],
-                        backgroundColor: ["#00b880", "#ff3b3b"],
+                        backgroundColor: ["#1ab394", "#ff3b3b"],
                     },
                 ],
                 labels: ["Cumplidos", "No cumplidos"],
@@ -496,4 +513,19 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.ant-btn:hover {
+    color: #1ab394;
+    border-color: #1ab394;
+}
+.ant-btn::selection {
+    background: #1ab394 !important;
+    border-color: #1ab394;
+}
+.ant-btn::before {
+    border-color: #1ab394;
+}
+.column--width {
+    width: 100%;
+}
+</style>

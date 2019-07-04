@@ -19,16 +19,16 @@ steps:
     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
       displayName: "Yarn Build"
       inputs:
-          Arguments: build
+          Arguments: build --fix
 
     - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
       displayName: "PowerShell Script"
 
-    - task: AzureFileCopy@2
+    - task: AzureFileCopy@3
       inputs:
           SourcePath: 'd:\a\1\s\dist\'
-          azureSubscription: Tiendas3B
-          Destination: AzureBlob
-          storage: tiendas3b
+          azureSubscription: "Tiendas3B"
+          Destination: "AzureBlob"
+          storage: "tiendas3b"
           ContainerName: "$web"
       displayName: "AzureBlob File Copy"

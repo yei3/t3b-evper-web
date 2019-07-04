@@ -12,7 +12,7 @@
         </a-row>
         <a-row class="collapse-title" style="margin: 16px 0;">
             <a-col :span="3">
-                <a-avatar :size="120" src="https://t3b.blob.core.windows.net/t3b/images/site/logo.png" />
+                <a-avatar :size="120" :src="logoImgUrl()" />
             </a-col>
             <a-col :span="1"></a-col>
             <a-col :span="10">
@@ -128,9 +128,11 @@
                             <b>Valor esperado:</b>
                             {{ question.expected || question.expectedText }}
                             <b>Valor real:</b>
-                            {{ getValorReal(question.id) }}
+                            {{ getValorReal(question.id, question.relation) }}
                             <b>Resultado: </b>
-                            {{ getResultado(question.id) }}
+                            {{
+                                getResultado(question.id, question.relation, question.expected || question.expectedText)
+                            }}
                             <br />
                             <b>Observaciones: </b>
                             {{ getObservaciones(question.id) }}
@@ -320,7 +322,7 @@ export default {
     methods: {
         print() {
             // Pass the element id here
-            this.$printHtml("printEvaluation");
+            this.$printEvaluation("printEvaluation");
         },
         findAnwer(questionId) {
             let ans = "";
@@ -350,11 +352,15 @@ export default {
             }
             return ans;
         },
-        getValorReal(questionId) {
+        getValorReal(questionId, relation) {
             let res = "";
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
-                    res = anwser.measuredAnswer.real;
+                    if (relation == 3) {
+                        res = anwser.measuredAnswer.text;
+                    } else {
+                        res = anwser.measuredAnswer.real;
+                    }
                 }
             });
             return res;
@@ -368,11 +374,23 @@ export default {
             });
             return res;
         },
-        getResultado(questionId) {
+        getResultado(questionId, relation, expected) {
             let res = "";
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
-                    res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                    if (relation == 5) {
+                        res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 2) {
+                        res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 3) {
+                        res = anwser.measuredAnswer.text == expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 1) {
+                        res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido";
+                    } else if (relation == 4) {
+                        res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido";
+                    } else {
+                        res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                    }
                 }
             });
             return res;
@@ -523,9 +541,12 @@ export default {
             this.collaboratorName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
             this.includePastObjectives = this.evaluation.template.includePastObjectives;
-            this.isClosed = this.evaluation.closingComment.length > 0;
+            this.isClosed = this.evaluation.closingComment != null && this.evaluation.closingComment.length > 0;
             await this.clearSections(this.evaluation.template.sections);
             this.spin = false;
+        },
+        logoImgUrl() {
+            return `${process.env.VUE_APP_IMAGES_URL}/site/logo.png`;
         },
     },
 };
