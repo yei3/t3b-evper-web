@@ -135,9 +135,9 @@ export default {
                 authorization: "authorization-text",
             },
             account: {
-                name: "t3bevper", // esto es algo temporal se tiene que crear una función en Azure (tipo lamdas de AWS) para obtener el SAS Token
+                name: "t3bevper", // esto es algo temporal se tiene que crear un mecanismo para obtener el SAS Token
                 sas:
-                    "?sv=2018-03-28&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-06-20T16:42:32Z&st=2019-06-20T08:42:32Z&spr=https&sig=MgmtB8bAh4jXmQsOK1kvA0uei1lT0U5AFJat%2BrQ4pRc%3D",
+                    "?sv=2018-03-28&ss=bf&srt=sco&sp=rwdlac&se=2020-07-31T05:17:21Z&st=2019-07-07T21:17:21Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=DSQ%2BTtRQZ%2ByDyeae0iwvXwGcxmdNZsQ5EGYsDwMomow%3D",
             },
         };
     },
