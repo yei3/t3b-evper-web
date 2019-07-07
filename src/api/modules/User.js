@@ -42,7 +42,7 @@ class User extends Http {
         return this.request(path, this.methods.put, data);
     }
 
-    IsUserSalesMan(data) {
+    recoverPassword(data) {
         const path = `${this.entityPath}/RecoverPassword`;
         return this.request(path, this.methods.post, data);
     }

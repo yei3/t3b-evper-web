@@ -13,13 +13,13 @@
       <video ref="video" controls width="100%">
         <source
           v-if="userRole === 'Supervisor'"
-          src="https://tiendas3b.blob.core.windows.net/t3b/compressed.mp4"
+          :src="videoUrl()"
           type="video/mp4"
         >
         <source
           v-else
-          src="https://tiendas3b.blob.core.windows.net/t3b/evaluacion.mp4"
-          tyep="video/mp4"
+          :src="videoUrl()"
+          type="video/mp4"
         >
         <p>Sorry, your browser doesn't support embedded videos.</p>
       </video>
@@ -59,6 +59,9 @@ export default {
         },
         pauseVideo() {
             this.$refs.video.pause();
+        },
+        videoUrl() {
+            return `${process.env.VUE_APP_BLOB_URL}videos/evaluacion_hevc.mp4`;
         },
     },
 };
