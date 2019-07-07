@@ -73,7 +73,7 @@ export default {
     },
     data: () => ({
         SUCCESS: 70,
-        EXCEEDS: 90,        
+        EXCEEDS: 90,
         objetiveSpin: false,
         competenceSpin: false,
         isObjectivesLoaded: false,
@@ -183,8 +183,8 @@ export default {
                         return value <= 0 ? "transparent" : "white";
                     },
                     formatter: function(value) {
-                         return value + '%';
-                    }
+                        return value + "%";
+                    },
                 },
             },
         },
@@ -226,8 +226,8 @@ export default {
                         return value <= 0 ? "transparent" : "white";
                     },
                     formatter: function(value) {
-                         return value + '%';
-                    }
+                        return value + "%";
+                    },
                 },
             },
         },
@@ -384,21 +384,21 @@ export default {
             this.competenceSpin = false;
             this.isCompentecesLoaded = true;
         },
-        isExceeds(total, value) {            
+        isExceeds(total, value) {
             if (!total) return 0;
-            const result = Math.round(value / total * 100);
+            const result = Math.round((value / total) * 100);
             if (result >= this.EXCEEDS) return result;
             return 0;
         },
         isSatisfactory(total, value) {
             if (!total) return 0;
-            const result = Math.round(value / total * 100);
+            const result = Math.round((value / total) * 100);
             if (result >= this.SUCCESS && result < this.EXCEEDS) return result;
             return 0;
         },
         isUnsatisfactory(total, value) {
             if (!total) return 0;
-            const result = Math.round(value / total * 100);
+            const result = Math.round((value / total) * 100);
             if (result < this.SUCCESS) return result;
             return 0;
         },
