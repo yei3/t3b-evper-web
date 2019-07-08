@@ -54,7 +54,7 @@
                 <a-menu mode="inline" theme="dark" :selectedKeys="selectedKeys">
                     <a-sub-menu key="sub2" v-show="sidebarCollapsed">
                         <span slot="title">
-                            <a-icon type="profile" />
+                            <a-icon type="ellipsis" />
                             <span>Tipo de rol</span>
                         </span>
                         <a-menu-item v-for="arole in user.roles" :key="arole" v-show="arole !== userCurrentRole">
