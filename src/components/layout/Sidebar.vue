@@ -26,7 +26,7 @@
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
                         <a-dropdown>
-                            <a class="ant-dropdown-link" > {{ roleEs }} <a-icon type="bars" /> </a>
+                            <a class="ant-dropdown-link"> {{ roleEs }} <a-icon type="bars" /> </a>
                             <a-menu slot="overlay">
                                 <a-menu-item
                                     v-for="arole in user.roles"
