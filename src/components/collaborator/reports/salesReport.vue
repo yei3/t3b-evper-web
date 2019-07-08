@@ -109,13 +109,13 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
-                    formatter: function(value, context) {                        
+                    formatter: function(value, context) {
                         let total = 0;
                         const index = context.dataIndex;
-                        context.dataset.data.forEach(element => {
+                        context.dataset.data.forEach((element) => {
                             total += element;
                         });
-                        return Math.round((value / total) * 100) + '%';
+                        return Math.round((value / total) * 100) + "%";
                     },
                 },
             },
@@ -150,13 +150,13 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
-                    formatter: function(value, context) {                        
+                    formatter: function(value, context) {
                         let total = 0;
                         const index = context.dataIndex;
-                        context.dataset.data.forEach(element => {
+                        context.dataset.data.forEach((element) => {
                             total += element;
                         });
-                        return Math.round((value / total) * 100) + '%';
+                        return Math.round((value / total) * 100) + "%";
                     },
                 },
             },
@@ -269,7 +269,7 @@ export default {
             const { result } = response.data;
             const currentInvalid = result.currentTotal - result.currentValidated;
             const previousInvalid = result.previousTotal - result.previousValidated;
-            
+
             // Current Chart
             this.currentData = {
                 datasets: [
