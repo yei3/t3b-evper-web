@@ -137,20 +137,6 @@ export default {
                     icon: "search",
                     text: "Historial",
                 },
-                /*
-                {
-                    role: authService.ROLES.SUPERVISOR,
-                    to: 'onWork',
-                    icon: 'form',
-                    text: 'Evaluaciones',
-                },
-                {
-                    role: authService.ROLES.SUPERVISOR,
-                    to: 'boss-reports',
-                    icon: 'line-chart',
-                    text: 'Resultados',
-                },
-                */
                 {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: "admin-home",
@@ -172,7 +158,7 @@ export default {
                 {
                     role: authService.ROLES.ADMINISTRATOR,
                     to: "admin-organigram",
-                    icon: "cluster",
+                    icon: "share-alt",
                     text: "Organigrama",
                 },
                 {
@@ -320,21 +306,6 @@ export default {
     margin-top: 0px;
     margin-bottom: 0px;
 }
-
-/*
-.ant-menu-vertical.ant-menu-sub .ant-menu-item:first-child {
-    margin-top: 15px;
-}
-
-.ant-menu-vertical.ant-menu-sub .ant-menu-item:last-child {
-    margin-bottom: 15px;
-}
-
-.ant-menu-vertical.ant-menu-sub .ant-menu-item {
-    margin-right: 15px;
-    margin-left: 15px;
-}
-*/
 
 .ant-menu-vertical,
 .ant-menu-vertical .ant-menu-item,
