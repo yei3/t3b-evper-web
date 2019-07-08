@@ -27,19 +27,8 @@
         <div class="collapse-content" style="background-color: white; margin: 30px 30px;">
             <a-row>
                 <a-row>
-                    <a-col :span="12">
+                    <a-col :span="24">
                         <h3 class="breadcrumb-header">Competencias de Ventas Evaluadas</h3>
-                    </a-col>
-                    <a-col :span="12" class="text-right select--chart__padding">
-                        <b>Tipo de gráfica: </b>
-                        <a-select
-                            defaultValue="bar"
-                            class="select--chart"
-                            @change="(option) => (competencesChartType = option)"
-                        >
-                            <a-select-option value="radar">Gráfica Radar</a-select-option>
-                            <a-select-option value="bar">Gráfica de Barras</a-select-option>
-                        </a-select>
                     </a-col>
                 </a-row>
                 <a-row class="chart--capabilities">
@@ -49,36 +38,18 @@
                         </div>
                     </a-row>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <div class="radar--size" v-show="competencesChartType == 'radar'">
-                            <radar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="currentCompentecesData"
-                                :options="currentCompentecesOptions"
-                            />
-                        </div>
-                        <div class="radar--size" v-show="competencesChartType == 'bar'">
-                            <bar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="currentCompentecesData"
-                                :options="currentCompentecesOptions"
-                            />
-                        </div>
+                        <bar-chart
+                            v-if="isCompentecesLoaded"
+                            :chartData="currentCompentecesData"
+                            :options="currentCompentecesOptions"
+                        />
                     </a-col>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <div class="radar--size" v-show="competencesChartType == 'radar'">
-                            <radar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="previousCompetencesData"
-                                :options="previousCompentecesOptions"
-                            />
-                        </div>
-                        <div class="radar--size" v-show="competencesChartType == 'bar'">
-                            <bar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="previousCompetencesData"
-                                :options="previousCompentecesOptions"
-                            />
-                        </div>
+                        <bar-chart
+                            v-if="isCompentecesLoaded"
+                            :chartData="previousCompetencesData"
+                            :options="previousCompentecesOptions"
+                        />
                     </a-col>
                 </a-row>
             </a-row>
@@ -101,11 +72,13 @@ export default {
         BarChart,
     },
     data: () => ({
-        user: authService.getUserData(),
+        SUCCESS: 70,
+        EXCEEDS: 90,
         objetiveSpin: false,
         competenceSpin: false,
         isObjectivesLoaded: false,
         isCompentecesLoaded: false,
+        user: authService.getUserData(),
         currentData: {
             datasets: [
                 {
@@ -135,6 +108,14 @@ export default {
                         const index = context.dataIndex;
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
+                    },
+                    formatter: function(value, context) {
+                        let total = 0;
+                        const index = context.dataIndex;
+                        context.dataset.data.forEach((element) => {
+                            total += element;
+                        });
+                        return Math.round((value / total) * 100) + "%";
                     },
                 },
             },
@@ -169,10 +150,17 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
+                    formatter: function(value, context) {
+                        let total = 0;
+                        const index = context.dataIndex;
+                        context.dataset.data.forEach((element) => {
+                            total += element;
+                        });
+                        return Math.round((value / total) * 100) + "%";
+                    },
                 },
             },
         },
-        competencesChartType: "bar",
         currentCompentecesData: {
             labels: [],
             datasets: [],
@@ -209,6 +197,9 @@ export default {
                         const index = context.dataIndex;
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
+                    },
+                    formatter: function(value) {
+                        return value + "%";
                     },
                 },
             },
@@ -250,6 +241,9 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
+                    formatter: function(value) {
+                        return value + "%";
+                    },
                 },
             },
         },
@@ -264,8 +258,6 @@ export default {
         },
         async getCollaboratorObjectives() {
             this.objetiveSpin = true;
-            let currentDiff = 0;
-            let previousDiff = 0;
             this.isObjectivesLoaded = false;
 
             const response = await client3B.report.GetCollaboratorObjectivesAccomplishmentReport().catch((error) => {
@@ -275,13 +267,14 @@ export default {
             if (!response) return;
 
             const { result } = response.data;
-            currentDiff = result.currentTotal - result.currentValidated;
-            previousDiff = result.previousTotal - result.previousValidated;
+            const currentInvalid = result.currentTotal - result.currentValidated;
+            const previousInvalid = result.previousTotal - result.previousValidated;
+
             // Current Chart
             this.currentData = {
                 datasets: [
                     {
-                        data: [result.currentValidated, currentDiff],
+                        data: [result.currentValidated, currentInvalid],
                         backgroundColor: ["#00b880", "#ff3b3b"],
                     },
                 ],
@@ -291,7 +284,7 @@ export default {
             this.previousData = {
                 datasets: [
                     {
-                        data: [result.previousValidated, previousDiff],
+                        data: [result.previousValidated, previousInvalid],
                         backgroundColor: ["#00b880", "#ff3b3b"],
                     },
                 ],
@@ -315,13 +308,13 @@ export default {
                 errorHandler(this, error);
             });
 
-            if (!current) return;
-
+            if (!current && !previous) return;
+            // populate current data
             const currentJobTotal = current.data.result[0].total;
             const currentJobSuccess = current.data.result[0].satisfactory;
             const currentCultureTotal = current.data.result[1].total;
             const currentCultureSuccess = current.data.result[1].satisfactory;
-
+            // populate previous data
             const previousJobTotal = previous.data.result[0].total;
             const previousJobSuccess = previous.data.result[0].satisfactory;
             const previousCultureTotal = previous.data.result[1].total;
@@ -367,7 +360,7 @@ export default {
                     {
                         label: "Insatisfactorio",
                         data: currentData.map((item) => item.unsatisfactory),
-                        backgroundColor: "#e94e6f",
+                        backgroundColor: "#ff3b3b",
                     },
                     {
                         label: "Satisfactorio",
@@ -377,11 +370,7 @@ export default {
                     {
                         label: "Excelente",
                         data: currentData.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
-                    },
-                    {
-                        label: "",
-                        data: currentData.map((item) => item.total),
+                        backgroundColor: "#00b880",
                     },
                 ],
             };
@@ -392,7 +381,7 @@ export default {
                     {
                         label: "Insatisfactorio",
                         data: previousData.map((item) => item.unsatisfactory),
-                        backgroundColor: "#e94e6f",
+                        backgroundColor: "#ff3b3b",
                     },
                     {
                         label: "Satisfactorio",
@@ -402,11 +391,7 @@ export default {
                     {
                         label: "Excelente",
                         data: previousData.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
-                    },
-                    {
-                        label: "",
-                        data: previousData.map((item) => item.total),
+                        backgroundColor: "#00b880",
                     },
                 ],
             };
@@ -416,18 +401,20 @@ export default {
         },
         isExceeds(total, value) {
             if (!total) return 0;
-            if (value / total >= 0.9) return value;
+            const result = Math.round((value / total) * 100);
+            if (result >= this.EXCEEDS) return result;
             return 0;
         },
         isSatisfactory(total, value) {
             if (!total) return 0;
-            const percent = value / total;
-            if (percent >= 0.7 && percent < 0.9) return value;
+            const result = Math.round((value / total) * 100);
+            if (result >= this.SUCCESS && result < this.EXCEEDS) return result;
             return 0;
         },
         isUnsatisfactory(total, value) {
             if (!total) return 0;
-            if (value / total < 0.7) return value;
+            const result = Math.round((value / total) * 100);
+            if (result < this.SUCCESS) return result;
             return 0;
         },
     },
@@ -437,9 +424,6 @@ export default {
 .small {
     max-width: 256px;
     margin: 0px auto;
-}
-.radar--size {
-    color: #b6b6b688;
 }
 .select--chart {
     width: 200px;

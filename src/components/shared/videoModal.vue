@@ -1,30 +1,22 @@
 <template>
-  <div class="video-modal">
-    <a-modal
-      :visible="visible"
-      style="top: 20px"
-      cancelText="No volver a mostrar video"
-      okText="Entendido"
-      :maskClosable="false"
-      :closable="false"
-      @cancel="handleCancel"
-      @ok="handleOk"
-    >
-      <video ref="video" controls width="100%">
-        <source
-          v-if="userRole === 'Supervisor'"
-          src="https://tiendas3b.blob.core.windows.net/t3b/compressed.mp4"
-          type="video/mp4"
+    <div class="video-modal">
+        <a-modal
+            :visible="visible"
+            style="top: 20px"
+            cancelText="No volver a mostrar video"
+            okText="Entendido"
+            :maskClosable="false"
+            :closable="false"
+            @cancel="handleCancel"
+            @ok="handleOk"
         >
-        <source
-          v-else
-          src="https://tiendas3b.blob.core.windows.net/t3b/evaluacion.mp4"
-          tyep="video/mp4"
-        >
-        <p>Sorry, your browser doesn't support embedded videos.</p>
-      </video>
-    </a-modal>
-  </div>
+            <video ref="video" controls width="100%">
+                <source v-if="userRole === 'Supervisor'" :src="videoUrl" type="video/mp4" />
+                <source v-if="userRole === 'Collaborator'" :src="videoUrl" type="video/mp4" />
+                <p>Sorry, your browser doesn't support embedded videos.</p>
+            </video>
+        </a-modal>
+    </div>
 </template>
 
 <script>
@@ -42,6 +34,11 @@ export default {
         return {
             visible: false,
         };
+    },
+    computed: {
+        videoUrl() {
+            return `${process.env.VUE_APP_BLOB_URL}videos/evaluacion_hevc.mp4`;
+        },
     },
     methods: {
         handleOk() {
