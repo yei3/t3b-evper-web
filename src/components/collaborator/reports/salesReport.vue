@@ -109,6 +109,14 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
+                    formatter: function(value, context) {                        
+                        let total = 0;
+                        const index = context.dataIndex;
+                        context.dataset.data.forEach(element => {
+                            total += element;
+                        });
+                        return Math.round((value / total) * 100) + '%';
+                    },
                 },
             },
         },
@@ -141,6 +149,14 @@ export default {
                         const index = context.dataIndex;
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
+                    },
+                    formatter: function(value, context) {                        
+                        let total = 0;
+                        const index = context.dataIndex;
+                        context.dataset.data.forEach(element => {
+                            total += element;
+                        });
+                        return Math.round((value / total) * 100) + '%';
                     },
                 },
             },
@@ -242,8 +258,6 @@ export default {
         },
         async getCollaboratorObjectives() {
             this.objetiveSpin = true;
-            let currentDiff = 0;
-            let previousDiff = 0;
             this.isObjectivesLoaded = false;
 
             const response = await client3B.report.GetCollaboratorObjectivesAccomplishmentReport().catch((error) => {
@@ -253,13 +267,14 @@ export default {
             if (!response) return;
 
             const { result } = response.data;
-            currentDiff = result.currentTotal - result.currentValidated;
-            previousDiff = result.previousTotal - result.previousValidated;
+            const currentInvalid = result.currentTotal - result.currentValidated;
+            const previousInvalid = result.previousTotal - result.previousValidated;
+            
             // Current Chart
             this.currentData = {
                 datasets: [
                     {
-                        data: [result.currentValidated, currentDiff],
+                        data: [result.currentValidated, currentInvalid],
                         backgroundColor: ["#00b880", "#ff3b3b"],
                     },
                 ],
@@ -269,7 +284,7 @@ export default {
             this.previousData = {
                 datasets: [
                     {
-                        data: [result.previousValidated, previousDiff],
+                        data: [result.previousValidated, previousInvalid],
                         backgroundColor: ["#00b880", "#ff3b3b"],
                     },
                 ],
