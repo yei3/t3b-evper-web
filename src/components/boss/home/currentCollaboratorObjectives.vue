@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse" v-show="!hideSection">
+    <div class="collapse">
         <a-row class="collapse-title-boss">
             <a-col :span="23" class="text-center">
                 Seguimiento a Objetivos Actuales
