@@ -26,7 +26,7 @@
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
                         <a-dropdown>
-                            <a class="ant-dropdown-link"> {{ roleEs }} <a-icon type="bars" /> </a>
+                            <a class="ant-dropdown-link"> {{ roleEs }} <a-icon type="swap" /> </a>
                             <a-menu slot="overlay">
                                 <a-menu-item
                                     v-for="arole in user.roles"
@@ -110,7 +110,7 @@ export default {
                 {
                     role: authService.ROLES.COLLABORATOR,
                     to: "collaborator-evaluationsHistory",
-                    icon: "search",
+                    icon: "profile",
                     text: "Historial",
                 },
                 {
@@ -134,7 +134,7 @@ export default {
                 {
                     role: authService.ROLES.SUPERVISOR,
                     to: "boss-closedEvaluationsHistory",
-                    icon: "search",
+                    icon: "profile",
                     text: "Historial",
                 },
                 {
