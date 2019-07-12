@@ -43,7 +43,15 @@
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
-                        <a-select style="width: 100%" v-model="left.region" @change="left.area = null">
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="left.region"
+                            @change="left.area = left.job = left.person = none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Selecciona una región
+                            </a-select-option>
                             <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
                                 {{ region.displayName }}
                             </a-select-option>
@@ -51,7 +59,16 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área:</h5>
-                        <a-select style="width: 100%" v-model="left.area" @change="left.person = null">
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="left.area"
+                            @change="left.job = left.person = none"
+                            :disabled="left.region === none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Todos
+                            </a-select-option>
                             <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
                                 {{ area.displayName }}
                             </a-select-option>
@@ -59,15 +76,34 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Puesto:</h5>
-                        <a-select style="width: 100%" v-model="left.person">
-                            <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
-                                {{ person.jobDescription }}
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="left.job"
+                            @change="left.person = none"
+                            :disabled="left.area === none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Todos
+                            </a-select-option>
+                            <a-select-option v-for="job in leftJobs" :key="job.id" :value="job.id">
+                                {{ job.jobDescription }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Evaluado:</h5>
-                        <a-select style="width: 100%" v-model="left.person" showSearch :filterOption="filterOption">
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="left.person"
+                            showSearch
+                            :filterOption="filterOption"
+                            :disabled="left.job === none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Todos
+                            </a-select-option>
                             <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
                                 {{ person.fullName }}
                             </a-select-option>
@@ -85,7 +121,15 @@
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
-                        <a-select style="width: 100%" v-model="right.region" @change="right.area = null">
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="right.region"
+                            @change="right.area = right.job = right.person = none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Selecciona una región
+                            </a-select-option>
                             <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
                                 {{ region.displayName }}
                             </a-select-option>
@@ -93,7 +137,16 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área:</h5>
-                        <a-select style="width: 100%" v-model="right.area" @change="right.person = null">
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="right.area"
+                            @change="right.job = right.person = none"
+                            :disabled="right.region === none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Todos
+                            </a-select-option>
                             <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
                                 {{ area.displayName }}
                             </a-select-option>
@@ -101,15 +154,34 @@
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Puesto:</h5>
-                        <a-select style="width: 100%" v-model="right.person">
-                            <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
-                                {{ person.jobDescription }}
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="right.job"
+                            @change="right.person = none"
+                            :disabled="right.area === none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Todos
+                            </a-select-option>
+                            <a-select-option v-for="job in rightJobs" :key="job.id" :value="job.id">
+                                {{ job.jobDescription }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Evaluado:</h5>
-                        <a-select style="width: 100%" v-model="right.person" showSearch :filterOption="filterOption">
+                        <a-select
+                            style="width: 100%"
+                            :defaultValue="none"
+                            v-model="right.person"
+                            showSearch
+                            :filterOption="filterOption"
+                            :disabled="right.job === none"
+                        >
+                            <a-select-option :value="none" :key="none">
+                                Todos
+                            </a-select-option>
                             <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
                                 {{ person.fullName }}
                             </a-select-option>
@@ -177,6 +249,8 @@ import errorHandler from "@/views/errorHandler";
 import BarChart from "@/components/charts/horizontalBar.vue";
 import DoughnutChart from "@/components/charts/doughnut.vue";
 
+const NONE = "NONE";
+
 export default {
     mixins: [print],
     components: {
@@ -184,9 +258,11 @@ export default {
         DoughnutChart,
     },
     data: () => ({
+        none: NONE,
         areas: [],
         regions: [],
-        organigram: [],
+        jobs: [],
+        users: [],
         loading: false,
         bannerError: null,
         objetiveSpin: true,
@@ -238,16 +314,18 @@ export default {
             },
         },
         left: {
-            region: null,
-            area: null,
-            person: null,
+            region: NONE,
+            area: NONE,
+            job: NONE,
+            person: NONE,
             start: undefined,
             end: undefined,
         },
         right: {
-            region: null,
-            area: null,
-            person: null,
+            region: NONE,
+            area: NONE,
+            job: NONE,
+            person: NONE,
             start: undefined,
             end: undefined,
         },
@@ -298,28 +376,30 @@ export default {
             this.$printHtml("printReport");
         },
         async init() {
-            try {
-                const [
-                    {
-                        data: { result: regions },
-                    },
-                    {
-                        data: { result: areas },
-                    },
-                    {
-                        data: { result: organigram },
-                    },
-                ] = await Promise.all([
-                    client3B.organizationUnit.getMyRegion(),
-                    client3B.organizationUnit.getAllAreas(),
-                    client3B.organizationUnit.getOrganigram(),
-                ]);
-                this.regions = regions;
-                this.areas = areas;
-                this.organigram = organigram;
-            } catch (error) {
-                errorHandler(this, error);
-            }
+            const [
+                {
+                    data: { result: regions },
+                },
+                {
+                    data: { result: areas },
+                },
+                {
+                    data: { result: jobs },
+                },
+                {
+                    data: { result: users },
+                },
+            ] = await Promise.all([
+                client3B.organizationUnit.getRegionsTree(),
+                client3B.organizationUnit.getAreasTree(),
+                client3B.organizationUnit.getJobsTree(),
+                client3B.organizationUnit.getUserTree(),
+            ]).catch((error) => errorHandler(this, error));
+
+            this.regions = regions;
+            this.areas = areas;
+            this.jobs = jobs;
+            this.users = users;
         },
         filterOption(input, option) {
             return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -327,7 +407,7 @@ export default {
         async getReport() {
             this.loading = true;
             this.bannerError = null;
-            if (this.left.region === null || this.right.region === null) {
+            if (this.left.region === NONE || this.right.region === NONE) {
                 this.bannerError = "Al menos una región debe ser seleccionada";
                 this.loading = false;
                 return;
@@ -345,9 +425,6 @@ export default {
 
             try {
                 // Objectives - Capabilities Left-Report
-                let AreaId = 0;
-                let RegionId = this.left.region;
-                if (this.left.area) AreaId = this.left.area;
                 const [
                     {
                         data: { result: leftReport },
@@ -355,11 +432,9 @@ export default {
                     {
                         data: { result: leftObjectives },
                     },
-                ] = await this.getCapabilitiesReport(RegionId, AreaId);
+                ] = await this.getCapabilitiesReport(this.left);
 
                 // Objectives - Capabilities Right-Report
-                RegionId = this.left.region;
-                if (this.right.area) AreaId = this.right.area;
                 const [
                     {
                         data: { result: rightReport },
@@ -367,7 +442,7 @@ export default {
                     {
                         data: { result: rightObjectives },
                     },
-                ] = await this.getCapabilitiesReport(RegionId, AreaId);
+                ] = await this.getCapabilitiesReport(this.right);
 
                 // Left Doughnut Chart
                 this.populateLeftObjectivesChart(leftObjectives);
@@ -384,24 +459,19 @@ export default {
                 this.loading = false;
             }
         },
-        getCapabilitiesReport(RegionId, AreaId) {
+        getCapabilitiesReport(side) {
+            const dataReport = {
+                RegionId: side.region,
+                StarTime: side.start.toISOString(),
+                EndDateTime: side.end.toISOString(),
+            };
+            if (side.area !== NONE) dataReport.AreaId = side.area;
+            if (side.job !== NONE) dataReport.JobDescription = side.job;
+            if (side.person !== NONE) dataReport.UserId = side.person;
+
             return Promise.all([
-                client3B.report.getAdminCapabilitiesReport({
-                    RegionId,
-                    AreaId,
-                    JobDescription: this.left.person,
-                    StarTime: this.left.start.toISOString(),
-                    EndDateTime: this.left.end.toISOString(),
-                    UserId: this.left.person,
-                }),
-                client3B.report.getAdminObjectivesReport({
-                    RegionId,
-                    AreaId,
-                    JobDescription: this.right.person,
-                    StarTime: this.right.start.toISOString(),
-                    EndDateTime: this.right.end.toISOString(),
-                    UserId: this.right.person,
-                }),
+                client3B.report.GetEvaluatorCapabilitiesReport(dataReport),
+                client3B.report.GetEvaluatorObjectivesReport(dataReport),
             ]);
         },
         populateLeftHorizontalChart(leftReport) {
@@ -475,22 +545,30 @@ export default {
     },
     computed: {
         leftAreas() {
-            if (!this.left.region) return [];
+            if (this.left.region === NONE) return [];
             return this.areas.filter((area) => area.parentId === this.left.region);
         },
         rightAreas() {
-            if (!this.right.region) return [];
+            if (this.right.region === NONE) return [];
             return this.areas.filter((area) => area.parentId === this.right.region);
         },
+        leftJobs() {
+            if (this.left.area === NONE) return [];
+            return this.jobs.filter((job) => job.areaIds.includes(this.left.area));
+        },
+        rightJobs() {
+            if (this.right.area === NONE) return [];
+            return this.jobs.filter((job) => job.areaIds.includes(this.right.area));
+        },
         leftPeople() {
-            if (!this.left.area) return [];
-            const area = this.organigram.find((org) => org.parentId !== null && org.id === this.left.area);
-            return area.organizationUnitUsers;
+            if (this.left.job === NONE) return [];
+            const currentJob = this.jobs.find((job) => job.id === this.left.job);
+            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
         },
         rightPeople() {
-            if (!this.right.area) return [];
-            const area = this.organigram.find((org) => org.parentId !== null && org.id === this.right.area);
-            return area.organizationUnitUsers;
+            if (this.right.job === NONE) return [];
+            const currentJob = this.jobs.find((job) => job.id === this.right.job);
+            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
         },
     },
 };

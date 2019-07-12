@@ -80,6 +80,26 @@ class Reports extends Http {
         const path = `${this.entityPath}/GetCollaboratorAccomplishmentReport`;
         return this.request(path, this.methods.get, { period });
     }
+
+    /*
+     * Data report using GetEvaluatorObjectivesReport
+     *
+     * @return {Promise}        Http Response
+     */
+    GetEvaluatorObjectivesReport(data) {
+        const path = `${this.entityPath}/GetEvaluatorObjectivesReport`;
+        return this.request(path, this.methods.get, data);
+    }
+
+    /*
+     * Data report using GetEvaluatorCapabilitiesReport
+     *
+     * @return {Promise}        Http Response
+     */
+    GetEvaluatorCapabilitiesReport(data) {
+        const path = `${this.entityPath}/GetEvaluatorCapabilitiesReport`;
+        return this.request(path, this.methods.get, data);
+    }
 }
 
 export default Reports;
