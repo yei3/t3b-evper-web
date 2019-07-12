@@ -398,10 +398,4 @@ export default {
 .chart--capabilities {
     padding: 32px 0 0 0;
 }
-.ant-select-selection--single {
-    height: 25px;
-}
-.ant-select-selection__rendered {
-    line-height: none;
-}
 </style>

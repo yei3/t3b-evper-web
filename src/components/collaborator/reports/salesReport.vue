@@ -109,13 +109,12 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
-                    formatter: function(value, context) {
+                    formatter: (value, context) => {
                         let total = 0;
-                        const index = context.dataIndex;
                         context.dataset.data.forEach((element) => {
                             total += element;
                         });
-                        return Math.round((value / total) * 100) + "%";
+                        return `$${Math.round((value / total) * 100)}%`;
                     },
                 },
             },
@@ -150,13 +149,12 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
-                    formatter: function(value, context) {
+                    formatter: (value, context) => {
                         let total = 0;
-                        const index = context.dataIndex;
                         context.dataset.data.forEach((element) => {
                             total += element;
                         });
-                        return Math.round((value / total) * 100) + "%";
+                        return `${Math.round((value / total) * 100)}%`;
                     },
                 },
             },
@@ -198,9 +196,7 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
-                    formatter: function(value) {
-                        return value + "%";
-                    },
+                    formatter: (value) => `${value}%`,
                 },
             },
         },
@@ -241,9 +237,7 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
-                    formatter: function(value) {
-                        return value + "%";
-                    },
+                    formatter: (value) => `${value}%`,
                 },
             },
         },
@@ -446,11 +440,5 @@ export default {
 }
 .chart--capabilities {
     padding: 32px 0 0 0;
-}
-.ant-select-selection--single {
-    height: 25px;
-}
-.ant-select-selection__rendered {
-    line-height: none;
 }
 </style>
