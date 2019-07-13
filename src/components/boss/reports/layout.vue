@@ -285,6 +285,13 @@ export default {
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
                     },
+                    formatter: (value, context) => {
+                        let total = 0;
+                        context.dataset.data.forEach((element) => {
+                            total += element;
+                        });
+                        return `$${Math.round((value / total) * 100)}%`;
+                    },
                 },
             },
         },
@@ -309,6 +316,13 @@ export default {
                         const index = context.dataIndex;
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
+                    },
+                    formatter: (value, context) => {
+                        let total = 0;
+                        context.dataset.data.forEach((element) => {
+                            total += element;
+                        });
+                        return `${Math.round((value / total) * 100)}%`;
                     },
                 },
             },
@@ -362,6 +376,14 @@ export default {
                         const index = context.dataIndex;
                         const value = context.dataset.data[index];
                         return value <= 0 ? "transparent" : "white";
+                    },
+                    formatter: (value, context) => {
+                        const index = context.dataIndex;
+                        let total = 0;
+                        context.chart.data.datasets.forEach((dataset) => {
+                            total += dataset.data[index];
+                        });
+                        return `${Math.round((value / total) * 100)}%`;
                     },
                 },
             },
