@@ -17,7 +17,7 @@
                 :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
                 :wrapperCol="{ xxl: 19, xl: 14, lg: 14, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
-                    initialValue: expected,
+                    initialValue: expectedValue,
                     rules: [
                         {
                             required: true,
