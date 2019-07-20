@@ -17,12 +17,13 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
+                            <!-- remove edit option
                             <a-menu-item>
                                 <a @click="gotToEditForm(record.key)">
                                     <a-icon type="edit" />
                                     Editar
                                 </a>
-                            </a-menu-item>
+                            </a-menu-item> -->
                             <a-menu-item >
                                 <a-popconfirm
                                     title="¿Está seguro de eliminar el Formato de Evaluación?"
