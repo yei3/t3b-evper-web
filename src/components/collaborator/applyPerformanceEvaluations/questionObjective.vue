@@ -162,14 +162,16 @@ export default {
             this.expectedValue = this.expected;
             if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
-                this.value = this.answer.evaluationMeasuredQuestion.expected || this.answer.real || 0;
+                this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
+                this.value = this.answer.real || 0;
             } else {
-                this.value = this.answer.evaluationMeasuredQuestion.expectedText || this.answer.text || "";
+                this.value = this.answer.text || "";
+                this.expectedValue = this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;
             }
-            this.observations = this.answer.evaluationMeasuredQuestion.comment || this.answer.observations || "";
             if (this.questionStatus === 1) {
                 this.edited = true;
             }
+            this.observations = this.answer.observations || "";
         },
         setStatus() {
             this.evaluationAddQuestionStatus({
@@ -193,11 +195,11 @@ export default {
             const response = await client3B.evaluation.answer
                 .updateExpected(
                     {
-                        id: this.questionId,
-                        expectedAnswer: this.numeric ? this.value : 0,
-                        expectedAnswerText: this.numeric ? null : this.value,
+                        id: this.answer.evaluationMeasuredQuestion.id,
+                        expectedAnswer: this.numeric ? this.value : null,
+                        expectedAnswerText: this.numeric ? null : this.value.trim(),
                         expectedQuestion: this.numeric ? this.expectedValue : null,
-                        expectedQuestionText: this.numeric ? null : this.expectedValue,
+                        expectedQuestionText: this.numeric ? null : this.expectedValue.trim(),
                         comment: this.observations,
                     },
                     { measured: true },
