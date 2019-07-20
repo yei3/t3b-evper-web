@@ -162,14 +162,14 @@ export default {
             this.expectedValue = this.expected;
             if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
-                this.value = this.answer.real || 0;
+                this.value = this.answer.evaluationMeasuredQuestion.expected || this.answer.real || 0;
             } else {
-                this.value = this.answer.text || "";
+                this.value = this.answer.evaluationMeasuredQuestion.expectedText || this.answer.text || "";
             }
+            this.observations = this.answer.evaluationMeasuredQuestion.comment || this.answer.observations || "";
             if (this.questionStatus === 1) {
                 this.edited = true;
             }
-            this.observations = this.answer.observations || "";
         },
         setStatus() {
             this.evaluationAddQuestionStatus({
@@ -191,17 +191,14 @@ export default {
         async update() {
             this.loading = true;
             const response = await client3B.evaluation.answer
-                .update(
+                .updateExpected(
                     {
-                        id: this.answer.id,
-                        evaluationQuestionId: this.questionId,
-                        text: this.numeric ? null : this.value,
-                        real: this.numeric ? this.value : 0,
-                        isActive: true,
-                        evaluationMeasuredQuestion: {
-                            status: 2,
-                        },
-                        observations: this.observations,
+                        id: this.questionId,
+                        expectedAnswer: this.numeric ? this.value : 0,
+                        expectedAnswerText: this.numeric ? null : this.value,
+                        expectedQuestion: this.numeric ? this.expectedValue : null,
+                        expectedQuestionText: this.numeric ? null : this.expectedValue,
+                        comment: this.observations,
                     },
                     { measured: true },
                 )
@@ -211,19 +208,6 @@ export default {
             this.edited = false;
             this.evaluationSetQuestionsAsAnswered(this.questionId);
             this.$message.success("Evaluación guardada correctamente");
-            await this.updateExpectedValue();
-        },
-        async updateExpectedValue() {
-            const templateQuestion = JSON.parse(JSON.stringify(this.templateQuestion));
-            if (this.numeric) {
-                templateQuestion.expected = this.expectedValue;
-            } else {
-                templateQuestion.expectedText = this.expectedValue;
-            }
-
-            await client3B.question
-                .update(templateQuestion, { objective: true })
-                .catch((error) => errorHandler(this, error));
         },
     },
     computed: {

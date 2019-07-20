@@ -1,4 +1,4 @@
-import Http from './Http';
+import Http from "./Http";
 
 /**
  * Class to make operations to the Answer entity
@@ -7,9 +7,9 @@ class Answer extends Http {
     constructor() {
         super();
         this.entityPath = {
-            measured: '/api/services/app/EvaluationObjectives',
-            unmeasured: '/api/services/app/UnmeasuredAnswer',
-            goal: '/api/services/app/NotEvaluableAnswer',
+            measured: "/api/services/app/EvaluationObjectives",
+            unmeasured: "/api/services/app/UnmeasuredAnswer",
+            goal: "/api/services/app/NotEvaluableAnswer",
         };
     }
 
@@ -65,6 +65,17 @@ class Answer extends Http {
      */
     update(data, options = {}) {
         const path = `${this.getEntityPath(options)}/Update`;
+        return this.request(path, this.methods.put, data);
+    }
+
+    /**
+     * Update expected values for answer type objetive
+     * @param {Object} data   Data to create a answer
+     *
+     * @return {Promise}        Http Response
+     */
+    updateExpected(data, options = {}) {
+        const path = `${this.getEntityPath(options)}/UpdateExpectedValues`;
         return this.request(path, this.methods.put, data);
     }
 
