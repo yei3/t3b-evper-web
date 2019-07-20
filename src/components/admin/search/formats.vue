@@ -11,9 +11,7 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
-            <a-table :columns="columns" :dataSource="data" :pagination=true
-                :scroll="{ x: true }"
-            >
+            <a-table :columns="columns" :dataSource="data" :pagination="true" :scroll="{ x: true }">
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
@@ -24,7 +22,7 @@
                                     Editar
                                 </a>
                             </a-menu-item> -->
-                            <a-menu-item >
+                            <a-menu-item>
                                 <a-popconfirm
                                     title="¿Está seguro de eliminar el Formato de Evaluación?"
                                     @confirm="deleteFormat(record.key)"
@@ -47,26 +45,26 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import { mapActions } from "vuex";
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 const columns = [
     {
-        title: 'Nombre',
-        dataIndex: 'format.title',
-        key: 'format.title',
+        title: "Nombre",
+        dataIndex: "format.title",
+        key: "format.title",
     },
     {
-        title: 'Descripción',
-        dataIndex: 'format.subtitle',
-        key: 'format.subtitle',
+        title: "Descripción",
+        dataIndex: "format.subtitle",
+        key: "format.subtitle",
     },
     {
-        title: '',
-        key: 'key',
-        scopedSlots: { customRender: 'action' },
-        align: 'right',
+        title: "",
+        key: "key",
+        scopedSlots: { customRender: "action" },
+        align: "right",
     },
 ];
 
@@ -86,15 +84,15 @@ export default {
     },
     watch: {
         // call again the method if the route changes
-        $route: 'search',
+        $route: "search",
     },
     methods: {
         ...mapActions({
-            clearFormatForm: 'clearFormatForm',
+            clearFormatForm: "clearFormatForm",
         }),
         gotToEditForm(id) {
             this.clearFormatForm();
-            this.$router.push({ name: 'update-format', params: { id } });
+            this.$router.push({ name: "update-format", params: { id } });
         },
         async deleteFormat(id) {
             this.spin = true;
@@ -132,32 +130,40 @@ export default {
         },
         getStatus(status) {
             switch (status) {
-            case 0: return 'No iniciado';
-            case 1: return 'En proceso';
-            case 2: return 'Finalizado';
-            case 3: return 'Validado';
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "En proceso";
+                case 2:
+                    return "Finalizado";
+                case 3:
+                    return "Validado";
 
-            default:
-                break;
+                default:
+                    break;
             }
 
-            return 'No iniciado';
+            return "No iniciado";
         },
         transformStatus(status) {
-            if (status === 'En proceso' || status === 'Finalizado') {
-                return 'Continuar';
+            if (status === "En proceso" || status === "Finalizado") {
+                return "Continuar";
             }
-            return 'Iniciar';
+            return "Iniciar";
         },
         selectTagColor(status) {
             switch (status) {
-            case 'No iniciado': return 'ant-tag-red';
-            case 'En proceso': return 'ant-tag-yellow';
-            case 'Finalizado': return 'ant-tag-green';
-            case 'Validado': return 'ant-tag-blue';
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Finalizado":
+                    return "ant-tag-green";
+                case "Validado":
+                    return "ant-tag-blue";
 
-            default:
-                return 'ant-tag-gray';
+                default:
+                    return "ant-tag-gray";
             }
         },
     },

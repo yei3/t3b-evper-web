@@ -261,28 +261,14 @@ export default {
             await client3B.evaluation.revision
                 .updateRevisionDate({
                     evaluationId,
-                    revisionTime: this.dateString.toLocaleDateString([], {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    }),
+                    revisionTime: this.dateString.toISOString(),
                 })
                 .catch((error) => errorHandler(this, error));
 
-            this.sendReviewNotification(
-                evaluationId,
-                this.dateString.toLocaleDateString([], {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                }),
-            );
-            // hot date string
+            this.sendReviewNotification(evaluationId, this.dateString.toISOString());
+
             const obj = this.data.find((tmp) => tmp.id === evaluationId);
+
             obj.reviewDate = this.dateString.toLocaleDateString([], {
                 day: "2-digit",
                 month: "2-digit",
