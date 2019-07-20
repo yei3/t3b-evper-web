@@ -265,8 +265,6 @@ export default {
                 })
                 .catch((error) => errorHandler(this, error));
 
-            this.sendReviewNotification(evaluationId, this.dateString.toISOString());
-
             const obj = this.data.find((tmp) => tmp.id === evaluationId);
 
             obj.reviewDate = this.dateString.toLocaleDateString([], {
@@ -276,6 +274,7 @@ export default {
                 hour: "2-digit",
                 minute: "2-digit",
             });
+            this.sendReviewNotification(evaluationId, obj.reviewDate);
             this.loading = false;
             this.$message.success("La fecha de revisión se ha guardado correctamente");
         },

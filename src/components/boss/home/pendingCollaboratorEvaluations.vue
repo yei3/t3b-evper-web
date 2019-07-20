@@ -191,8 +191,16 @@ export default {
                     revisionTime: this.dateString.toISOString(),
                 })
                 .catch((error) => errorHandler(this, error));
+            
+            const reviewDatetime = this.dateString.toLocaleDateString([], {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
             // send notification
-            this.sendReviewNotification(evaluationId, this.dateString);
+            this.sendReviewNotification(evaluationId, reviewDatetime);
             // change status on real-time XD
             const obj = this.data.find((tmp) => tmp.id === evaluationId);
             obj.status = this.selectStatusName(4);
