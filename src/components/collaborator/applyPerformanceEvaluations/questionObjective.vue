@@ -162,8 +162,11 @@ export default {
             this.expectedValue = this.expected;
             if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
-                this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
                 this.value = this.answer.real || 0;
+                if (this.answer.evaluationMeasuredQuestion.expected === 0)
+                    this.expectedValue = this.answer.evaluationMeasuredQuestion.expected;
+                else
+                    this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;                
             } else {
                 this.value = this.answer.text || "";
                 this.expectedValue = this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;
