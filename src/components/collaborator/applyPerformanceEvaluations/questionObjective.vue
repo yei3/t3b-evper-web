@@ -166,13 +166,10 @@ export default {
                 if (this.answer.evaluationMeasuredQuestion.expected === 0)
                     this.expectedValue = this.answer.evaluationMeasuredQuestion.expected;
                 else
-                    this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;                
+                    this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
             } else {
                 this.value = this.answer.text || "";
                 this.expectedValue = this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;
-            }
-            if (this.questionStatus === 1) {
-                this.edited = true;
             }
             this.observations = this.answer.observations || "";
         },
