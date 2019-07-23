@@ -117,13 +117,11 @@
                             <b>Objetivo:</b>
                             {{ question.text }}
                             <b>Valor esperado:</b>
-                            {{ getExpectedQuestion(question.id, question) }}
+                            {{ getExpectedQuestion(question) }}
                             <b>Valor real:</b>
                             {{ getValorReal(question.id, question.relation) }}
                             <b>Resultado: </b>
-                            {{
-                                getResultado(question.id, question.relation, question.expected || question.expectedText)
-                            }}
+                            {{ getResult(question) }}
                             <br />
                             <b>Observaciones: </b>
                             {{ getObservaciones(question.id) }}
@@ -356,10 +354,10 @@ export default {
             });
             return res;
         },
-        getExpectedQuestion(questionId, question) {
+        getExpectedQuestion(question) {
             let res = question.expected || question.expectedText;
             this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
+                if (anwser.evaluationQuestionId === question.id) {
                     if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
                         res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected;
                     } else {
@@ -372,22 +370,26 @@ export default {
 
             return res;
         },
-        getResultado(questionId, relation, expected) {
+        getResult(question) {
             let res = "";
+            let expected = question.expected || question.expectedText;
+
             this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
-                    if (relation == 5) {
-                        res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido";
-                    } else if (relation == 2) {
-                        res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido";
-                    } else if (relation == 3) {
-                        res = anwser.measuredAnswer.text == expected ? "Cumplido" : "No Cumplido";
-                    } else if (relation == 1) {
-                        res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido";
-                    } else if (relation == 4) {
-                        res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido";
+                if (anwser.evaluationQuestionId === question.id) {
+                    if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
+                        expected = anwser.measuredAnswer.evaluationMeasuredQuestion.expected;
                     } else {
-                        res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                        expected =
+                            anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
+                            anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+                    }
+                    switch (question.relation) {
+                        case 1: res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido"; break;
+                        case 2: res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido"; break;
+                        case 3: res = anwser.measuredAnswer.text.includes(expected) ? "Cumplido" : "No Cumplido"; break;
+                        case 4: res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido"; break;
+                        case 5: res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido"; break;
+                        default: res = anwser.isActive === false ? "No Cumplido" : "Cumplido";  break;
                     }
                 }
             });
