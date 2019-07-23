@@ -357,8 +357,7 @@ export default {
             return res;
         },
         getExpectedQuestion(questionId, question) {
-            let res = "";
-            res = question.expected || question.expectedText;
+            let res = question.expected || question.expectedText;
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
                     if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
