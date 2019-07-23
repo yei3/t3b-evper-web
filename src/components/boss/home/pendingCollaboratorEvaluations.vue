@@ -182,16 +182,14 @@ export default {
         },
         async scheduleReview(evaluationId) {
             this.loading = true;
-            // unrevise evaluation for real change of status
-            await client3B.evaluation.revision.unrevise(evaluationId).catch((error) => errorHandler(this, error));
-            // schedule revision date
+            // schedule revision date and status change
             await client3B.evaluation.revision
                 .updateRevisionDate({
                     evaluationId,
                     revisionTime: this.dateString.toISOString(),
                 })
                 .catch((error) => errorHandler(this, error));
-            
+
             const reviewDatetime = this.dateString.toLocaleDateString([], {
                 day: "2-digit",
                 month: "2-digit",

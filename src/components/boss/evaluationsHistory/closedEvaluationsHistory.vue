@@ -180,8 +180,6 @@ export default {
         },
         async scheduleReview(evaluationId) {
             this.loading = true;
-            // unrevise evaluation for real change of status
-            await client3B.evaluation.revision.unrevise(evaluationId).catch((error) => errorHandler(this, error));
             // schedule revision date
             await client3B.evaluation.revision
                 .updateRevisionDate({
