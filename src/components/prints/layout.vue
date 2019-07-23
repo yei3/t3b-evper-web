@@ -384,12 +384,24 @@ export default {
                             anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
                     }
                     switch (question.relation) {
-                        case 1: res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido"; break;
-                        case 2: res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido"; break;
-                        case 3: res = anwser.measuredAnswer.text.includes(expected) ? "Cumplido" : "No Cumplido"; break;
-                        case 4: res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido"; break;
-                        case 5: res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido"; break;
-                        default: res = anwser.isActive === false ? "No Cumplido" : "Cumplido";  break;
+                        case 1:
+                            res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido";
+                            break;
+                        case 2:
+                            res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido";
+                            break;
+                        case 3:
+                            res = anwser.measuredAnswer.text.includes(expected) ? "Cumplido" : "No Cumplido";
+                            break;
+                        case 4:
+                            res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido";
+                            break;
+                        case 5:
+                            res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido";
+                            break;
+                        default:
+                            res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
+                            break;
                     }
                 }
             });
