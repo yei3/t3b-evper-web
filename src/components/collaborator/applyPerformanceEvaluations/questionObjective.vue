@@ -163,10 +163,11 @@ export default {
             if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
                 this.value = this.answer.real || 0;
-                if (this.answer.evaluationMeasuredQuestion.expected === 0)
+                if (this.answer.evaluationMeasuredQuestion.expected === 0) {
                     this.expectedValue = this.answer.evaluationMeasuredQuestion.expected;
-                else
+                } else {
                     this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
+                }
             } else {
                 this.value = this.answer.text || "";
                 this.expectedValue = this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;

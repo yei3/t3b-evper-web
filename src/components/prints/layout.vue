@@ -362,14 +362,15 @@ export default {
             this.anwsers.forEach((anwser) => {
                 if (anwser.evaluationQuestionId === questionId) {
                     if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected
+                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected;
                     } else {
-                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
+                        res =
+                            anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
                             anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
                     }
                 }
             });
-            
+
             return res;
         },
         getResultado(questionId, relation, expected) {
