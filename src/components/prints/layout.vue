@@ -72,17 +72,8 @@
             <a-row v-show="includePastObjectives">
                 <div class="section__title">
                     <h3>Objetivos</h3>
-                    <!-- <h3>{{ section.name }}</h3> -->
                 </div>
                 <span v-for="(objective, i) in currentObjectives.objectives" :key="i">
-                    <!-- <div class="subsection--padd">
-                        <b
-                            class="subsection"
-                            v-show="isNullOrEmpty(objective.name)"
-                        >
-                            {{ subsection.name }}
-                        </b>
-          </div>-->
                     <p class="question__border">
                         <b>{{ i + 1 }}.-</b>
                         <strong>{{ objective.text }} - {{ getStatusText(objective.status) }}</strong>
@@ -126,7 +117,7 @@
                             <b>Objetivo:</b>
                             {{ question.text }}
                             <b>Valor esperado:</b>
-                            {{ question.expected || question.expectedText }}
+                            {{ getExpectedQuestion(question.id, question) }}
                             <b>Valor real:</b>
                             {{ getValorReal(question.id, question.relation) }}
                             <b>Resultado: </b>
@@ -147,17 +138,8 @@
             <a-row v-show="includePastObjectives">
                 <div class="section__title">
                     <h3>Próximos Objetivos</h3>
-                    <!-- <h3>{{ section.name }}</h3> -->
                 </div>
                 <span v-for="(objective, i) in nextObjectives.objectives" :key="i">
-                    <!-- <div class="subsection--padd">
-                        <b
-                            class="subsection"
-                            v-show="isNullOrEmpty(objective.name)"
-                        >
-                            {{ subsection.name }}
-                        </b>
-          </div>-->
                     <p class="question__border">
                         <b>{{ i + 1 }}.-</b>
                         <strong>{{ objective.text }}</strong>
@@ -372,6 +354,22 @@ export default {
                     res = anwser.measuredAnswer.observations;
                 }
             });
+            return res;
+        },
+        getExpectedQuestion(questionId, question) {
+            let res = "";
+            res = question.expected || question.expectedText;
+            this.anwsers.forEach((anwser) => {
+                if (anwser.evaluationQuestionId === questionId) {
+                    if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
+                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected
+                    } else {
+                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
+                            anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+                    }
+                }
+            });
+            
             return res;
         },
         getResultado(questionId, relation, expected) {
