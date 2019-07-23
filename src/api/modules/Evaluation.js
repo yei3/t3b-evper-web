@@ -1,5 +1,5 @@
-import Http from './Http';
-import Answer from './Answer';
+import Http from "./Http";
+import Answer from "./Answer";
 
 /**
  * Class to make operations to the Evaluation entity
@@ -7,7 +7,7 @@ import Answer from './Answer';
 class Revision extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Revision';
+        this.entityPath = "/api/services/app/Revision";
         this.answer = new Answer();
     }
 
@@ -58,7 +58,7 @@ class Revision extends Http {
 class Evaluation extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Evaluation';
+        this.entityPath = "/api/services/app/Evaluation";
         this.answer = new Answer();
         this.revision = new Revision();
     }
@@ -112,7 +112,7 @@ class Evaluation extends Http {
      * @param {Object} data   Data to create a evaluation
      *
      * @return {Promise}        Http Response
-    **/
+     **/
     update(data) {
         const path = `${this.entityPath}/Update`;
         return this.request(path, this.methods.put, data);
@@ -145,7 +145,7 @@ class Evaluation extends Http {
      * @param {Object} data   Data to delete a format
      *
      * @return {Promise}        Http Response
-    **/
+     **/
     closeComment(data) {
         const path = `${this.entityPath}/ClosingComment`;
         return this.request(path, this.methods.post, data);
