@@ -353,17 +353,16 @@ export default {
             return res;
         },
         getExpectedQuestion(question) {
-            // console.log(question);
             let res = question.expectedText || question.expected;
-            this.answers.forEach((answer) => {
-                if (answer.evaluationQuestionId === question.id) {
-                    if (!Number.isNaN(Number(res))) {
-                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expected || res;
-                    } else {
-                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || res;
-                    }
-                }
-            });
+            const answer = this.answers
+                .find((answer) => answer.evaluationQuestionId === question.id);
+
+            if (!Number.isNaN(Number(res))) {
+                res = answer.measuredAnswer.evaluationMeasuredQuestion.expected || res;
+            } else {
+                res = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || res;
+            }
+
             return res;
         },
         getAccomplished(question) {
@@ -371,10 +370,7 @@ export default {
         },
         isQuestionAccomplished(question) {
             const answer = this.answers
-                .map((answer) => {
-                    if (answer.evaluationQuestionId === question.id) return answer;
-                })
-                .filter(Boolean)[0];
+                .find((answer) => answer.evaluationQuestionId === question.id);
 
             return answer.unmeasuredAnswer.action === "true";
         },
@@ -382,18 +378,14 @@ export default {
             let expected = question.expected || question.expectedText;
 
             const answer = this.answers
-                .map((answer) => {
-                    if (answer.evaluationQuestionId === question.id) return answer;
-                })
-                .filter(Boolean)[0];
+                .find((answer) => answer.evaluationQuestionId === question.id);
 
-            if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
+            if (!Number.isNaN(Number(expected))) {
+                expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
             } else {
-                expected =
-                    answer.measuredAnswer.evaluationMeasuredQuestion.expected ||
-                    answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+                expected = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || expected;
             }
+
             switch (question.relation) {
                 case 1:
                     return answer.measuredAnswer.real < expected;
@@ -412,18 +404,15 @@ export default {
         getGlobalResult() {
             let result = 0.0;
             const evaluableSections = this.sections
-                .map((section) => {
-                    if (section.value > 0) return section;
-                })
-                .filter(Boolean);
+                .filter((section) => section.value > 0);
 
             evaluableSections.forEach((section) => {
-                if (section.name === "Objetivos evaluados") {
+                if (section.name.toLowerCase().includes("objetivos evaluados")) {
                     let accomplished = 0;
                     section.childSections[0].measuredQuestions.forEach((question) => {
                         if (this.isObjetiveAccomplished(question)) accomplished += 1;
                     });
-                    result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;
+                    result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;                    
                 } else {
                     let accomplished = 0;
                     section.childSections[0].unmeasuredQuestions.forEach((question) => {
