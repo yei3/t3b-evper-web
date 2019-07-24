@@ -354,8 +354,7 @@ export default {
         },
         getExpectedQuestion(question) {
             let res = question.expectedText || question.expected;
-            const answer = this.answers
-                .find((answer) => answer.evaluationQuestionId === question.id);
+            const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
 
             if (!Number.isNaN(Number(res))) {
                 res = answer.measuredAnswer.evaluationMeasuredQuestion.expected || res;
@@ -369,16 +368,14 @@ export default {
             return this.isObjetiveAccomplished(question) ? "Cumplido" : "No cumplido";
         },
         isQuestionAccomplished(question) {
-            const answer = this.answers
-                .find((answer) => answer.evaluationQuestionId === question.id);
+            const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
 
             return answer.unmeasuredAnswer.action === "true";
         },
         isObjetiveAccomplished(question) {
             let expected = question.expected || question.expectedText;
 
-            const answer = this.answers
-                .find((answer) => answer.evaluationQuestionId === question.id);
+            const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
 
             if (!Number.isNaN(Number(expected))) {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
@@ -403,8 +400,7 @@ export default {
         },
         getGlobalResult() {
             let result = 0.0;
-            const evaluableSections = this.sections
-                .filter((section) => section.value > 0);
+            const evaluableSections = this.sections.filter((section) => section.value > 0);
 
             evaluableSections.forEach((section) => {
                 if (section.name.toLowerCase().includes("objetivos evaluados")) {
@@ -412,7 +408,7 @@ export default {
                     section.childSections[0].measuredQuestions.forEach((question) => {
                         if (this.isObjetiveAccomplished(question)) accomplished += 1;
                     });
-                    result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;                    
+                    result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;
                 } else {
                     let accomplished = 0;
                     section.childSections[0].unmeasuredQuestions.forEach((question) => {
