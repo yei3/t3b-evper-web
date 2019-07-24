@@ -353,19 +353,17 @@ export default {
             return res;
         },
         getExpectedQuestion(question) {
-            let res = question.expected || question.expectedText;
+            // console.log(question);
+            let res = question.expectedText || question.expected;
             this.answers.forEach((answer) => {
                 if (answer.evaluationQuestionId === question.id) {
-                    if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
+                    if (!Number.isNaN(Number(res))) {
+                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expected || res;
                     } else {
-                        res =
-                            answer.measuredAnswer.evaluationMeasuredQuestion.expected ||
-                            answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || res;
                     }
                 }
             });
-
             return res;
         },
         getAccomplished(question) {
