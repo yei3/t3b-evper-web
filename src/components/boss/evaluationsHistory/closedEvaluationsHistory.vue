@@ -188,18 +188,27 @@ export default {
                 })
                 .catch((error) => errorHandler(this, error));
             // send notification
-            this.sendReviewNotification(evaluationId, this.dateString.toISOString());
+            this.sendReviewNotification(
+                evaluationId,
+                this.dateString.toLocaleDateString([], {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                }),
+            );
             // change status on real-time XD
             const obj = this.data.find((tmp) => tmp.id === evaluationId);
             obj.status = this.selectStatusName(4);
             this.loading = false;
             this.$message.success(`La evaluación está en proceso de revisión  ${evaluationId}`);
         },
-        async sendReviewNotification(_evaluationId, _dateReview) {
+        async sendReviewNotification(evaluationId, dateReview) {
             await client3B.notifications
                 .sendReviewNotification({
-                    evaluationId: _evaluationId,
-                    dateReview: _dateReview,
+                    evaluationId,
+                    dateReview,
                 })
                 .catch((error) => errorHandler(this, error));
         },
