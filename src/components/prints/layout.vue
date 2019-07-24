@@ -313,18 +313,18 @@ export default {
         findAnswer(questionId) {
             let ans = "";
             const regex = "/[[]']+/g";
-            this.answers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
-                    if (anwser.unmeasuredAnswer.action === "true") {
-                        ans = `Sí. ${anwser.unmeasuredAnswer.text}`;
-                    } else if (anwser.unmeasuredAnswer.action === "false") {
-                        ans = `No. ${anwser.unmeasuredAnswer.text}`;
-                    } else if (anwser.unmeasuredAnswer.action === null) {
-                        ans = anwser.unmeasuredAnswer.text;
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === questionId) {
+                    if (answer.unmeasuredAnswer.action === "true") {
+                        ans = `Sí. ${answer.unmeasuredAnswer.text}`;
+                    } else if (answer.unmeasuredAnswer.action === "false") {
+                        ans = `No. ${answer.unmeasuredAnswer.text}`;
+                    } else if (answer.unmeasuredAnswer.action === null) {
+                        ans = answer.unmeasuredAnswer.text;
                     } else {
-                        ans = `ACCIÓN: ${anwser.unmeasuredAnswer.action}  |   RESPONSABLE: ${
-                            anwser.unmeasuredAnswer.text
-                        }        FECHA COMPROMISO: ${this.formatDate(anwser.unmeasuredAnswer.commitmentDate)}`;
+                        ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
+                            answer.unmeasuredAnswer.text
+                        }        FECHA COMPROMISO: ${this.formatDate(answer.unmeasuredAnswer.commitmentDate)}`;
                     }
                 }
             });
@@ -340,12 +340,12 @@ export default {
         },
         getRealValue(questionId, relation) {
             let res = "";
-            this.answers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === questionId) {
                     if (relation == 3) {
-                        res = anwser.measuredAnswer.text;
+                        res = answer.measuredAnswer.text;
                     } else {
-                        res = anwser.measuredAnswer.real;
+                        res = answer.measuredAnswer.real;
                     }
                 }
             });
@@ -353,23 +353,23 @@ export default {
         },
         getObservaciones(questionId) {
             let res = "";
-            this.answers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
-                    res = anwser.measuredAnswer.observations;
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === questionId) {
+                    res = answer.measuredAnswer.observations;
                 }
             });
             return res;
         },
         getExpectedQuestion(question) {
             let res = question.expected || question.expectedText;
-            this.answers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === question.id) {
-                    if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected;
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === question.id) {
+                    if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
+                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
                     } else {
                         res =
-                            anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
-                            anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+                            answer.measuredAnswer.evaluationMeasuredQuestion.expected ||
+                            answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
                     }
                 }
             });
@@ -454,13 +454,13 @@ export default {
                     this.sections.push(section);
                 }
             });
-            this.answers.forEach((anwser) => {
-                if (anwser.notEvaluableAnswer !== null) {
-                    if (anwser.sectionId === this.nextObjectives.sectionId) {
-                        this.nextObjectives.objectives.push(anwser);
+            this.answers.forEach((answer) => {
+                if (answer.notEvaluableAnswer !== null) {
+                    if (answer.sectionId === this.nextObjectives.sectionId) {
+                        this.nextObjectives.objectives.push(answer);
                     }
-                    if (anwser.sectionId === this.currentObjectives.sectionId) {
-                        this.currentObjectives.objectives.push(anwser);
+                    if (answer.sectionId === this.currentObjectives.sectionId) {
+                        this.currentObjectives.objectives.push(answer);
                     }
                 }
             });
@@ -500,20 +500,20 @@ export default {
             let countCR = 0;
             let countIN = 0;
             let countEG = 0;
-            this.answers.forEach((anwser) => {
-                if (anwser.unmeasuredAnswer != null) {
-                    if (anwser.unmeasuredAnswer.text === "-70") {
+            this.answers.forEach((answer) => {
+                if (answer.unmeasuredAnswer != null) {
+                    if (answer.unmeasuredAnswer.text === "-70") {
                         countIN += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.text === "71-99") {
+                    } else if (answer.unmeasuredAnswer.text === "71-99") {
                         countCR += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.text === "+100") {
+                    } else if (answer.unmeasuredAnswer.text === "+100") {
                         countER += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.action != null) {
+                    } else if (answer.unmeasuredAnswer.action != null) {
                         total += 1;
-                        if (anwser.unmeasuredAnswer.action === "true") {
+                        if (answer.unmeasuredAnswer.action === "true") {
                             countEG += 1;
                         }
                     }
