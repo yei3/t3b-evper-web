@@ -28,30 +28,30 @@
                 <br />
                 <b>Tiempo en el puesto:</b>
                 <span style="font-weight: normal">{{
-                    getDiffDates(formatDate(entryDate), formatDate(reassignDate), formatDate(reviewDate))
+                    getDiffDates(entryDate, reassignDate, reviewDate)
                 }}</span>
                 <br />
                 <b>Fecha de ingreso:</b>
-                <span style="font-weight: normal">{{ formatDate(entryDate) }}</span>
+                <span style="font-weight: normal">{{ new Date(entryDate).toLocaleDateString() }}</span>
                 <br />
                 <b>Fecha de revisión:</b>
-                <span style="font-weight: normal">{{ formatDate(reviewDate) }}</span>
+                <span style="font-weight: normal">{{ new Date(reviewDate).toLocaleDateString() }}</span>
                 <br />
             </a-col>
             <a-col :span="6" v-show="includePastObjectives">
                 <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
                 <br />
                 <b>% Objetivos logrados:</b>
-                <span style="font-weight: normal">&emsp;&emsp;{{ completed }}</span>
+                <span style="font-weight: normal">&emsp;&emsp;{{ objectivesCount() }}</span>
                 <br />
                 <b>% Excede requerimiento:</b>
-                <span style="font-weight: normal">&emsp;{{ answerER }}</span>
+                <span style="font-weight: normal">&emsp;{{ getAnswersByLevel("+100") }}</span>
                 <br />
                 <b>% Cumple requerimiento:</b>
-                <span style="font-weight: normal">&emsp;{{ answerCR }}</span>
+                <span style="font-weight: normal">&emsp;{{ getAnswersByLevel("71-99") }}</span>
                 <br />
                 <b>% Insatisfactorio:</b>
-                <span style="font-weight: normal">&emsp;&emsp;{{ answerIN }}</span>
+                <span style="font-weight: normal">&emsp;&emsp;{{ getAnswersByLevel("-70") }}</span>
             </a-col>
             <a-col :span="6" v-show="!includePastObjectives">
                 <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
@@ -88,7 +88,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ formatDate(objective.notEvaluableAnswer.commitmentTime) }}
+                        {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
                     </p>
                 </span>
             </a-row>
@@ -155,7 +155,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ objective.notEvaluableAnswer.commitmentTime }}
+                        {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
                     </p>
                 </span>
             </a-row>
@@ -259,12 +259,7 @@ export default {
             isAutoEvaluation: true,
             includePastObjectives: false,
             isClosed: false,
-            completed: "",
             objectiveAccomplished: 0,
-            answerER: 0,
-            answerCR: 0,
-            answerIN: 0,
-            answerEG: 0,
             answers: [],
             sections: [],
             evaluation: {
@@ -301,9 +296,6 @@ export default {
     },
     async created() {
         await this.fetchEvaluation();
-        // eliminar estas dos llamadas de aqui @omar
-        await this.objectivesCount();
-        await this.answersCount();
     },
     methods: {
         print() {
@@ -324,7 +316,7 @@ export default {
                     } else {
                         ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
                             answer.unmeasuredAnswer.text
-                        }        FECHA COMPROMISO: ${this.formatDate(answer.unmeasuredAnswer.commitmentDate)}`;
+                        }        FECHA COMPROMISO: ${new Date(answer.unmeasuredAnswer.commitmentDate).toLocaleDateString()}`;
                     }
                 }
             });
@@ -342,7 +334,7 @@ export default {
             let res = "";
             this.answers.forEach((answer) => {
                 if (answer.evaluationQuestionId === questionId) {
-                    if (relation == 3) {
+                    if (relation === 3) {
                         res = answer.measuredAnswer.text;
                     } else {
                         res = answer.measuredAnswer.real;
@@ -405,20 +397,19 @@ export default {
                     answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
             }
             switch (question.relation) {
-                case 1:
-                    return answer.measuredAnswer.real < expected;
-                case 2:
-                    return answer.measuredAnswer.real <= expected;
-                case 3:
-                    return answer.measuredAnswer.text === expected;
-                case 4:
-                    return answer.measuredAnswer.real > expected;
-                case 5:
-                    return answer.measuredAnswer.real >= expected;
-                default:
-                    return answer.isActive === false;
+            case 1:
+                return answer.measuredAnswer.real < expected;
+            case 2:
+                return answer.measuredAnswer.real <= expected;
+            case 3:
+                return answer.measuredAnswer.text === expected;
+            case 4:
+                return answer.measuredAnswer.real > expected;
+            case 5:
+                return answer.measuredAnswer.real >= expected;
+            default:
+                return answer.isActive === false;
             }
-            return false;
         },
         getGlobalResult() {
             let result = 0.0;
@@ -432,13 +423,13 @@ export default {
                 if (section.name === "Objetivos evaluados") {
                     let accomplished = 0;
                     section.childSections[0].measuredQuestions.forEach((question) => {
-                        if (this.isObjetiveAccomplished(question)) accomplished++;
+                        if (this.isObjetiveAccomplished(question)) accomplished += 1;
                     });
                     result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;
                 } else {
                     let accomplished = 0;
                     section.childSections[0].unmeasuredQuestions.forEach((question) => {
-                        if (this.isQuestionAccomplished(question)) accomplished++;
+                        if (this.isQuestionAccomplished(question)) accomplished += 1;
                     });
                     result += (accomplished / section.childSections[0].unmeasuredQuestions.length) * section.value;
                 }
@@ -456,12 +447,8 @@ export default {
             });
             this.answers.forEach((answer) => {
                 if (answer.notEvaluableAnswer !== null) {
-                    if (answer.sectionId === this.nextObjectives.sectionId) {
-                        this.nextObjectives.objectives.push(answer);
-                    }
-                    if (answer.sectionId === this.currentObjectives.sectionId) {
-                        this.currentObjectives.objectives.push(answer);
-                    }
+                    if (answer.sectionId === this.nextObjectives.sectionId) this.nextObjectives.objectives.push(answer);
+                    if (answer.sectionId === this.currentObjectives.sectionId) this.currentObjectives.objectives.push(answer);
                 }
             });
         },
@@ -477,67 +464,30 @@ export default {
             return section.name !== "Próximos Objetivos" && section.name !== "Objetivos";
         },
         objectivesCount() {
-            this.completed = 0;
             let count = 0;
             this.currentObjectives.objectives.forEach((objective) => {
-                if (objective.status === 4) {
-                    count += 1;
-                }
+                if (objective.status === 4) count += 1;
             });
             if (count > 0) {
-                this.completed = (count * 100) / this.currentObjectives.objectives.length;
-                this.completed = `${this.completed.toPrecision(4)}  %`;
+                this.objectiveAccomplished = (count * 100) / this.currentObjectives.objectives.length;
             }
+            return `${this.objectiveAccomplished.toPrecision(4)}  %`;
         },
-        answersCount() {
-            // neta??? 9 variables?
-            this.answerER = 0;
-            this.answerCR = 0;
-            this.answerIN = 0;
-            this.answerEG = 0;
+        getAnswersByLevel(level) {
+            let count = 0;
+            let ans = 0;
             let total = 0;
-            let countER = 0;
-            let countCR = 0;
-            let countIN = 0;
-            let countEG = 0;
+            const responses = "-70 71-99 +100";
             this.answers.forEach((answer) => {
-                if (answer.unmeasuredAnswer != null) {
-                    if (answer.unmeasuredAnswer.text === "-70") {
-                        countIN += 1;
-                        total += 1;
-                    } else if (answer.unmeasuredAnswer.text === "71-99") {
-                        countCR += 1;
-                        total += 1;
-                    } else if (answer.unmeasuredAnswer.text === "+100") {
-                        countER += 1;
-                        total += 1;
-                    } else if (answer.unmeasuredAnswer.action != null) {
-                        total += 1;
-                        if (answer.unmeasuredAnswer.action === "true") {
-                            countEG += 1;
-                        }
-                    }
-                }
+                if (answer.unmeasuredAnswer != null && responses.includes(answer.unmeasuredAnswer.text)) total += 1;
             });
-            if (countIN > 0) {
-                this.answerIN = (countIN * 100) / total;
-                this.answerIN = `${this.answerIN.toPrecision(4)}  %`;
+            this.answers.forEach((answer) => {
+                if (answer.unmeasuredAnswer != null && answer.unmeasuredAnswer.text === level) count += 1;
+            });
+            if (count > 0) {
+                ans = (count * 100) / total;
             }
-            if (countCR > 0) {
-                this.answerCR = (countCR * 100) / total;
-                this.answerCR = `${this.answerCR.toPrecision(4)}  %`;
-            }
-            if (countCR > 0) {
-                this.answerER = (countER * 100) / total;
-                this.answerER = `${this.answerER.toPrecision(4)}  %`;
-            }
-            if (countEG > 0) {
-                this.answerEG = (countEG * 100) / total;
-                this.answerEG = `${this.answerEG.toPrecision(4)}`;
-                this.textEG = `${this.answerEG} %   ${
-                    this.answerEG < 70 ? "Insatisfactorio" : this.answerEG < 90 ? "Satistactorio" : "Excelente"
-                }`;
-            }
+            return `${ans.toPrecision(4)}  %`;
         },
         getStatusText(status) {
             let res = "";
@@ -552,18 +502,10 @@ export default {
             }
             return res;
         },
-        formatDate(date) {
-            // Date tiene metodos para hacerte esto
-            let res = `${date} `; // esto para que ?
-            if (res.length > 10) {
-                res = res.substring(0, 10);
-            }
-            return res;
-        },
         getDiffDates(entry, reassign, review) {
             const fecha1 = new Date(entry);
             let fecha2 = new Date();
-            if (reassign === "0001-01-01") {
+            if (reassign === "0001-01-01T00:00:00") {
                 fecha2 = fecha1;
             } else {
                 fecha2 = new Date(reassign);
