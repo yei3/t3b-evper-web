@@ -27,9 +27,7 @@
                 <span style="font-weight: normal">{{ jobDescription }}</span>
                 <br />
                 <b>Tiempo en el puesto:</b>
-                <span style="font-weight: normal">{{
-                    getDiffDates(entryDate, reassignDate, reviewDate)
-                }}</span>
+                <span style="font-weight: normal">{{ getDiffDates(entryDate, reassignDate, reviewDate) }}</span>
                 <br />
                 <b>Fecha de ingreso:</b>
                 <span style="font-weight: normal">{{ new Date(entryDate).toLocaleDateString() }}</span>
@@ -316,7 +314,9 @@ export default {
                     } else {
                         ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
                             answer.unmeasuredAnswer.text
-                        }        FECHA COMPROMISO: ${new Date(answer.unmeasuredAnswer.commitmentDate).toLocaleDateString()}`;
+                        }        FECHA COMPROMISO: ${new Date(
+                            answer.unmeasuredAnswer.commitmentDate,
+                        ).toLocaleDateString()}`;
                     }
                 }
             });
@@ -397,18 +397,18 @@ export default {
                     answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
             }
             switch (question.relation) {
-            case 1:
-                return answer.measuredAnswer.real < expected;
-            case 2:
-                return answer.measuredAnswer.real <= expected;
-            case 3:
-                return answer.measuredAnswer.text === expected;
-            case 4:
-                return answer.measuredAnswer.real > expected;
-            case 5:
-                return answer.measuredAnswer.real >= expected;
-            default:
-                return answer.isActive === false;
+                case 1:
+                    return answer.measuredAnswer.real < expected;
+                case 2:
+                    return answer.measuredAnswer.real <= expected;
+                case 3:
+                    return answer.measuredAnswer.text === expected;
+                case 4:
+                    return answer.measuredAnswer.real > expected;
+                case 5:
+                    return answer.measuredAnswer.real >= expected;
+                default:
+                    return answer.isActive === false;
             }
         },
         getGlobalResult() {
@@ -448,7 +448,8 @@ export default {
             this.answers.forEach((answer) => {
                 if (answer.notEvaluableAnswer !== null) {
                     if (answer.sectionId === this.nextObjectives.sectionId) this.nextObjectives.objectives.push(answer);
-                    if (answer.sectionId === this.currentObjectives.sectionId) this.currentObjectives.objectives.push(answer);
+                    if (answer.sectionId === this.currentObjectives.sectionId)
+                        this.currentObjectives.objectives.push(answer);
                 }
             });
         },
