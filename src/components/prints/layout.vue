@@ -58,7 +58,7 @@
                 <br />
                 <br />
                 <b>Evaluación Global:</b>
-                <span style="font-weight: normal"> &emsp;&emsp;{{ textEG }} </span>
+                <span v-if="evaluationLoaded" style="font-weight: normal"> &emsp;&emsp;{{ getGlobalResult() }} </span>
             </a-col>
             <a-col :span="3">
                 <a-button class="btn-blue" @click="print"> <a-icon type="printer" />Imprimir </a-button>
@@ -69,7 +69,7 @@
             <p>{{ evaluation.template.instructions }}</p>
             <br />
             <br />
-            <a-row v-show="includePastObjectives">
+            <a-row v-if="includePastObjectives">
                 <div class="section__title">
                     <h3>Objetivos</h3>
                 </div>
@@ -109,19 +109,22 @@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <a-icon type="edit" />
                             &nbsp;
-                            {{ findAnwer(question.id) }}
+                            {{ findAnswer(question.id) }}
                         </p>
                     </span>
                     <span :key="h" v-for="(question, h) in subsection.measuredQuestions">
                         <p class="question__border">
-                            <b>Objetivo:</b>
+                            <b>{{ h + 1 }}.- </b>
+                            <a-icon type="form" />
+                            <br />
+                            <b>Objetivo {{ getAccomplished(question) }}:</b>
                             {{ question.text }}
+                            <br />
                             <b>Valor esperado:</b>
                             {{ getExpectedQuestion(question) }}
-                            <b>Valor real:</b>
-                            {{ getValorReal(question.id, question.relation) }}
-                            <b>Resultado: </b>
-                            {{ getResult(question) }}
+                            <a-icon type="minus" />
+                            <b> Valor real:</b>
+                            {{ getRealValue(question.id, question.relation) }}
                             <br />
                             <b>Observaciones: </b>
                             {{ getObservaciones(question.id) }}
@@ -257,11 +260,12 @@ export default {
             includePastObjectives: false,
             isClosed: false,
             completed: "",
+            objectiveAccomplished: 0,
             answerER: 0,
             answerCR: 0,
             answerIN: 0,
             answerEG: 0,
-            anwsers: [],
+            answers: [],
             sections: [],
             evaluation: {
                 template: {
@@ -270,6 +274,7 @@ export default {
                     instructions: "",
                 },
             },
+            evaluationLoaded: false,
             nextObjectives: {
                 sectionId: 0,
                 objectives: [],
@@ -296,6 +301,7 @@ export default {
     },
     async created() {
         await this.fetchEvaluation();
+        // eliminar estas dos llamadas de aqui @omar
         await this.objectivesCount();
         await this.answersCount();
     },
@@ -304,21 +310,21 @@ export default {
             // Pass the element id here
             this.$printEvaluation("printEvaluation");
         },
-        findAnwer(questionId) {
+        findAnswer(questionId) {
             let ans = "";
             const regex = "/[[]']+/g";
-            this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
-                    if (anwser.unmeasuredAnswer.action === "true") {
-                        ans = `Sí. ${anwser.unmeasuredAnswer.text}`;
-                    } else if (anwser.unmeasuredAnswer.action === "false") {
-                        ans = `No. ${anwser.unmeasuredAnswer.text}`;
-                    } else if (anwser.unmeasuredAnswer.action === null) {
-                        ans = anwser.unmeasuredAnswer.text;
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === questionId) {
+                    if (answer.unmeasuredAnswer.action === "true") {
+                        ans = `Sí. ${answer.unmeasuredAnswer.text}`;
+                    } else if (answer.unmeasuredAnswer.action === "false") {
+                        ans = `No. ${answer.unmeasuredAnswer.text}`;
+                    } else if (answer.unmeasuredAnswer.action === null) {
+                        ans = answer.unmeasuredAnswer.text;
                     } else {
-                        ans = `ACCIÓN: ${anwser.unmeasuredAnswer.action}  |   RESPONSABLE: ${
-                            anwser.unmeasuredAnswer.text
-                        }        FECHA COMPROMISO: ${this.formatDate(anwser.unmeasuredAnswer.commitmentDate)}`;
+                        ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
+                            answer.unmeasuredAnswer.text
+                        }        FECHA COMPROMISO: ${this.formatDate(answer.unmeasuredAnswer.commitmentDate)}`;
                     }
                 }
             });
@@ -332,14 +338,14 @@ export default {
             }
             return ans;
         },
-        getValorReal(questionId, relation) {
+        getRealValue(questionId, relation) {
             let res = "";
-            this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === questionId) {
                     if (relation == 3) {
-                        res = anwser.measuredAnswer.text;
+                        res = answer.measuredAnswer.text;
                     } else {
-                        res = anwser.measuredAnswer.real;
+                        res = answer.measuredAnswer.real;
                     }
                 }
             });
@@ -347,65 +353,97 @@ export default {
         },
         getObservaciones(questionId) {
             let res = "";
-            this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === questionId) {
-                    res = anwser.measuredAnswer.observations;
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === questionId) {
+                    res = answer.measuredAnswer.observations;
                 }
             });
             return res;
         },
         getExpectedQuestion(question) {
             let res = question.expected || question.expectedText;
-            this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === question.id) {
-                    if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                        res = anwser.measuredAnswer.evaluationMeasuredQuestion.expected;
+            this.answers.forEach((answer) => {
+                if (answer.evaluationQuestionId === question.id) {
+                    if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
+                        res = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
                     } else {
                         res =
-                            anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
-                            anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+                            answer.measuredAnswer.evaluationMeasuredQuestion.expected ||
+                            answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
                     }
                 }
             });
 
             return res;
         },
-        getResult(question) {
-            let res = "";
+        getAccomplished(question) {
+            return this.isObjetiveAccomplished(question) ? "Cumplido" : "No cumplido";
+        },
+        isQuestionAccomplished(question) {
+            const answer = this.answers
+                .map((answer) => {
+                    if (answer.evaluationQuestionId === question.id) return answer;
+                })
+                .filter(Boolean)[0];
+
+            return answer.unmeasuredAnswer.action === "true";
+        },
+        isObjetiveAccomplished(question) {
             let expected = question.expected || question.expectedText;
 
-            this.anwsers.forEach((anwser) => {
-                if (anwser.evaluationQuestionId === question.id) {
-                    if (anwser.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                        expected = anwser.measuredAnswer.evaluationMeasuredQuestion.expected;
-                    } else {
-                        expected =
-                            anwser.measuredAnswer.evaluationMeasuredQuestion.expected ||
-                            anwser.measuredAnswer.evaluationMeasuredQuestion.expectedText;
-                    }
-                    switch (question.relation) {
-                        case 1:
-                            res = anwser.measuredAnswer.real < expected ? "Cumplido" : "No Cumplido";
-                            break;
-                        case 2:
-                            res = anwser.measuredAnswer.real <= expected ? "Cumplido" : "No Cumplido";
-                            break;
-                        case 3:
-                            res = anwser.measuredAnswer.text.includes(expected) ? "Cumplido" : "No Cumplido";
-                            break;
-                        case 4:
-                            res = anwser.measuredAnswer.real > expected ? "Cumplido" : "No Cumplido";
-                            break;
-                        case 5:
-                            res = anwser.measuredAnswer.real >= expected ? "Cumplido" : "No Cumplido";
-                            break;
-                        default:
-                            res = anwser.isActive === false ? "No Cumplido" : "Cumplido";
-                            break;
-                    }
+            const answer = this.answers
+                .map((answer) => {
+                    if (answer.evaluationQuestionId === question.id) return answer;
+                })
+                .filter(Boolean)[0];
+
+            if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
+                expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
+            } else {
+                expected =
+                    answer.measuredAnswer.evaluationMeasuredQuestion.expected ||
+                    answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
+            }
+            switch (question.relation) {
+                case 1:
+                    return answer.measuredAnswer.real < expected;
+                case 2:
+                    return answer.measuredAnswer.real <= expected;
+                case 3:
+                    return answer.measuredAnswer.text === expected;
+                case 4:
+                    return answer.measuredAnswer.real > expected;
+                case 5:
+                    return answer.measuredAnswer.real >= expected;
+                default:
+                    return answer.isActive === false;
+            }
+            return false;
+        },
+        getGlobalResult() {
+            let result = 0.0;
+            const evaluableSections = this.sections
+                .map((section) => {
+                    if (section.value > 0) return section;
+                })
+                .filter(Boolean);
+
+            evaluableSections.forEach((section) => {
+                if (section.name === "Objetivos evaluados") {
+                    let accomplished = 0;
+                    section.childSections[0].measuredQuestions.forEach((question) => {
+                        if (this.isObjetiveAccomplished(question)) accomplished++;
+                    });
+                    result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;
+                } else {
+                    let accomplished = 0;
+                    section.childSections[0].unmeasuredQuestions.forEach((question) => {
+                        if (this.isQuestionAccomplished(question)) accomplished++;
+                    });
+                    result += (accomplished / section.childSections[0].unmeasuredQuestions.length) * section.value;
                 }
             });
-            return res;
+            return `${result.toFixed(2)} %`;
         },
         clearSections(sections) {
             this.sections = [];
@@ -416,13 +454,13 @@ export default {
                     this.sections.push(section);
                 }
             });
-            this.anwsers.forEach((anwser) => {
-                if (anwser.notEvaluableAnswer !== null) {
-                    if (anwser.sectionId === this.nextObjectives.sectionId) {
-                        this.nextObjectives.objectives.push(anwser);
+            this.answers.forEach((answer) => {
+                if (answer.notEvaluableAnswer !== null) {
+                    if (answer.sectionId === this.nextObjectives.sectionId) {
+                        this.nextObjectives.objectives.push(answer);
                     }
-                    if (anwser.sectionId === this.currentObjectives.sectionId) {
-                        this.currentObjectives.objectives.push(anwser);
+                    if (answer.sectionId === this.currentObjectives.sectionId) {
+                        this.currentObjectives.objectives.push(answer);
                     }
                 }
             });
@@ -452,6 +490,7 @@ export default {
             }
         },
         answersCount() {
+            // neta??? 9 variables?
             this.answerER = 0;
             this.answerCR = 0;
             this.answerIN = 0;
@@ -461,20 +500,20 @@ export default {
             let countCR = 0;
             let countIN = 0;
             let countEG = 0;
-            this.anwsers.forEach((anwser) => {
-                if (anwser.unmeasuredAnswer != null) {
-                    if (anwser.unmeasuredAnswer.text === "-70") {
+            this.answers.forEach((answer) => {
+                if (answer.unmeasuredAnswer != null) {
+                    if (answer.unmeasuredAnswer.text === "-70") {
                         countIN += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.text === "71-99") {
+                    } else if (answer.unmeasuredAnswer.text === "71-99") {
                         countCR += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.text === "+100") {
+                    } else if (answer.unmeasuredAnswer.text === "+100") {
                         countER += 1;
                         total += 1;
-                    } else if (anwser.unmeasuredAnswer.action != null) {
+                    } else if (answer.unmeasuredAnswer.action != null) {
                         total += 1;
-                        if (anwser.unmeasuredAnswer.action === "true") {
+                        if (answer.unmeasuredAnswer.action === "true") {
                             countEG += 1;
                         }
                     }
@@ -514,7 +553,8 @@ export default {
             return res;
         },
         formatDate(date) {
-            let res = `${date} `;
+            // Date tiene metodos para hacerte esto
+            let res = `${date} `; // esto para que ?
             if (res.length > 10) {
                 res = res.substring(0, 10);
             }
@@ -535,6 +575,9 @@ export default {
             const numDias = dias - Math.trunc(anios) * 365 - Math.trunc(meses) * 30.4;
             return `${Math.floor(anios)} años ${Math.floor(meses)} meses ${numDias.toFixed(0)} días.`;
         },
+        logoImgUrl() {
+            return `${process.env.VUE_APP_IMAGES_URL}/site/logo.png`;
+        },
         async fetchEvaluation() {
             this.spin = true;
             const response = await client3B.evaluation.get(this.$route.params.id).catch((error) => {
@@ -542,8 +585,9 @@ export default {
                 errorHandler(this, error);
             });
             if (!response) return;
+            this.evaluationLoaded = true;
             this.evaluation = response.data.result;
-            this.anwsers = this.evaluation.questions;
+            this.answers = this.evaluation.questions;
             this.region = this.evaluation.user.region;
             this.area = this.evaluation.user.area;
             this.jobDescription = this.evaluation.user.jobDescription;
@@ -556,9 +600,6 @@ export default {
             this.isClosed = this.evaluation.closingComment != null && this.evaluation.closingComment.length > 0;
             await this.clearSections(this.evaluation.template.sections);
             this.spin = false;
-        },
-        logoImgUrl() {
-            return `${process.env.VUE_APP_IMAGES_URL}/site/logo.png`;
         },
     },
 };
