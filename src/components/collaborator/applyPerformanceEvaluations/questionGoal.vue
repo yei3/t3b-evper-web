@@ -5,7 +5,7 @@
                 <a-tag :class="tagColorClass">{{ objectiveStatus }}</a-tag>
             </a-col>
             <a-col :md="6" :lg="8">
-                <strong>{{ objective.name }}</strong>
+                <strong>{{ objective.notEvaluableAnswer.text }}</strong>
             </a-col>
             <a-col :md="6" :lg="8">
                 {{ objective.text }}
@@ -113,12 +113,12 @@
             </template>
             <a-row class="modal-content">
                 <a-col :span="24" style="text-align: center;">
-                    <span v-if="binnacle.length === 0">No hay avances</span>
+                    <span v-if="binnacle.items.length === 0">No hay avances</span>
                 </a-col>
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
                         <a-timeline-item
-                            v-for="(item, index) in binnacle"
+                            v-for="(item, index) in binnacle.items"
                             :key="index"
                             color="gray"
                             class="timeline-item"
@@ -265,7 +265,7 @@ export default {
     data() {
         return {
             objective$: null,
-            binnacle: [],
+            binnacle: { items: [] },
             modals: {
                 input: "",
                 modalRecordProgress: {
@@ -293,13 +293,22 @@ export default {
             },
         };
     },
-    created() {
+    async created() {
         this.init();
     },
     methods: {
-        init() {
+        async init() {
             this.objective$ = this.objective;
-            this.binnacle = this.objective.binnacle.items;
+            this.binnacle = await this.getBinnacle(this.objective$.id);
+        },
+        async getBinnacle(objectiveId) {
+            const response = await client3B.binnacle
+                .getBinnacle({
+                    EvaluationMeasuredQuestionId: objectiveId,
+                })
+                .catch((error) => errorHandler(this, error));
+
+            return response.data.result;
         },
         async updateObjectiveStatus(_modal, status) {
             const modal = _modal;
