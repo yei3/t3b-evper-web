@@ -84,6 +84,7 @@
                                     v-show="index + 1 == data.currentStep"
                                     :evaluationId="evaluation.id"
                                     :section="section"
+                                    :questions="getQuestions()"
                                     :onlyLecture="onlyLecture"
                                 />
                                 <evaluation-section-next-objectives

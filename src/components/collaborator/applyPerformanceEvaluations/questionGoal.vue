@@ -1,27 +1,26 @@
 <template>
     <a-col :span="24" style="padding: 5px 0px 0px 0px; margin-bottom: 0px;">
-        <a-row :gutter="16" >
+        <a-row :gutter="16">
             <a-col :md="4" :lg="2">
-                <a-tag :class="tagColorClass">{{objectiveStatus}}</a-tag>
+                <a-tag :class="tagColorClass">{{ objectiveStatus }}</a-tag>
             </a-col>
             <a-col :md="6" :lg="8">
-                <strong>{{objective.name}}</strong>
+                <strong>{{ objective.name }}</strong>
             </a-col>
             <a-col :md="6" :lg="8">
-                {{objective.deliverable}}
+                {{ objective.text }}
             </a-col>
             <a-col :md="6" :lg="4">
-                {{(new Date(objective.deliveryDate)).toLocaleString()}}
+                {{ new Date(objective.terminationDateTime).toLocaleString() }}
             </a-col>
             <a-col :md="2" :lg="2">
                 <a-dropdown>
                     <a-menu slot="overlay">
-                        <a-menu-item key="2"
-                            @click="modals.modalViewProgress.show = true"
-                        >
+                        <a-menu-item key="2" @click="modals.modalViewProgress.show = true">
                             Ver avances
                         </a-menu-item>
-                        <a-menu-item key="1"
+                        <a-menu-item
+                            key="1"
                             :disabled="objective.status === 3"
                             v-if="isCollaborator"
                             @click="
@@ -32,19 +31,23 @@
                             Registrar avances
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="3" @click="
-                            modals.modalComplete.show = true
-                            modals.input = ''
-                        "
+                        <a-menu-item
+                            key="3"
+                            @click="
+                                modals.modalComplete.show = true;
+                                modals.input = '';
+                            "
                             v-if="isCollaborator"
                             :disabled="objective.status !== 2"
                         >
                             Completar objetivo
                         </a-menu-item>
-                        <a-menu-item key="3" @click="
-                            modals.modalValidate.show = true
-                            modals.input = ''
-                        "
+                        <a-menu-item
+                            key="3"
+                            @click="
+                                modals.modalValidate.show = true;
+                                modals.input = '';
+                            "
                             v-if="isBoss"
                             :disabled="objective.status !== 3"
                         >
@@ -57,9 +60,9 @@
                 </a-dropdown>
             </a-col>
         </a-row>
-        <a-divider style="margin-top: 10px; background: #d5d5d5;"/>
+        <a-divider style="margin-top: 10px; background: #d5d5d5;" />
         <!-- Record Progress -->
-        <a-modal v-model="modals.modalRecordProgress.show" width="600px" >
+        <a-modal v-model="modals.modalRecordProgress.show" width="600px">
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -67,7 +70,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Registrar avance</h1>
-                        <small>{{objective.name}}</small>
+                        <small>{{ objective.name }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -75,23 +78,15 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a las acciones realizadas
-                        para cumplir el objetivo indicado.
+                        Agregue un comentario referente a las acciones realizadas para cumplir el objetivo indicado.
                     </span>
                 </a-col>
                 <a-col :span="24" modal-content-seccion-bottom>
-                    <a-textarea
-                        placeholder="Avance del objetivo..."
-                        :rows="6"
-                        v-model="modals.input"
-                    />
+                    <a-textarea placeholder="Avance del objetivo..." :rows="6" v-model="modals.input" />
                 </a-col>
             </a-row>
             <template slot="footer">
-                <a-button
-                    key="back"
-                    @click="modals.modalRecordProgress.show = false"
-                >
+                <a-button key="back" @click="modals.modalRecordProgress.show = false">
                     Cancelar
                 </a-button>
                 <a-button
@@ -100,10 +95,7 @@
                     type="primary"
                     @click="updateObjectiveStatus(modals.modalRecordProgress, STATUS.IN_PROGRESS)"
                     :loading="modals.modalRecordProgress.loading"
-                    :disabled="
-                        modals.input === '' ||
-                        modals.modalRecordProgress.loading
-                    "
+                    :disabled="modals.input === '' || modals.modalRecordProgress.loading"
                 >
                     Guardar
                 </a-button>
@@ -121,19 +113,20 @@
             </template>
             <a-row class="modal-content">
                 <a-col :span="24" style="text-align: center;">
-                    <span v-if="objective$.binnacle.length === 0">No hay avances</span>
+                    <span v-if="binnacle.length === 0">No hay avances</span>
                 </a-col>
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item v-for="(item, index) in objective$.binnacle"
+                        <a-timeline-item
+                            v-for="(item, index) in binnacle"
                             :key="index"
                             color="gray"
                             class="timeline-item"
                         >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user"/>
-                                {{item.userName}}
+                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
+                                {{ item.userName }}
                                 <small>{{ item.creationTime }}</small>
                             </p>
                             <p style="padding-left: 20px; padding-top: 5px">
@@ -144,9 +137,7 @@
                 </a-col>
             </a-row>
             <template slot="footer">
-                <a-button key="back"
-                    @click="modals.modalViewProgress.show = false"
-                >
+                <a-button key="back" @click="modals.modalViewProgress.show = false">
                     Cerrar
                 </a-button>
             </template>
@@ -160,7 +151,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Completar Objetivo</h1>
-                        <small>{{objective.name}}</small>
+                        <small>{{ objective.name }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -168,25 +159,19 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a las acciones
-                        realizadas para cumplir el objetivo indicado.
+                        Agregue un comentario referente a las acciones realizadas para cumplir el objetivo indicado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"
-                        v-model="modals.input"
-                    />
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="modals.input" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
-                     ¿Está seguro que desea completar el objetivo indicado?
+                    ¿Está seguro que desea completar el objetivo indicado?
                 </a-col>
             </a-row>
 
             <template slot="footer">
-                <a-button
-                    key="back"
-                    @click="modals.modalComplete.show = false"
-                >
+                <a-button key="back" @click="modals.modalComplete.show = false">
                     Cancelar
                 </a-button>
                 <a-button
@@ -210,7 +195,7 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Validar Objetivo</h1>
-                        <small>{{objective.name}}</small>
+                        <small>{{ objective.name }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -218,14 +203,11 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario con respecto al cumplimiento
-                        del objetivo por parte del evaluado.
+                        Agregue un comentario con respecto al cumplimiento del objetivo por parte del evaluado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6"
-                        v-model="modals.input"
-                    />
+                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="modals.input" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     ¿Está seguro que desea validar el objetivo indicado?
@@ -233,10 +215,7 @@
             </a-row>
 
             <template slot="footer">
-                <a-button
-                    key="back"
-                    @click="modals.modalValidate.show = false"
-                >
+                <a-button key="back" @click="modals.modalValidate.show = false">
                     Cancelar
                 </a-button>
                 <a-button
@@ -263,10 +242,10 @@
     </a-col>
 </template>
 
-<script >
-import errorHandler from '@/views/errorHandler';
-import client3B from '@/api/client3B';
-import authService from '@/services/auth';
+<script>
+import errorHandler from "@/views/errorHandler";
+import client3B from "@/api/client3B";
+import authService from "@/services/auth";
 
 export default {
     props: {
@@ -286,8 +265,9 @@ export default {
     data() {
         return {
             objective$: null,
+            binnacle: [],
             modals: {
-                input: '',
+                input: "",
                 modalRecordProgress: {
                     show: false,
                     loading: false,
@@ -319,22 +299,25 @@ export default {
     methods: {
         init() {
             this.objective$ = this.objective;
+            this.binnacle = this.objective.binnacle.items;
         },
         async updateObjectiveStatus(_modal, status) {
             const modal = _modal;
             modal.loading = true;
 
-            let response = await client3B.binnacle.createMessage({
-                evaluationQuestionId: this.objective.id,
-                text: this.modals.input,
-            }).catch(error => errorHandler(this, error));
+            let response = await client3B.binnacle
+                .createMessage({
+                    evaluationQuestionId: this.objective.id,
+                    text: this.modals.input,
+                })
+                .catch((error) => errorHandler(this, error));
 
             modal.loading = false;
             modal.show = false;
 
             if (!response) return;
 
-            this.objective$.binnacle.push({
+            this.binnacle.push({
                 id: response.data.result.id,
                 evaluationQuestionId: response.data.result.evaluationQuestionId,
                 text: response.data.result.text,
@@ -342,37 +325,39 @@ export default {
                 userName: authService.getUserData().name,
             });
 
-            response = await client3B.objective.updateStatus({
-                id: this.objective$.id,
-                status,
-            }).catch(error => errorHandler(this, error));
+            response = await client3B.objective
+                .updateStatus({
+                    id: this.objective$.id,
+                    status,
+                })
+                .catch((error) => errorHandler(this, error));
 
             modal.loading = false;
             if (!response) return;
             modal.show = false;
             this.objective$.status = status;
-            this.$message.success('El objetivo se ha actualizado correctamente');
+            this.$message.success("El objetivo se ha actualizado correctamente");
         },
     },
     computed: {
         tagColorClass() {
             const statuses = {
-                0: 'ant-tag-red', // No status
-                1: 'ant-tag-red', // No iniciado
-                2: 'ant-tag-yellow', // En progreso
-                3: 'ant-tag-green', // Completado
-                4: 'ant-tag-blue', // Validado
+                0: "ant-tag-red", // No status
+                1: "ant-tag-red", // No iniciado
+                2: "ant-tag-yellow", // En progreso
+                3: "ant-tag-green", // Completado
+                4: "ant-tag-blue", // Validado
             };
 
             return statuses[this.objective$.status];
         },
         objectiveStatus() {
             const statuses = {
-                0: 'No iniciado',
-                1: 'No iniciado',
-                2: 'En proceso',
-                3: 'Completado',
-                4: 'Validado',
+                0: "No iniciado",
+                1: "No iniciado",
+                2: "En proceso",
+                3: "Completado",
+                4: "Validado",
             };
 
             return statuses[this.objective$.status];
