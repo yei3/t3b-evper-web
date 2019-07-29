@@ -1,241 +1,236 @@
 <template>
-  <div
-    id="printEvaluation"
-    class="collapse-content"
-    style="background-color: white;
+    <div
+        id="printEvaluation"
+        class="collapse-content"
+        style="background-color: white;
         margin: 30px 30px;"
-  >
-    <a-row v-show="spin">
-      <div style="text-align: center; margin-top: 20px;">
-        <a-spin tip="Cargando..." size="small" />
-      </div>
-    </a-row>
-    <a-row class="collapse-title" style="margin: 16px 0;">
-      <a-col :span="3">
-        <a-avatar :size="120" :src="logoImgUrl()" />
-      </a-col>
-      <a-col :span="1"></a-col>
-      <a-col :span="10">
-        <h1>{{ evaluation.name }}</h1>
-        <b>Región:</b>
-        <span style="font-weight: normal">{{ region }}</span>
-        <br />
-        <b>Área:</b>
-        <span style="font-weight: normal">{{ area }}</span>
-        <br />
-        <b>Puesto:</b>
-        <span style="font-weight: normal">{{ jobDescription }}</span>
-        <br />
-        <b>Tiempo en el puesto:</b>
-        <span style="font-weight: normal">{{ getDiffDates(entryDate, reassignDate, reviewDate) }}</span>
-        <br />
-        <b>Fecha de ingreso:</b>
-        <span style="font-weight: normal">{{ new Date(entryDate).toLocaleDateString() }}</span>
-        <br />
-        <b>Fecha de revisión:</b>
-        <span style="font-weight: normal">{{ new Date(reviewDate).toLocaleDateString() }}</span>
-        <br />
-      </a-col>
-      <a-col :span="6" v-show="includePastObjectives">
-        <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
-        <br />
-        <b>% Objetivos logrados:</b>
-        <span style="font-weight: normal">&emsp;&emsp;{{ objectivesCount() }}</span>
-        <br />
-        <b>% Excede requerimiento:</b>
-        <span style="font-weight: normal">&emsp;{{ getAnswersByLevel("+100") }}</span>
-        <br />
-        <b>% Cumple requerimiento:</b>
-        <span style="font-weight: normal">&emsp;{{ getAnswersByLevel("71-99") }}</span>
-        <br />
-        <b>% Insatisfactorio:</b>
-        <span style="font-weight: normal">&emsp;&emsp;{{ getAnswersByLevel("-70") }}</span>
-      </a-col>
-      <a-col :span="6" v-show="!includePastObjectives">
-        <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
-        <br />
-        <br />
-        <b>Evaluación Global:</b>
-        <span
-          v-if="evaluationLoaded"
-          style="font-weight: normal"
-        >&emsp;&emsp;{{ getGlobalResult() }}</span>
-      </a-col>
-      <a-col :span="3">
-        <a-button class="btn-blue" @click="print">
-          <a-icon type="printer" />Imprimir
-        </a-button>
-      </a-col>
-    </a-row>
-    <div class="collapse-content">
-      <h2>Instrucciones</h2>
-      <p>{{ evaluation.template.instructions }}</p>
-      <br />
-      <br />
-      <a-row v-if="includePastObjectives">
-        <div class="section__title">
-          <h3>Objetivos</h3>
+    >
+        <a-row v-show="spin">
+            <div style="text-align: center; margin-top: 20px;">
+                <a-spin tip="Cargando..." size="small" />
+            </div>
+        </a-row>
+        <a-row class="collapse-title" style="margin: 16px 0;">
+            <a-col :span="3">
+                <a-avatar :size="120" :src="logoImgUrl()" />
+            </a-col>
+            <a-col :span="1"></a-col>
+            <a-col :span="10">
+                <h1>{{ evaluation.name }}</h1>
+                <b>Región:</b>
+                <span style="font-weight: normal">{{ region }}</span>
+                <br />
+                <b>Área:</b>
+                <span style="font-weight: normal">{{ area }}</span>
+                <br />
+                <b>Puesto:</b>
+                <span style="font-weight: normal">{{ jobDescription }}</span>
+                <br />
+                <b>Tiempo en el puesto:</b>
+                <span style="font-weight: normal">{{ getDiffDates(entryDate, reassignDate, reviewDate) }}</span>
+                <br />
+                <b>Fecha de ingreso:</b>
+                <span style="font-weight: normal">{{ new Date(entryDate).toLocaleDateString() }}</span>
+                <br />
+                <b>Fecha de revisión:</b>
+                <span style="font-weight: normal">{{ new Date(reviewDate).toLocaleDateString() }}</span>
+                <br />
+            </a-col>
+            <a-col :span="6" v-show="includePastObjectives">
+                <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
+                <br />
+                <b>% Objetivos logrados:</b>
+                <span style="font-weight: normal">&emsp;&emsp;{{ objectivesCount() }}</span>
+                <br />
+                <b>% Excede requerimiento:</b>
+                <span style="font-weight: normal">&emsp;{{ getAnswersByLevel("+100") }}</span>
+                <br />
+                <b>% Cumple requerimiento:</b>
+                <span style="font-weight: normal">&emsp;{{ getAnswersByLevel("71-99") }}</span>
+                <br />
+                <b>% Insatisfactorio:</b>
+                <span style="font-weight: normal">&emsp;&emsp;{{ getAnswersByLevel("-70") }}</span>
+            </a-col>
+            <a-col :span="6" v-show="!includePastObjectives">
+                <h3 style="color: #00b490;">{{ collaboratorName }}</h3>
+                <br />
+                <br />
+                <b>Evaluación Global:</b>
+                <span v-if="evaluationLoaded" style="font-weight: normal">&emsp;&emsp;{{ getGlobalResult() }}</span>
+            </a-col>
+            <a-col :span="3">
+                <a-button class="btn-blue" @click="print"> <a-icon type="printer" />Imprimir </a-button>
+            </a-col>
+        </a-row>
+        <div class="collapse-content">
+            <h2>Instrucciones</h2>
+            <p>{{ evaluation.template.instructions }}</p>
+            <br />
+            <br />
+            <a-row v-if="includePastObjectives">
+                <div class="section__title">
+                    <h3>Objetivos</h3>
+                </div>
+                <span v-for="(objective, i) in currentObjectives.objectives" :key="i">
+                    <p class="question__border">
+                        <b>{{ i + 1 }}.-</b>
+                        <strong>{{ objective.text }} - {{ getStatusText(objective.status) }}</strong>
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="edit" />
+                        &nbsp;
+                        {{ objective.notEvaluableAnswer.text }}
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="calendar" />
+                        &nbsp;
+                        {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
+                    </p>
+                </span>
+            </a-row>
+            <a-row v-for="(section, i) in sections" :key="i">
+                <div class="section__title">
+                    <h3>{{ section.name }}</h3>
+                </div>
+                <span v-for="(subsection, j) in section.childSections" :key="j">
+                    <div class="subsection--padd">
+                        <b class="subsection" v-show="isNullOrEmpty(subsection.name)">{{ subsection.name }}</b>
+                    </div>
+                    <span :key="h" v-for="(question, h) in subsection.unmeasuredQuestions">
+                        <p class="question__border">
+                            <b>{{ h + 1 }}.-</b>
+                            <strong>{{ question.text }}</strong>
+                        </p>
+                        <p class="question__border">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a-icon type="edit" />
+                            &nbsp;
+                            {{ findAnswer(question.id) }}
+                        </p>
+                    </span>
+                    <span :key="h" v-for="(question, h) in subsection.measuredQuestions">
+                        <p class="question__border">
+                            <b>{{ h + 1 }}.-</b>
+                            <a-icon type="form" />
+                            <br />
+                            <b>Objetivo {{ getAccomplished(question) }}:</b>
+                            {{ question.text }}
+                            <br />
+                            <b>Valor esperado:</b>
+                            {{ getExpectedQuestion(question) }}
+                            <a-icon type="minus" />
+                            <b>Valor real:</b>
+                            {{ getRealValue(question.id, question.relation) }}
+                            <br />
+                            <b>Observaciones:</b>
+                            {{ getObservaciones(question.id) }}
+                        </p>
+                    </span>
+                    <span :key="h" v-for="(question, h) in subsection.notEvaluableAnswer">
+                        <p class="question__border">{{ question.text }}</p>
+                    </span>
+                </span>
+                <a-divider />
+            </a-row>
+            <a-row v-show="includePastObjectives">
+                <div class="section__title">
+                    <h3>Próximos Objetivos</h3>
+                </div>
+                <span v-for="(objective, i) in nextObjectives.objectives" :key="i">
+                    <p class="question__border">
+                        <b>{{ i + 1 }}.-</b>
+                        <strong>{{ objective.text }}</strong>
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="edit" />
+                        &nbsp;
+                        {{ objective.notEvaluableAnswer.text }}
+                    </p>
+                    <p class="question__border">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a-icon type="calendar" />
+                        &nbsp;
+                        {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
+                    </p>
+                </span>
+            </a-row>
+            <a-row v-show="isClosed">
+                <div class="section__title">
+                    <h3>Comentario de cierre</h3>
+                </div>
+                <span>
+                    <p class="question__border">{{ evaluation.closingComment }}</p>
+                </span>
+            </a-row>
         </div>
-        <span v-for="(objective, i) in currentObjectives.objectives" :key="i">
-          <p class="question__border">
-            <b>{{ i + 1 }}.-</b>
-            <strong>{{ objective.text }} - {{ getStatusText(objective.status) }}</strong>
-          </p>
-          <p class="question__border">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-icon type="edit" />
-            &nbsp;
-            {{ objective.notEvaluableAnswer.text }}
-          </p>
-          <p class="question__border">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-icon type="calendar" />
-            &nbsp;
-            {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
-          </p>
-        </span>
-      </a-row>
-      <a-row v-for="(section, i) in sections" :key="i">
-        <div class="section__title">
-          <h3>{{ section.name }}</h3>
+        <div class="collapse-content">
+            <a-row class style="padding: 0 0 8px;">
+                <a-col :span="13">
+                    <p v-show="isAutoEvaluation">
+                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y
+                        discutido en detalle con mi Evaluador.
+                    </p>
+                    <p v-show="!isAutoEvaluation">
+                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y
+                        discutido en detalle con el Evaluado.
+                    </p>
+                    <br />
+                    <br />
+                    <p v-show="isAutoEvaluation" class="signature">
+                        <b>Firma de Evaluado</b>
+                    </p>
+                    <p v-show="!isAutoEvaluation" class="signature">
+                        <b>Firma de Evaluador</b>
+                    </p>
+                </a-col>
+                <a-col :span="4"></a-col>
+                <a-col :span="6">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <p class="signature">
+                        <b>Fecha</b>
+                    </p>
+                </a-col>
+                <a-col :span="1"></a-col>
+            </a-row>
+            <a-row class style="padding: 24px 0 0 0;">
+                <a-col :span="13">
+                    <p v-show="isAutoEvaluation">
+                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la
+                        mejora en el desempeño del Evaluado.
+                    </p>
+                    <p v-show="!isAutoEvaluation">
+                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo
+                        mejor posible para mejorar mi desempeño basado en estos comentarios.
+                    </p>
+                    <br />
+                    <br />
+                    <p v-show="isAutoEvaluation" class="signature">
+                        <b>Firma de Evaluador</b>
+                    </p>
+                    <p v-show="!isAutoEvaluation" class="signature">
+                        <b>Firma de Evaluado</b>
+                    </p>
+                </a-col>
+                <a-col :span="4"></a-col>
+                <a-col :span="6">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <p class="signature">
+                        <b>Fecha</b>
+                    </p>
+                </a-col>
+                <a-col :span="1"></a-col>
+            </a-row>
         </div>
-        <span v-for="(subsection, j) in section.childSections" :key="j">
-          <div class="subsection--padd">
-            <b class="subsection" v-show="isNullOrEmpty(subsection.name)">{{ subsection.name }}</b>
-          </div>
-          <span :key="h" v-for="(question, h) in subsection.unmeasuredQuestions">
-            <p class="question__border">
-              <b>{{ h + 1 }}.-</b>
-              <strong>{{ question.text }}</strong>
-            </p>
-            <p class="question__border">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <a-icon type="edit" />
-              &nbsp;
-              {{ findAnswer(question.id) }}
-            </p>
-          </span>
-          <span :key="h" v-for="(question, h) in subsection.measuredQuestions">
-            <p class="question__border">
-              <b>{{ h + 1 }}.-</b>
-              <a-icon type="form" />
-              <br />
-              <b>Objetivo {{ getAccomplished(question) }}:</b>
-              {{ question.text }}
-              <br />
-              <b>Valor esperado:</b>
-              {{ getExpectedQuestion(question) }}
-              <a-icon type="minus" />
-              <b>Valor real:</b>
-              {{ getRealValue(question.id, question.relation) }}
-              <br />
-              <b>Observaciones:</b>
-              {{ getObservaciones(question.id) }}
-            </p>
-          </span>
-          <span :key="h" v-for="(question, h) in subsection.notEvaluableAnswer">
-            <p class="question__border">{{ question.text }}</p>
-          </span>
-        </span>
-        <a-divider />
-      </a-row>
-      <a-row v-show="includePastObjectives">
-        <div class="section__title">
-          <h3>Próximos Objetivos</h3>
-        </div>
-        <span v-for="(objective, i) in nextObjectives.objectives" :key="i">
-          <p class="question__border">
-            <b>{{ i + 1 }}.-</b>
-            <strong>{{ objective.text }}</strong>
-          </p>
-          <p class="question__border">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-icon type="edit" />
-            &nbsp;
-            {{ objective.notEvaluableAnswer.text }}
-          </p>
-          <p class="question__border">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-icon type="calendar" />
-            &nbsp;
-            {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
-          </p>
-        </span>
-      </a-row>
-      <a-row v-show="isClosed">
-        <div class="section__title">
-          <h3>Comentario de cierre</h3>
-        </div>
-        <span>
-          <p class="question__border">{{ evaluation.closingComment }}</p>
-        </span>
-      </a-row>
     </div>
-    <div class="collapse-content">
-      <a-row class style="padding: 0 0 8px;">
-        <a-col :span="13">
-          <p v-show="isAutoEvaluation">
-            He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y
-            discutido en detalle con mi Evaluador.
-          </p>
-          <p v-show="!isAutoEvaluation">
-            He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y
-            discutido en detalle con el Evaluado.
-          </p>
-          <br />
-          <br />
-          <p v-show="isAutoEvaluation" class="signature">
-            <b>Firma de Evaluado</b>
-          </p>
-          <p v-show="!isAutoEvaluation" class="signature">
-            <b>Firma de Evaluador</b>
-          </p>
-        </a-col>
-        <a-col :span="4"></a-col>
-        <a-col :span="6">
-          <br />
-          <br />
-          <br />
-          <br />
-          <p class="signature">
-            <b>Fecha</b>
-          </p>
-        </a-col>
-        <a-col :span="1"></a-col>
-      </a-row>
-      <a-row class style="padding: 24px 0 0 0;">
-        <a-col :span="13">
-          <p v-show="isAutoEvaluation">
-            He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la
-            mejora en el desempeño del Evaluado.
-          </p>
-          <p v-show="!isAutoEvaluation">
-            He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo
-            mejor posible para mejorar mi desempeño basado en estos comentarios.
-          </p>
-          <br />
-          <br />
-          <p v-show="isAutoEvaluation" class="signature">
-            <b>Firma de Evaluador</b>
-          </p>
-          <p v-show="!isAutoEvaluation" class="signature">
-            <b>Firma de Evaluado</b>
-          </p>
-        </a-col>
-        <a-col :span="4"></a-col>
-        <a-col :span="6">
-          <br />
-          <br />
-          <br />
-          <br />
-          <p class="signature">
-            <b>Fecha</b>
-          </p>
-        </a-col>
-        <a-col :span="1"></a-col>
-      </a-row>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -423,7 +418,13 @@ export default {
                 }
             });
             let calif =
-                result < 70 ? "Insatisfactorio" : result >= 70 && result < 90 ? "Satisfactorio" : result >= 90 ? "Excelente" : "";
+                result < 70
+                    ? "Insatisfactorio"
+                    : result >= 70 && result < 90
+                    ? "Satisfactorio"
+                    : result >= 90
+                    ? "Excelente"
+                    : "";
             return `${result.toFixed(2)} %  ${calif}`;
         },
         clearSections(sections) {
