@@ -357,9 +357,11 @@ export default {
             const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
 
             if (!Number.isNaN(Number(res))) {
-                res = answer.measuredAnswer.evaluationMeasuredQuestion.expected || res;
-            } else {
-                res = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || res;
+                if (answer.measuredAnswer.evaluationMeasuredQuestion.expected !== null) {
+                    res = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
+                }
+            } else if (answer.measuredAnswer.evaluationMeasuredQuestion.expectedText !== null) {
+                res = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText;
             }
 
             return res;
