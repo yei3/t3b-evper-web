@@ -197,6 +197,7 @@ export default {
                 .updateExpected(
                     {
                         id: this.answer.evaluationMeasuredQuestion.id,
+                        status: 2,
                         expectedAnswer: this.numeric ? this.value : null,
                         expectedAnswerText: this.numeric ? null : this.value.trim(),
                         expectedQuestion: this.numeric ? this.expectedValue : null,
