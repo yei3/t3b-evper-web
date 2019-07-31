@@ -5,10 +5,10 @@
                 <a-tag :class="tagColorClass">{{ objectiveStatus }}</a-tag>
             </a-col>
             <a-col :md="6" :lg="8">
-                <strong>{{ objective.notEvaluableAnswer.text }}</strong>
+                <strong>{{ objective.text }}</strong>
             </a-col>
             <a-col :md="6" :lg="8">
-                {{ objective.text }}
+                {{ objective.notEvaluableAnswer.text }}
             </a-col>
             <a-col :md="6" :lg="4">
                 {{ new Date(objective.terminationDateTime).toLocaleString() }}
