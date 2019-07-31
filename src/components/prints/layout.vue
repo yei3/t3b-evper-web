@@ -375,12 +375,15 @@ export default {
             return answer.unmeasuredAnswer.action === "true";
         },
         isObjetiveAccomplished(question) {
-            let expected = question.expected || question.expectedText;
+            let expected = question.expectedText || question.expected;
 
             const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
 
             if (!Number.isNaN(Number(expected))) {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
+                if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
+                    expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
+                }                
             } else {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || expected;
             }
