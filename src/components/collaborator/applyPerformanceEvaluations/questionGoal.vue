@@ -326,7 +326,7 @@ export default {
 
             if (!response) return;
 
-            this.binnacle.push({
+            this.binnacle.items.push({
                 id: response.data.result.id,
                 evaluationQuestionId: response.data.result.evaluationQuestionId,
                 text: response.data.result.text,
