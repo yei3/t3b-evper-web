@@ -10,7 +10,7 @@ module.exports = {
         indent: ["error", 4],
         quotes: ["error", "double"],
         "comma-dangle": ["error", "always-multiline"],
-        "arrow-parens": ["error", "as-needed"],
+        "arrow-parens": ["error", "always"],
         "operator-linebreak": ["error", "after"],
     },
     parserOptions: {
