@@ -14,6 +14,10 @@ export default {
         },
     },
     mutations: {
+        evaluationClearQuestions: (_state) => {
+            const state = _state;
+            state.questions = [];
+        },
         evaluationSetQuestions: (_state, questions) => {
             const state = _state;
             state.questions = questions;
@@ -28,5 +32,9 @@ export default {
             question.answered = true;
         },
     },
-    actions: {},
+    actions: {
+        evaluationClearQuestions: (context) => {
+            context.commit("evaluationClearQuestions");
+        },
+    },
 };

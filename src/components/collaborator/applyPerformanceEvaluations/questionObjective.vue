@@ -163,16 +163,19 @@ export default {
             if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
                 this.value = this.answer.real || 0;
+                this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
                 if (this.answer.evaluationMeasuredQuestion.expected === 0) {
                     this.expectedValue = this.answer.evaluationMeasuredQuestion.expected;
-                } else {
-                    this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
                 }
             } else {
                 this.value = this.answer.text || "";
                 this.expectedValue = this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;
             }
             this.observations = this.answer.observations || "";
+
+            if (this.questionStatus === 1) {
+                this.edited = true;
+            }
         },
         setStatus() {
             this.evaluationAddQuestionStatus({
