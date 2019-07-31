@@ -93,7 +93,7 @@
                                     :evaluationId="evaluation.id"
                                     :section="section"
                                     :questions="notEvaluableQuestions(section.childSections[0].id)"
-                                    :onlyLecture="false"
+                                    :onlyLecture="onlyLecture"
                                 />
                                 <evaluation-section
                                     v-if="isGenericSection(section)"

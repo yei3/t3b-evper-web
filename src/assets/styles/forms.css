@@ -7,7 +7,7 @@
 }
 
 .step-form-current {
-    background-color: #1AB394;
+    background-color: #1ab394;
     color: white;
 }
 
@@ -26,4 +26,9 @@
     background-color: #eee;
     margin: 10px 0px;
     padding: 30px 40px;
+}
+
+.ant-input-disabled {
+    background-color: #eee;
+    color: #5c5c5c;
 }
