@@ -93,7 +93,7 @@
                                     :evaluationId="evaluation.id"
                                     :section="section"
                                     :questions="notEvaluableQuestions(section.childSections[0].id)"
-                                    :onlyLecture="false"
+                                    :onlyLecture="onlyLectureForNextObjectives()"
                                 />
                                 <evaluation-section
                                     v-if="isGenericSection(section)"
@@ -142,6 +142,7 @@ import evaluationSection from "@/components/collaborator/applyPerformanceEvaluat
 import evaluationSectionNextObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue";
 import evaluationSectionObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue";
 import { mapActions, mapGetters } from "vuex";
+import authService from "@/services/auth";
 
 const SECTION_PROX_OBJETIVES_NAME = "Próximos objetivos";
 const SECTION_OBJETIVES_NAME = "Objetivos";
@@ -281,6 +282,19 @@ export default {
             return this.evaluation.questions.filter(
                 (qst) => qst.notEvaluableAnswer !== null && qst.sectionId === subsectionId,
             );
+        },
+        isCollaborator() {
+            return authService.ROLES.COLLABORATOR === authService.getCurrentRole();
+        },
+        isBoss() {
+            return authService.ROLES.SUPERVISOR === authService.getCurrentRole();
+        },
+        onlyLectureForNextObjectives() {
+            if (this.isAutoEvaluation && this.isCollaborator()) {
+                return false;
+            }
+
+            return this.onlyLecture;
         },
     },
     computed: {

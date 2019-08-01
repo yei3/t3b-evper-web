@@ -383,7 +383,7 @@ export default {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
                 if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
                     expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
-                }                
+                }
             } else {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || expected;
             }
