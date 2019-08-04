@@ -89,7 +89,7 @@
                                     }"
                                 >
                                     <a-date-picker
-                                        :defaultValue="moment(question.deliverDate, 'YYYY/MM/DD')"
+                                        :defaultValue="moment(question.deliverDate)"
                                         :format="'YYYY/MM/DD'"
                                         placeholder="Fecha de Entrega"
                                         :disabled="onlyLecture"

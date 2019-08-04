@@ -42,7 +42,7 @@
                 :labelCol="{ xxl: 5, xl: 8, lg: 10, md: 24, sm: 24 }"
                 :wrapperCol="{ xxl: 19, xl: 16, lg: 14, md: 24, sm: 24 }"
                 :fieldDecoratorOptions="{
-                    initialValue: moment(ans.deliverDate, 'YYYY/MM/DD'),
+                    initialValue: moment(ans.deliverDate),
                     rules: [
                         {
                             required: true,
@@ -52,7 +52,7 @@
                 }"
             >
                 <a-date-picker
-                    :defaultValue="moment(ans.deliverDate, 'YYYY/MM/DD')"
+                    :defaultValue="moment(ans.deliverDate)"
                     :format="'YYYY/MM/DD'"
                     placeholder="Fecha de Entrega"
                     @change="
