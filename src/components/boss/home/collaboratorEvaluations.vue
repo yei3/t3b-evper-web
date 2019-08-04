@@ -312,7 +312,7 @@ export default {
                             hour: "2-digit",
                             minute: "2-digit",
                         }),
-                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
+                        endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
                     });
                 });
             } catch (error) {

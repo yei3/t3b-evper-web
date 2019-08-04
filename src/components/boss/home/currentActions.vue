@@ -86,7 +86,7 @@ export default {
                         user: items[index].user,
                         action: items[index].description,
                         responsible: items[index].responsible,
-                        deliveryDate: new Date(items[index].deliveryDate).toLocaleDateString(),
+                        deliveryDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
                     });
                 }
             } catch (error) {

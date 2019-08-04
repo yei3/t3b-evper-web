@@ -1,26 +1,15 @@
 <template>
     <div class="collapse">
         <a-row class="collapse-title background--title">
-            <a-col :span=23>
+            <a-col :span="23">
                 Evaluaciones Periodo Actual
             </a-col>
-            <a-col :span=1 style="text-align: right; color: #fff;">
-
+            <a-col :span="1" style="text-align: right; color: #fff;">
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
                 </a>
                 <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
+                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
                 </a>
             </a-col>
         </a-row>
@@ -30,11 +19,9 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination=false
-                :scroll="{ x: true }"
-            >
+            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
                 <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                    <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
@@ -42,10 +29,12 @@
                             class="table-link"
                             :to="{name: 'collaborator-assessments-apply', params: { id } }"
                         > -->
-                            {{evaluation.title}}
+                        {{ evaluation.title }}
                         <!-- </router-link> -->
                     </p>
-                    <p><small>{{evaluation.subtitle}}</small></p>
+                    <p>
+                        <small>{{ evaluation.subtitle }}</small>
+                    </p>
                 </span>
                 <span slot="action" slot-scope="action, record">
                     <a-button
@@ -54,7 +43,7 @@
                         @click="fillEvaluation(record.id, record.status)"
                         :disabled="disableButton(record.status)"
                     >
-                        {{transformStatus(action)}}
+                        {{ transformStatus(action) }}
                     </a-button>
                     <!-- <router-link
                         class="table-link-light"
@@ -69,33 +58,33 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 const columns = [
     {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
+        title: "Estatus",
+        dataIndex: "status",
+        key: "status",
+        scopedSlots: { customRender: "status" },
     },
     {
-        title: 'Evaluaciones',
-        dataIndex: 'evaluation',
-        key: 'evaluation',
-        scopedSlots: { customRender: 'evaluation' },
+        title: "Evaluaciones",
+        dataIndex: "evaluation",
+        key: "evaluation",
+        scopedSlots: { customRender: "evaluation" },
     },
     {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
+        title: "Fecha fin",
+        dataIndex: "endDate",
+        key: "endDate",
     },
     {
-        title: '',
-        key: 'action',
-        dataIndex: 'status',
-        scopedSlots: { customRender: 'action' },
-        align: 'right',
+        title: "",
+        key: "action",
+        dataIndex: "status",
+        scopedSlots: { customRender: "action" },
+        align: "right",
     },
 ];
 
@@ -128,7 +117,7 @@ export default {
                             title: evaluation.name,
                             subtitle: evaluation.description,
                         },
-                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
+                        endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
                     });
                 });
             } catch (error) {
@@ -137,57 +126,57 @@ export default {
             this.spin = false;
         },
         fillEvaluation(id, status) {
-            if (status === 'Finalizado') {
-                this.$router.push({ name: 'collaborator-assessment', params: { id } });
+            if (status === "Finalizado") {
+                this.$router.push({ name: "collaborator-assessment", params: { id } });
             } else {
-                this.$router.push({ name: 'collaborator-assessments-apply', params: { id } });
+                this.$router.push({ name: "collaborator-assessments-apply", params: { id } });
             }
         },
         disableButton(status) {
-            if (status === 'Validado') {
+            if (status === "Validado") {
                 return true;
             }
             return false;
         },
         transformStatus(status) {
-            if (status === 'Finalizado') {
-                return 'Ver';
+            if (status === "Finalizado") {
+                return "Ver";
             }
-            if (status === 'En proceso') {
-                return 'Continuar';
+            if (status === "En proceso") {
+                return "Continuar";
             }
-            return 'Iniciar';
+            return "Iniciar";
         },
         selectTagColor(status) {
             switch (status) {
-                case 'No iniciado':
-                    return 'ant-tag-red';
-                case 'En proceso':
-                    return 'ant-tag-yellow';
-                case 'Finalizado':
-                    return 'ant-tag-green';
-                case 'Pte. revisión':
-                    return 'ant-tag-blue';
-                case 'Cerrada':
-                    return 'ant-tag-gray';
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Finalizado":
+                    return "ant-tag-green";
+                case "Pte. revisión":
+                    return "ant-tag-blue";
+                case "Cerrada":
+                    return "ant-tag-gray";
                 default:
-                    return 'ant-tag-gray';
+                    return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
                 case 0:
-                    return 'No iniciado';
+                    return "No iniciado";
                 case 1:
-                    return 'En proceso';
+                    return "En proceso";
                 case 2:
-                    return 'Finalizado';
+                    return "Finalizado";
                 case 3:
-                    return 'Pte. revisión';
+                    return "Pte. revisión";
                 case 4:
-                    return 'Cerrada';
+                    return "Cerrada";
                 default:
-                    return 'No iniciado';
+                    return "No iniciado";
             }
         },
     },
@@ -195,15 +184,15 @@ export default {
 </script>
 
 <style scoped>
-    .btn--start-evaluations {
-        border: none;
-        background: #00d5af;
-        color: #000;
-        font-size: 11px;
-        width: 82px;
-    }
-    .btn--start-evaluations:hover {
-        background: #00af8f;
-        color: #fff;
-    }
+.btn--start-evaluations {
+    border: none;
+    background: #00d5af;
+    color: #000;
+    font-size: 11px;
+    width: 82px;
+}
+.btn--start-evaluations:hover {
+    background: #00af8f;
+    color: #fff;
+}
 </style>

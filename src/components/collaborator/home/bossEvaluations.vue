@@ -185,8 +185,8 @@ export default {
                             title: evaluation.name,
                             subtitle: evaluation.description,
                         },
-                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
-                        reviewDate: new Date(evaluation.revisionDateTime).toLocaleString([], {
+                        endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
+                        reviewDate: new Date(evaluation.revisionDateTime + "Z").toLocaleString([], {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",

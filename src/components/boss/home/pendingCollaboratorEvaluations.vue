@@ -231,7 +231,7 @@ export default {
                         },
                         autoEvaluation: items[i].isAutoEvaluation,
                         collaborator: items[i].collaboratorName,
-                        endDate: new Date(items[i].endDateTime).toLocaleDateString(),
+                        endDate: new Date(items[i].endDateTime + "Z").toLocaleDateString(),
                     });
                 }
             } catch (error) {

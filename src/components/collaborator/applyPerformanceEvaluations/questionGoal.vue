@@ -11,7 +11,7 @@
                 {{ objective.notEvaluableAnswer.text }}
             </a-col>
             <a-col :md="6" :lg="4">
-                {{ new Date(objective.terminationDateTime).toLocaleString() }}
+                {{ new Date(objective.terminationDateTime + "Z").toLocaleString() }}
             </a-col>
             <a-col :md="2" :lg="2">
                 <a-dropdown>

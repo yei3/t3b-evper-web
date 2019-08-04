@@ -271,7 +271,7 @@ export default {
                             binnacle.push({
                                 message: binnacleAux[hndex].text,
                                 username: binnacleAux[hndex].userName,
-                                created: new Date(binnacleAux[hndex].creationTime).toLocaleDateString(),
+                                created: new Date(binnacleAux[hndex].creationTime + "Z").toLocaleDateString(),
                             });
                         }
                         objectives.push({
@@ -283,7 +283,7 @@ export default {
                                 title: objectivesAux[jndex].name,
                                 binnacle,
                             },
-                            endDate: new Date(objectivesAux[jndex].deliveryDate).toLocaleDateString(),
+                            endDate: new Date(objectivesAux[jndex].deliveryDate + "Z").toLocaleDateString(),
                         });
                     }
                     this.data.push({

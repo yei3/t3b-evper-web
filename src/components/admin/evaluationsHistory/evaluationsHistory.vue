@@ -261,7 +261,7 @@ export default {
                         },
                         collaborator: items[index].collaboratorName,
                         isAutoevaluation: items[index].isAutoEvaluation ? "Sí" : "No",
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
+                        endDate: new Date(items[index].endDateTime + "Z").toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -286,7 +286,7 @@ export default {
                         },
                         collaborator: items[index].user.name + " " + items[index].user.surname,
                         isAutoevaluation: items[index].template.isAutoEvaluation ? "Sí" : "No",
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
+                        endDate: new Date(items[index].endDateTime + "Z").toLocaleDateString(),
                     });
                 }
             } catch (error) {

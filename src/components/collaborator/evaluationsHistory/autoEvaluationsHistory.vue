@@ -117,7 +117,7 @@ export default {
                             title: evaluation.name,
                             subtitle: evaluation.description,
                         },
-                        endDate: new Date(evaluation.endDateTime).toLocaleDateString(),
+                        endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
                     });
                 });
             } catch (error) {

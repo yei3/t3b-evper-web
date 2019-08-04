@@ -49,15 +49,19 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed && !spin">
-            <a-table :columns="columns" :dataSource="data" :pagination=false>
+            <a-table :columns="columns" :dataSource="data" :pagination="false">
                 <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{status}}</a-tag>
+                    <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
-                    <p><a class="table-link">
-                        {{evaluation.title}}
-                    </a></p>
-                    <p><small>{{evaluation.subtitle}}</small></p>
+                    <p>
+                        <a class="table-link">
+                            {{ evaluation.title }}
+                        </a>
+                    </p>
+                    <p>
+                        <small>{{ evaluation.subtitle }}</small>
+                    </p>
                 </span>
 
                 <span slot="action" slot-scope="text, record">
@@ -92,30 +96,32 @@
     </div>
 </template>
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 const columns = [
     {
-        title: 'Estatus',
-        dataIndex: 'status',
-        key: 'status',
-        scopedSlots: { customRender: 'status' },
-    }, {
-        title: 'Evaluación',
-        dataIndex: 'evaluation',
-        key: 'evaluation',
-        scopedSlots: { customRender: 'evaluation' },
-    }, {
-        title: 'Fecha fin',
-        dataIndex: 'endDate',
-        key: 'endDate',
+        title: "Estatus",
+        dataIndex: "status",
+        key: "status",
+        scopedSlots: { customRender: "status" },
     },
     {
-        title: '',
-        key: 'key',
-        scopedSlots: { customRender: 'action' },
-        align: 'right',
+        title: "Evaluación",
+        dataIndex: "evaluation",
+        key: "evaluation",
+        scopedSlots: { customRender: "evaluation" },
+    },
+    {
+        title: "Fecha fin",
+        dataIndex: "endDate",
+        key: "endDate",
+    },
+    {
+        title: "",
+        key: "key",
+        scopedSlots: { customRender: "action" },
+        align: "right",
     },
 ];
 
@@ -135,7 +141,7 @@ export default {
     },
     watch: {
         // call again the method if the route changes
-        $route: 'search',
+        $route: "search",
     },
     methods: {
         async deleteEvaluation(id) {
@@ -167,7 +173,7 @@ export default {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
-                        endDate: new Date(items[index].endDateTime).toLocaleDateString(),
+                        endDate: new Date(items[index].endDateTime + "Z").toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -177,38 +183,44 @@ export default {
         },
         getStatus(status) {
             switch (status) {
-            case 0: return 'No iniciado';
-            case 1: return 'En proceso';
-            case 2: return 'Finalizado';
-            case 3: return 'Validado';
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "En proceso";
+                case 2:
+                    return "Finalizado";
+                case 3:
+                    return "Validado";
 
-            default:
-                break;
+                default:
+                    break;
             }
 
-            return 'No iniciado';
+            return "No iniciado";
         },
         transformStatus(status) {
-            if (status === 'En proceso' || status === 'Finalizado') {
-                return 'Continuar';
+            if (status === "En proceso" || status === "Finalizado") {
+                return "Continuar";
             }
-            return 'Iniciar';
+            return "Iniciar";
         },
         selectTagColor(status) {
             switch (status) {
-            case 'No iniciado': return 'ant-tag-red';
-            case 'En proceso': return 'ant-tag-yellow';
-            case 'Finalizado': return 'ant-tag-green';
-            case 'Validado': return 'ant-tag-blue';
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Finalizado":
+                    return "ant-tag-green";
+                case "Validado":
+                    return "ant-tag-blue";
 
-            default:
-                return 'ant-tag-gray';
+                default:
+                    return "ant-tag-gray";
             }
         },
     },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

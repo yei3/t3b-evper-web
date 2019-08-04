@@ -196,7 +196,7 @@ export default {
                 id: qst.id,
                 key: qst.id,
                 text: qst.text,
-                deliverDate: qst.notEvaluableAnswer.commitmentTime || new Date(),
+                deliverDate: qst.notEvaluableAnswer.commitmentTime + "Z" || new Date(),
                 deriverable: qst.notEvaluableAnswer.text,
                 answerId: qst.notEvaluableAnswer.id,
                 edited: false,

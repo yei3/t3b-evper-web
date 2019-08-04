@@ -89,7 +89,7 @@ export default {
                             subtitle: items[index].state,
                         },
                         collaborator: items[index].userId,
-                        endDate: new Date(items[index].notification.creationTime).toLocaleDateString(),
+                        endDate: new Date(items[index].notification.creationTime + "Z").toLocaleDateString(),
                     });
                 }
             } catch (error) {

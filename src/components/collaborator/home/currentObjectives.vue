@@ -297,7 +297,7 @@ export default {
                     this.binnacle.push({
                         message: items[i].text,
                         username: items[i].userName,
-                        created: new Date(items[i].creationTime).toLocaleDateString(),
+                        created: new Date(items[i].creationTime + "Z").toLocaleDateString(),
                     });
                 }
                 // this.loaded = true;
@@ -342,7 +342,7 @@ export default {
                             subtitle: "sin descripción",
                         },
                         evaluable: items[index].isNotEvaluable,
-                        endDate: new Date(items[index].deliveryDate).toLocaleDateString(),
+                        endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
                     });
                     if (items[index].isNotEvaluable === false) {
                         this.hideSection = true;
