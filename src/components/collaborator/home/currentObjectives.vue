@@ -356,11 +356,11 @@ export default {
                 this.recordProgressModal.loading = true;
 
                 let response = await client3B.binnacle
-                .createMessage({
-                    evaluationQuestionId: this.recordProgressModal.objectiveId,
-                    text: this.recordProgressModal.message,
-                })
-                .catch((error) => errorHandler(this, error));
+                    .createMessage({
+                        evaluationQuestionId: this.recordProgressModal.objectiveId,
+                        text: this.recordProgressModal.message,
+                    })
+                    .catch((error) => errorHandler(this, error));
 
                 this.recordProgressModal.show = !this.recordProgressModal.show;
                 this.recordProgressModal.loading = false;
@@ -375,13 +375,15 @@ export default {
                     userName: authService.getUserData().name,
                 });
 
-                await client3B.objective.updateStatus({
-                    id: this.recordProgressModal.objectiveId,
-                    status: 2,
-                }).catch((error) => errorHandler(this, error));
-                
+                await client3B.objective
+                    .updateStatus({
+                        id: this.recordProgressModal.objectiveId,
+                        status: 2,
+                    })
+                    .catch((error) => errorHandler(this, error));
+
                 const obj = this.data.find((tmp) => tmp.id === this.recordProgressModal.objectiveId);
-                obj.status = this.selectStatusName(2);                
+                obj.status = this.selectStatusName(2);
             }
             this.recordProgressModal.message = "";
         },
