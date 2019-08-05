@@ -30,10 +30,10 @@
                 <span style="font-weight: normal">{{ getDiffDates(entryDate, reassignDate, reviewDate) }}</span>
                 <br />
                 <b>Fecha de ingreso:</b>
-                <span style="font-weight: normal">{{ new Date(entryDate).toLocaleDateString() }}</span>
+                <span style="font-weight: normal">{{ new Date(entryDate + "Z").toLocaleDateString() }}</span>
                 <br />
                 <b>Fecha de revisión:</b>
-                <span style="font-weight: normal">{{ new Date(reviewDate).toLocaleDateString() }}</span>
+                <span style="font-weight: normal">{{ new Date(reviewDate + "Z").toLocaleDateString() }}</span>
                 <br />
             </a-col>
             <a-col :span="6" v-show="includePastObjectives">
@@ -86,7 +86,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
+                        {{ new Date(objective.notEvaluableAnswer.commitmentTime + "Z").toLocaleDateString() }}
                     </p>
                 </span>
             </a-row>
@@ -153,7 +153,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ new Date(objective.notEvaluableAnswer.commitmentTime).toLocaleDateString() }}
+                        {{ new Date(objective.notEvaluableAnswer.commitmentTime + "Z").toLocaleDateString() }}
                     </p>
                 </span>
             </a-row>
@@ -315,7 +315,7 @@ export default {
                         ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
                             answer.unmeasuredAnswer.text
                         }        FECHA COMPROMISO: ${new Date(
-                            answer.unmeasuredAnswer.commitmentDate,
+                            answer.unmeasuredAnswer.commitmentDate + "Z",
                         ).toLocaleDateString()}`;
                     }
                 }
