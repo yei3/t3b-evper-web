@@ -100,6 +100,16 @@ class Reports extends Http {
         const path = `${this.entityPath}/GetEvaluatorCapabilitiesReport`;
         return this.request(path, this.methods.get, data);
     }
+
+    /*
+     * Data report using GetEvaluatorCapabilitiesReport
+     *
+     * @return {Promise}        Http Response
+     */
+    GetEvaluationEmployeeData(data) {
+        const path = `${this.entityPath}/GetEvaluationEmployeeData`;
+        return this.request(path, this.methods.get, data);
+    }
 }
 
 export default Reports;
