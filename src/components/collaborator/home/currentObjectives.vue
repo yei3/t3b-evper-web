@@ -205,6 +205,7 @@
 
 <script>
 import client3B from "@/api/client3B";
+import authService from "@/services/auth";
 import errorHandler from "@/views/errorHandler";
 
 const columns = [
@@ -220,13 +221,6 @@ const columns = [
         key: "objective",
         scopedSlots: { customRender: "objective" },
     },
-    /*{
-        title: 'Evaluable',
-        dataIndex: 'evaluable',
-        key: 'evaluable',
-        scopedSlots: { customRender: 'evaluable' },
-        align: 'center',
-    },*/
     {
         title: "Fecha fin",
         dataIndex: "endDate",
@@ -360,14 +354,34 @@ export default {
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
                 this.recordProgressModal.loading = true;
-                await this.addObjetiveMessage(
-                    this.recordProgressModal.objectiveId,
-                    this.recordProgressModal.message,
-                ).catch((error) => errorHandler(this, error));
-                const obj = this.data.find((tmp) => tmp.id === this.recordProgressModal.objectiveId);
-                obj.status = this.selectStatusName(2);
+
+                let response = await client3B.binnacle
+                .createMessage({
+                    evaluationQuestionId: this.recordProgressModal.objectiveId,
+                    text: this.recordProgressModal.message,
+                })
+                .catch((error) => errorHandler(this, error));
+
                 this.recordProgressModal.show = !this.recordProgressModal.show;
                 this.recordProgressModal.loading = false;
+
+                if (!response) return;
+
+                this.binnacle.push({
+                    id: response.data.result.id,
+                    evaluationQuestionId: response.data.result.evaluationQuestionId,
+                    text: response.data.result.text,
+                    created: new Date(response.data.result.creationTime + "Z").toLocaleDateString(),
+                    userName: authService.getUserData().name,
+                });
+
+                await client3B.objective.updateStatus({
+                    id: this.recordProgressModal.objectiveId,
+                    status: 2,
+                }).catch((error) => errorHandler(this, error));
+                
+                const obj = this.data.find((tmp) => tmp.id === this.recordProgressModal.objectiveId);
+                obj.status = this.selectStatusName(2);                
             }
             this.recordProgressModal.message = "";
         },
@@ -388,13 +402,16 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;
+
                 await this.addObjetiveMessage(
                     this.finishObjectiveModal.objectiveId,
                     `Objetivo completado: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
+
                 await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
                     errorHandler(this, error),
                 );
+
                 const obj = this.data.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
                 obj.status = this.selectStatusName(3);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
