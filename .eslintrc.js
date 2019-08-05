@@ -12,6 +12,7 @@ module.exports = {
         "comma-dangle": ["error", "always-multiline"],
         "arrow-parens": ["error", "always"],
         "operator-linebreak": ["error", "after"],
+        "max-len": ["error", { code: 190 }],
     },
     parserOptions: {
         parser: "babel-eslint",
