@@ -521,7 +521,7 @@ export default {
                 this.evaluationEmployeeData.left.results.showAll = this.isInCurrentPeriod(this.left.start, this.left.end);
                 this.evaluationEmployeeData.right.results.showAll = this.isInCurrentPeriod(this.right.start, this.right.end);
 
-                const [leftEmployee, rightEmployee] = await Promise.all([this.getEvaluationEmployeeData(this.right), this.getEvaluationEmployeeData(this.left)]);
+                const [leftEmployee, rightEmployee] = await Promise.all([this.getEvaluationEmployeeData(this.left), this.getEvaluationEmployeeData(this.right)]);
                 this.evaluationEmployeeData.left.results.data = leftEmployee.data.result;
                 this.evaluationEmployeeData.right.results.data = rightEmployee.data.result;
             } catch (error) {
