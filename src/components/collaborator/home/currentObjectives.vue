@@ -366,17 +366,20 @@ export default {
                 const items = response.data.result.objectiveSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    this.data.push({
-                        key: index + 1,
-                        id: items[index].id,
-                        status: this.selectStatusName(items[index].status),
-                        objective: {
-                            title: items[index].name,
-                            subtitle: "sin descripción",
-                        },
-                        evaluable: items[index].isNotEvaluable,
-                        endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
-                    });
+                    if (!items[index].isNextObjective)
+                    {
+                        this.data.push({
+                            key: index + 1,
+                            id: items[index].id,
+                            status: this.selectStatusName(items[index].status),
+                            objective: {
+                                title: items[index].name,
+                                subtitle: "sin descripción",
+                            },
+                            evaluable: items[index].isNotEvaluable,
+                            endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
+                        });
+                    }
                     if (items[index].isNotEvaluable === false) {
                         this.hideSection = true;
                     }
