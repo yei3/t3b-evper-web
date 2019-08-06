@@ -1,26 +1,28 @@
 <template>
-    <a-col class="results-info" :xl="12" :lg="12" :xs="24">
-        <a-row class="custom-row" type="flex" justify="center">
-            <a-col class="custom-col" :xl="4">
-                <p class="custom-col__text custom-col__text--title">Plantilla</p>
-                <div class="circle">
-                    <span class="text">{{ this.peopleTotal }}</span>
-                </div>
-            </a-col>
-            <a-col class="custom-col" :xl="4">
-                <p class="custom-col__text custom-col__text--title">Evaluados</p>
-                <p class="custom-col__text custom-col__text--percentage">{{ this.getEvaluatedPercentage }}%</p>
-                <div class="circle">
-                    <span class="text">{{ this.evaluatedTotal }}</span>
-                </div>
-            </a-col>
-        </a-row>
-        <a-row type="flex" justify="center">
-            <a-col :xl="6">
-                <p class="custom-col__text custom-col__text--average">Promedio de antiguedad: {{ this.getAgeAverage }} años</p>
-            </a-col>
-        </a-row>
-    </a-col>
+  <a-col class="results-info" :xl="12" :lg="12" :xs="24">
+    <a-row class="custom-row" type="flex" justify="center">
+      <a-col v-if="showAll" class="custom-col" :xl="4">
+        <p class="custom-col__text custom-col__text--title">Plantilla</p>
+        <div class="circle">
+          <span class="text">{{ this.data.totalEmployees }}</span>
+        </div>
+      </a-col>
+      <a-col class="custom-col" :xl="4">
+        <p class="custom-col__text custom-col__text--title">Evaluados</p>
+        <p class="custom-col__text custom-col__text--percentage">{{ this.getEvaluatedPercentage }}%</p>
+        <div class="circle">
+          <span class="text">{{ this.data.evaluatedEmployees }}</span>
+        </div>
+      </a-col>
+    </a-row>
+    <a-row v-if="showAll" type="flex" justify="center">
+      <a-col :xl="6">
+        <p
+          class="custom-col__text custom-col__text--average"
+        >Promedio de antiguedad: {{ this.getAgeAverage }} años</p>
+      </a-col>
+    </a-row>
+  </a-col>
 </template>
 
 <script>
@@ -30,17 +32,16 @@ export default {
         evaluatedAverage: 0,
     }),
     props: {
-        peopleTotal: Number,
-        evaluatedTotal: Number,
-        ageAverage: Number,
+        data: Object,
+        showAll: Boolean,
     },
     computed: {
         getEvaluatedPercentage() {
-            const evaluatedPercent = (this.$props.evaluatedTotal / this.$props.peopleTotal) * 100;
+            const evaluatedPercent = (this.$props.data.evaluatedEmployees / this.$props.data.totalEmployees) * 100;
             return evaluatedPercent.toFixed(2);
         },
         getAgeAverage() {
-            return this.$props.ageAverage.toFixed(3);
+            return this.$props.data.seniorityAverage.toFixed(1);
         },
     },
 };
