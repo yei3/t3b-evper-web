@@ -319,7 +319,7 @@ export default {
                         context.dataset.data.forEach((element) => {
                             total += element;
                         });
-                        return `$${Math.round((value / total) * 100)}%`;
+                        return `${Math.round((value / total) * 100)}%`;
                     },
                 },
             },
