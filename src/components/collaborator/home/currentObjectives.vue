@@ -384,7 +384,7 @@ export default {
                             title: items[index].name,
                             subtitle: "sin descripción",
                         },
-                        isNextObjective: items[index].isNextObjective, 
+                        isNextObjective: items[index].isNextObjective,
                         evaluable: items[index].isNotEvaluable,
                         endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
                     });

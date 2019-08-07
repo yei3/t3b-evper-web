@@ -159,7 +159,7 @@ import formIntroduction from "@/components/collaborator/applyPerformanceEvaluati
 import evaluationSection from "@/components/collaborator/applyPerformanceEvaluations/section.vue";
 import evaluationSectionNextObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue";
 import evaluationSectionObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import authService from "@/services/auth";
 
 const SECTION_PROX_OBJETIVES_NAME = "Próximos objetivos";
@@ -201,12 +201,13 @@ export default {
             },
         };
     },
+    beforeCreate() {
+        this.$store.commit("evaluationClearQuestions");
+    },
     async created() {
         await this.fetchEvaluation();
-        this.evaluationClearQuestions();
     },
     methods: {
-        ...mapActions(["evaluationClearQuestions"]),
         async fetchEvaluation() {
             this.spin = true;
             const response = await client3B.evaluation.get(this.$route.params.id).catch((error) => {
