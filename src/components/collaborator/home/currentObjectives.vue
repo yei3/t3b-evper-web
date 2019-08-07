@@ -131,7 +131,9 @@
                     key="submit"
                     type="primary"
                     @click="toggleRecordProgressModal"
-                    :disabled="recordProgressModal.input === '' || !recordProgressModal.enableButton"
+                    :disabled="
+                        recordProgressModal.input === '' || !recordProgressModal.enableButton
+                    "
                     :loading="recordProgressModal.loading"
                 >
                     Guardar
