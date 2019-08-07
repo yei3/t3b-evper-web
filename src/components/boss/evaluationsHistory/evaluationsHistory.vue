@@ -67,9 +67,6 @@ export default {
         closedEvaluations,
         historyObjectives,
     },
-    beforeCreate() {
-        this.form = this.$form.createForm(this);
-    },
     data() {
         return {
             spin: false,
