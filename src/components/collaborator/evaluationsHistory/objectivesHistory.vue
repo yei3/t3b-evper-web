@@ -105,12 +105,7 @@
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item
-                            v-for="(item, index) in binnacle"
-                            :key="index"
-                            color="gray"
-                            class="timeline-item"
-                        >
+                        <a-timeline-item v-for="(item, index) in binnacle" :key="index" color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
@@ -159,11 +154,7 @@
             </a-row>
 
             <template slot="footer">
-                <a-button
-                    key="back"
-                    @click="finishObjectiveModal.show = false"
-                    :disabled="finishObjectiveModal.loading"
-                >
+                <a-button key="back" @click="finishObjectiveModal.show = false" :disabled="finishObjectiveModal.loading">
                     Cancelar
                 </a-button>
                 <a-button
@@ -334,10 +325,7 @@ export default {
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
                 this.recordProgressModal.loading = true;
-                await this.addObjetiveMessage(
-                    this.recordProgressModal.objectiveId,
-                    this.recordProgressModal.message,
-                ).catch((error) => errorHandler(this, error));
+                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.recordProgressModal.message).catch((error) => errorHandler(this, error));
                 const obj = this.data.find((tmp) => tmp.id === this.recordProgressModal.objectiveId);
                 obj.status = this.selectStatusName(2);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
@@ -362,13 +350,10 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;
-                await this.addObjetiveMessage(
-                    this.finishObjectiveModal.objectiveId,
-                    `Objetivo completado: ${this.finishObjectiveModal.message}`,
-                ).catch((error) => errorHandler(this, error));
-                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, `Objetivo completado: ${this.finishObjectiveModal.message}`).catch((error) =>
                     errorHandler(this, error),
                 );
+                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) => errorHandler(this, error));
                 const obj = this.data.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
                 obj.status = this.selectStatusName(3);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;

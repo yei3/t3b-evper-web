@@ -12,9 +12,7 @@
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active">
-                            Realizar <span v-show="isAutoEvaluation">auto-</span>evaluación
-                        </strong>
+                        <strong class="breadcrumb-path-active"> Realizar <span v-show="isAutoEvaluation">auto-</span>evaluación </strong>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
@@ -33,12 +31,7 @@
                             <h3 v-show="!isAutoEvaluation">{{ evaluatedName }}</h3>
                         </a-col>
                         <a-col :sm="12" :md="6" style="text-align: right; padding-right: 31px; padding-top: 5px;">
-                            <a-button
-                                class="btn-blue"
-                                @click="finishEvaluation"
-                                :loading="loading"
-                                v-show="!onlyLecture"
-                            >
+                            <a-button class="btn-blue" @click="finishEvaluation" :loading="loading" v-show="!onlyLecture">
                                 <a-icon type="file-text" />
                                 Finalizar Evaluación
                             </a-button>
@@ -50,20 +43,8 @@
                     </a-row>
                     <div class="collapse-content" v-show="!collapsed">
                         <a-row :gutter="16">
-                            <a-col
-                                :xxl="4"
-                                :xl="6"
-                                :lg="8"
-                                :md="12"
-                                :sm="24"
-                                v-for="(step, index) in viewSteps"
-                                :key="step.id"
-                            >
-                                <div
-                                    class="step-form step-form-done"
-                                    v-show="data.lastStep >= index && index !== data.currentStep"
-                                    @click="data.currentStep = index"
-                                >
+                            <a-col :xxl="4" :xl="6" :lg="8" :md="12" :sm="24" v-for="(step, index) in viewSteps" :key="step.id">
+                                <div class="step-form step-form-done" v-show="data.lastStep >= index && index !== data.currentStep" @click="data.currentStep = index">
                                     <span>{{ index + 1 }}. {{ capitalize(step.label) }}</span>
                                 </div>
 
@@ -106,19 +87,10 @@
                         </a-row>
                         <a-row style="margin-bottom: 20px;">
                             <a-col :span="24" style="text-align: right;">
-                                <a-button
-                                    @click="previousStep"
-                                    :disabled="data.currentStep === 0"
-                                    class="btn-green"
-                                    style="margin-right: 15px;"
-                                >
+                                <a-button @click="previousStep" :disabled="data.currentStep === 0" class="btn-green" style="margin-right: 15px;">
                                     Anterior
                                 </a-button>
-                                <a-button
-                                    @click="nextStep"
-                                    class="btn-green"
-                                    v-show="data.currentStep !== viewSteps.length - 1"
-                                >
+                                <a-button @click="nextStep" class="btn-green" v-show="data.currentStep !== viewSteps.length - 1">
                                     Siguiente
                                 </a-button>
                             </a-col>
@@ -212,14 +184,10 @@ export default {
 
             // Sort sections
             const sectNextObj = this.evaluation.template.sections.find((sect) => this.isSectionNextObjetives(sect));
-            this.evaluation.template.sections = this.evaluation.template.sections.filter(
-                (sect) => !this.isSectionNextObjetives(sect),
-            );
+            this.evaluation.template.sections = this.evaluation.template.sections.filter((sect) => !this.isSectionNextObjetives(sect));
 
             const sectObj = this.evaluation.template.sections.find((sect) => this.isSectionObjetives(sect));
-            this.evaluation.template.sections = this.evaluation.template.sections.filter(
-                (sect) => !this.isSectionObjetives(sect),
-            );
+            this.evaluation.template.sections = this.evaluation.template.sections.filter((sect) => !this.isSectionObjetives(sect));
 
             if (sectObj) {
                 this.evaluation.template.sections.splice(0, 0, sectObj);
@@ -252,9 +220,7 @@ export default {
                 return;
             }
             this.loading = true;
-            await client3B.evaluation.revision
-                .finish(this.$route.params.id)
-                .catch((error) => errorHandler(this, error));
+            await client3B.evaluation.revision.finish(this.$route.params.id).catch((error) => errorHandler(this, error));
             this.loading = false;
             this.$message.success("La evaluación ha sido finalizada correctamente");
             this.$router.push({ name: "home" });
@@ -279,9 +245,7 @@ export default {
         },
         notEvaluableQuestions(subsectionId) {
             if (!this.evaluation) return [];
-            return this.evaluation.questions.filter(
-                (qst) => qst.notEvaluableAnswer !== null && qst.sectionId === subsectionId,
-            );
+            return this.evaluation.questions.filter((qst) => qst.notEvaluableAnswer !== null && qst.sectionId === subsectionId);
         },
         isCollaborator() {
             return authService.ROLES.COLLABORATOR === authService.getCurrentRole();

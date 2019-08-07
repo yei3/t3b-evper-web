@@ -51,9 +51,7 @@
                         okText="Sí, validar cierre"
                         cancelText="Cancelar"
                     >
-                        <a-button size="small" class="btn--close-evaluations" :disabled="disableButton(record.status)"
-                            >Validar</a-button
-                        >
+                        <a-button size="small" class="btn--close-evaluations" :disabled="disableButton(record.status)">Validar</a-button>
                     </a-popconfirm>
                 </span>
             </a-table>
@@ -78,8 +76,7 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida
-                        del Colaborador.
+                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida del Colaborador.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
@@ -88,8 +85,7 @@
                 <a-col :span="24" class="modal-content-seccion">
                     <a-checkbox @change="finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton">
                         <strong style="font-size: 13px;">
-                            He preparado esta evaluación de desempeño con detenimiento, lo he explicado claramente y
-                            discutido en detalle con el colaborador.
+                            He preparado esta evaluación de desempeño con detenimiento, lo he explicado claramente y discutido en detalle con el colaborador.
                         </strong>
                     </a-checkbox>
                 </a-col>
@@ -104,13 +100,7 @@
                 <a-button key="back" @click="toggleFinishEvaluationModal">
                     Cancelar
                 </a-button>
-                <a-button
-                    key="submit"
-                    type="primary"
-                    class="modal-button-ok"
-                    @click="toggleFinishEvaluationModal"
-                    :disabled="!finishEvaluationModal.enableButton"
-                >
+                <a-button key="submit" type="primary" class="modal-button-ok" @click="toggleFinishEvaluationModal" :disabled="!finishEvaluationModal.enableButton">
                     Si, cerrar evaluación
                 </a-button>
             </template>
@@ -139,13 +129,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker
-                        showTime
-                        format="YYYY-MM-DD HH:mm"
-                        placeholder="Selecciona el día y la hora de la revisión"
-                        style="width: 100%"
-                        @ok="onSelectDate"
-                    />
+                    <a-date-picker showTime format="YYYY-MM-DD HH:mm" placeholder="Selecciona el día y la hora de la revisión" style="width: 100%" @ok="onSelectDate" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>
@@ -158,13 +142,7 @@
                 <a-button key="back" @click="toggleScheduleReviewModal">
                     Cancelar
                 </a-button>
-                <a-button
-                    class="modal-button-ok"
-                    key="submit"
-                    type="primary"
-                    :loading="loading"
-                    @click="toggleScheduleReviewModal"
-                >
+                <a-button class="modal-button-ok" key="submit" type="primary" :loading="loading" @click="toggleScheduleReviewModal">
                     Re-agendar revisión
                 </a-button>
             </template>

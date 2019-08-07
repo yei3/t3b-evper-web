@@ -5,69 +5,35 @@
                 <a-col>
                     <a-row type="flex" justify="center" align="middle">
                         <a-col :md="{ span: 12 }" :lg="{ span: 9 }" class="login-img">
-                            <img
-                                alt="image"
-                                src="@/assets/img/login-imagen2.png"
-                                style="max-width: 80%; height: auto;"
-                            />
+                            <img alt="image" src="@/assets/img/login-imagen2.png" style="max-width: 80%; height: auto;" />
                         </a-col>
                         <a-col :md="{ span: 12 }" :lg="{ span: 9 }" class="login-form">
                             <a-row>
                                 <a-col :span="24" style="text-aling: center;">
-                                    <img
-                                        alt="image"
-                                        src="@/assets/img/logo-tipografia.png"
-                                        style="max-width: 30%; height: auto; padding-top: 80px;"
-                                    />
+                                    <img alt="image" src="@/assets/img/logo-tipografia.png" style="max-width: 30%; height: auto; padding-top: 80px;" />
                                 </a-col>
                             </a-row>
                             <a-row>
                                 <a-col style="text-align: center;">
-                                    <label style="font-size: 30px; font-weight: 900; color: black;"
-                                        >Evaluación de desempeño</label
-                                    >
+                                    <label style="font-size: 30px; font-weight: 900; color: black;">Evaluación de desempeño</label>
                                     <a-divider />
                                 </a-col>
                             </a-row>
                             <a-row type="flex" justify="center" align="middle">
-                                <a-col
-                                    :md="{ span: 14 }"
-                                    :sm="{ span: 24 }"
-                                    v-if="!showFormConfirmPassword && !showRecovPass"
-                                >
+                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="!showFormConfirmPassword && !showRecovPass">
                                     <a-form>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                v-model="user.id"
-                                                class="form-input"
-                                                placeholder="Número de Empleado"
-                                            />
+                                            <a-input v-model="user.id" class="form-input" placeholder="Número de Empleado" />
                                         </a-form-item>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                type="password"
-                                                v-model="user.password"
-                                                class="form-input"
-                                                placeholder="Contraseña"
-                                            />
+                                            <a-input type="password" v-model="user.password" class="form-input" placeholder="Contraseña" />
                                         </a-form-item>
                                         <a-form-item>
-                                            <a-button
-                                                block
-                                                htmlType="submit"
-                                                class="login-buttom"
-                                                :loading="loading"
-                                                @click="login"
-                                                >Ingresar</a-button
-                                            >
+                                            <a-button block htmlType="submit" class="login-buttom" :loading="loading" @click="login">Ingresar</a-button>
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
-                                <a-col
-                                    :md="{ span: 14 }"
-                                    :sm="{ span: 24 }"
-                                    v-if="showFormConfirmPassword && !showRecovPass"
-                                >
+                                <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="showFormConfirmPassword && !showRecovPass">
                                     <a-form>
                                         <a-form-item style="margin: 0px;">
                                             <label for>
@@ -77,70 +43,32 @@
                                             </label>
                                         </a-form-item>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                v-model="user.email"
-                                                class="form-input"
-                                                placeholder="Email de la empresa"
-                                                type="email"
-                                            />
+                                            <a-input v-model="user.email" class="form-input" placeholder="Email de la empresa" type="email" />
                                         </a-form-item>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                type="password"
-                                                v-model="user.newPassword"
-                                                class="form-input"
-                                                placeholder="Nueva Contraseña"
-                                            />
+                                            <a-input type="password" v-model="user.newPassword" class="form-input" placeholder="Nueva Contraseña" />
                                         </a-form-item>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                type="password"
-                                                v-model="user.newPasswordConfirmation"
-                                                class="form-input"
-                                                placeholder="Confirma tu nueva Contraseña"
-                                            />
+                                            <a-input type="password" v-model="user.newPasswordConfirmation" class="form-input" placeholder="Confirma tu nueva Contraseña" />
                                         </a-form-item>
                                         <a-form-item style="margin-bottom: 0px;">
-                                            <a-button
-                                                block
-                                                htmlType="submit"
-                                                class="login-buttom"
-                                                :loading="loading"
-                                                @click="updatePassword"
-                                                >Actualizar datos</a-button
-                                            >
+                                            <a-button block htmlType="submit" class="login-buttom" :loading="loading" @click="updatePassword">Actualizar datos</a-button>
                                         </a-form-item>
                                         <a-form-item>
-                                            <a style="color: #666; text-decoration: underline;" @click="redirectToHome"
-                                                >Cancelar</a
-                                            >
+                                            <a style="color: #666; text-decoration: underline;" @click="redirectToHome">Cancelar</a>
                                         </a-form-item>
                                     </a-form>
                                 </a-col>
                                 <a-col :md="{ span: 14 }" :sm="{ span: 24 }" v-if="showRecovPass">
                                     <a-form>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                v-model="user.id"
-                                                class="form-input"
-                                                placeholder="Número de Empleado"
-                                            />
+                                            <a-input v-model="user.id" class="form-input" placeholder="Número de Empleado" />
                                         </a-form-item>
                                         <a-form-item hasFeedback :validateStatus="errors.length ? 'error' : ''">
-                                            <a-input
-                                                type="email"
-                                                v-model="user.email"
-                                                class="form-input"
-                                                placeholder="Correo Eletrónico"
-                                            />
+                                            <a-input type="email" v-model="user.email" class="form-input" placeholder="Correo Eletrónico" />
                                         </a-form-item>
                                         <a-form-item>
-                                            <a-button
-                                                block
-                                                htmlType="submit"
-                                                class="login-buttom"
-                                                :loading="loading"
-                                                @click="passwordRecovery"
+                                            <a-button block htmlType="submit" class="login-buttom" :loading="loading" @click="passwordRecovery"
                                                 >Enviar correo de recuperación</a-button
                                             >
                                         </a-form-item>
@@ -149,16 +77,12 @@
                             </a-row>
                             <a-row v-show="!showFormConfirmPassword && !showRecovPass">
                                 <a-col>
-                                    <a @click="showRecovPass = true" style="color: #666; text-decoration: underline;"
-                                        >¿Olvidó su contraseña?</a
-                                    >
+                                    <a @click="showRecovPass = true" style="color: #666; text-decoration: underline;">¿Olvidó su contraseña?</a>
                                 </a-col>
                             </a-row>
                             <a-row v-show="showRecovPass">
                                 <a-col>
-                                    <a @click="showRecovPass = false" style="color: #666; text-decoration: underline;"
-                                        >Iniciar Sesión</a
-                                    >
+                                    <a @click="showRecovPass = false" style="color: #666; text-decoration: underline;">Iniciar Sesión</a>
                                 </a-col>
                             </a-row>
                         </a-col>

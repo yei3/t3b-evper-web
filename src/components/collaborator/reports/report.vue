@@ -10,11 +10,7 @@
                 </a-col>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart
-                            v-if="isObjectivesLoaded"
-                            :chartData="previousData"
-                            :options="previousOptions"
-                        />
+                        <doughnut-chart v-if="isObjectivesLoaded" :chartData="previousData" :options="previousOptions" />
                     </div>
                 </a-col>
                 <a-row v-show="objetiveSpin">
@@ -32,11 +28,7 @@
                     </a-col>
                     <a-col :span="12" class="text-right select--chart__padding">
                         <b>Tipo de gráfica: </b>
-                        <a-select
-                            defaultValue="bar"
-                            class="select--chart"
-                            @change="(option) => (competencesChartType = option)"
-                        >
+                        <a-select defaultValue="bar" class="select--chart" @change="(option) => (competencesChartType = option)">
                             <a-select-option value="radar">Gráfica Radar</a-select-option>
                             <a-select-option value="bar">Gráfica de Barras</a-select-option>
                         </a-select>
@@ -50,34 +42,18 @@
                     </a-row>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
                         <div class="radar--size" v-show="competencesChartType == 'radar'">
-                            <radar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="currentCompentecesData"
-                                :options="currentCompentecesOptions"
-                            />
+                            <radar-chart v-if="isCompentecesLoaded" :chartData="currentCompentecesData" :options="currentCompentecesOptions" />
                         </div>
                         <div class="radar--size" v-show="competencesChartType == 'bar'">
-                            <bar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="currentCompentecesData"
-                                :options="currentCompentecesOptions"
-                            />
+                            <bar-chart v-if="isCompentecesLoaded" :chartData="currentCompentecesData" :options="currentCompentecesOptions" />
                         </div>
                     </a-col>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
                         <div class="radar--size" v-show="competencesChartType == 'radar'">
-                            <radar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="previousCompetencesData"
-                                :options="previousCompentecesOptions"
-                            />
+                            <radar-chart v-if="isCompentecesLoaded" :chartData="previousCompetencesData" :options="previousCompentecesOptions" />
                         </div>
                         <div class="radar--size" v-show="competencesChartType == 'bar'">
-                            <bar-chart
-                                v-if="isCompentecesLoaded"
-                                :chartData="previousCompetencesData"
-                                :options="previousCompentecesOptions"
-                            />
+                            <bar-chart v-if="isCompentecesLoaded" :chartData="previousCompetencesData" :options="previousCompentecesOptions" />
                         </div>
                     </a-col>
                 </a-row>

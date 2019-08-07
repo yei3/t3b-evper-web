@@ -43,20 +43,10 @@
                     </div>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button
-                        size="small"
-                        class="btn--start-evaluations"
-                        @click="fillEvaluation(record)"
-                        v-show="!disableButton(record.status, record.autoEvaluation)"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation(record)" v-show="!disableButton(record.status, record.autoEvaluation)">
                         {{ transformStatus(action, record.autoEvaluation) }}
                     </a-button>
-                    <a-button
-                        size="small"
-                        class="btn--start-evaluations"
-                        @click="toggleScheduleReviewModal(record)"
-                        v-show="disableButton(record.status, record.autoEvaluation)"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="toggleScheduleReviewModal(record)" v-show="disableButton(record.status, record.autoEvaluation)">
                         {{ transformStatus(action, record.autoEvaluation) }}
                     </a-button>
                 </span>
@@ -86,13 +76,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker
-                        showTime
-                        format="YYYY-MM-DD HH:mm"
-                        placeholder="Selecciona el día y la hora de la revisión"
-                        style="width: 100%"
-                        @ok="onSelectDate"
-                    />
+                    <a-date-picker showTime format="YYYY-MM-DD HH:mm" placeholder="Selecciona el día y la hora de la revisión" style="width: 100%" @ok="onSelectDate" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>

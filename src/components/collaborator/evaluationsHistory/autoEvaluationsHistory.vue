@@ -37,12 +37,7 @@
                     </p>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button
-                        size="small"
-                        class="btn--start-evaluations"
-                        @click="printEvaluation(record)"
-                        :disabled="disableButton(record.status)"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="printEvaluation(record)" :disabled="disableButton(record.status)">
                         Imprimir
                     </a-button>
                     <!-- <router-link

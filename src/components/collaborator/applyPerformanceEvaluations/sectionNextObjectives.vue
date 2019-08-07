@@ -42,12 +42,7 @@
                                         ],
                                     }"
                                 >
-                                    <a-input
-                                        v-model="question.text"
-                                        placeholder="Descripción del Objetivo"
-                                        @change="question.edited = true"
-                                        :disabled="onlyLecture"
-                                    />
+                                    <a-input v-model="question.text" placeholder="Descripción del Objetivo" @change="question.edited = true" :disabled="onlyLecture" />
                                 </a-form-item>
                                 <a-form-item
                                     :fieldDecoratorId="`qb${question.key}`"
@@ -65,12 +60,7 @@
                                         ],
                                     }"
                                 >
-                                    <a-input
-                                        v-model="question.deriverable"
-                                        placeholder="Entregable del Objetivo"
-                                        @change="question.edited = true"
-                                        :disabled="onlyLecture"
-                                    />
+                                    <a-input v-model="question.deriverable" placeholder="Entregable del Objetivo" @change="question.edited = true" :disabled="onlyLecture" />
                                 </a-form-item>
                                 <a-form-item
                                     :fieldDecoratorId="`qc${question.key}`"
@@ -111,30 +101,15 @@
                                 >
                                     <a-icon class="dynamic-delete-button form-icon" type="delete" /> Eliminar
                                 </a>
-                                <a
-                                    @click="save(question)"
-                                    class="link-delete-question form-icon"
-                                    style="padding-left: 2%;"
-                                    :disabled="question.loading"
-                                >
+                                <a @click="save(question)" class="link-delete-question form-icon" style="padding-left: 2%;" :disabled="question.loading">
                                     <a-icon class="dynamic-delete-button form-icon" type="check" /> Guardar
                                 </a>
-                                <a-icon
-                                    v-show="question.loading"
-                                    class="dynamic-delete-button form-icon"
-                                    type="loading"
-                                    style="padding-left: 2%;"
-                                />
+                                <a-icon v-show="question.loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 2%;" />
                             </a-col>
                         </a-row>
                         <a-row v-if="!onlyLecture">
                             <a-col :md="24" style="text-align: center;">
-                                <a-button
-                                    type="dashed"
-                                    @click="addQuestion"
-                                    class="add-button"
-                                    style="min-width: 200px; width: 300px; margin: 0px;"
-                                >
+                                <a-button type="dashed" @click="addQuestion" class="add-button" style="min-width: 200px; width: 300px; margin: 0px;">
                                     <a-icon type="plus" /> Agregar Objetivo
                                 </a-button>
                             </a-col>

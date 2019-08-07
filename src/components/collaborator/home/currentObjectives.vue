@@ -45,11 +45,7 @@
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
-                            <a-menu-item
-                                key="1"
-                                :disabled="record.status === 'Completado'"
-                                @click="toggleRecordProgressModal(record)"
-                            >
+                            <a-menu-item key="1" :disabled="record.status === 'Completado'" @click="toggleRecordProgressModal(record)">
                                 Registrar avances
                             </a-menu-item>
                             <a-menu-item key="2" @click="toggleViewProgressModal(record)">
@@ -58,11 +54,7 @@
                             <a-menu-divider />
                             <a-menu-item
                                 key="3"
-                                :disabled="
-                                    record.status === 'Completado' ||
-                                        record.status === 'No iniciado' ||
-                                        record.status === 'Validado'
-                                "
+                                :disabled="record.status === 'Completado' || record.status === 'No iniciado' || record.status === 'Validado'"
                                 @click="toggleFinishObjectiveModal(record)"
                             >
                                 Completar objetivo
@@ -127,12 +119,7 @@
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item
-                            v-for="(item, index) in binnacle"
-                            :key="index"
-                            color="gray"
-                            class="timeline-item"
-                        >
+                        <a-timeline-item v-for="(item, index) in binnacle" :key="index" color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
@@ -181,11 +168,7 @@
             </a-row>
 
             <template slot="footer">
-                <a-button
-                    key="back"
-                    @click="finishObjectiveModal.show = false"
-                    :disabled="finishObjectiveModal.loading"
-                >
+                <a-button key="back" @click="finishObjectiveModal.show = false" :disabled="finishObjectiveModal.loading">
                     Cancelar
                 </a-button>
                 <a-button
@@ -405,14 +388,11 @@ export default {
             } else {
                 this.finishObjectiveModal.show = true;
 
-                await this.addObjetiveMessage(
-                    this.finishObjectiveModal.objectiveId,
-                    `Objetivo completado: ${this.finishObjectiveModal.message}`,
-                ).catch((error) => errorHandler(this, error));
-
-                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
+                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, `Objetivo completado: ${this.finishObjectiveModal.message}`).catch((error) =>
                     errorHandler(this, error),
                 );
+
+                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) => errorHandler(this, error));
 
                 const obj = this.data.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
                 obj.status = this.selectStatusName(3);

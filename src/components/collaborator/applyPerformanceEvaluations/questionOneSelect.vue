@@ -32,12 +32,7 @@
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            <a-icon
-                v-show="loading"
-                class="dynamic-delete-button form-icon"
-                type="loading"
-                style="padding-left: 30px;"
-            />
+            <a-icon v-show="loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 30px;" />
             <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>

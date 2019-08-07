@@ -12,11 +12,7 @@
                         </h2>
                     </a-col>
                     <a-col :span="24">
-                        <a-row
-                            v-for="(qstTemplate, index) in getSubsectionQuestions(subsection)"
-                            :key="qstTemplate.id"
-                            style="padding: 10px 16px;"
-                        >
+                        <a-row v-for="(qstTemplate, index) in getSubsectionQuestions(subsection)" :key="qstTemplate.id" style="padding: 10px 16px;">
                             <question-open
                                 v-if="qstTemplate.questionType == 0"
                                 :index="index + 1"

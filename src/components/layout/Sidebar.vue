@@ -28,11 +28,7 @@
                         <a-dropdown>
                             <a class="ant-dropdown-link"> {{ roleEs }} <a-icon type="swap" /> </a>
                             <a-menu slot="overlay">
-                                <a-menu-item
-                                    v-for="arole in user.roles"
-                                    :key="arole"
-                                    v-show="arole !== userCurrentRole"
-                                >
+                                <a-menu-item v-for="arole in user.roles" :key="arole" v-show="arole !== userCurrentRole">
                                     <a @click="setCurrentRole(arole)"> <a-icon type="user" /> {{ roleToEs(arole) }} </a>
                                 </a-menu-item>
                                 <a-menu-divider />

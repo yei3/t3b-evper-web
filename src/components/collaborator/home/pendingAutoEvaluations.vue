@@ -37,12 +37,7 @@
                     </p>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button
-                        size="small"
-                        class="btn--start-evaluations"
-                        @click="fillEvaluation(record.id, record.status)"
-                        :disabled="disableButton(record.status)"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation(record.id, record.status)" :disabled="disableButton(record.status)">
                         {{ transformStatus(action) }}
                     </a-button>
                     <!-- <router-link

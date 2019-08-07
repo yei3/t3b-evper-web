@@ -117,12 +117,7 @@
                 </a-col>
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item
-                            v-for="(item, index) in binnacle.items"
-                            :key="index"
-                            color="gray"
-                            class="timeline-item"
-                        >
+                        <a-timeline-item v-for="(item, index) in binnacle.items" :key="index" color="gray" class="timeline-item">
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
                                 <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />

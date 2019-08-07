@@ -170,12 +170,10 @@
             <a-row class style="padding: 0 0 8px;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y
-                        discutido en detalle con mi Evaluador.
+                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con mi Evaluador.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y
-                        discutido en detalle con el Evaluado.
+                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con el Evaluado.
                     </p>
                     <br />
                     <br />
@@ -201,12 +199,11 @@
             <a-row class style="padding: 24px 0 0 0;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la
-                        mejora en el desempeño del Evaluado.
+                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la mejora en el desempeño del Evaluado.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo
-                        mejor posible para mejorar mi desempeño basado en estos comentarios.
+                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi desempeño basado en estos
+                        comentarios.
                     </p>
                     <br />
                     <br />
@@ -312,9 +309,7 @@ export default {
                     } else if (answer.unmeasuredAnswer.action === null) {
                         ans = answer.unmeasuredAnswer.text;
                     } else {
-                        ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
-                            answer.unmeasuredAnswer.text
-                        }        FECHA COMPROMISO: ${new Date(
+                        ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${answer.unmeasuredAnswer.text}        FECHA COMPROMISO: ${new Date(
                             answer.unmeasuredAnswer.commitmentDate + "Z",
                         ).toLocaleDateString()}`;
                     }
@@ -422,14 +417,7 @@ export default {
                     result += (accomplished / section.childSections[0].unmeasuredQuestions.length) * section.value;
                 }
             });
-            let calif =
-                result < 70
-                    ? "Insatisfactorio"
-                    : result >= 70 && result < 90
-                    ? "Satisfactorio"
-                    : result >= 90
-                    ? "Excelente"
-                    : "";
+            let calif = result < 70 ? "Insatisfactorio" : result >= 70 && result < 90 ? "Satisfactorio" : result >= 90 ? "Excelente" : "";
             return `${result.toFixed(2)} %  ${calif}`;
         },
         clearSections(sections) {
@@ -444,8 +432,7 @@ export default {
             this.answers.forEach((answer) => {
                 if (answer.notEvaluableAnswer !== null) {
                     if (answer.sectionId === this.nextObjectives.sectionId) this.nextObjectives.objectives.push(answer);
-                    if (answer.sectionId === this.currentObjectives.sectionId)
-                        this.currentObjectives.objectives.push(answer);
+                    if (answer.sectionId === this.currentObjectives.sectionId) this.currentObjectives.objectives.push(answer);
                 }
             });
         },

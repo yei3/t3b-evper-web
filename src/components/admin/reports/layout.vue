@@ -10,16 +10,12 @@
                 <a-col :span="21">
                     <a-breadcrumb>
                         <a-breadcrumb-item>
-                            <router-link :to="{ name: 'admin-reports' }" class="breadcrumb-path"
-                                >Resultados</router-link
-                            >
+                            <router-link :to="{ name: 'admin-reports' }" class="breadcrumb-path">Resultados</router-link>
                         </a-breadcrumb-item>
                     </a-breadcrumb>
                 </a-col>
                 <a-col :span="3">
-                    <a-button class="btn-blue" @click="print" :disabled="leftObjectivesData === null">
-                        <a-icon type="printer" />Imprimir
-                    </a-button>
+                    <a-button class="btn-blue" @click="print" :disabled="leftObjectivesData === null"> <a-icon type="printer" />Imprimir </a-button>
                 </a-col>
             </a-row>
         </a-row>
@@ -136,20 +132,12 @@
             <a-row>
                 <a-col :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart
-                            v-if="leftObjectivesData"
-                            :chartData="leftObjectivesData"
-                            :options="leftObjectivesOptions"
-                        />
+                        <doughnut-chart v-if="leftObjectivesData" :chartData="leftObjectivesData" :options="leftObjectivesOptions" />
                     </div>
                 </a-col>
                 <a-col :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart
-                            v-if="rightObjectivesData"
-                            :chartData="rightObjectivesData"
-                            :options="rightObjectivesOptions"
-                        />
+                        <doughnut-chart v-if="rightObjectivesData" :chartData="rightObjectivesData" :options="rightObjectivesOptions" />
                     </div>
                 </a-col>
             </a-row>
@@ -307,11 +295,7 @@ export default {
                     {
                         data: { result: organigram },
                     },
-                ] = await Promise.all([
-                    client3B.organizationUnit.getAllRegions(),
-                    client3B.organizationUnit.getAllAreas(),
-                    client3B.organizationUnit.getOrganigram(),
-                ]);
+                ] = await Promise.all([client3B.organizationUnit.getAllRegions(), client3B.organizationUnit.getAllAreas(), client3B.organizationUnit.getOrganigram()]);
                 this.regions = regions;
                 this.areas = areas;
                 this.organigram = organigram;
@@ -330,12 +314,7 @@ export default {
                 this.loading = false;
                 return;
             }
-            if (
-                this.left.start === undefined ||
-                this.right.start === undefined ||
-                this.left.end === undefined ||
-                this.right.end === undefined
-            ) {
+            if (this.left.start === undefined || this.right.start === undefined || this.left.end === undefined || this.right.end === undefined) {
                 this.bannerError = "Selecciona un rango de fechas correcto";
                 this.loading = false;
                 return;

@@ -1,28 +1,26 @@
 <template>
-  <a-col class="results-info" :xl="12" :lg="12" :xs="24">
-    <a-row class="custom-row" type="flex" justify="center">
-      <a-col v-if="showAll" class="custom-col" :xl="4">
-        <p class="custom-col__text custom-col__text--title">Plantilla</p>
-        <div class="circle">
-          <span class="text">{{ this.data.totalEmployees }}</span>
-        </div>
-      </a-col>
-      <a-col class="custom-col" :xl="4">
-        <p class="custom-col__text custom-col__text--title">Evaluados</p>
-        <p class="custom-col__text custom-col__text--percentage">{{ this.getEvaluatedPercentage }}%</p>
-        <div class="circle">
-          <span class="text">{{ this.data.evaluatedEmployees }}</span>
-        </div>
-      </a-col>
-    </a-row>
-    <a-row v-if="showAll" type="flex" justify="center">
-      <a-col :xl="6">
-        <p
-          class="custom-col__text custom-col__text--average"
-        >Promedio de antiguedad: {{ this.getAgeAverage }} años</p>
-      </a-col>
-    </a-row>
-  </a-col>
+    <a-col class="results-info" :xl="12" :lg="12" :xs="24">
+        <a-row class="custom-row" type="flex" justify="center">
+            <a-col v-if="showAll" class="custom-col" :xl="4">
+                <p class="custom-col__text custom-col__text--title">Plantilla</p>
+                <div class="circle">
+                    <span class="text">{{ this.data.totalEmployees }}</span>
+                </div>
+            </a-col>
+            <a-col class="custom-col" :xl="4">
+                <p class="custom-col__text custom-col__text--title">Evaluados</p>
+                <p class="custom-col__text custom-col__text--percentage">{{ this.getEvaluatedPercentage }}%</p>
+                <div class="circle">
+                    <span class="text">{{ this.data.evaluatedEmployees }}</span>
+                </div>
+            </a-col>
+        </a-row>
+        <a-row v-if="showAll" type="flex" justify="center">
+            <a-col :xl="6">
+                <p class="custom-col__text custom-col__text--average">Promedio de antiguedad: {{ this.getAgeAverage }} años</p>
+            </a-col>
+        </a-row>
+    </a-col>
 </template>
 
 <script>

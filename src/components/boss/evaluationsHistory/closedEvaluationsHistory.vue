@@ -41,20 +41,10 @@
                     <a-icon type="minus" v-if="!autoEvaluation" />
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button
-                        size="small"
-                        class="btn--start-evaluations"
-                        @click="printEvaluation(record)"
-                        v-show="!disableButton(record.status, record.autoEvaluation)"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="printEvaluation(record)" v-show="!disableButton(record.status, record.autoEvaluation)">
                         Imprimir
                     </a-button>
-                    <a-button
-                        size="small"
-                        class="btn--start-evaluations"
-                        @click="toggleScheduleReviewModal(record)"
-                        v-show="disableButton(record.status, record.autoEvaluation)"
-                    >
+                    <a-button size="small" class="btn--start-evaluations" @click="toggleScheduleReviewModal(record)" v-show="disableButton(record.status, record.autoEvaluation)">
                         {{ transformStatus(action, record.autoEvaluation) }}
                     </a-button>
                 </span>
@@ -84,13 +74,7 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker
-                        showTime
-                        format="YYYY-MM-DD HH:mm"
-                        placeholder="Selecciona el día y la hora de la revisión"
-                        style="width: 100%"
-                        @ok="onSelectDate"
-                    />
+                    <a-date-picker showTime format="YYYY-MM-DD HH:mm" placeholder="Selecciona el día y la hora de la revisión" style="width: 100%" @ok="onSelectDate" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>

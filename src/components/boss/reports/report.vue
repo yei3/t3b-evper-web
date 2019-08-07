@@ -29,11 +29,7 @@
                 </div>
             </a-row>
             <a-col :span="8" class="text-left">
-                <a-select
-                    defaultValue="radar"
-                    style="width: 200px"
-                    @change="(option) => (competencesChartType = option)"
-                >
+                <a-select defaultValue="radar" style="width: 200px" @change="(option) => (competencesChartType = option)">
                     <a-select-option value="radar">Gráfica Radar</a-select-option>
                     <a-select-option value="bar">Gráfica de Barras</a-select-option>
                 </a-select>
@@ -46,11 +42,7 @@
             </a-col>
             <a-col :span="12" class="text-center">
                 <div class="radar--size" v-show="competencesChartType == 'radar'">
-                    <radar-chart
-                        v-if="isCompentecesLoaded"
-                        :chartData="compentecesData"
-                        :options="compentecesOptions"
-                    />
+                    <radar-chart v-if="isCompentecesLoaded" :chartData="compentecesData" :options="compentecesOptions" />
                 </div>
                 <div class="radar--size" v-show="competencesChartType == 'bar'">
                     <bar-chart v-if="isCompentecesLoaded" :chartData="compentecesData" :options="compentecesOptions" />
@@ -171,14 +163,7 @@ export default {
             */
 
             this.compentecesData = {
-                labels: [
-                    "Orientación a resultados",
-                    "Eficiencia",
-                    "Orientación al detalle",
-                    "Comunicación",
-                    "Capacidad de análisis y solución de problemas",
-                    "Cultura 3B",
-                ],
+                labels: ["Orientación a resultados", "Eficiencia", "Orientación al detalle", "Comunicación", "Capacidad de análisis y solución de problemas", "Cultura 3B"],
                 datasets: [
                     {
                         label: "2019-1",

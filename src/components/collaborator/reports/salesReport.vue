@@ -10,11 +10,7 @@
                 </a-col>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart
-                            v-if="isObjectivesLoaded"
-                            :chartData="previousData"
-                            :options="previousOptions"
-                        />
+                        <doughnut-chart v-if="isObjectivesLoaded" :chartData="previousData" :options="previousOptions" />
                     </div>
                 </a-col>
                 <a-row v-show="objetiveSpin">
@@ -38,18 +34,10 @@
                         </div>
                     </a-row>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <bar-chart
-                            v-if="isCompentecesLoaded"
-                            :chartData="currentCompentecesData"
-                            :options="currentCompentecesOptions"
-                        />
+                        <bar-chart v-if="isCompentecesLoaded" :chartData="currentCompentecesData" :options="currentCompentecesOptions" />
                     </a-col>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <bar-chart
-                            v-if="isCompentecesLoaded"
-                            :chartData="previousCompetencesData"
-                            :options="previousCompentecesOptions"
-                        />
+                        <bar-chart v-if="isCompentecesLoaded" :chartData="previousCompetencesData" :options="previousCompentecesOptions" />
                     </a-col>
                 </a-row>
             </a-row>
