@@ -1,3 +1,13 @@
+/*
+    Este proyecto se basa usando las reglas de
+
+    "Airbnb JavaScript Style Guide"
+
+    Las reglas se encuentran aprovadas y soportadas por gran parte de la comunidad
+
+    FAVOR DE NO MODIFICAR SIN CONSULTAR PREVIAMENTE
+*/
+
 module.exports = {
     root: true,
     env: {
