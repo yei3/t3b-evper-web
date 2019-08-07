@@ -27,13 +27,19 @@
                 <span style="font-weight: normal">{{ jobDescription }}</span>
                 <br />
                 <b>Tiempo en el puesto:</b>
-                <span style="font-weight: normal">{{ getDiffDates(entryDate, reassignDate, reviewDate) }}</span>
+                <span style="font-weight: normal">{{
+                    getDiffDates(entryDate, reassignDate, reviewDate)
+                }}</span>
                 <br />
                 <b>Fecha de ingreso:</b>
-                <span style="font-weight: normal">{{ new Date(entryDate + "Z").toLocaleDateString() }}</span>
+                <span style="font-weight: normal">{{
+                    new Date(entryDate + "Z").toLocaleDateString()
+                }}</span>
                 <br />
                 <b>Fecha de revisión:</b>
-                <span style="font-weight: normal">{{ new Date(reviewDate + "Z").toLocaleDateString() }}</span>
+                <span style="font-weight: normal">{{
+                    new Date(reviewDate + "Z").toLocaleDateString()
+                }}</span>
                 <br />
             </a-col>
             <a-col :span="6" v-show="includePastObjectives">
@@ -56,10 +62,14 @@
                 <br />
                 <br />
                 <b>Evaluación Global:</b>
-                <span v-if="evaluationLoaded" style="font-weight: normal">&emsp;&emsp;{{ getGlobalResult() }}</span>
+                <span v-if="evaluationLoaded" style="font-weight: normal"
+                    >&emsp;&emsp;{{ getGlobalResult() }}</span
+                >
             </a-col>
             <a-col :span="3">
-                <a-button class="btn-blue" @click="print"> <a-icon type="printer" />Imprimir </a-button>
+                <a-button class="btn-blue" @click="print">
+                    <a-icon type="printer" />Imprimir
+                </a-button>
             </a-col>
         </a-row>
         <div class="collapse-content">
@@ -74,7 +84,9 @@
                 <span v-for="(objective, i) in currentObjectives.objectives" :key="i">
                     <p class="question__border">
                         <b>{{ i + 1 }}.-</b>
-                        <strong>{{ objective.text }} - {{ getStatusText(objective.status) }}</strong>
+                        <strong
+                            >{{ objective.text }} - {{ getStatusText(objective.status) }}</strong
+                        >
                     </p>
                     <p class="question__border">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -86,7 +98,11 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ new Date(objective.notEvaluableAnswer.commitmentTime + "Z").toLocaleDateString() }}
+                        {{
+                            new Date(
+                                objective.notEvaluableAnswer.commitmentTime + "Z",
+                            ).toLocaleDateString()
+                        }}
                     </p>
                 </span>
             </a-row>
@@ -96,7 +112,9 @@
                 </div>
                 <span v-for="(subsection, j) in section.childSections" :key="j">
                     <div class="subsection--padd">
-                        <b class="subsection" v-show="isNullOrEmpty(subsection.name)">{{ subsection.name }}</b>
+                        <b class="subsection" v-show="isNullOrEmpty(subsection.name)">{{
+                            subsection.name
+                        }}</b>
                     </div>
                     <span :key="h" v-for="(question, h) in subsection.unmeasuredQuestions">
                         <p class="question__border">
@@ -153,7 +171,11 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a-icon type="calendar" />
                         &nbsp;
-                        {{ new Date(objective.notEvaluableAnswer.commitmentTime + "Z").toLocaleDateString() }}
+                        {{
+                            new Date(
+                                objective.notEvaluableAnswer.commitmentTime + "Z",
+                            ).toLocaleDateString()
+                        }}
                     </p>
                 </span>
             </a-row>
@@ -170,10 +192,12 @@
             <a-row class style="padding: 0 0 8px;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He preparado esta auto evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con mi Evaluador.
+                        He preparado esta auto evaluación de desempeño con detenimiento, la he
+                        explicado claramente y discutido en detalle con mi Evaluador.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He preparado esta evaluación de desempeño con detenimiento, la he explicado claramente y discutido en detalle con el Evaluado.
+                        He preparado esta evaluación de desempeño con detenimiento, la he explicado
+                        claramente y discutido en detalle con el Evaluado.
                     </p>
                     <br />
                     <br />
@@ -199,10 +223,12 @@
             <a-row class style="padding: 24px 0 0 0;">
                 <a-col :span="13">
                     <p v-show="isAutoEvaluation">
-                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis recomendaciones para la mejora en el desempeño del Evaluado.
+                        He leído y comprendido esta auto evaluación de desempeño, otorgando mis
+                        recomendaciones para la mejora en el desempeño del Evaluado.
                     </p>
                     <p v-show="!isAutoEvaluation">
-                        He leído y comprendido esta evaluación de desempeño y las recomendaciones señaladas. Haré lo mejor posible para mejorar mi desempeño basado en estos
+                        He leído y comprendido esta evaluación de desempeño y las recomendaciones
+                        señaladas. Haré lo mejor posible para mejorar mi desempeño basado en estos
                         comentarios.
                     </p>
                     <br />
@@ -309,7 +335,9 @@ export default {
                     } else if (answer.unmeasuredAnswer.action === null) {
                         ans = answer.unmeasuredAnswer.text;
                     } else {
-                        ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${answer.unmeasuredAnswer.text}        FECHA COMPROMISO: ${new Date(
+                        ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
+                            answer.unmeasuredAnswer.text
+                        }        FECHA COMPROMISO: ${new Date(
                             answer.unmeasuredAnswer.commitmentDate + "Z",
                         ).toLocaleDateString()}`;
                     }
@@ -349,7 +377,9 @@ export default {
         },
         getExpectedQuestion(question) {
             let res = question.expectedText || question.expected;
-            const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
+            const answer = this.answers.find(
+                (answer) => answer.evaluationQuestionId === question.id,
+            );
 
             if (!Number.isNaN(Number(res))) {
                 if (answer.measuredAnswer.evaluationMeasuredQuestion.expected !== null) {
@@ -365,14 +395,18 @@ export default {
             return this.isObjetiveAccomplished(question) ? "Cumplido" : "No cumplido";
         },
         isQuestionAccomplished(question) {
-            const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
+            const answer = this.answers.find(
+                (answer) => answer.evaluationQuestionId === question.id,
+            );
 
             return answer.unmeasuredAnswer.action === "true";
         },
         isObjetiveAccomplished(question) {
             let expected = question.expectedText || question.expected;
 
-            const answer = this.answers.find((answer) => answer.evaluationQuestionId === question.id);
+            const answer = this.answers.find(
+                (answer) => answer.evaluationQuestionId === question.id,
+            );
 
             if (!Number.isNaN(Number(expected))) {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
@@ -380,7 +414,8 @@ export default {
                     expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
                 }
             } else {
-                expected = answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || expected;
+                expected =
+                    answer.measuredAnswer.evaluationMeasuredQuestion.expectedText || expected;
             }
 
             switch (question.relation) {
@@ -408,16 +443,27 @@ export default {
                     section.childSections[0].measuredQuestions.forEach((question) => {
                         if (this.isObjetiveAccomplished(question)) accomplished += 1;
                     });
-                    result += (accomplished / section.childSections[0].measuredQuestions.length) * section.value;
+                    result +=
+                        (accomplished / section.childSections[0].measuredQuestions.length) *
+                        section.value;
                 } else {
                     let accomplished = 0;
                     section.childSections[0].unmeasuredQuestions.forEach((question) => {
                         if (this.isQuestionAccomplished(question)) accomplished += 1;
                     });
-                    result += (accomplished / section.childSections[0].unmeasuredQuestions.length) * section.value;
+                    result +=
+                        (accomplished / section.childSections[0].unmeasuredQuestions.length) *
+                        section.value;
                 }
             });
-            let calif = result < 70 ? "Insatisfactorio" : result >= 70 && result < 90 ? "Satisfactorio" : result >= 90 ? "Excelente" : "";
+            let calif =
+                result < 70
+                    ? "Insatisfactorio"
+                    : result >= 70 && result < 90
+                    ? "Satisfactorio"
+                    : result >= 90
+                    ? "Excelente"
+                    : "";
             return `${result.toFixed(2)} %  ${calif}`;
         },
         clearSections(sections) {
@@ -431,8 +477,10 @@ export default {
             });
             this.answers.forEach((answer) => {
                 if (answer.notEvaluableAnswer !== null) {
-                    if (answer.sectionId === this.nextObjectives.sectionId) this.nextObjectives.objectives.push(answer);
-                    if (answer.sectionId === this.currentObjectives.sectionId) this.currentObjectives.objectives.push(answer);
+                    if (answer.sectionId === this.nextObjectives.sectionId)
+                        this.nextObjectives.objectives.push(answer);
+                    if (answer.sectionId === this.currentObjectives.sectionId)
+                        this.currentObjectives.objectives.push(answer);
                 }
             });
         },
@@ -453,7 +501,8 @@ export default {
                 if (objective.status === 4) count += 1;
             });
             if (count > 0) {
-                this.objectiveAccomplished = (count * 100) / this.currentObjectives.objectives.length;
+                this.objectiveAccomplished =
+                    (count * 100) / this.currentObjectives.objectives.length;
             }
             return `${this.objectiveAccomplished.toPrecision(4)}  %`;
         },
@@ -463,10 +512,15 @@ export default {
             let total = 0;
             const responses = "-70 71-99 +100";
             this.answers.forEach((answer) => {
-                if (answer.unmeasuredAnswer != null && responses.includes(answer.unmeasuredAnswer.text)) total += 1;
+                if (
+                    answer.unmeasuredAnswer != null &&
+                    responses.includes(answer.unmeasuredAnswer.text)
+                )
+                    total += 1;
             });
             this.answers.forEach((answer) => {
-                if (answer.unmeasuredAnswer != null && answer.unmeasuredAnswer.text === level) count += 1;
+                if (answer.unmeasuredAnswer != null && answer.unmeasuredAnswer.text === level)
+                    count += 1;
             });
             if (count > 0) {
                 ans = (count * 100) / total;
@@ -499,7 +553,9 @@ export default {
             const anios = dias / 365;
             const meses = (dias - Math.trunc(anios) * 365) / 30.4;
             const numDias = dias - Math.trunc(anios) * 365 - Math.trunc(meses) * 30.4;
-            return `${Math.floor(anios)} años ${Math.floor(meses)} meses ${numDias.toFixed(0)} días.`;
+            return `${Math.floor(anios)} años ${Math.floor(meses)} meses ${numDias.toFixed(
+                0,
+            )} días.`;
         },
         logoImgUrl() {
             return `${process.env.VUE_APP_IMAGES_URL}/site/logo.png`;
@@ -523,7 +579,8 @@ export default {
             this.collaboratorName = `${this.evaluation.user.name}  ${this.evaluation.user.surname}`;
             this.isAutoEvaluation = this.evaluation.template.isAutoEvaluation;
             this.includePastObjectives = this.evaluation.template.includePastObjectives;
-            this.isClosed = this.evaluation.closingComment != null && this.evaluation.closingComment.length > 0;
+            this.isClosed =
+                this.evaluation.closingComment != null && this.evaluation.closingComment.length > 0;
             await this.clearSections(this.evaluation.template.sections);
             this.spin = false;
         },

@@ -5,14 +5,22 @@
                 <h1>{{ section.name }}</h1>
             </a-col>
             <a-col :span="24">
-                <a-row class="form-section" v-for="subsection in section.childSections" :key="subsection.id">
+                <a-row
+                    class="form-section"
+                    v-for="subsection in section.childSections"
+                    :key="subsection.id"
+                >
                     <a-col :span="24" class="form-section-tittle" v-show="subsection.displayName">
                         <h2 style="margin: 20px 0px 0px 0px; font-size: 20px;">
                             {{ subsection.name }}
                         </h2>
                     </a-col>
                     <a-col :span="24">
-                        <a-row v-for="(qstTemplate, index) in getSubsectionQuestions(subsection)" :key="qstTemplate.id" style="padding: 10px 16px;">
+                        <a-row
+                            v-for="(qstTemplate, index) in getSubsectionQuestions(subsection)"
+                            :key="qstTemplate.id"
+                            style="padding: 10px 16px;"
+                        >
                             <question-open
                                 v-if="qstTemplate.questionType == 0"
                                 :index="index + 1"

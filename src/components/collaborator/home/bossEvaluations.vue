@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -19,7 +29,12 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
@@ -37,7 +52,12 @@
                     </p>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                    <a-button size="small" class="btn--close-evaluations" @click="toggleCBEModal(record)" :disabled="disableButton(record.status)">
+                    <a-button
+                        size="small"
+                        class="btn--close-evaluations"
+                        @click="toggleCBEModal(record)"
+                        :disabled="disableButton(record.status)"
+                    >
                         Cerrar
                     </a-button>
                 </span>
@@ -60,14 +80,22 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida por mi Evaluador.
+                        Agregue un comentario referente al desempeño, la evaluación y a la
+                        retroalimentación recibida por mi Evaluador.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="CBEModal.evaluationCloseMsg" />
+                    <a-textarea
+                        placeholder="Comentarios..."
+                        :rows="6"
+                        v-model="CBEModal.evaluationCloseMsg"
+                    />
                 </a-col>
                 <a-col class="modal-content-seccion">
-                    <a-checkbox :checked="CBEModal.enableButton" @change="CBEModal.enableButton = !CBEModal.enableButton">
+                    <a-checkbox
+                        :checked="CBEModal.enableButton"
+                        @change="CBEModal.enableButton = !CBEModal.enableButton"
+                    >
                         <strong style="font-size: 13px;">
                             ¿Estás seguro que deseas cerrar tu evaluación?
                         </strong>
@@ -82,7 +110,13 @@
                 >
                     Cancelar
                 </a-button> -->
-                <a-button class="modal-button-ok" key="submit" type="primary" @click="toggleCBEModal" :disabled="!CBEModal.enableButton">
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="toggleCBEModal"
+                    :disabled="!CBEModal.enableButton"
+                >
                     Si, cerrar evaluación
                 </a-button>
             </template>
@@ -187,7 +221,9 @@ export default {
             }
         },
         async sendBossCloseEvaluationNotification() {
-            await client3B.notifications.sendBossCloseEvaluationNotification({}).catch((error) => errorHandler(this, error));
+            await client3B.notifications
+                .sendBossCloseEvaluationNotification({})
+                .catch((error) => errorHandler(this, error));
         },
         async toggleCBEModal(input) {
             if (!this.CBEModal.show) {
@@ -196,7 +232,10 @@ export default {
                 this.CBEModal.evaluationName = input.evaluation.title;
                 this.CBEModal.show = !this.CBEModal.show;
             } else {
-                await this.addClosingMessage(this.CBEModal.evaluationId, this.CBEModal.evaluationCloseMsg);
+                await this.addClosingMessage(
+                    this.CBEModal.evaluationId,
+                    this.CBEModal.evaluationCloseMsg,
+                );
                 this.sendBossCloseEvaluationNotification();
                 this.CBEModal.show = !this.CBEModal.show;
                 // this.data.splice( this.data.indexOf(this.CBEModal.evaluationId), 1);

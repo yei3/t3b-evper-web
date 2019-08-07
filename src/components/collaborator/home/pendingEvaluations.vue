@@ -6,7 +6,12 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
@@ -21,7 +26,12 @@
                     </p>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation(record.id)" :disabled="disableButton(record.status)">
+                    <a-button
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="fillEvaluation(record.id)"
+                        :disabled="disableButton(record.status)"
+                    >
                         {{ transformStatus(action) }}
                     </a-button>
                     <!-- <router-link

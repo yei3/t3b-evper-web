@@ -2,12 +2,20 @@
     <a-layout-header class="header" style="background: white; padding: 0px; height: 60px;">
         <a-row>
             <a-col :span="12">
-                <a-icon class="trigger" :type="sidebarCollapsed ? 'menu-unfold' : 'menu-fold'" @click="toggleSidebar" />
+                <a-icon
+                    class="trigger"
+                    :type="sidebarCollapsed ? 'menu-unfold' : 'menu-fold'"
+                    @click="toggleSidebar"
+                />
             </a-col>
             <a-col :span="12">
                 <a-row>
                     <a-col style="text-align: right;">
-                        <a-button icon="user" style="border-style: none; cursor: unset;" class="logout-buttom">
+                        <a-button
+                            icon="user"
+                            style="border-style: none; cursor: unset;"
+                            class="logout-buttom"
+                        >
                             {{ userProfile }}
                         </a-button>
                         <a-button @click="showDrawer">
@@ -15,14 +23,25 @@
                                 <a-icon type="bell" theme="filled" style="font-size: 25px;" />
                             </a-badge>
                         </a-button>
-                        <a-button icon="logout" style="border-style: none" class="logout-buttom" @click="logout()">
+                        <a-button
+                            icon="logout"
+                            style="border-style: none"
+                            class="logout-buttom"
+                            @click="logout()"
+                        >
                             Cerrar sesión
                         </a-button>
                     </a-col>
                 </a-row>
             </a-col>
         </a-row>
-        <a-drawer title="Notificaciones" placement="right" :closable="false" @close="onClose" :visible="visible">
+        <a-drawer
+            title="Notificaciones"
+            placement="right"
+            :closable="false"
+            @close="onClose"
+            :visible="visible"
+        >
             <div v-for="item in data" :key="item.id">
                 <a-icon type="bell" theme="filled" style="font-size: 14px;" />
                 <strong> {{ item.id }}</strong>
@@ -89,7 +108,9 @@ export default {
                             subtitle: items[index].state,
                         },
                         collaborator: items[index].userId,
-                        endDate: new Date(items[index].notification.creationTime + "Z").toLocaleDateString(),
+                        endDate: new Date(
+                            items[index].notification.creationTime + "Z",
+                        ).toLocaleDateString(),
                     });
                 }
             } catch (error) {

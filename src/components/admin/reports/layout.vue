@@ -3,19 +3,29 @@
         <a-row class="breadcrumb-wrapper">
             <a-row :gutter="32">
                 <a-col :h2="24">
-                    <h1 class="breadcrumb-header">Resultados de Evaluación | Análisis Comparativo</h1>
+                    <h1 class="breadcrumb-header">
+                        Resultados de Evaluación | Análisis Comparativo
+                    </h1>
                 </a-col>
             </a-row>
             <a-row :gutter="32">
                 <a-col :span="21">
                     <a-breadcrumb>
                         <a-breadcrumb-item>
-                            <router-link :to="{ name: 'admin-reports' }" class="breadcrumb-path">Resultados</router-link>
+                            <router-link :to="{ name: 'admin-reports' }" class="breadcrumb-path"
+                                >Resultados</router-link
+                            >
                         </a-breadcrumb-item>
                     </a-breadcrumb>
                 </a-col>
                 <a-col :span="3">
-                    <a-button class="btn-blue" @click="print" :disabled="leftObjectivesData === null"> <a-icon type="printer" />Imprimir </a-button>
+                    <a-button
+                        class="btn-blue"
+                        @click="print"
+                        :disabled="leftObjectivesData === null"
+                    >
+                        <a-icon type="printer" />Imprimir
+                    </a-button>
                 </a-col>
             </a-row>
         </a-row>
@@ -39,16 +49,32 @@
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
-                        <a-select class="column--width" v-model="left.region" @change="left.area = null">
-                            <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                        <a-select
+                            class="column--width"
+                            v-model="left.region"
+                            @change="left.area = null"
+                        >
+                            <a-select-option
+                                v-for="region in regions"
+                                :key="region.id"
+                                :value="region.id"
+                            >
                                 {{ region.displayName }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área:</h5>
-                        <a-select class="column--width" v-model="left.area" @change="left.person = null">
-                            <a-select-option v-for="area in leftAreas" :key="area.id" :value="area.id">
+                        <a-select
+                            class="column--width"
+                            v-model="left.area"
+                            @change="left.person = null"
+                        >
+                            <a-select-option
+                                v-for="area in leftAreas"
+                                :key="area.id"
+                                :value="area.id"
+                            >
                                 {{ area.displayName }}
                             </a-select-option>
                         </a-select>
@@ -56,41 +82,78 @@
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Puesto:</h5>
                         <a-select class="column--width" v-model="left.person">
-                            <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
+                            <a-select-option
+                                v-for="person in leftPeople"
+                                :key="person.id"
+                                :value="person.id"
+                            >
                                 {{ person.jobDescription }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Evaluado:</h5>
-                        <a-select class="column--width" v-model="left.person" showSearch :filterOption="filterOption">
-                            <a-select-option v-for="person in leftPeople" :key="person.id" :value="person.id">
+                        <a-select
+                            class="column--width"
+                            v-model="left.person"
+                            showSearch
+                            :filterOption="filterOption"
+                        >
+                            <a-select-option
+                                v-for="person in leftPeople"
+                                :key="person.id"
+                                :value="person.id"
+                            >
                                 {{ person.fullName }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Inicio:</h5>
-                        <a-date-picker class="column--width" placeholder="Fecha Inicio" v-model="left.start" />
+                        <a-date-picker
+                            class="column--width"
+                            placeholder="Fecha Inicio"
+                            v-model="left.start"
+                        />
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Fin:</h5>
-                        <a-date-picker class="column--width" placeholder="Fecha Fin" v-model="left.end" />
+                        <a-date-picker
+                            class="column--width"
+                            placeholder="Fecha Fin"
+                            v-model="left.end"
+                        />
                     </a-col>
                 </a-col>
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
-                        <a-select class="column--width" v-model="right.region" @change="right.area = null">
-                            <a-select-option v-for="region in regions" :key="region.id" :value="region.id">
+                        <a-select
+                            class="column--width"
+                            v-model="right.region"
+                            @change="right.area = null"
+                        >
+                            <a-select-option
+                                v-for="region in regions"
+                                :key="region.id"
+                                :value="region.id"
+                            >
                                 {{ region.displayName }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Área:</h5>
-                        <a-select class="column--width" v-model="right.area" @change="right.person = null">
-                            <a-select-option v-for="area in rightAreas" :key="area.id" :value="area.id">
+                        <a-select
+                            class="column--width"
+                            v-model="right.area"
+                            @change="right.person = null"
+                        >
+                            <a-select-option
+                                v-for="area in rightAreas"
+                                :key="area.id"
+                                :value="area.id"
+                            >
                                 {{ area.displayName }}
                             </a-select-option>
                         </a-select>
@@ -98,58 +161,105 @@
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Puesto:</h5>
                         <a-select class="column--width" v-model="right.person">
-                            <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
+                            <a-select-option
+                                v-for="person in rightPeople"
+                                :key="person.id"
+                                :value="person.id"
+                            >
                                 {{ person.jobDescription }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Evaluado:</h5>
-                        <a-select class="column--width" v-model="right.person" showSearch :filterOption="filterOption">
-                            <a-select-option v-for="person in rightPeople" :key="person.id" :value="person.id">
+                        <a-select
+                            class="column--width"
+                            v-model="right.person"
+                            showSearch
+                            :filterOption="filterOption"
+                        >
+                            <a-select-option
+                                v-for="person in rightPeople"
+                                :key="person.id"
+                                :value="person.id"
+                            >
                                 {{ person.fullName }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Inicio:</h5>
-                        <a-date-picker class="column--width" placeholder="Fecha Inicio" v-model="right.start" />
+                        <a-date-picker
+                            class="column--width"
+                            placeholder="Fecha Inicio"
+                            v-model="right.start"
+                        />
                     </a-col>
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Fecha Fin:</h5>
-                        <a-date-picker class="column--width" placeholder="Fecha Fin" v-model="right.end" />
+                        <a-date-picker
+                            class="column--width"
+                            placeholder="Fecha Fin"
+                            v-model="right.end"
+                        />
                     </a-col>
                 </a-col>
                 <a-col :md="24" style="text-align: center; padding-top: 20px;">
                     <a-alert v-show="bannerError" banner closable :message="bannerError" />
                     <br />
-                    <a-button block @click="getReport" :loading="loading" :disabled="loading">C o m p a r a r</a-button>
+                    <a-button block @click="getReport" :loading="loading" :disabled="loading"
+                        >C o m p a r a r</a-button
+                    >
                 </a-col>
             </a-row>
         </div>
-        <div class="collapse-content" v-if="leftObjectivesData" style="background-color: white; margin: 30px 30px;">
+        <div
+            class="collapse-content"
+            v-if="leftObjectivesData"
+            style="background-color: white; margin: 30px 30px;"
+        >
             <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
             <a-row>
                 <a-col :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart v-if="leftObjectivesData" :chartData="leftObjectivesData" :options="leftObjectivesOptions" />
+                        <doughnut-chart
+                            v-if="leftObjectivesData"
+                            :chartData="leftObjectivesData"
+                            :options="leftObjectivesOptions"
+                        />
                     </div>
                 </a-col>
                 <a-col :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart v-if="rightObjectivesData" :chartData="rightObjectivesData" :options="rightObjectivesOptions" />
+                        <doughnut-chart
+                            v-if="rightObjectivesData"
+                            :chartData="rightObjectivesData"
+                            :options="rightObjectivesOptions"
+                        />
                     </div>
                 </a-col>
             </a-row>
         </div>
-        <div v-if="leftChartData" class="collapse-content" style="background-color: white; margin: 30px 30px;">
+        <div
+            v-if="leftChartData"
+            class="collapse-content"
+            style="background-color: white; margin: 30px 30px;"
+        >
             <h3 class="breadcrumb-header">Competencias Evaluadas</h3>
             <a-row>
                 <a-col :sm="24" :md="12">
-                    <bar-chart v-if="leftChartData" :chartData="leftChartData" :options="barOptions" />
+                    <bar-chart
+                        v-if="leftChartData"
+                        :chartData="leftChartData"
+                        :options="barOptions"
+                    />
                 </a-col>
                 <a-col :sm="24" :md="12">
-                    <bar-chart v-if="rightChartData" :chartData="rightChartData" :options="barOptions" />
+                    <bar-chart
+                        v-if="rightChartData"
+                        :chartData="rightChartData"
+                        :options="barOptions"
+                    />
                 </a-col>
             </a-row>
         </div>
@@ -295,7 +405,11 @@ export default {
                     {
                         data: { result: organigram },
                     },
-                ] = await Promise.all([client3B.organizationUnit.getAllRegions(), client3B.organizationUnit.getAllAreas(), client3B.organizationUnit.getOrganigram()]);
+                ] = await Promise.all([
+                    client3B.organizationUnit.getAllRegions(),
+                    client3B.organizationUnit.getAllAreas(),
+                    client3B.organizationUnit.getOrganigram(),
+                ]);
                 this.regions = regions;
                 this.areas = areas;
                 this.organigram = organigram;
@@ -304,7 +418,11 @@ export default {
             }
         },
         filterOption(input, option) {
-            return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+            return (
+                option.componentOptions.children[0].text
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+            );
         },
         async getReport() {
             this.loading = true;
@@ -314,7 +432,12 @@ export default {
                 this.loading = false;
                 return;
             }
-            if (this.left.start === undefined || this.right.start === undefined || this.left.end === undefined || this.right.end === undefined) {
+            if (
+                this.left.start === undefined ||
+                this.right.start === undefined ||
+                this.left.end === undefined ||
+                this.right.end === undefined
+            ) {
                 this.bannerError = "Selecciona un rango de fechas correcto";
                 this.loading = false;
                 return;
@@ -465,12 +588,16 @@ export default {
         },
         leftPeople() {
             if (!this.left.area) return [];
-            const area = this.organigram.find((org) => org.parentId !== null && org.id === this.left.area);
+            const area = this.organigram.find(
+                (org) => org.parentId !== null && org.id === this.left.area,
+            );
             return area.organizationUnitUsers;
         },
         rightPeople() {
             if (!this.right.area) return [];
-            const area = this.organigram.find((org) => org.parentId !== null && org.id === this.right.area);
+            const area = this.organigram.find(
+                (org) => org.parentId !== null && org.id === this.right.area,
+            );
             return area.organizationUnitUsers;
         },
     },

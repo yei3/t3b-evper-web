@@ -12,47 +12,116 @@
                 margin: 30px 30px;"
             >
                 <a-row :gutter="16">
-                    <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                    <a-col
+                        :xs="24"
+                        :sm="24"
+                        :md="24"
+                        :lg="12"
+                        :xl="8"
+                        style="padding-bottom: 15px;"
+                    >
                         <a-input v-model="form.name" placeholder="Nombre de evaluación" />
                     </a-col>
-                    <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                        <a-date-picker placeholder="Fecha Inicio" style="width: 100%" v-model="form.startDate" />
+                    <a-col
+                        :xs="24"
+                        :sm="24"
+                        :md="24"
+                        :lg="12"
+                        :xl="8"
+                        style="padding-bottom: 15px;"
+                    >
+                        <a-date-picker
+                            placeholder="Fecha Inicio"
+                            style="width: 100%"
+                            v-model="form.startDate"
+                        />
                     </a-col>
-                    <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                        <a-date-picker placeholder="Fecha Fin" style="width: 100%" v-model="form.finishDate" />
+                    <a-col
+                        :xs="24"
+                        :sm="24"
+                        :md="24"
+                        :lg="12"
+                        :xl="8"
+                        style="padding-bottom: 15px;"
+                    >
+                        <a-date-picker
+                            placeholder="Fecha Fin"
+                            style="width: 100%"
+                            v-model="form.finishDate"
+                        />
                     </a-col>
                     <a-col :xs="12" :sm="12" :md="12" :lg="6" :xl="4" style="padding-bottom: 15px;">
                         <a-select placeholder="Formato" style="width: 100%" v-model="form.format">
-                            <a-select-option v-for="(item, index) in formats" :key="index" :value="item.id">
+                            <a-select-option
+                                v-for="(item, index) in formats"
+                                :key="index"
+                                :value="item.id"
+                            >
                                 {{ item.name }}
                             </a-select-option>
                         </a-select>
                     </a-col>
 
                     <a-col :xs="12" :sm="12" :md="12" :lg="6" :xl="4" style="padding-bottom: 15px;">
-                        <a-select mode="multiple" style="width: 100%" placeholder="Regiones" v-model="form.regs">
-                            <a-select-option v-for="(item, index) in regions" :key="index" :value="item.id">
+                        <a-select
+                            mode="multiple"
+                            style="width: 100%"
+                            placeholder="Regiones"
+                            v-model="form.regs"
+                        >
+                            <a-select-option
+                                v-for="(item, index) in regions"
+                                :key="index"
+                                :value="item.id"
+                            >
                                 {{ item.displayName }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :xs="12" :sm="12" :md="12" :lg="6" :xl="4" style="padding-bottom: 15px;">
-                        <a-select mode="multiple" style="width: 100%" placeholder="Áreas" v-model="form.areas">
-                            <a-select-option v-for="(item, index) in areas" :key="index" :value="item.id">
+                        <a-select
+                            mode="multiple"
+                            style="width: 100%"
+                            placeholder="Áreas"
+                            v-model="form.areas"
+                        >
+                            <a-select-option
+                                v-for="(item, index) in areas"
+                                :key="index"
+                                :value="item.id"
+                            >
                                 {{ item.displayName }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :xs="12" :sm="12" :md="12" :lg="6" :xl="4" style="padding-bottom: 15px;">
-                        <a-select mode="multiple" style="width: 100%" placeholder="Puestos" v-model="form.employments">
-                            <a-select-option v-for="(item, index) in employments" :key="index" :value="item">
+                        <a-select
+                            mode="multiple"
+                            style="width: 100%"
+                            placeholder="Puestos"
+                            v-model="form.employments"
+                        >
+                            <a-select-option
+                                v-for="(item, index) in employments"
+                                :key="index"
+                                :value="item"
+                            >
                                 {{ item }}
                             </a-select-option>
                         </a-select>
                     </a-col>
                     <a-col :xs="12" :sm="12" :md="12" :lg="6" :xl="4" style="padding-bottom: 15px;">
-                        <a-select mode="multiple" style="width: 100%" placeholder="Empleados" v-model="form.users">
-                            <a-select-option v-for="(item, index) in users" :key="index" :value="item">
+                        <a-select
+                            mode="multiple"
+                            style="width: 100%"
+                            placeholder="Empleados"
+                            v-model="form.users"
+                        >
+                            <a-select-option
+                                v-for="(item, index) in users"
+                                :key="index"
+                                :value="item"
+                            >
                                 {{ item.fullName }}
                             </a-select-option>
                         </a-select>
@@ -73,7 +142,12 @@
                 </a-row>
                 <a-row style="margin-top: 30px;">
                     <a-col :span="24">
-                        <a-table :columns="columns" :dataSource="data" :pagination="true" :scroll="{ x: true }">
+                        <a-table
+                            :columns="columns"
+                            :dataSource="data"
+                            :pagination="true"
+                            :scroll="{ x: true }"
+                        >
                             <span slot="status" slot-scope="status">
                                 <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                             </span>
@@ -88,7 +162,12 @@
                                 </p>
                             </span>
                             <span slot="action" slot-scope="action, record">
-                                <a-button size="small" class="btn--start-evaluations" @click="printEvaluation(record)" :disabled="disableButton(record.status)">
+                                <a-button
+                                    size="small"
+                                    class="btn--start-evaluations"
+                                    @click="printEvaluation(record)"
+                                    :disabled="disableButton(record.status)"
+                                >
                                     Imprimir
                                 </a-button>
                                 <!-- <router-link
@@ -195,7 +274,9 @@ export default {
     },
     methods: {
         async getAllFormats() {
-            const response = await client3B.format.getAll().catch((error) => errorHandler(this, error));
+            const response = await client3B.format
+                .getAll()
+                .catch((error) => errorHandler(this, error));
             this.formats = response.data.result.items;
         },
         async getAllUsers() {
@@ -208,15 +289,21 @@ export default {
             }
         },
         async getAllRegions() {
-            const response = await client3B.organizationUnit.getAllRegions().catch((error) => errorHandler(this, error));
+            const response = await client3B.organizationUnit
+                .getAllRegions()
+                .catch((error) => errorHandler(this, error));
             this.regions = response.data.result;
         },
         async getAllAreas() {
-            const response = await client3B.organizationUnit.getAllAreas().catch((error) => errorHandler(this, error));
+            const response = await client3B.organizationUnit
+                .getAllAreas()
+                .catch((error) => errorHandler(this, error));
             this.areas = response.data.result;
         },
         async getAllEmployments() {
-            const response = await client3B.user.getAllEmployments().catch((error) => errorHandler(this, error));
+            const response = await client3B.user
+                .getAllEmployments()
+                .catch((error) => errorHandler(this, error));
             this.employments = response.data.result;
         },
         async findbyFilters() {
@@ -330,7 +417,11 @@ export default {
         },
         fillEvaluation(input) {
             let id = input.id;
-            if (input.isAutoEvaluation === "Sí" || input.status === "Pte. revisión" || input.status === "Cerrada") {
+            if (
+                input.isAutoEvaluation === "Sí" ||
+                input.status === "Pte. revisión" ||
+                input.status === "Cerrada"
+            ) {
                 this.$router.push({ name: "boss-assessment", params: { id } });
             } else {
                 this.$router.push({ name: "boss-assessments-apply", params: { id } });

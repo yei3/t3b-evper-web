@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -19,7 +29,12 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
@@ -41,10 +56,20 @@
                     <a-icon type="minus" v-if="!autoEvaluation" />
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button size="small" class="btn--start-evaluations" @click="printEvaluation(record)" v-show="!disableButton(record.status, record.autoEvaluation)">
+                    <a-button
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="printEvaluation(record)"
+                        v-show="!disableButton(record.status, record.autoEvaluation)"
+                    >
                         Imprimir
                     </a-button>
-                    <a-button size="small" class="btn--start-evaluations" @click="toggleScheduleReviewModal(record)" v-show="disableButton(record.status, record.autoEvaluation)">
+                    <a-button
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="toggleScheduleReviewModal(record)"
+                        v-show="disableButton(record.status, record.autoEvaluation)"
+                    >
                         {{ transformStatus(action, record.autoEvaluation) }}
                     </a-button>
                 </span>
@@ -74,7 +99,13 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker showTime format="YYYY-MM-DD HH:mm" placeholder="Selecciona el día y la hora de la revisión" style="width: 100%" @ok="onSelectDate" />
+                    <a-date-picker
+                        showTime
+                        format="YYYY-MM-DD HH:mm"
+                        placeholder="Selecciona el día y la hora de la revisión"
+                        style="width: 100%"
+                        @ok="onSelectDate"
+                    />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>
@@ -87,7 +118,12 @@
                 <a-button key="back" @click="toggleScheduleReviewModal">
                     Cancelar
                 </a-button>
-                <a-button class="modal-button-ok" key="submit" type="primary" @click="toggleScheduleReviewModal">
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="toggleScheduleReviewModal"
+                >
                     Agendar revisión
                 </a-button>
             </template>
@@ -235,7 +271,11 @@ export default {
         },
         fillEvaluation(input) {
             const id = input.id;
-            if (input.autoEvaluation === true || input.status === "Pte. revisión" || input.status === "Cerrada") {
+            if (
+                input.autoEvaluation === true ||
+                input.status === "Pte. revisión" ||
+                input.status === "Cerrada"
+            ) {
                 this.$router.push({ name: "boss-assessment", params: { id } });
             } else {
                 this.$router.push({ name: "boss-assessments-apply", params: { id } });

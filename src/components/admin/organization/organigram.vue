@@ -24,7 +24,12 @@
                     <a-spin tip="Cargando..." size="large" />
                 </div>
                 <a-col span="24" v-show="!spin">
-                    <GChart :settings="{ packages: ['orgchart'] }" type="OrgChart" version="current" @ready="onChartReady" />
+                    <GChart
+                        :settings="{ packages: ['orgchart'] }"
+                        type="OrgChart"
+                        version="current"
+                        @ready="onChartReady"
+                    />
                 </a-col>
             </a-row>
         </div>
@@ -50,7 +55,9 @@ export default {
     },
     methods: {
         async onChartReady(chart, google) {
-            const response = await client3B.organizationUnit.getOrganigram().catch((error) => errorHandler(this, error));
+            const response = await client3B.organizationUnit
+                .getOrganigram()
+                .catch((error) => errorHandler(this, error));
             if (!response) return;
 
             const data = new google.visualization.DataTable();
@@ -65,9 +72,13 @@ export default {
                         [
                             {
                                 v: user.jobDescription,
-                                f: `<div class="org-card"> <img src="${process.env.VUE_APP_IMAGES_URL}/profile/${
+                                f: `<div class="org-card"> <img src="${
+                                    process.env.VUE_APP_IMAGES_URL
+                                }/profile/${
                                     user.userName
-                                }.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${user.fullName} </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
+                                }.png" alt="John" class="org-user-img"> <h3 class="org-user-name"> ${
+                                    user.fullName
+                                } </h3> <p class="org-user-title"> ${user.jobDescription} </div>`,
                             },
                             user.immediateSupervisor,
                             user.fullName,

@@ -12,12 +12,29 @@
                     NO
                 </span>
                 <a-switch class="switch" v-model="value" :disabled="loading || onlyLecture" />
-                <a-input placeholder="Observaciones" v-model="remark" :disabled="onlyLecture" @keyup="edited = true" @keypress.enter.prevent="save">
-                    <a-icon class="input-save" slot="addonAfter" type="save" v-if="!onlyLecture" @click="save" />
+                <a-input
+                    placeholder="Observaciones"
+                    v-model="remark"
+                    :disabled="onlyLecture"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
+                >
+                    <a-icon
+                        class="input-save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                        @click="save"
+                    />
                 </a-input>
             </a-col>
             <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-                <a-icon v-show="loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 30px;" />
+                <a-icon
+                    v-show="loading"
+                    class="dynamic-delete-button form-icon"
+                    type="loading"
+                    style="padding-left: 30px;"
+                />
                 <span v-show="loading"> Guardardando Respuesta </span>
             </a-col>
         </a-row>

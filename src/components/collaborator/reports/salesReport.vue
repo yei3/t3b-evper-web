@@ -5,12 +5,20 @@
             <a-row>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart v-if="isObjectivesLoaded" :chartData="currentData" :options="currentOptions" />
+                        <doughnut-chart
+                            v-if="isObjectivesLoaded"
+                            :chartData="currentData"
+                            :options="currentOptions"
+                        />
                     </div>
                 </a-col>
                 <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                     <div class="small">
-                        <doughnut-chart v-if="isObjectivesLoaded" :chartData="previousData" :options="previousOptions" />
+                        <doughnut-chart
+                            v-if="isObjectivesLoaded"
+                            :chartData="previousData"
+                            :options="previousOptions"
+                        />
                     </div>
                 </a-col>
                 <a-row v-show="objetiveSpin">
@@ -34,10 +42,18 @@
                         </div>
                     </a-row>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <bar-chart v-if="isCompentecesLoaded" :chartData="currentCompentecesData" :options="currentCompentecesOptions" />
+                        <bar-chart
+                            v-if="isCompentecesLoaded"
+                            :chartData="currentCompentecesData"
+                            :options="currentCompentecesOptions"
+                        />
                     </a-col>
                     <a-col v-show="!competenceSpin" :span="12" class="text-center">
-                        <bar-chart v-if="isCompentecesLoaded" :chartData="previousCompetencesData" :options="previousCompentecesOptions" />
+                        <bar-chart
+                            v-if="isCompentecesLoaded"
+                            :chartData="previousCompetencesData"
+                            :options="previousCompentecesOptions"
+                        />
                     </a-col>
                 </a-row>
             </a-row>
@@ -242,10 +258,12 @@ export default {
             this.objetiveSpin = true;
             this.isObjectivesLoaded = false;
 
-            const response = await client3B.report.GetCollaboratorObjectivesAccomplishmentReport().catch((error) => {
-                this.objetiveSpin = false;
-                errorHandler(this, error);
-            });
+            const response = await client3B.report
+                .GetCollaboratorObjectivesAccomplishmentReport()
+                .catch((error) => {
+                    this.objetiveSpin = false;
+                    errorHandler(this, error);
+                });
             if (!response) return;
 
             const { result } = response.data;
@@ -280,15 +298,19 @@ export default {
             this.competenceSpin = true;
             this.isCompentecesLoaded = false;
 
-            const current = await client3B.report.GetCollaboratorAccomplishmentReport(0).catch((error) => {
-                this.competenceSpin = false;
-                errorHandler(this, error);
-            });
+            const current = await client3B.report
+                .GetCollaboratorAccomplishmentReport(0)
+                .catch((error) => {
+                    this.competenceSpin = false;
+                    errorHandler(this, error);
+                });
 
-            const previous = await client3B.report.GetCollaboratorAccomplishmentReport(1).catch((error) => {
-                this.competenceSpin = false;
-                errorHandler(this, error);
-            });
+            const previous = await client3B.report
+                .GetCollaboratorAccomplishmentReport(1)
+                .catch((error) => {
+                    this.competenceSpin = false;
+                    errorHandler(this, error);
+                });
 
             if (!current && !previous) return;
             // populate current data
@@ -315,7 +337,10 @@ export default {
                     total: currentCultureTotal - currentCultureSuccess,
                     exceeds: this.isExceeds(currentCultureTotal, currentCultureSuccess),
                     satisfactory: this.isSatisfactory(currentCultureTotal, currentCultureSuccess),
-                    unsatisfactory: this.isUnsatisfactory(currentCultureTotal, currentCultureSuccess),
+                    unsatisfactory: this.isUnsatisfactory(
+                        currentCultureTotal,
+                        currentCultureSuccess,
+                    ),
                 },
             ];
 
@@ -332,7 +357,10 @@ export default {
                     total: previousCultureTotal - previousCultureSuccess,
                     exceeds: this.isExceeds(previousCultureTotal, previousCultureSuccess),
                     satisfactory: this.isSatisfactory(previousCultureTotal, previousCultureSuccess),
-                    unsatisfactory: this.isUnsatisfactory(previousCultureTotal, previousCultureSuccess),
+                    unsatisfactory: this.isUnsatisfactory(
+                        previousCultureTotal,
+                        previousCultureSuccess,
+                    ),
                 },
             ];
 

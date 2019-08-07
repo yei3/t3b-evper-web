@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -19,25 +29,49 @@
             </div>
         </a-row>
         <div v-show="!collapsed" style="margin: 25px 26px; padding-bottom: 30px;">
-            <a-row :key="collaborator.id" v-for="(collaborator, index) in data" class="collapse-single-wrapper">
+            <a-row
+                :key="collaborator.id"
+                v-for="(collaborator, index) in data"
+                class="collapse-single-wrapper"
+            >
                 <a-col :span="24" class="collapse-single-header">
                     <a-col :span="20">
                         <a-avatar shape="circle" :src="collaboratorImgUrl(collaborator.number)" />
-                        <a class="table-link" style="margin-left: 5px;" @click="currentCollaborator = index !== currentCollaborator ? index : -1">
+                        <a
+                            class="table-link"
+                            style="margin-left: 5px;"
+                            @click="
+                                currentCollaborator = index !== currentCollaborator ? index : -1
+                            "
+                        >
                             {{ collaborator.name }}
                         </a>
                     </a-col>
                     <a-col :span="4">
                         <p>
-                            <a-progress strokeColor="#1ab394" :percent="objectivesPercet(collaborator.objectives)" :showInfo="false" size="small" />
+                            <a-progress
+                                strokeColor="#1ab394"
+                                :percent="objectivesPercet(collaborator.objectives)"
+                                :showInfo="false"
+                                size="small"
+                            />
                         </p>
                         <p>
                             <small>({{ objectivesCount(collaborator.objectives) }})</small>
                         </p>
                     </a-col>
                 </a-col>
-                <a-col :span="24" class="collapse-single-content" v-show="currentCollaborator == index">
-                    <a-table :columns="columns" :dataSource="collaborator.objectives" :pagination="false" :scroll="{ x: true }">
+                <a-col
+                    :span="24"
+                    class="collapse-single-content"
+                    v-show="currentCollaborator == index"
+                >
+                    <a-table
+                        :columns="columns"
+                        :dataSource="collaborator.objectives"
+                        :pagination="false"
+                        :scroll="{ x: true }"
+                    >
                         <span slot="status" slot-scope="status">
                             <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                         </span>
@@ -76,17 +110,29 @@
                 <a-row>
                     <a-col :span="24" class="modal-header">
                         <h1>Ver avances</h1>
-                        <small>{{ viewProgressModal.objectiveName }} - {{ viewProgressModal.evaluatedName }}</small>
+                        <small
+                            >{{ viewProgressModal.objectiveName }} -
+                            {{ viewProgressModal.evaluatedName }}</small
+                        >
                     </a-col>
                 </a-row>
             </template>
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item v-for="(item, index) in viewProgressModal.binnacle" :key="index" color="gray" class="timeline-item">
+                        <a-timeline-item
+                            v-for="(item, index) in viewProgressModal.binnacle"
+                            :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
+                                <a-avatar
+                                    size="small"
+                                    style="backgroundColor:#87d068"
+                                    icon="user"
+                                />
                                 {{ item.username }}
                                 <small>{{ item.created }}</small>
                             </p>
@@ -98,13 +144,22 @@
                 </a-col>
             </a-row>
             <template slot="footer">
-                <a-button class="modal-button-ok" key="submit" type="primary" @click="viewProgressModal.show = false">
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="viewProgressModal.show = false"
+                >
                     OK
                 </a-button>
             </template>
         </a-modal>
 
-        <a-modal v-model="finishObjectiveModal.show" onOk="toggleFinishObjectiveModal" width="600px">
+        <a-modal
+            v-model="finishObjectiveModal.show"
+            onOk="toggleFinishObjectiveModal"
+            width="600px"
+        >
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -112,7 +167,10 @@
                     </a-col>
                     <a-col :span="24" class="modal-header">
                         <h1>Validar o Reabrir Objetivo</h1>
-                        <small> {{ finishObjectiveModal.objectiveName }} - {{ finishObjectiveModal.evaluatedName }} </small>
+                        <small>
+                            {{ finishObjectiveModal.objectiveName }} -
+                            {{ finishObjectiveModal.evaluatedName }}
+                        </small>
                     </a-col>
                 </a-row>
             </template>
@@ -120,11 +178,16 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario con respecto al cumplimiento del objetivo por parte del evaluado.
+                        Agregue un comentario con respecto al cumplimiento del objetivo por parte
+                        del evaluado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message" />
+                    <a-textarea
+                        placeholder="Comentarios..."
+                        :rows="6"
+                        v-model="finishObjectiveModal.message"
+                    />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     ¿Está seguro que desea validar o reabrir el objetivo indicado?
@@ -132,10 +195,20 @@
             </a-row>
 
             <template slot="footer">
-                <a-button key="open" type="danger" @click="toggleOpenOrValidateObjective(false, 2)" :disabled="finishObjectiveModal.loading">
+                <a-button
+                    key="open"
+                    type="danger"
+                    @click="toggleOpenOrValidateObjective(false, 2)"
+                    :disabled="finishObjectiveModal.loading"
+                >
                     No, reabrir objetivo
                 </a-button>
-                <a-button class="modal-button-ok" key="submit" type="primary" @click="toggleOpenOrValidateObjective(true, 4)">
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    @click="toggleOpenOrValidateObjective(true, 4)"
+                >
                     Si, validar objetivo
                 </a-button>
             </template>
@@ -240,7 +313,9 @@ export default {
                             binnacle.push({
                                 message: binnacleAux[hndex].text,
                                 username: binnacleAux[hndex].userName,
-                                created: new Date(binnacleAux[hndex].creationTime + "Z").toLocaleDateString(),
+                                created: new Date(
+                                    binnacleAux[hndex].creationTime + "Z",
+                                ).toLocaleDateString(),
                             });
                         }
                         objectives.push({
@@ -252,7 +327,9 @@ export default {
                                 title: objectivesAux[jndex].name,
                                 binnacle,
                             },
-                            endDate: new Date(objectivesAux[jndex].deliveryDate + "Z").toLocaleDateString(),
+                            endDate: new Date(
+                                objectivesAux[jndex].deliveryDate + "Z",
+                            ).toLocaleDateString(),
                         });
                     }
                     this.data.push({
@@ -282,26 +359,44 @@ export default {
         },
         async toggleOpenOrValidateObjective(input, status) {
             if (input) {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, "Objetivo validado: " + this.finishObjectiveModal.message).catch((error) =>
-                    errorHandler(this, error),
+                await this.addObjetiveMessage(
+                    this.finishObjectiveModal.objectiveId,
+                    "Objetivo validado: " + this.finishObjectiveModal.message,
+                ).catch((error) => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4).catch(
+                    (error) => errorHandler(this, error),
                 );
-                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4).catch((error) => errorHandler(this, error));
                 let obj = null;
                 for (let i = 0; i < this.data.length; i++) {
-                    if (typeof this.data[i].objectives.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId) !== "undefined") {
-                        obj = this.data[i].objectives.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
+                    if (
+                        typeof this.data[i].objectives.find(
+                            (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                        ) !== "undefined"
+                    ) {
+                        obj = this.data[i].objectives.find(
+                            (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                        );
                     }
                 }
                 obj.status = this.selectStatusName(4);
             } else {
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, "Objetivo Reabierto: " + this.finishObjectiveModal.message).catch((error) =>
-                    errorHandler(this, error),
+                await this.addObjetiveMessage(
+                    this.finishObjectiveModal.objectiveId,
+                    "Objetivo Reabierto: " + this.finishObjectiveModal.message,
+                ).catch((error) => errorHandler(this, error));
+                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2).catch(
+                    (error) => errorHandler(this, error),
                 );
-                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2).catch((error) => errorHandler(this, error));
                 let obj = null;
                 for (let i = 0; i < this.data.length; i++) {
-                    if (typeof this.data[i].objectives.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId) !== "undefined") {
-                        obj = this.data[i].objectives.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
+                    if (
+                        typeof this.data[i].objectives.find(
+                            (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                        ) !== "undefined"
+                    ) {
+                        obj = this.data[i].objectives.find(
+                            (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                        );
                     }
                 }
                 obj.status = this.selectStatusName(2);

@@ -32,7 +32,14 @@ export default {
                     console.error(err);
                 });
         },
-        $printEvaluation(el, { name = "_blank", replace = false, specs = ["fullscreen=yes", "titlebar=no", "scrollbars=yes"] } = {}) {
+        $printEvaluation(
+            el,
+            {
+                name = "_blank",
+                replace = false,
+                specs = ["fullscreen=yes", "titlebar=no", "scrollbars=yes"],
+            } = {},
+        ) {
             const element = document.getElementById(el);
             if (!element) {
                 console.error(`Element "${el}" not found`);
@@ -67,7 +74,11 @@ export default {
             }, 1000);
         },
         ignoreElements(element) {
-            return element.classList.contains("btn-blue") || element.classList.contains("ant-layout-sider") || element.classList.contains("custom-footer");
+            return (
+                element.classList.contains("btn-blue") ||
+                element.classList.contains("ant-layout-sider") ||
+                element.classList.contains("custom-footer")
+            );
         },
         onCloned(cloned) {
             /**
@@ -77,9 +88,11 @@ export default {
              */
             const modified = cloned;
             if (modified.querySelector("#printEvaluation")) {
-                modified.querySelector("#printEvaluation").style = "font-family: 'Quicksand', sans-serif; font-variant: normal;";
+                modified.querySelector("#printEvaluation").style =
+                    "font-family: 'Quicksand', sans-serif; font-variant: normal;";
             } else if (modified.querySelector("#printReport")) {
-                modified.querySelector("#printReport").style = "font-family: 'Quicksand', sans-serif; font-variant: normal;";
+                modified.querySelector("#printReport").style =
+                    "font-family: 'Quicksand', sans-serif; font-variant: normal;";
             }
             return modified;
         },

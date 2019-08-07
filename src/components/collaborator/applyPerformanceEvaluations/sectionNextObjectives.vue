@@ -5,7 +5,11 @@
                 <h1>{{ capitalize(section.name) }}</h1>
             </a-col>
             <a-col :span="24">
-                <a-row class="form-section" v-for="subsection in section.childSections" :key="subsection.id">
+                <a-row
+                    class="form-section"
+                    v-for="subsection in section.childSections"
+                    :key="subsection.id"
+                >
                     <a-col :span="24" class="form-section-tittle" v-show="subsection.displayName">
                         <h2 style="margin: 20px 0px 0px 0px; font-size: 20px;">
                             {{ subsection.name }}
@@ -16,7 +20,11 @@
                             v-for="(question, index) in questions$"
                             :key="question.id"
                             style="padding: 10px 16px;"
-                            :class="question.edited ? 'question-row orange-bar' : 'question-row green-bar'"
+                            :class="
+                                question.edited
+                                    ? 'question-row orange-bar'
+                                    : 'question-row green-bar'
+                            "
                         >
                             <a-form
                                 @submit="(e) => e.preventDefault()"
@@ -42,7 +50,12 @@
                                         ],
                                     }"
                                 >
-                                    <a-input v-model="question.text" placeholder="Descripción del Objetivo" @change="question.edited = true" :disabled="onlyLecture" />
+                                    <a-input
+                                        v-model="question.text"
+                                        placeholder="Descripción del Objetivo"
+                                        @change="question.edited = true"
+                                        :disabled="onlyLecture"
+                                    />
                                 </a-form-item>
                                 <a-form-item
                                     :fieldDecoratorId="`qb${question.key}`"
@@ -60,7 +73,12 @@
                                         ],
                                     }"
                                 >
-                                    <a-input v-model="question.deriverable" placeholder="Entregable del Objetivo" @change="question.edited = true" :disabled="onlyLecture" />
+                                    <a-input
+                                        v-model="question.deriverable"
+                                        placeholder="Entregable del Objetivo"
+                                        @change="question.edited = true"
+                                        :disabled="onlyLecture"
+                                    />
                                 </a-form-item>
                                 <a-form-item
                                     :fieldDecoratorId="`qc${question.key}`"
@@ -92,24 +110,46 @@
                                     />
                                 </a-form-item>
                             </a-form>
-                            <a-col :sm="24" :md="24" style="text-align: center; margin-top: 10px;" v-if="!onlyLecture">
+                            <a-col
+                                :sm="24"
+                                :md="24"
+                                style="text-align: center; margin-top: 10px;"
+                                v-if="!onlyLecture"
+                            >
                                 <a
                                     @click="deleteQuestion(question, index)"
                                     class="link-delete-question form-icon"
                                     style="padding-right: 2%; padding-left: 4%;"
                                     :disabled="question.loading"
                                 >
-                                    <a-icon class="dynamic-delete-button form-icon" type="delete" /> Eliminar
+                                    <a-icon class="dynamic-delete-button form-icon" type="delete" />
+                                    Eliminar
                                 </a>
-                                <a @click="save(question)" class="link-delete-question form-icon" style="padding-left: 2%;" :disabled="question.loading">
-                                    <a-icon class="dynamic-delete-button form-icon" type="check" /> Guardar
+                                <a
+                                    @click="save(question)"
+                                    class="link-delete-question form-icon"
+                                    style="padding-left: 2%;"
+                                    :disabled="question.loading"
+                                >
+                                    <a-icon class="dynamic-delete-button form-icon" type="check" />
+                                    Guardar
                                 </a>
-                                <a-icon v-show="question.loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 2%;" />
+                                <a-icon
+                                    v-show="question.loading"
+                                    class="dynamic-delete-button form-icon"
+                                    type="loading"
+                                    style="padding-left: 2%;"
+                                />
                             </a-col>
                         </a-row>
                         <a-row v-if="!onlyLecture">
                             <a-col :md="24" style="text-align: center;">
-                                <a-button type="dashed" @click="addQuestion" class="add-button" style="min-width: 200px; width: 300px; margin: 0px;">
+                                <a-button
+                                    type="dashed"
+                                    @click="addQuestion"
+                                    class="add-button"
+                                    style="min-width: 200px; width: 300px; margin: 0px;"
+                                >
                                     <a-icon type="plus" /> Agregar Objetivo
                                 </a-button>
                             </a-col>

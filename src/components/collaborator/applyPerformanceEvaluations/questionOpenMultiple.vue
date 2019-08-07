@@ -24,18 +24,42 @@
                         ],
                     }"
                 >
-                    <a-input placeholder="Respuesta" v-model="answersText[index]" :disabled="onlyLecture" @keyup="edited = true" @keypress.enter.prevent="save">
-                        <a-icon class="input-delete" @click="removeAnswer(index)" slot="addonAfter" type="delete" v-if="!onlyLecture" />
+                    <a-input
+                        placeholder="Respuesta"
+                        v-model="answersText[index]"
+                        :disabled="onlyLecture"
+                        @keyup="edited = true"
+                        @keypress.enter.prevent="save"
+                    >
+                        <a-icon
+                            class="input-delete"
+                            @click="removeAnswer(index)"
+                            slot="addonAfter"
+                            type="delete"
+                            v-if="!onlyLecture"
+                        />
                     </a-input>
                 </a-form-item>
             </div>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 0px;" v-if="!onlyLecture">
-            <a class="link-delete-question form-icon" :disabled="loading" @click="addAnswer"> <a-icon class="dynamic-delete-button form-icon" type="plus" /> Agregar campo </a>
-            <a class="link-delete-question form-icon" style="padding-left: 2%;" :disabled="loading" @click="save">
+            <a class="link-delete-question form-icon" :disabled="loading" @click="addAnswer">
+                <a-icon class="dynamic-delete-button form-icon" type="plus" /> Agregar campo
+            </a>
+            <a
+                class="link-delete-question form-icon"
+                style="padding-left: 2%;"
+                :disabled="loading"
+                @click="save"
+            >
                 <a-icon class="dynamic-delete-button form-icon" type="check" /> Guardar Respuesta
             </a>
-            <a-icon v-show="loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 2%;" />
+            <a-icon
+                v-show="loading"
+                class="dynamic-delete-button form-icon"
+                type="loading"
+                style="padding-left: 2%;"
+            />
         </a-col>
     </a-col>
 </template>

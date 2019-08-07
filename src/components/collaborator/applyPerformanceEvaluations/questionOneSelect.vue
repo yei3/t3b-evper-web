@@ -24,15 +24,29 @@
                     ],
                 }"
             >
-                <a-select placeholder="Selecciona una respuesta" v-model="value" @select="save" :disabled="onlyLecture">
-                    <a-select-option v-for="(option, index) in selectOptions" :key="index" :value="option.value">
+                <a-select
+                    placeholder="Selecciona una respuesta"
+                    v-model="value"
+                    @select="save"
+                    :disabled="onlyLecture"
+                >
+                    <a-select-option
+                        v-for="(option, index) in selectOptions"
+                        :key="index"
+                        :value="option.value"
+                    >
                         {{ option.label }}
                     </a-select-option>
                 </a-select>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            <a-icon v-show="loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 30px;" />
+            <a-icon
+                v-show="loading"
+                class="dynamic-delete-button form-icon"
+                type="loading"
+                style="padding-left: 30px;"
+            />
             <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>

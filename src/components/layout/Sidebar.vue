@@ -1,6 +1,16 @@
 <template>
-    <a-layout-sider breakpoint="lg" :trigger="null" collapsible v-model="sidebarCollapsed" theme="dark" width="250">
-        <a-row style="padding: 25px 0px 20px 15px; background-color: #ff0000" v-show="sidebarCollapsed">
+    <a-layout-sider
+        breakpoint="lg"
+        :trigger="null"
+        collapsible
+        v-model="sidebarCollapsed"
+        theme="dark"
+        width="250"
+    >
+        <a-row
+            style="padding: 25px 0px 20px 15px; background-color: #ff0000"
+            v-show="sidebarCollapsed"
+        >
             <a-col class="ant-dropdown-link">
                 <a-avatar shape="square" :size="48" src="/favicon.ico" />
             </a-col>
@@ -13,7 +23,12 @@
             <a-col>
                 <a-row type="flex" justify="space-around" align="middle">
                     <a-col>
-                        <a-avatar :size="60" :src="imageUrl" class="avatar--border" :loadError="resetImageUrl" />
+                        <a-avatar
+                            :size="60"
+                            :src="imageUrl"
+                            class="avatar--border"
+                            :loadError="resetImageUrl"
+                        />
                     </a-col>
                 </a-row>
                 <a-row type="flex" justify="space-around" align="middle">
@@ -28,12 +43,20 @@
                         <a-dropdown>
                             <a class="ant-dropdown-link"> {{ roleEs }} <a-icon type="swap" /> </a>
                             <a-menu slot="overlay">
-                                <a-menu-item v-for="arole in user.roles" :key="arole" v-show="arole !== userCurrentRole">
-                                    <a @click="setCurrentRole(arole)"> <a-icon type="user" /> {{ roleToEs(arole) }} </a>
+                                <a-menu-item
+                                    v-for="arole in user.roles"
+                                    :key="arole"
+                                    v-show="arole !== userCurrentRole"
+                                >
+                                    <a @click="setCurrentRole(arole)">
+                                        <a-icon type="user" /> {{ roleToEs(arole) }}
+                                    </a>
                                 </a-menu-item>
                                 <a-menu-divider />
                                 <a-menu-item>
-                                    <a @click="updateProfile"> <a-icon type="form" /> Editar perfil </a>
+                                    <a @click="updateProfile">
+                                        <a-icon type="form" /> Editar perfil
+                                    </a>
                                 </a-menu-item>
                                 <a-menu-divider />
                                 <a-menu-item>
@@ -53,8 +76,14 @@
                             <a-icon type="ellipsis" />
                             <span>Tipo de rol</span>
                         </span>
-                        <a-menu-item v-for="arole in user.roles" :key="arole" v-show="arole !== userCurrentRole">
-                            <a @click="setCurrentRole(arole)"> <a-icon type="user" /> {{ roleToEs(arole) }} </a>
+                        <a-menu-item
+                            v-for="arole in user.roles"
+                            :key="arole"
+                            v-show="arole !== userCurrentRole"
+                        >
+                            <a @click="setCurrentRole(arole)">
+                                <a-icon type="user" /> {{ roleToEs(arole) }}
+                            </a>
                         </a-menu-item>
                         <a-menu-divider style="background-color: #666;" />
                         <a-menu-item>
@@ -66,7 +95,11 @@
                         </a-menu-item>
                     </a-sub-menu>
 
-                    <a-menu-item v-for="(item, index) in sidebarItems" :key="String(index)" v-show="role == item.role">
+                    <a-menu-item
+                        v-for="(item, index) in sidebarItems"
+                        :key="String(index)"
+                        v-show="role == item.role"
+                    >
                         <router-link :to="{ name: item.to }">
                             <a-icon :type="item.icon" />
                             <span>{{ item.text }}</span>

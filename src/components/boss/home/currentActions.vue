@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="1" style="text-align: right; color: #fff;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -19,7 +29,13 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }"> </a-table>
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
+            </a-table>
         </a-row>
     </div>
 </template>
@@ -86,7 +102,9 @@ export default {
                         user: items[index].user,
                         action: items[index].description,
                         responsible: items[index].responsible,
-                        deliveryDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
+                        deliveryDate: new Date(
+                            items[index].deliveryDate + "Z",
+                        ).toLocaleDateString(),
                     });
                 }
             } catch (error) {

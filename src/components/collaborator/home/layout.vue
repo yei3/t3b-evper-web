@@ -63,7 +63,10 @@ export default {
         if (!videoPreference.getShouldNeverDisplayVideo()) {
             this.role = authService.getCurrentRole();
             const lastLoginDate = loginDates.getPreviousLoginDate();
-            if (videoPreference.getVideoPreference() || loginDates.hasMoreThanOneDay(lastLoginDate)) {
+            if (
+                videoPreference.getVideoPreference() ||
+                loginDates.hasMoreThanOneDay(lastLoginDate)
+            ) {
                 this.$refs.videoModal.showModal();
             }
         }

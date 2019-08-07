@@ -26,7 +26,13 @@
                     ],
                 }"
             >
-                <a-input v-model="expectedValue" style="width: 200px;" @keyup="edited = true" @keypress.enter.prevent="save" :disabled="onlyLecture">
+                <a-input
+                    v-model="expectedValue"
+                    style="width: 200px;"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
+                    :disabled="onlyLecture"
+                >
                     <a-icon class="input-save" @click="save" slot="addonAfter" type="save" />
                 </a-input>
             </a-form-item>
@@ -45,7 +51,13 @@
                     ],
                 }"
             >
-                <a-input v-model="value" style="width: 200px;" @keyup="edited = true" @keypress.enter.prevent="save" :disabled="onlyLecture">
+                <a-input
+                    v-model="value"
+                    style="width: 200px;"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
+                    :disabled="onlyLecture"
+                >
                     <a-icon class="input-save" @click="save" slot="addonAfter" type="save" />
                 </a-input>
             </a-form-item>
@@ -75,7 +87,12 @@
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            <a-icon v-show="loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 30px;" />
+            <a-icon
+                v-show="loading"
+                class="dynamic-delete-button form-icon"
+                type="loading"
+                style="padding-left: 30px;"
+            />
             <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>
@@ -146,13 +163,15 @@ export default {
             if (!Number.isNaN(Number(this.expected))) {
                 this.numeric = true;
                 this.value = this.answer.real || 0;
-                this.expectedValue = this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
+                this.expectedValue =
+                    this.answer.evaluationMeasuredQuestion.expected || this.expectedValue;
                 if (this.answer.evaluationMeasuredQuestion.expected === 0) {
                     this.expectedValue = this.answer.evaluationMeasuredQuestion.expected;
                 }
             } else {
                 this.value = this.answer.text || "";
-                this.expectedValue = this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;
+                this.expectedValue =
+                    this.answer.evaluationMeasuredQuestion.expectedText || this.expectedValue;
             }
             this.observations = this.answer.observations || "";
 

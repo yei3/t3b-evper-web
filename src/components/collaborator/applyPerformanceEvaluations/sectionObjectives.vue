@@ -27,8 +27,15 @@
                                 <strong>Acciones</strong>
                             </a-col>
                         </a-row>
-                        <div v-for="(objective, index) in getObjectives(childSection.id)" :key="index">
-                            <question-goal :index="index" :objective="objective" :onlyLecture="onlyLecture" />
+                        <div
+                            v-for="(objective, index) in getObjectives(childSection.id)"
+                            :key="index"
+                        >
+                            <question-goal
+                                :index="index"
+                                :objective="objective"
+                                :onlyLecture="onlyLecture"
+                            />
                         </div>
                     </a-col>
                 </a-row>

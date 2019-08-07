@@ -78,11 +78,16 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a las acciones realizadas para cumplir el objetivo indicado.
+                        Agregue un comentario referente a las acciones realizadas para cumplir el
+                        objetivo indicado.
                     </span>
                 </a-col>
                 <a-col :span="24" modal-content-seccion-bottom>
-                    <a-textarea placeholder="Avance del objetivo..." :rows="6" v-model="modals.input" />
+                    <a-textarea
+                        placeholder="Avance del objetivo..."
+                        :rows="6"
+                        v-model="modals.input"
+                    />
                 </a-col>
             </a-row>
             <template slot="footer">
@@ -117,10 +122,19 @@
                 </a-col>
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item v-for="(item, index) in binnacle.items" :key="index" color="gray" class="timeline-item">
+                        <a-timeline-item
+                            v-for="(item, index) in binnacle.items"
+                            :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
+                                <a-avatar
+                                    size="small"
+                                    style="backgroundColor:#87d068"
+                                    icon="user"
+                                />
                                 {{ item.userName }}
                                 <small>{{ item.creationTime }}</small>
                             </p>
@@ -154,7 +168,8 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a las acciones realizadas para cumplir el objetivo indicado.
+                        Agregue un comentario referente a las acciones realizadas para cumplir el
+                        objetivo indicado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
@@ -198,7 +213,8 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario con respecto al cumplimiento del objetivo por parte del evaluado.
+                        Agregue un comentario con respecto al cumplimiento del objetivo por parte
+                        del evaluado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">

@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -19,7 +29,12 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
@@ -51,13 +66,22 @@
                         okText="Sí, validar cierre"
                         cancelText="Cancelar"
                     >
-                        <a-button size="small" class="btn--close-evaluations" :disabled="disableButton(record.status)">Validar</a-button>
+                        <a-button
+                            size="small"
+                            class="btn--close-evaluations"
+                            :disabled="disableButton(record.status)"
+                            >Validar</a-button
+                        >
                     </a-popconfirm>
                 </span>
             </a-table>
         </a-row>
 
-        <a-modal v-model="finishEvaluationModal.show" onOk="toggleFinishEvaluationModal" width="600px">
+        <a-modal
+            v-model="finishEvaluationModal.show"
+            onOk="toggleFinishEvaluationModal"
+            width="600px"
+        >
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -76,16 +100,22 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente al desempeño, la evaluación y a la retroalimentación recibida del Colaborador.
+                        Agregue un comentario referente al desempeño, la evaluación y a la
+                        retroalimentación recibida del Colaborador.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
                     <a-textarea placeholder="Comentarios..." :rows="6" />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-checkbox @change="finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton">
+                    <a-checkbox
+                        @change="
+                            finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton
+                        "
+                    >
                         <strong style="font-size: 13px;">
-                            He preparado esta evaluación de desempeño con detenimiento, lo he explicado claramente y discutido en detalle con el colaborador.
+                            He preparado esta evaluación de desempeño con detenimiento, lo he
+                            explicado claramente y discutido en detalle con el colaborador.
                         </strong>
                     </a-checkbox>
                 </a-col>
@@ -100,7 +130,13 @@
                 <a-button key="back" @click="toggleFinishEvaluationModal">
                     Cancelar
                 </a-button>
-                <a-button key="submit" type="primary" class="modal-button-ok" @click="toggleFinishEvaluationModal" :disabled="!finishEvaluationModal.enableButton">
+                <a-button
+                    key="submit"
+                    type="primary"
+                    class="modal-button-ok"
+                    @click="toggleFinishEvaluationModal"
+                    :disabled="!finishEvaluationModal.enableButton"
+                >
                     Si, cerrar evaluación
                 </a-button>
             </template>
@@ -129,7 +165,13 @@
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker showTime format="YYYY-MM-DD HH:mm" placeholder="Selecciona el día y la hora de la revisión" style="width: 100%" @ok="onSelectDate" />
+                    <a-date-picker
+                        showTime
+                        format="YYYY-MM-DD HH:mm"
+                        placeholder="Selecciona el día y la hora de la revisión"
+                        style="width: 100%"
+                        @ok="onSelectDate"
+                    />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     <span>
@@ -142,7 +184,13 @@
                 <a-button key="back" @click="toggleScheduleReviewModal">
                     Cancelar
                 </a-button>
-                <a-button class="modal-button-ok" key="submit" type="primary" :loading="loading" @click="toggleScheduleReviewModal">
+                <a-button
+                    class="modal-button-ok"
+                    key="submit"
+                    type="primary"
+                    :loading="loading"
+                    @click="toggleScheduleReviewModal"
+                >
                     Re-agendar revisión
                 </a-button>
             </template>
@@ -227,7 +275,9 @@ export default {
         },
         async validateEvaluation(evaluationId) {
             this.loading = true;
-            await client3B.evaluation.revision.revise(evaluationId).catch((error) => errorHandler(this, error));
+            await client3B.evaluation.revision
+                .revise(evaluationId)
+                .catch((error) => errorHandler(this, error));
             this.sendValidateEvaluationNotification(evaluationId);
             this.loading = false;
             const obj = this.data.find((tmp) => tmp.id === evaluationId);
@@ -283,13 +333,16 @@ export default {
                             subtitle: evaluation.description,
                         },
                         collaborator: evaluation.collaboratorFullName,
-                        reviewDate: new Date(evaluation.revisionDateTime + "Z").toLocaleDateString([], {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        }),
+                        reviewDate: new Date(evaluation.revisionDateTime + "Z").toLocaleDateString(
+                            [],
+                            {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            },
+                        ),
                         endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
                     });
                 });

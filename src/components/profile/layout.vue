@@ -91,7 +91,14 @@
                             />
                         </a-form-item>
                         <a-form-item style="text-align: right">
-                            <a-button class="btn--start-evaluations" htmlType="submit" :loading="loading" @click="updateProfile"> Guardar <a-icon type="save" /> </a-button>
+                            <a-button
+                                class="btn--start-evaluations"
+                                htmlType="submit"
+                                :loading="loading"
+                                @click="updateProfile"
+                            >
+                                Guardar <a-icon type="save" />
+                            </a-button>
                         </a-form-item>
                     </a-form>
                 </a-col>
@@ -142,17 +149,27 @@ export default {
             this.spin = true;
             const file = document.getElementById("fileinput").files[0];
             const blobUri = "https://" + this.account.name + ".blob.core.windows.net";
-            const blobService = AzureStorage.Blob.createBlobServiceWithSas(blobUri, this.account.sas);
+            const blobService = AzureStorage.Blob.createBlobServiceWithSas(
+                blobUri,
+                this.account.sas,
+            );
 
             if (typeof file != "undefined") {
-                blobService.createBlockBlobFromBrowserFile("evper", "images/profile/" + this.user.id + ".png", file, (error, result) => {
-                    if (error) {
-                        this.$message.error("Hubo un problema al cargar tu imagen, vuele a intentarlo");
-                    } else {
-                        this.spin = false;
-                        this.$message.success("Tu imagen fue cargada con éxito.");
-                    }
-                });
+                blobService.createBlockBlobFromBrowserFile(
+                    "evper",
+                    "images/profile/" + this.user.id + ".png",
+                    file,
+                    (error, result) => {
+                        if (error) {
+                            this.$message.error(
+                                "Hubo un problema al cargar tu imagen, vuele a intentarlo",
+                            );
+                        } else {
+                            this.spin = false;
+                            this.$message.success("Tu imagen fue cargada con éxito.");
+                        }
+                    },
+                );
             } else {
                 this.$message.error("¡Selecciona una imagen por favor!");
             }

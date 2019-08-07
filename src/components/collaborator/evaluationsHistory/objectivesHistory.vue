@@ -7,10 +7,20 @@
 
             <a-col :span="1" style="text-align: right;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -20,7 +30,12 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
@@ -69,15 +84,24 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a las acciones realizadas para cumplir el objetivo indicado.
+                        Agregue un comentario referente a las acciones realizadas para cumplir el
+                        objetivo indicado.
                     </span>
                 </a-col>
                 <a-col :span="24" modal-content-seccion-bottom>
-                    <a-textarea placeholder="Avance del objetivo..." :rows="6" v-model="recordProgressModal.message" />
+                    <a-textarea
+                        placeholder="Avance del objetivo..."
+                        :rows="6"
+                        v-model="recordProgressModal.message"
+                    />
                 </a-col>
             </a-row>
             <template slot="footer">
-                <a-button key="back" @click="recordProgressModal.show = false" :disabled="recordProgressModal.loading">
+                <a-button
+                    key="back"
+                    @click="recordProgressModal.show = false"
+                    :disabled="recordProgressModal.loading"
+                >
                     Cancelar
                 </a-button>
                 <a-button
@@ -105,10 +129,19 @@
             <a-row class="modal-content">
                 <a-col :span="24" style="padding: 0px 20px;">
                     <a-timeline>
-                        <a-timeline-item v-for="(item, index) in binnacle" :key="index" color="gray" class="timeline-item">
+                        <a-timeline-item
+                            v-for="(item, index) in binnacle"
+                            :key="index"
+                            color="gray"
+                            class="timeline-item"
+                        >
                             <a-icon slot="dot" type="edit" style="font-size: 20px" />
                             <p style="padding-left: 20px; padding-top: 5px">
-                                <a-avatar size="small" style="backgroundColor:#87d068" icon="user" />
+                                <a-avatar
+                                    size="small"
+                                    style="backgroundColor:#87d068"
+                                    icon="user"
+                                />
                                 {{ item.username }}
                                 <small>{{ item.created }}</small>
                             </p>
@@ -126,7 +159,11 @@
             </template>
         </a-modal>
 
-        <a-modal v-model="finishObjectiveModal.show" onOk="toggleFinishObjectiveModal" width="600px">
+        <a-modal
+            v-model="finishObjectiveModal.show"
+            onOk="toggleFinishObjectiveModal"
+            width="600px"
+        >
             <template slot="title">
                 <a-row>
                     <a-col :span="24" class="modal-icon-wrapper">
@@ -142,11 +179,16 @@
             <a-row class="modal-content">
                 <a-col :span="24" class="modal-content-seccion-top">
                     <span>
-                        Agregue un comentario referente a las acciones realizadas para cumplir el objetivo indicado.
+                        Agregue un comentario referente a las acciones realizadas para cumplir el
+                        objetivo indicado.
                     </span>
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" v-model="finishObjectiveModal.message" />
+                    <a-textarea
+                        placeholder="Comentarios..."
+                        :rows="6"
+                        v-model="finishObjectiveModal.message"
+                    />
                 </a-col>
                 <a-col :span="24" class="modal-content-seccion-bottom">
                     ¿Está seguro que desea completar el objetivo indicado?
@@ -154,7 +196,11 @@
             </a-row>
 
             <template slot="footer">
-                <a-button key="back" @click="finishObjectiveModal.show = false" :disabled="finishObjectiveModal.loading">
+                <a-button
+                    key="back"
+                    @click="finishObjectiveModal.show = false"
+                    :disabled="finishObjectiveModal.loading"
+                >
                     Cancelar
                 </a-button>
                 <a-button
@@ -310,7 +356,9 @@ export default {
                             subtitle: "sin descripción",
                         },
                         evaluable: items[index].isNotEvaluable,
-                        endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString().substring(0, 10),
+                        endDate: new Date(items[index].deliveryDate + "Z")
+                            .toLocaleDateString()
+                            .substring(0, 10),
                     });
                 }
             } catch (error) {
@@ -325,8 +373,13 @@ export default {
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
                 this.recordProgressModal.loading = true;
-                await this.addObjetiveMessage(this.recordProgressModal.objectiveId, this.recordProgressModal.message).catch((error) => errorHandler(this, error));
-                const obj = this.data.find((tmp) => tmp.id === this.recordProgressModal.objectiveId);
+                await this.addObjetiveMessage(
+                    this.recordProgressModal.objectiveId,
+                    this.recordProgressModal.message,
+                ).catch((error) => errorHandler(this, error));
+                const obj = this.data.find(
+                    (tmp) => tmp.id === this.recordProgressModal.objectiveId,
+                );
                 obj.status = this.selectStatusName(2);
                 this.recordProgressModal.show = !this.recordProgressModal.show;
                 this.recordProgressModal.loading = false;
@@ -350,11 +403,16 @@ export default {
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;
-                await this.addObjetiveMessage(this.finishObjectiveModal.objectiveId, `Objetivo completado: ${this.finishObjectiveModal.message}`).catch((error) =>
+                await this.addObjetiveMessage(
+                    this.finishObjectiveModal.objectiveId,
+                    `Objetivo completado: ${this.finishObjectiveModal.message}`,
+                ).catch((error) => errorHandler(this, error));
+                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
                     errorHandler(this, error),
                 );
-                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) => errorHandler(this, error));
-                const obj = this.data.find((tmp) => tmp.id === this.finishObjectiveModal.objectiveId);
+                const obj = this.data.find(
+                    (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
+                );
                 obj.status = this.selectStatusName(3);
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
                 this.finishObjectiveModal.show = false;

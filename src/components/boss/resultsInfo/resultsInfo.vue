@@ -9,7 +9,9 @@
             </a-col>
             <a-col class="custom-col" :xl="4">
                 <p class="custom-col__text custom-col__text--title">Evaluados</p>
-                <p class="custom-col__text custom-col__text--percentage">{{ this.getEvaluatedPercentage }}%</p>
+                <p class="custom-col__text custom-col__text--percentage">
+                    {{ this.getEvaluatedPercentage }}%
+                </p>
                 <div class="circle">
                     <span class="text">{{ this.data.evaluatedEmployees }}</span>
                 </div>
@@ -17,7 +19,9 @@
         </a-row>
         <a-row v-if="showAll" type="flex" justify="center">
             <a-col :xl="6">
-                <p class="custom-col__text custom-col__text--average">Promedio de antiguedad: {{ this.getAgeAverage }} años</p>
+                <p class="custom-col__text custom-col__text--average">
+                    Promedio de antiguedad: {{ this.getAgeAverage }} años
+                </p>
             </a-col>
         </a-row>
     </a-col>
@@ -35,7 +39,8 @@ export default {
     },
     computed: {
         getEvaluatedPercentage() {
-            const evaluatedPercent = (this.$props.data.evaluatedEmployees / this.$props.data.totalEmployees) * 100;
+            const evaluatedPercent =
+                (this.$props.data.evaluatedEmployees / this.$props.data.totalEmployees) * 100;
             return evaluatedPercent.toFixed(2);
         },
         getAgeAverage() {

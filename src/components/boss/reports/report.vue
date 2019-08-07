@@ -5,13 +5,21 @@
             <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                 <p>2019-1</p>
                 <div class="small">
-                    <chart v-if="isObjectivesLoaded" :chartData="currentData" :options="currentOptions" />
+                    <chart
+                        v-if="isObjectivesLoaded"
+                        :chartData="currentData"
+                        :options="currentOptions"
+                    />
                 </div>
             </a-col>
             <a-col v-if="isObjectivesLoaded" :span="12" class="text-center">
                 <p>2018-2</p>
                 <div class="small">
-                    <chart v-if="isObjectivesLoaded" :chartData="previousData" :options="previousOptions" />
+                    <chart
+                        v-if="isObjectivesLoaded"
+                        :chartData="previousData"
+                        :options="previousOptions"
+                    />
                 </div>
             </a-col>
             <a-row v-show="spin">
@@ -29,7 +37,11 @@
                 </div>
             </a-row>
             <a-col :span="8" class="text-left">
-                <a-select defaultValue="radar" style="width: 200px" @change="(option) => (competencesChartType = option)">
+                <a-select
+                    defaultValue="radar"
+                    style="width: 200px"
+                    @change="(option) => (competencesChartType = option)"
+                >
                     <a-select-option value="radar">Gráfica Radar</a-select-option>
                     <a-select-option value="bar">Gráfica de Barras</a-select-option>
                 </a-select>
@@ -42,10 +54,18 @@
             </a-col>
             <a-col :span="12" class="text-center">
                 <div class="radar--size" v-show="competencesChartType == 'radar'">
-                    <radar-chart v-if="isCompentecesLoaded" :chartData="compentecesData" :options="compentecesOptions" />
+                    <radar-chart
+                        v-if="isCompentecesLoaded"
+                        :chartData="compentecesData"
+                        :options="compentecesOptions"
+                    />
                 </div>
                 <div class="radar--size" v-show="competencesChartType == 'bar'">
-                    <bar-chart v-if="isCompentecesLoaded" :chartData="compentecesData" :options="compentecesOptions" />
+                    <bar-chart
+                        v-if="isCompentecesLoaded"
+                        :chartData="compentecesData"
+                        :options="compentecesOptions"
+                    />
                 </div>
             </a-col>
         </a-row>
@@ -149,10 +169,12 @@ export default {
             const currentData = [8, 8, 4, 5, 7, 9];
             const previousData = [6, 7, 9, 8, 4, 5];
 
-            const response = await client3B.report.getCollaboratorCompetencesReport().catch((error) => {
-                this.spin = false;
-                errorHandler(this, error);
-            });
+            const response = await client3B.report
+                .getCollaboratorCompetencesReport()
+                .catch((error) => {
+                    this.spin = false;
+                    errorHandler(this, error);
+                });
             if (!response) return;
 
             /*
@@ -163,7 +185,14 @@ export default {
             */
 
             this.compentecesData = {
-                labels: ["Orientación a resultados", "Eficiencia", "Orientación al detalle", "Comunicación", "Capacidad de análisis y solución de problemas", "Cultura 3B"],
+                labels: [
+                    "Orientación a resultados",
+                    "Eficiencia",
+                    "Orientación al detalle",
+                    "Comunicación",
+                    "Capacidad de análisis y solución de problemas",
+                    "Cultura 3B",
+                ],
                 datasets: [
                     {
                         label: "2019-1",

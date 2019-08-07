@@ -6,10 +6,20 @@
             </a-col>
             <a-col :span="1" style="text-align: right; color: #fff;">
                 <a>
-                    <a-icon class="dropdown-icon" type="down" @click="collapsed = !collapsed" v-show="collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="down"
+                        @click="collapsed = !collapsed"
+                        v-show="collapsed"
+                    />
                 </a>
                 <a>
-                    <a-icon class="dropdown-icon" type="up" @click="collapsed = !collapsed" v-show="!collapsed" />
+                    <a-icon
+                        class="dropdown-icon"
+                        type="up"
+                        @click="collapsed = !collapsed"
+                        v-show="!collapsed"
+                    />
                 </a>
             </a-col>
         </a-row>
@@ -19,7 +29,12 @@
             </div>
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
-            <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+            <a-table
+                :columns="columns"
+                :dataSource="data"
+                :pagination="false"
+                :scroll="{ x: true }"
+            >
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
@@ -37,7 +52,12 @@
                     </p>
                 </span>
                 <span slot="action" slot-scope="action, record">
-                    <a-button size="small" class="btn--start-evaluations" @click="fillEvaluation(record.id, record.status)" :disabled="disableButton(record.status)">
+                    <a-button
+                        size="small"
+                        class="btn--start-evaluations"
+                        @click="fillEvaluation(record.id, record.status)"
+                        :disabled="disableButton(record.status)"
+                    >
                         {{ transformStatus(action) }}
                     </a-button>
                     <!-- <router-link

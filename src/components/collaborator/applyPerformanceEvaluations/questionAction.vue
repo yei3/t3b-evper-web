@@ -25,8 +25,20 @@
                     ],
                 }"
             >
-                <a-input v-model="ans.action" placeholder="Descripción de la Acción" :disabled="onlyLecture" @keyup="edited = true" @keypress.enter.prevent="save">
-                    <a-icon class="input-save" @click="save" slot="addonAfter" type="save" v-if="!onlyLecture" />
+                <a-input
+                    v-model="ans.action"
+                    placeholder="Descripción de la Acción"
+                    :disabled="onlyLecture"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
+                >
+                    <a-icon
+                        class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                    />
                 </a-input>
             </a-form-item>
             <a-form-item
@@ -74,13 +86,29 @@
                     ],
                 }"
             >
-                <a-input v-model="ans.person" placeholder="Nombre del responsable" @keyup="edited = true" @keypress.enter.prevent="save">
-                    <a-icon class="input-save" @click="save" slot="addonAfter" type="save" v-if="!onlyLecture" />
+                <a-input
+                    v-model="ans.person"
+                    placeholder="Nombre del responsable"
+                    @keyup="edited = true"
+                    @keypress.enter.prevent="save"
+                >
+                    <a-icon
+                        class="input-save"
+                        @click="save"
+                        slot="addonAfter"
+                        type="save"
+                        v-if="!onlyLecture"
+                    />
                 </a-input>
             </a-form-item>
         </a-form>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
-            <a-icon v-show="loading" class="dynamic-delete-button form-icon" type="loading" style="padding-left: 30px;" />
+            <a-icon
+                v-show="loading"
+                class="dynamic-delete-button form-icon"
+                type="loading"
+                style="padding-left: 30px;"
+            />
             <span v-show="loading"> Guardardando Respuesta </span>
         </a-col>
     </a-col>
