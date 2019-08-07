@@ -332,7 +332,7 @@ export default {
                     {
                         data: { result: leftCapabilities },
                     },
-                ] = await this.getAdminLeftReport(RegionId, AreaId);
+                ] = await this.getAdminSideReport(RegionId, AreaId, this.left);
 
                 // Objectives - Capabilities Right-Report
                 RegionId = this.left.region;
@@ -344,7 +344,7 @@ export default {
                     {
                         data: { result: rightCapabilities },
                     },
-                ] = await this.getAdminRightReport(RegionId, AreaId);
+                ] = await this.getAdminSideReport(RegionId, AreaId, this.right);
 
                 // Left Doughnut Chart
                 this.populateLeftObjectivesChart(leftObjectives);
@@ -360,43 +360,28 @@ export default {
                 this.loading = false;
             }
         },
-        getAdminLeftReport(RegionId, AreaId) {
+        getAdminSideReport(RegionId, AreaId, side) {
+            const startTime = side.start;
+            const endTime = side.end;
+            startTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+            endTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+
             return Promise.all([
                 client3B.report.getAdminObjectivesReport({
                     RegionId,
                     AreaId,
-                    JobDescription: this.left.person,
-                    StarTime: this.left.start.toISOString(),
-                    EndDateTime: this.left.end.toISOString(),
-                    UserId: this.left.person,
+                    JobDescription: side.person,
+                    StarTime: startTime.toISOString(),
+                    EndDateTime: endTime.toISOString(),
+                    UserId: side.person,
                 }),
                 client3B.report.getAdminCapabilitiesReport({
                     RegionId,
                     AreaId,
-                    JobDescription: this.left.person,
-                    StarTime: this.left.start.toISOString(),
-                    EndDateTime: this.left.end.toISOString(),
-                    UserId: this.left.person,
-                }),
-            ]);
-        },
-        getAdminRightReport(RegionId, AreaId) {
-            return Promise.all([
-                client3B.report.getAdminObjectivesReport({
-                    RegionId,
-                    AreaId,
-                    JobDescription: this.right.person,
-                    StarTime: this.right.start.toISOString(),
-                    EndDateTime: this.right.end.toISOString(),
-                    UserId: this.right.person,
-                }),
-                client3B.report.getAdminCapabilitiesReport({
-                    RegionId,
-                    AreaId,
-                    JobDescription: this.right.person,
-                    StarTime: this.right.start.toISOString(),
-                    EndDateTime: this.right.end.toISOString(),
-                    UserId: this.right.person,
+                    JobDescription: side.person,
+                    StarTime: startTime.toISOString(),
+                    EndDateTime: endTime.toISOString(),
+                    UserId: side.person,
                 }),
             ]);
         },

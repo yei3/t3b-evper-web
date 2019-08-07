@@ -418,10 +418,14 @@ export default {
             }
         },
         getCapabilitiesReport(side) {
+            const startTime = side.start;
+            const endTime = side.end;
+            startTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+            endTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
             const dataReport = {
                 RegionId: side.region,
-                StarTime: side.start.toISOString(),
-                EndDateTime: side.end.toISOString(),
+                StarTime: startTime.toISOString(),
+                EndDateTime: endTime.toISOString(),
             };
             if (side.area !== NONE) dataReport.AreaId = side.area;
             if (side.job !== NONE) dataReport.JobDescription = side.job;
@@ -498,10 +502,14 @@ export default {
             };
         },
         getEvaluationEmployeeData(side) {
+            const startTime = side.start;
+            const endTime = side.end;
+            startTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+            endTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
             const dataReport = {
                 RegionId: side.region,
-                StarTime: side.start.toISOString(),
-                EndDateTime: side.end.toISOString(),
+                StarTime: startTime.toISOString(),
+                EndDateTime: endTime.toISOString(),
             };
             if (side.area !== NONE) dataReport.AreaId = side.area;
             if (side.job !== NONE) dataReport.JobDescription = side.job;
