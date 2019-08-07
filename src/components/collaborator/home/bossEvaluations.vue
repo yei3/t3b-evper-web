@@ -40,12 +40,7 @@
                 </span>
                 <span slot="evaluation" slot-scope="evaluation">
                     <p>
-                        <!-- <a
-                        class="table-link"
-                        @click="toggleCBEModal()"
-                    > -->
                         {{ evaluation.title }}
-                        <!-- </a> -->
                     </p>
                     <p>
                         <small>{{ evaluation.subtitle }}</small>
@@ -104,18 +99,12 @@
             </a-row>
 
             <template slot="footer">
-                <!-- <a-button
-                    key="back"
-                    @click="toggleCBEModal"
-                >
-                    Cancelar
-                </a-button> -->
                 <a-button
                     class="modal-button-ok"
                     key="submit"
                     type="primary"
                     @click="toggleCBEModal"
-                    :disabled="!CBEModal.enableButton"
+                    :disabled="CBEModal.evaluationCloseMsg === '' || !CBEModal.enableButton"
                 >
                     Si, cerrar evaluación
                 </a-button>

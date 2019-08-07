@@ -177,13 +177,6 @@ export default {
                 });
             if (!response) return;
 
-            /*
-            const competences = response.data.result;
-            competences.forEach(competence => {
-
-            });
-            */
-
             this.compentecesData = {
                 labels: [
                     "Orientación a resultados",

@@ -131,7 +131,7 @@
                     key="submit"
                     type="primary"
                     @click="toggleRecordProgressModal"
-                    :disabled="!recordProgressModal.enableButton"
+                    :disabled="recordProgressModal.input === '' || !recordProgressModal.enableButton"
                     :loading="recordProgressModal.loading"
                 >
                     Guardar
@@ -432,7 +432,6 @@ export default {
                 await this.getBinnacle(objective.id);
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             } else {
-                // this.loaded = true;
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             }
         },
