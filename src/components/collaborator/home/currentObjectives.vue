@@ -57,6 +57,10 @@
                     <a-icon type="check" v-if="!evaluable" />
                     <a-icon type="minus" v-if="evaluable" />
                 </span>
+                <span slot="isNextObjective" slot-scope="isNextObjective" class="text-center">
+                    <a-icon type="check" v-if="isNextObjective" />
+                    <a-icon type="minus" v-if="!isNextObjective" />
+                </span>
                 <span slot="action" slot-scope="text, record">
                     <a-dropdown>
                         <a-menu slot="overlay">
@@ -261,6 +265,12 @@ const columns = [
         scopedSlots: { customRender: "objective" },
     },
     {
+        title: "Próximo Objetivo",
+        dataIndex: "isNextObjective",
+        key: "isNextObjective",
+        scopedSlots: { customRender: "isNextObjective" },
+    },
+    {
         title: "Fecha fin",
         dataIndex: "endDate",
         key: "endDate",
@@ -366,20 +376,18 @@ export default {
                 const items = response.data.result.objectiveSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    if (!items[index].isNextObjective)
-                    {
-                        this.data.push({
-                            key: index + 1,
-                            id: items[index].id,
-                            status: this.selectStatusName(items[index].status),
-                            objective: {
-                                title: items[index].name,
-                                subtitle: "sin descripción",
-                            },
-                            evaluable: items[index].isNotEvaluable,
-                            endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
-                        });
-                    }
+                    this.data.push({
+                        key: index + 1,
+                        id: items[index].id,
+                        status: this.selectStatusName(items[index].status),
+                        objective: {
+                            title: items[index].name,
+                            subtitle: "sin descripción",
+                        },
+                        isNextObjective: items[index].isNextObjective, 
+                        evaluable: items[index].isNotEvaluable,
+                        endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
+                    });
                     if (items[index].isNotEvaluable === false) {
                         this.hideSection = true;
                     }
