@@ -1,201 +1,175 @@
 <template>
-    <div class="collapse" v-show="data.length > 0">
-        <a-row class="collapse-title-boss">
-            <a-col :span="23" class="text-center">
-                Cierre de Evaluaciones
-            </a-col>
-            <a-col :span="1" style="text-align: right;">
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-            </a-col>
-        </a-row>
-        <a-row v-show="spin">
-            <div style="text-align: center; margin-top: 20px;">
-                <a-spin tip="Cargando..." size="small" />
-            </div>
-        </a-row>
-        <a-row class="collapse-content" v-show="!collapsed">
-            <a-table
-                :columns="columns"
-                :dataSource="data"
-                :pagination="false"
-                :scroll="{ x: true }"
-            >
-                <span slot="status" slot-scope="status">
-                    <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
-                </span>
-                <span slot="evaluation" slot-scope="evaluation">
-                    <p>
-                        <!-- <a
+  <div class="collapse" v-show="data.length > 0">
+    <a-row class="collapse-title-boss">
+      <a-col :span="23" class="text-center">Cierre de Evaluaciones</a-col>
+      <a-col :span="1" style="text-align: right;">
+        <a>
+          <a-icon
+            class="dropdown-icon"
+            type="down"
+            @click="collapsed = !collapsed"
+            v-show="collapsed"
+          />
+        </a>
+        <a>
+          <a-icon
+            class="dropdown-icon"
+            type="up"
+            @click="collapsed = !collapsed"
+            v-show="!collapsed"
+          />
+        </a>
+      </a-col>
+    </a-row>
+    <a-row v-show="spin">
+      <div style="text-align: center; margin-top: 20px;">
+        <a-spin tip="Cargando..." size="small" />
+      </div>
+    </a-row>
+    <a-row class="collapse-content" v-show="!collapsed">
+      <a-table :columns="columns" :dataSource="data" :pagination="false" :scroll="{ x: true }">
+        <span slot="status" slot-scope="status">
+          <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
+        </span>
+        <span slot="evaluation" slot-scope="evaluation">
+          <p>
+            <!-- <a
                         class="table-link"
                         @click="toggleFinishEvaluationModal"
-                    > -->
-                        {{ evaluation.title }}
-                        <!-- </a> -->
-                    </p>
-                    <p>
-                        <small>{{ evaluation.subtitle }}</small>
-                    </p>
-                </span>
-                <span slot="collaborator" slot-scope="collaborator">
-                    {{ collaborator }}
-                </span>
-                <span slot="reviewDate" slot-scope="reviewDate, record">
-                    <a class="table-link-light" @click="toggleScheduleReviewModal(record)">
-                        {{ reviewDate }}
-                    </a>
-                </span>
-                <span slot="action" slot-scope="text, record">
-                    <a-popconfirm
-                        title="¿Estás seguro que deseas validar la evaluación? "
-                        @confirm="validateEvaluation(record.id)"
-                        okText="Sí, validar cierre"
-                        cancelText="Cancelar"
-                    >
-                        <a-button
-                            size="small"
-                            class="btn--close-evaluations"
-                            :disabled="disableButton(record.status)"
-                            >Validar</a-button
-                        >
-                    </a-popconfirm>
-                </span>
-            </a-table>
+            >-->
+            {{ evaluation.title }}
+            <!-- </a> -->
+          </p>
+          <p>
+            <small>{{ evaluation.subtitle }}</small>
+          </p>
+        </span>
+        <span slot="collaborator" slot-scope="collaborator">{{ collaborator }}</span>
+        <span slot="reviewDate" slot-scope="reviewDate, record">
+          <a class="table-link-light" @click="toggleScheduleReviewModal(record)">{{ reviewDate }}</a>
+        </span>
+        <span slot="action" slot-scope="text, record">
+          <a-popconfirm
+            title="¿Estás seguro que deseas validar la evaluación? "
+            @confirm="validateEvaluation(record.id)"
+            okText="Sí, validar cierre"
+            cancelText="Cancelar"
+          >
+            <a-button
+              size="small"
+              class="btn--close-evaluations"
+              :disabled="disableButton(record.status)"
+            >Validar</a-button>
+          </a-popconfirm>
+        </span>
+      </a-table>
+    </a-row>
+
+    <a-modal v-model="finishEvaluationModal.show" onOk="toggleFinishEvaluationModal" width="600px">
+      <template slot="title">
+        <a-row>
+          <a-col :span="24" class="modal-icon-wrapper">
+            <a-icon type="check-square" class="modal-icon" />
+          </a-col>
+          <a-col :span="24" class="modal-header">
+            <h1>Cerrar evaluación</h1>
+            <small>
+              {{ finishEvaluationModal.evaluationName }} -
+              {{ finishEvaluationModal.collaboratorName }}
+            </small>
+          </a-col>
         </a-row>
+      </template>
 
-        <a-modal
-            v-model="finishEvaluationModal.show"
-            onOk="toggleFinishEvaluationModal"
-            width="600px"
-        >
-            <template slot="title">
-                <a-row>
-                    <a-col :span="24" class="modal-icon-wrapper">
-                        <a-icon type="check-square" class="modal-icon" />
-                    </a-col>
-                    <a-col :span="24" class="modal-header">
-                        <h1>Cerrar evaluación</h1>
-                        <small>
-                            {{ finishEvaluationModal.evaluationName }} -
-                            {{ finishEvaluationModal.collaboratorName }}
-                        </small>
-                    </a-col>
-                </a-row>
-            </template>
-
-            <a-row class="modal-content">
-                <a-col :span="24" class="modal-content-seccion-top">
-                    <span>
-                        Agregue un comentario referente al desempeño, la evaluación y a la
-                        retroalimentación recibida del Colaborador.
-                    </span>
-                </a-col>
-                <a-col :span="24" class="modal-content-seccion">
-                    <a-textarea placeholder="Comentarios..." :rows="6" />
-                </a-col>
-                <a-col :span="24" class="modal-content-seccion">
-                    <a-checkbox
-                        @change="
+      <a-row class="modal-content">
+        <a-col :span="24" class="modal-content-seccion-top">
+          <span>
+            Agregue un comentario referente al desempeño, la evaluación y a la
+            retroalimentación recibida del Colaborador.
+          </span>
+        </a-col>
+        <a-col :span="24" class="modal-content-seccion">
+          <a-textarea placeholder="Comentarios..." :rows="6" />
+        </a-col>
+        <a-col :span="24" class="modal-content-seccion">
+          <a-checkbox
+            @change="
                             finishEvaluationModal.enableButton = !finishEvaluationModal.enableButton
                         "
-                    >
-                        <strong style="font-size: 13px;">
-                            He preparado esta evaluación de desempeño con detenimiento, lo he
-                            explicado claramente y discutido en detalle con el colaborador.
-                        </strong>
-                    </a-checkbox>
-                </a-col>
-                <a-col class="modal-content-seccion-bottom">
-                    <span>
-                        ¿Está seguro que desea cerrar la evaluación indicada?
-                    </span>
-                </a-col>
-            </a-row>
+          >
+            <strong style="font-size: 13px;">
+              He preparado esta evaluación de desempeño con detenimiento, lo he
+              explicado claramente y discutido en detalle con el colaborador.
+            </strong>
+          </a-checkbox>
+        </a-col>
+        <a-col class="modal-content-seccion-bottom">
+          <span>¿Está seguro que desea cerrar la evaluación indicada?</span>
+        </a-col>
+      </a-row>
 
-            <template slot="footer">
-                <a-button key="back" @click="toggleFinishEvaluationModal">
-                    Cancelar
-                </a-button>
-                <a-button
-                    key="submit"
-                    type="primary"
-                    class="modal-button-ok"
-                    @click="toggleFinishEvaluationModal"
-                    :disabled="!finishEvaluationModal.enableButton"
-                >
-                    Si, cerrar evaluación
-                </a-button>
-            </template>
-        </a-modal>
+      <template slot="footer">
+        <a-button key="back" @click="toggleFinishEvaluationModal">Cancelar</a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          class="modal-button-ok"
+          @click="toggleFinishEvaluationModal"
+          :disabled="!finishEvaluationModal.enableButton"
+        >Si, cerrar evaluación</a-button>
+      </template>
+    </a-modal>
 
-        <a-modal v-model="scheduleReviewModal.show" onOk="toggleScheduleReviewModal" width="600px">
-            <template slot="title">
-                <a-row>
-                    <a-col :span="24" class="modal-icon-wrapper">
-                        <a-icon type="calendar" class="modal-icon" />
-                    </a-col>
-                    <a-col :span="24" class="modal-header">
-                        <h1>Agendar revisión</h1>
-                        <small>
-                            {{ scheduleReviewModal.evaluationName }} -
-                            {{ scheduleReviewModal.collaboratorName }}
-                        </small>
-                    </a-col>
-                </a-row>
-            </template>
+    <a-modal
+      v-model="scheduleReviewModal.show"
+      style="top: 20px; max-width: 600px;"
+      onOk="toggleScheduleReviewModal"
+    >
+      <template slot="title">
+        <a-row>
+          <a-col :span="24" class="modal-icon-wrapper">
+            <a-icon type="calendar" class="modal-icon" />
+          </a-col>
+          <a-col :span="24" class="modal-header">
+            <h1>Agendar revisión</h1>
+            <small>
+              {{ scheduleReviewModal.evaluationName }} -
+              {{ scheduleReviewModal.collaboratorName }}
+            </small>
+          </a-col>
+        </a-row>
+      </template>
 
-            <a-row class="modal-content">
-                <a-col :span="24" class="modal-content-seccion-top">
-                    <span>
-                        Seleccione la fecha y hora de la revisón:
-                    </span>
-                </a-col>
-                <a-col :span="24" class="modal-content-seccion">
-                    <a-date-picker
-                        showTime
-                        format="YYYY-MM-DD HH:mm"
-                        placeholder="Selecciona el día y la hora de la revisión"
-                        style="width: 100%"
-                        @ok="onSelectDate"
-                    />
-                </a-col>
-                <a-col :span="24" class="modal-content-seccion-bottom">
-                    <span>
-                        ¿Está seguro que desea agendar la revisión de la evaluación indicada?
-                    </span>
-                </a-col>
-            </a-row>
+      <a-row class="modal-content">
+        <a-col :span="24" class="modal-content-seccion-top">
+          <span>Seleccione la fecha y hora de la revisón:</span>
+        </a-col>
+        <a-col :span="24" class="modal-content-seccion">
+          <a-date-picker
+            showTime
+            format="YYYY-MM-DD HH:mm"
+            placeholder="Selecciona el día y la hora de la revisión"
+            style="width: 100%"
+            @ok="onSelectDate"
+          />
+        </a-col>
+        <a-col :span="24" class="modal-content-seccion-bottom">
+          <span>¿Está seguro que desea agendar la revisión de la evaluación indicada?</span>
+        </a-col>
+      </a-row>
 
-            <template slot="footer">
-                <a-button key="back" @click="toggleScheduleReviewModal">
-                    Cancelar
-                </a-button>
-                <a-button
-                    class="modal-button-ok"
-                    key="submit"
-                    type="primary"
-                    :loading="loading"
-                    @click="toggleScheduleReviewModal"
-                >
-                    Re-agendar revisión
-                </a-button>
-            </template>
-        </a-modal>
-    </div>
+      <template slot="footer">
+        <a-button key="back" @click="toggleScheduleReviewModal">Cancelar</a-button>
+        <a-button
+          class="modal-button-ok"
+          key="submit"
+          type="primary"
+          :loading="loading"
+          @click="toggleScheduleReviewModal"
+        >Re-agendar revisión</a-button>
+      </template>
+    </a-modal>
+  </div>
 </template>
 
 <script>
@@ -333,7 +307,7 @@ export default {
                             subtitle: evaluation.description,
                         },
                         collaborator: evaluation.collaboratorFullName,
-                        reviewDate: new Date(evaluation.revisionDateTime + "Z").toLocaleDateString(
+                        reviewDate: new Date(`${evaluation.revisionDateTime}Z`).toLocaleDateString(
                             [],
                             {
                                 day: "2-digit",
@@ -343,7 +317,7 @@ export default {
                                 minute: "2-digit",
                             },
                         ),
-                        endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
+                        endDate: new Date(`${evaluation.endDateTime}Z`).toLocaleDateString(),
                     });
                 });
             } catch (error) {
@@ -398,34 +372,34 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Finalizado":
-                    return "ant-tag-green";
-                case "Pte. revisión":
-                    return "ant-tag-gray";
-                case "Validada":
-                    return "ant-tag-blue";
-                default:
-                    return "ant-tag-white";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Finalizado":
+                return "ant-tag-green";
+            case "Pte. revisión":
+                return "ant-tag-gray";
+            case "Validada":
+                return "ant-tag-blue";
+            default:
+                return "ant-tag-white";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "En proceso";
-                case 2:
-                    return "Finalizado";
-                case 4:
-                    return "Pte. revisión";
-                case 3:
-                    return "Validada";
-                default:
-                    return "No iniciado";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "En proceso";
+            case 2:
+                return "Finalizado";
+            case 4:
+                return "Pte. revisión";
+            case 3:
+                return "Validada";
+            default:
+                return "No iniciado";
             }
         },
     },
