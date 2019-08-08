@@ -97,7 +97,7 @@
                             <a-select-option
                                 v-for="job in leftJobs"
                                 :key="job.id"
-                                :value="job.id"
+                                :value="job.jobDescription"
                                 >{{ job.jobDescription }}</a-select-option
                             >
                         </a-select>
@@ -181,7 +181,7 @@
                             <a-select-option
                                 v-for="job in rightJobs"
                                 :key="job.id"
-                                :value="job.id"
+                                :value="job.jobDescription"
                                 >{{ job.jobDescription }}</a-select-option
                             >
                         </a-select>
@@ -733,12 +733,12 @@ export default {
         },
         leftPeople() {
             if (this.left.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.id === this.left.job);
+            const currentJob = this.jobs.find((job) => job.jobDescription === this.left.job);
             return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
         },
         rightPeople() {
             if (this.right.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.id === this.right.job);
+            const currentJob = this.jobs.find((job) => job.jobDescription === this.right.job);
             return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
         },
     },
