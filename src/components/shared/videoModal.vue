@@ -37,7 +37,7 @@ export default {
     },
     computed: {
         videoUrl() {
-            return `${process.env.VUE_APP_BLOB_URL}videos/evaluacion_hevc.mp4`;
+            return `${process.env.VUE_APP_BLOB_URL}/videos/evaluacion_hevc.mp4`;
         },
     },
     methods: {
