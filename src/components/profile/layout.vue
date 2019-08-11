@@ -135,9 +135,10 @@ export default {
                 authorization: "authorization-text",
             },
             account: {
-                name: "t3bevper", // esto es algo temporal se tiene que crear un mecanismo para obtener el SAS Token
+                // esto es algo temporal se tiene que crear un mecanismo para obtener el SAS Token
+                name: "t3bevper",
                 sas:
-                    "?sv=2018-03-28&ss=bf&srt=sco&sp=rwdlac&se=2020-07-31T05:17:21Z&st=2019-07-07T21:17:21Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=DSQ%2BTtRQZ%2ByDyeae0iwvXwGcxmdNZsQ5EGYsDwMomow%3D",
+                    "?sv=2018-03-28&ss=bf&srt=sco&sp=rwdlac&se=2020-07-31T05:17:21Z&st=2019-07-07T21:17:21Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=DSQ%2BTtRQZ%2ByDyeae0iwvXwGcxmdNZsQ5EGYsDwMomow%3D", // eslint-disable-line
             },
         };
     },
@@ -148,18 +149,19 @@ export default {
         updateImgProfile() {
             this.spin = true;
             const file = document.getElementById("fileinput").files[0];
-            const blobUri = "https://" + this.account.name + ".blob.core.windows.net";
+            const blobUri = `https://${this.account.name}.blob.core.windows.net`;
+            // eslint-disable-next-line
             const blobService = AzureStorage.Blob.createBlobServiceWithSas(
                 blobUri,
                 this.account.sas,
             );
 
-            if (typeof file != "undefined") {
+            if (typeof file !== "undefined") {
                 blobService.createBlockBlobFromBrowserFile(
                     "evper",
-                    "images/profile/" + this.user.id + ".png",
+                    `images/profile/${this.user.id}.png`,
                     file,
-                    (error, result) => {
+                    (error) => {
                         if (error) {
                             this.$message.error(
                                 "Hubo un problema al cargar tu imagen, vuele a intentarlo",
@@ -174,9 +176,9 @@ export default {
                 this.$message.error("¡Selecciona una imagen por favor!");
             }
         },
-        handleChange(info) {
-            // updateImgProfile must be here
-        },
+        // handleChange(info) {
+        //     // updateImgProfile must be here
+        // },
         async updateProfile() {
             this.loading = true;
             const update = {

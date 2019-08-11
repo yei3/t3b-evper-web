@@ -10,13 +10,12 @@
     </a-collapse>
 </template>
 
-
 <script>
-import moment from 'moment';
+import moment from "moment";
 
 export default {
     data() {
-        this.dateFormat = 'DD-MM-YYYY';
+        this.dateFormat = "DD-MM-YYYY";
         return {};
     },
     methods: {

@@ -27,9 +27,9 @@
 <script>
 import nextEvaluationPeriod from "@/components/boss/home/nextEvaluationPeriod.vue";
 import bossIssues from "@/components/boss/home/bossIssues.vue";
-import pendingCollaboratorEvaluations from "@/components/boss/home/pendingCollaboratorEvaluations.vue";
+import pendingCollaboratorEvaluations from "@/components/boss/home/pendingCollaboratorEvaluations.vue"; // eslint-disable-line
 import collaboratorEvaluations from "@/components/boss/home/collaboratorEvaluations.vue";
-import currentCollaboratorObjectives from "@/components/boss/home/currentCollaboratorObjectives.vue";
+import currentCollaboratorObjectives from "@/components/boss/home/currentCollaboratorObjectives.vue"; // eslint-disable-line
 import currentActions from "@/components/boss/home/currentActions.vue";
 
 export default {

@@ -338,7 +338,7 @@ export default {
                         ans = `ACCIÓN: ${answer.unmeasuredAnswer.action}  |   RESPONSABLE: ${
                             answer.unmeasuredAnswer.text
                         }        FECHA COMPROMISO: ${new Date(
-                            answer.unmeasuredAnswer.commitmentDate + "Z",
+                            `${answer.unmeasuredAnswer.commitmentDate}Z`,
                         ).toLocaleDateString()}`;
                     }
                 }
@@ -377,9 +377,7 @@ export default {
         },
         getExpectedQuestion(question) {
             let res = question.expectedText || question.expected;
-            const answer = this.answers.find(
-                (answer) => answer.evaluationQuestionId === question.id,
-            );
+            const answer = this.answers.find((ans) => ans.evaluationQuestionId === question.id);
 
             if (!Number.isNaN(Number(res))) {
                 if (answer.measuredAnswer.evaluationMeasuredQuestion.expected !== null) {
@@ -395,23 +393,19 @@ export default {
             return this.isObjetiveAccomplished(question) ? "Cumplido" : "No cumplido";
         },
         isQuestionAccomplished(question) {
-            const answer = this.answers.find(
-                (answer) => answer.evaluationQuestionId === question.id,
-            );
+            const answer = this.answers.find((ans) => ans.evaluationQuestionId === question.id);
 
             return answer.unmeasuredAnswer.action === "true";
         },
         isObjetiveAccomplished(question) {
             let expected = question.expectedText || question.expected;
 
-            const answer = this.answers.find(
-                (answer) => answer.evaluationQuestionId === question.id,
-            );
+            const answer = this.answers.find((ans) => ans.evaluationQuestionId === question.id);
 
             if (!Number.isNaN(Number(expected))) {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
                 if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                    expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
+                    ({ expected } = answer.measuredAnswer.evaluationMeasuredQuestion.expected);
                 }
             } else {
                 expected =
@@ -419,18 +413,18 @@ export default {
             }
 
             switch (question.relation) {
-                case 1:
-                    return answer.measuredAnswer.real < expected;
-                case 2:
-                    return answer.measuredAnswer.real <= expected;
-                case 3:
-                    return answer.measuredAnswer.text === expected;
-                case 4:
-                    return answer.measuredAnswer.real > expected;
-                case 5:
-                    return answer.measuredAnswer.real >= expected;
-                default:
-                    return answer.isActive === false;
+            case 1:
+                return answer.measuredAnswer.real < expected;
+            case 2:
+                return answer.measuredAnswer.real <= expected;
+            case 3:
+                return answer.measuredAnswer.text === expected;
+            case 4:
+                return answer.measuredAnswer.real > expected;
+            case 5:
+                return answer.measuredAnswer.real >= expected;
+            default:
+                return answer.isActive === false;
             }
         },
         getGlobalResult() {
@@ -456,14 +450,26 @@ export default {
                         section.value;
                 }
             });
-            let calif =
-                result < 70
-                    ? "Insatisfactorio"
-                    : result >= 70 && result < 90
-                    ? "Satisfactorio"
-                    : result >= 90
-                    ? "Excelente"
-                    : "";
+
+            // const calif =
+            //     result < 70 ?
+            //         "Insatisfactorio" :
+            //         result >= 70 && result < 90 ?
+            //             "Satisfactorio" :
+            //             result >= 90 ?
+            //                 "Excelente" :
+            //                 "";
+
+            let calif = "";
+
+            if (result < 70) {
+                calif = "Insatisfactorio";
+            } else if (result >= 70 && result < 90) {
+                calif = "Satisfactorio";
+            } else if (result >= 90) {
+                calif = "Excelente";
+            }
+
             return `${result.toFixed(2)} %  ${calif}`;
         },
         clearSections(sections) {
@@ -477,10 +483,12 @@ export default {
             });
             this.answers.forEach((answer) => {
                 if (answer.notEvaluableAnswer !== null) {
-                    if (answer.sectionId === this.nextObjectives.sectionId)
+                    if (answer.sectionId === this.nextObjectives.sectionId) {
                         this.nextObjectives.objectives.push(answer);
-                    if (answer.sectionId === this.currentObjectives.sectionId)
+                    }
+                    if (answer.sectionId === this.currentObjectives.sectionId) {
                         this.currentObjectives.objectives.push(answer);
+                    }
                 }
             });
         },
@@ -515,12 +523,12 @@ export default {
                 if (
                     answer.unmeasuredAnswer != null &&
                     responses.includes(answer.unmeasuredAnswer.text)
-                )
-                    total += 1;
+                ) total += 1;
             });
             this.answers.forEach((answer) => {
-                if (answer.unmeasuredAnswer != null && answer.unmeasuredAnswer.text === level)
+                if (answer.unmeasuredAnswer != null && answer.unmeasuredAnswer.text === level) {
                     count += 1;
+                }
             });
             if (count > 0) {
                 ans = (count * 100) / total;

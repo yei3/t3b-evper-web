@@ -1,22 +1,18 @@
 <template>
     <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :span="24">
                 <h1 class="breadcrumb-header">Crear Formato</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-home' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'admin-home' }" class="breadcrumb-path">
                             Formatos
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active"
-                            v-if="!$route.params.id"
-                        >
+                        <strong class="breadcrumb-path-active" v-if="!$route.params.id">
                             Crear Formato
                         </strong>
                         <strong class="breadcrumb-path-active" v-else>
@@ -26,7 +22,8 @@
                 </a-breadcrumb>
             </a-col>
         </a-row>
-        <div class="collapse-content"
+        <div
+            class="collapse-content"
             style="background-color: white;
             margin: 30px 30px;"
         >
@@ -37,55 +34,59 @@
             </a-row>
             <a-row class="steps" v-show="!spin">
                 <span class="breadcrumb-header" style="font-weight: 400;">
-                    {{format.name}}
+                    {{ format.name }}
                 </span>
-                <span style="font-size: 16px;">{{format.description}}</span>
+                <span style="font-size: 16px;">{{ format.description }}</span>
             </a-row>
             <a-divider />
             <a-row :gutter="16" v-show="!spin">
-                <a-col :xxl="4" :xl="6" :lg="8" :md="12" :sm="24"
+                <a-col
+                    :xxl="4"
+                    :xl="6"
+                    :lg="8"
+                    :md="12"
+                    :sm="24"
                     v-for="(step, index) in view.steps"
                     :key="index"
                 >
-                    <div class="step-form step-form-done"
-                        v-show="lastStep >= index &&
-                                index !== currentStep"
-                        @click="view.activeSection = step.id; setStep(index);"
+                    <div
+                        class="step-form step-form-done"
+                        v-show="lastStep >= index && index !== currentStep"
+                        @click="
+                            view.activeSection = step.id;
+                            setStep(index);
+                        "
                     >
-                        <span>{{index + 1}}. {{step.label}}</span>
+                        <span>{{ index + 1 }}. {{ step.label }}</span>
                     </div>
 
-                    <div class="step-form step-form-current"
-                        v-show="currentStep === index"
-                    >
-                        <span>{{index + 1}}. {{step.label}}</span>
+                    <div class="step-form step-form-current" v-show="currentStep === index">
+                        <span>{{ index + 1 }}. {{ step.label }}</span>
                     </div>
 
-                    <div class="step-form step-form-not-done"
-                        v-show="lastStep < index"
-                    >
-                        <span>{{index + 1}}. {{step.label}}</span>
+                    <div class="step-form step-form-not-done" v-show="lastStep < index">
+                        <span>{{ index + 1 }}. {{ step.label }}</span>
                     </div>
                 </a-col>
             </a-row>
             <a-row v-show="!spin">
-                <a-col :sm="24" :md="12"
-                    style="padding-top: 10px;"
-                >
+                <a-col :sm="24" :md="12" style="padding-top: 10px;">
                     <a-button
-                        type='dashed'
+                        type="dashed"
                         class="add-button"
                         style="width: 48%; min-width: 200px;"
-                        @click="resetModalValues(); view.sectionModal.show=true"
+                        @click="
+                            resetModalValues();
+                            view.sectionModal.show = true;
+                        "
                         v-show="lastStep !== 0 || format.id"
                     >
-                        <a-icon type='plus' /> Agregar Sección
+                        <a-icon type="plus" /> Agregar Sección
                     </a-button>
                 </a-col>
-                <a-col :sm="24" :md="12"
-                    style="padding-top: 10px; text-align: right;"
-                >
-                    <a-popconfirm title="Está seguro de eliminar la sección?"
+                <a-col :sm="24" :md="12" style="padding-top: 10px; text-align: right;">
+                    <a-popconfirm
+                        title="Está seguro de eliminar la sección?"
                         @confirm="deleteSection(currentStep)"
                         okText="SI"
                         cancelText="No"
@@ -94,9 +95,8 @@
                             style="color: #fb4646; width: 48%; min-width: 200px;"
                             v-show="currentStep !== 0"
                         >
-                            <a-icon
-                                :type="view.loadingDelete? 'loading': 'delete'"
-                            /> Eliminar Sección
+                            <a-icon :type="view.loadingDelete ? 'loading' : 'delete'" /> Eliminar
+                            Sección
                         </a-button>
                     </a-popconfirm>
                 </a-col>
@@ -109,26 +109,27 @@
                     :showContinueButton="dinamicSteps.length !== 0"
                     :formatfetched="formatfetched"
                 />
-                <form-generic v-for="(step, index) in dinamicSteps" :key="step.id"
+                <form-generic
+                    v-for="(step, index) in dinamicSteps"
+                    :key="step.id"
                     v-model="step.label"
-                    :sectionPercent='step.percent'
+                    :sectionPercent="step.percent"
                     :sectionId="step.id"
                     :subsectionsFetched="step.section.childSections"
-                    :showFinishButton="index === (dinamicSteps.length - 1)"
-                    v-show="(index + 1) == currentStep"
+                    :showFinishButton="index === dinamicSteps.length - 1"
+                    v-show="index + 1 == currentStep"
                 />
             </a-row>
         </div>
-        <a-modal
-            title="Agregar Nueva Sección"
-            v-model="view.sectionModal.show"
-        >
-            <a-input v-model="view.sectionModal.value"
+        <a-modal title="Agregar Nueva Sección" v-model="view.sectionModal.show">
+            <a-input
+                v-model="view.sectionModal.value"
                 placeholder="Nombre de la sección"
                 addonBefore="Nombre"
                 @keyup.enter.native="addSection"
             />
-            <a-input v-model="view.sectionModal.percent"
+            <a-input
+                v-model="view.sectionModal.percent"
                 type="number"
                 style="margin-top: 20px;"
                 addonBefore="Porcentaje"
@@ -146,7 +147,8 @@
                         </a-button>
                     </a-col>
                     <a-col :span="12" style="text-align: right;">
-                        <a-button key="submit"
+                        <a-button
+                            key="submit"
                             class="btn-green"
                             @click="addSection"
                             :loading="view.sectionModal.loading"
@@ -161,11 +163,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import formName from '@/components/admin/formats/formName.vue';
-import formGeneric from '@/components/admin/formats/formGeneric.vue';
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import { mapActions, mapGetters } from "vuex";
+import formName from "@/components/admin/formats/formName.vue";
+import formGeneric from "@/components/admin/formats/formGeneric.vue";
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     components: {
@@ -176,7 +178,7 @@ export default {
         this.fetchData();
     },
     watch: {
-        $route: 'fetchData',
+        $route: "fetchData",
     },
     data() {
         return {
@@ -189,7 +191,7 @@ export default {
                 sectionModal: {
                     show: false,
                     error: null,
-                    value: '',
+                    value: "",
                     percent: 0,
                     loading: false,
                 },
@@ -197,8 +199,8 @@ export default {
                 steps: [
                     {
                         id: 0,
-                        label: 'Nombre del Formato',
-                        name: 'name',
+                        label: "Nombre del Formato",
+                        name: "name",
                     },
                 ],
             },
@@ -206,20 +208,22 @@ export default {
     },
     methods: {
         ...mapActions({
-            nextStep: 'nextStep',
-            previousStep: 'previousStep',
-            setStep: 'setStep',
-            setLastStep: 'setLastStep',
-            updateFormatForm: 'updateFormatForm',
+            nextStep: "nextStep",
+            previousStep: "previousStep",
+            setStep: "setStep",
+            setLastStep: "setLastStep",
+            updateFormatForm: "updateFormatForm",
         }),
         async addSection() {
             this.view.sectionModal.loading = true;
-            const response = await client3B.section.create({
-                name: this.view.sectionModal.value,
-                evaluationTemplateId: this.format.id,
-                displayName: true,
-                value: this.view.sectionModal.percent,
-            }).catch(error => errorHandler(this, error));
+            const response = await client3B.section
+                .create({
+                    name: this.view.sectionModal.value,
+                    evaluationTemplateId: this.format.id,
+                    displayName: true,
+                    value: this.view.sectionModal.percent,
+                })
+                .catch((error) => errorHandler(this, error));
             if (!response) {
                 this.view.sectionModal.loading = false;
                 return;
@@ -229,7 +233,7 @@ export default {
             const step = {
                 id: section.id,
                 label: this.view.sectionModal.value,
-                name: this.view.sectionModal.value.replace(/ /g, ''),
+                name: this.view.sectionModal.value.replace(/ /g, ""),
                 percent: Number(this.view.sectionModal.percent),
                 section: { childSections: [] },
             };
@@ -238,11 +242,11 @@ export default {
             this.resetModalValues();
             this.setLastStep(this.view.steps.length - 1);
             this.view.sectionModal.loading = false;
-            this.$message.success('Evaluación guardada correctamente');
+            this.$message.success("Evaluación guardada correctamente");
         },
         resetModalValues() {
             this.view.sectionModal.show = false;
-            this.view.sectionModal.value = '';
+            this.view.sectionModal.value = "";
             this.view.sectionModal.percent = 0;
         },
         async deleteSection(sectionStep) {
@@ -256,9 +260,11 @@ export default {
                 }
                 return sectionStep !== step;
             });
-            const response = await client3B.section.delete({
-                id: section.id,
-            }).catch(error => errorHandler(this, error));
+            const response = await client3B.section
+                .delete({
+                    id: section.id,
+                })
+                .catch((error) => errorHandler(this, error));
             if (!response) {
                 this.view.loadingDelete = false;
                 return;
@@ -267,7 +273,7 @@ export default {
             this.setStep(this.view.steps.length - 1);
             this.view.activeSection = this.view.steps[this.view.steps.length - 1].id;
             this.view.loadingDelete = false;
-            this.$message.success('Evaluación guardada correctamente');
+            this.$message.success("Evaluación guardada correctamente");
         },
         async fetchData() {
             this.spin = true;
@@ -276,8 +282,9 @@ export default {
                 this.spin = false;
                 return;
             }
-            const response = await client3B.format.get(this.$route.params.id)
-                .catch(error => errorHandler(this, error));
+            const response = await client3B.format
+                .get(this.$route.params.id)
+                .catch((error) => errorHandler(this, error));
             if (!response) {
                 this.spin = false;
                 return;
@@ -309,9 +316,9 @@ export default {
     },
     computed: {
         ...mapGetters({
-            currentStep: 'currentStep',
-            lastStep: 'lastStep',
-            format: 'format',
+            currentStep: "currentStep",
+            lastStep: "lastStep",
+            format: "format",
         }),
         dinamicSteps() {
             return this.view.steps.slice(1);
@@ -321,21 +328,21 @@ export default {
 </script>
 
 <style scoped>
-    .dynamic-delete-button {
+.dynamic-delete-button {
     cursor: pointer;
     position: relative;
     top: 4px;
     font-size: 24px;
     color: #999;
-    transition: all .3s;
-    }
-    .dynamic-delete-button:hover {
+    transition: all 0.3s;
+}
+.dynamic-delete-button:hover {
     color: #777;
-    }
-    .add-button {
-        width: 90%;
-    }
-    .add-button:hover {
-        border-style: dashed;
-    }
+}
+.add-button {
+    width: 90%;
+}
+.add-button:hover {
+    border-style: dashed;
+}
 </style>

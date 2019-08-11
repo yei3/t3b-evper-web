@@ -1,5 +1,5 @@
-import axios from 'axios';
-import authService from '../../services/auth';
+import axios from "axios";
+import authService from "../../services/auth";
 
 /**
  * Simple class to make synchronous Http request
@@ -8,11 +8,11 @@ class HttpRequest {
     constructor() {
         this.api_base = process.env.VUE_APP_API_URL;
         this.methods = {
-            get: 'get',
-            post: 'post',
-            put: 'put',
-            patch: 'patch',
-            delete: 'delete',
+            get: "get",
+            post: "post",
+            put: "put",
+            patch: "patch",
+            delete: "delete",
         };
     }
 
@@ -29,7 +29,7 @@ class HttpRequest {
             baseURL: this.api_base,
             url: path,
             headers: {
-                'Abp.TenantId': 1,
+                "Abp.TenantId": 1,
             },
         };
 

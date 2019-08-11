@@ -9,7 +9,9 @@ const ROLES = {
  * @param {Object} data Auth data
  */
 function storeAuthData(data) {
-    const { accessToken, expireInSeconds, userId, isFirstTimeLongin } = data;
+    const {
+        accessToken, expireInSeconds, userId, isFirstTimeLongin,
+    } = data;
     const expiration = new Date();
     expiration.setUTCSeconds(expiration.getUTCSeconds() + expireInSeconds);
     localStorage.setItem(

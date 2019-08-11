@@ -132,7 +132,7 @@ export default {
                             title: evaluation.name,
                             subtitle: evaluation.description,
                         },
-                        endDate: new Date(evaluation.endDateTime + "Z").toLocaleDateString(),
+                        endDate: new Date(`${evaluation.endDateTime}Z`).toLocaleDateString(),
                     });
                 });
             } catch (error) {
@@ -147,10 +147,6 @@ export default {
                 this.$router.push({ name: "collaborator-assessments-apply", params: { id } });
             }
         },
-        printEvaluation(input) {
-            let id = input.id;
-            this.$router.push({ name: "print-assessment", params: { id } });
-        },
         disableButton(status) {
             if (status === "Validado") {
                 return true;
@@ -159,38 +155,38 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Finalizado":
-                    return "ant-tag-green";
-                case "Pte. revisión":
-                    return "ant-tag-gray";
-                case "Cerrada":
-                    return "ant-tag-blue";
-                default:
-                    return "ant-tag-gray";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Finalizado":
+                return "ant-tag-green";
+            case "Pte. revisión":
+                return "ant-tag-gray";
+            case "Cerrada":
+                return "ant-tag-blue";
+            default:
+                return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "En proceso";
-                case 2:
-                    return "Finalizado";
-                case 4:
-                    return "Pte. revisión";
-                case 3:
-                    return "Cerrada";
-                default:
-                    return "No iniciado";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "En proceso";
+            case 2:
+                return "Finalizado";
+            case 4:
+                return "Pte. revisión";
+            case 3:
+                return "Cerrada";
+            default:
+                return "No iniciado";
             }
         },
         printEvaluation(input) {
-            let id = input.id;
+            const { id } = input;
             this.$router.push({ name: "print-assessment", params: { id } });
         },
     },

@@ -235,13 +235,13 @@ const columns = [
         key: "objective",
         scopedSlots: { customRender: "objective" },
     },
-    /*{
+    /* {
         title: 'Evaluable',
         dataIndex: 'evaluable',
         key: 'evaluable',
         scopedSlots: { customRender: 'evaluable' },
         align: 'center',
-    },*/
+    }, */
     {
         title: "Fecha fin",
         dataIndex: "endDate",
@@ -311,7 +311,7 @@ export default {
                     this.binnacle.push({
                         message: items[i].text,
                         username: items[i].userName,
-                        created: new Date(items[i].creationTime + "Z").toLocaleDateString(),
+                        created: new Date(`${items[i].creationTime}Z`).toLocaleDateString(),
                     });
                 }
                 // this.loaded = true;
@@ -356,7 +356,7 @@ export default {
                             subtitle: "sin descripción",
                         },
                         evaluable: items[index].isNotEvaluable,
-                        endDate: new Date(items[index].deliveryDate + "Z")
+                        endDate: new Date(`${items[index].deliveryDate}Z`)
                             .toLocaleDateString()
                             .substring(0, 10),
                     });
@@ -407,9 +407,8 @@ export default {
                     this.finishObjectiveModal.objectiveId,
                     `Objetivo completado: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
-                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
-                    errorHandler(this, error),
-                );
+                await this.completeObjective(this.finishObjectiveModal.objectiveId)
+                    .catch((error) => errorHandler(this, error));
                 const obj = this.data.find(
                     (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
                 );
@@ -448,32 +447,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Completado":
-                    return "ant-tag-green";
-                case "Validado":
-                    return "ant-tag-blue";
-                default:
-                    return "ant-tag-gray";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Completado":
+                return "ant-tag-green";
+            case "Validado":
+                return "ant-tag-blue";
+            default:
+                return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "No iniciado";
-                case 2:
-                    return "En proceso";
-                case 3:
-                    return "Completado";
-                case 4:
-                    return "Validado";
-                default:
-                    return "error";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "No iniciado";
+            case 2:
+                return "En proceso";
+            case 3:
+                return "Completado";
+            case 4:
+                return "Validado";
+            default:
+                return "error";
             }
         },
         formatDate(date) {

@@ -1,15 +1,13 @@
 <template>
     <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :span="24">
                 <h1 class="breadcrumb-header">Administración de Evaluaciones</h1>
             </a-col>
             <a-col :span="20">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-evaluations' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'admin-evaluations' }" class="breadcrumb-path">
                             Evaluaciones
                         </router-link>
                     </a-breadcrumb-item>
@@ -34,8 +32,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import evaluations from '@/components/admin/search/evaluations.vue';
+import { mapActions } from "vuex";
+import evaluations from "@/components/admin/search/evaluations.vue";
 
 export default {
     components: {
@@ -43,16 +41,14 @@ export default {
     },
     methods: {
         ...mapActions({
-            clearEvaluationForm: 'clearEvaluationForm',
+            clearEvaluationForm: "clearEvaluationForm",
         }),
         initNewEvaluationForm() {
             // this.clearEvaluationForm();
-            this.$router.push({ name: 'create-evaluation' });
+            this.$router.push({ name: "create-evaluation" });
         },
     },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

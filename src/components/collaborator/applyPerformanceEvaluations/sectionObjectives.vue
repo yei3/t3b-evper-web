@@ -46,8 +46,6 @@
 
 <script>
 import questionGoal from "@/components/collaborator/applyPerformanceEvaluations/questionGoal.vue";
-import errorHandler from "@/views/errorHandler";
-import client3B from "@/api/client3B";
 
 export default {
     props: {

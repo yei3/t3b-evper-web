@@ -49,8 +49,8 @@ export default {
             const WinPrint = window.open("", name, !specs.length ? specs.join(",") : "", replace);
 
             let stylesHtml = "";
-            for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
-                // eslint-disable-line
+            // eslint-disable-next-line
+            for (const node of [...document.querySelectorAll("link[rel=\"stylesheet\"], style")]) {
                 stylesHtml += node.outerHTML;
             }
 

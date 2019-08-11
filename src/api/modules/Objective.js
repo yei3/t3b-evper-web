@@ -1,4 +1,4 @@
-import Http from './Http';
+import Http from "./Http";
 
 /**
  * Class to make operations to the Section entity
@@ -6,7 +6,7 @@ import Http from './Http';
 class Objective extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/NotEvaluableQuestion';
+        this.entityPath = "/api/services/app/NotEvaluableQuestion";
     }
 
     /**

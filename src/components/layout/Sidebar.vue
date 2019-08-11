@@ -113,7 +113,6 @@
 
 <script>
 import authService from "@/services/auth";
-import { mapGetters } from "vuex";
 
 export default {
     name: "Sidebar",

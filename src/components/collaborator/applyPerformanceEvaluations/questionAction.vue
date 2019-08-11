@@ -175,7 +175,7 @@ export default {
                 this.ans.action = this.answer.action;
                 this.ans.person = this.answer.text;
                 if (this.answer.commitmentDate) {
-                    this.ans.deliverDate = new Date(this.answer.commitmentDate + "Z");
+                    this.ans.deliverDate = new Date(`${this.answer.commitmentDate}Z`);
                 } else this.ans.deliverDate = new Date();
             }
             if (this.questionStatus === 1) {

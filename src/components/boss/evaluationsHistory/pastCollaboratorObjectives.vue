@@ -198,7 +198,7 @@
                 <a-button
                     key="open"
                     type="danger"
-                    @click="toggleOpenOrValidateObjective(false, 2)"
+                    @click="toggleOpenOrValidateObjective(false)"
                     :disabled="finishObjectiveModal.loading"
                 >
                     No, reabrir objetivo
@@ -207,7 +207,7 @@
                     class="modal-button-ok"
                     key="submit"
                     type="primary"
-                    @click="toggleOpenOrValidateObjective(true, 4)"
+                    @click="toggleOpenOrValidateObjective(true)"
                 >
                     Si, validar objetivo
                 </a-button>
@@ -279,11 +279,11 @@ export default {
             await client3B.objective
                 .updateStatus({
                     id: objectiveId,
-                    status: status,
+                    status,
                 })
                 .catch((error) => errorHandler(this, error));
-            let action = status === 2 ? "reabierto" : "validado";
-            this.$message.success("El objetivo se ha " + action + " correctamente");
+            const action = status === 2 ? "reabierto" : "validado";
+            this.$message.success(`El objetivo se ha ${action} correctamente`);
         },
         async addObjetiveMessage(objectiveId, message) {
             await client3B.binnacle
@@ -303,18 +303,18 @@ export default {
                 const items = response.data.result.collaboratorsObjectivesSummary;
                 this.data = [];
                 for (let index = 0; index < items.length; index += 1) {
-                    let objectives = [];
+                    const objectives = [];
                     const objectivesAux = items[index].objectivesSummary;
 
                     for (let jndex = 0; jndex < objectivesAux.length; jndex += 1) {
-                        let binnacle = [];
+                        const binnacle = [];
                         const binnacleAux = objectivesAux[jndex].binnacle;
-                        for (let hndex = 0; hndex < binnacleAux.length; hndex++) {
+                        for (let hndex = 0; hndex < binnacleAux.length; hndex += 1) {
                             binnacle.push({
                                 message: binnacleAux[hndex].text,
                                 username: binnacleAux[hndex].userName,
                                 created: new Date(
-                                    binnacleAux[hndex].creationTime + "Z",
+                                    `${binnacleAux[hndex].creationTime}Z`,
                                 ).toLocaleDateString(),
                             });
                         }
@@ -328,7 +328,7 @@ export default {
                                 binnacle,
                             },
                             endDate: new Date(
-                                objectivesAux[jndex].deliveryDate + "Z",
+                                `${objectivesAux[jndex].deliveryDate}Z`,
                             ).toLocaleDateString(),
                         });
                     }
@@ -357,17 +357,17 @@ export default {
             this.finishObjectiveModal.objectiveName = input.objective.title;
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
         },
-        async toggleOpenOrValidateObjective(input, status) {
+        async toggleOpenOrValidateObjective(input) {
             if (input) {
                 await this.addObjetiveMessage(
                     this.finishObjectiveModal.objectiveId,
-                    "Objetivo validado: " + this.finishObjectiveModal.message,
+                    `Objetivo validado: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4).catch(
                     (error) => errorHandler(this, error),
                 );
                 let obj = null;
-                for (let i = 0; i < this.data.length; i++) {
+                for (let i = 0; i < this.data.length; i += 1) {
                     if (
                         typeof this.data[i].objectives.find(
                             (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
@@ -382,13 +382,13 @@ export default {
             } else {
                 await this.addObjetiveMessage(
                     this.finishObjectiveModal.objectiveId,
-                    "Objetivo Reabierto: " + this.finishObjectiveModal.message,
+                    `Objetivo Reabierto: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
                 await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2).catch(
                     (error) => errorHandler(this, error),
                 );
                 let obj = null;
-                for (let i = 0; i < this.data.length; i++) {
+                for (let i = 0; i < this.data.length; i += 1) {
                     if (
                         typeof this.data[i].objectives.find(
                             (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
@@ -406,32 +406,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Completado":
-                    return "ant-tag-green";
-                case "Validado":
-                    return "ant-tag-blue";
-                default:
-                    return "ant-tag-gray";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Completado":
+                return "ant-tag-green";
+            case "Validado":
+                return "ant-tag-blue";
+            default:
+                return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "No iniciado";
-                case 2:
-                    return "En proceso";
-                case 3:
-                    return "Completado";
-                case 4:
-                    return "Validado";
-                default:
-                    return "No iniciado";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "No iniciado";
+            case 2:
+                return "En proceso";
+            case 3:
+                return "Completado";
+            case 4:
+                return "Validado";
+            default:
+                return "No iniciado";
             }
         },
         transformStatus(status) {

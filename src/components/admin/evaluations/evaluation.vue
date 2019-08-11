@@ -1,22 +1,18 @@
 <template>
     <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :span="24">
                 <h1 class="breadcrumb-header">Crear Evaluación</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-evaluations' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'admin-evaluations' }" class="breadcrumb-path">
                             Evaluaciones
                         </router-link>
                     </a-breadcrumb-item>
                     <a-breadcrumb-item>
-                        <strong class="breadcrumb-path-active"
-                            v-if="!$route.params.id"
-                        >
+                        <strong class="breadcrumb-path-active" v-if="!$route.params.id">
                             Crear Evaluación
                         </strong>
                         <strong class="breadcrumb-path-active" v-else>
@@ -26,7 +22,8 @@
                 </a-breadcrumb>
             </a-col>
         </a-row>
-        <div class="collapse-content"
+        <div
+            class="collapse-content"
             style="background-color: white;
             margin: 30px 30px;"
         >
@@ -34,30 +31,30 @@
                 <a-col :span="24">
                     <h2>Programar nueva Evaluación</h2>
                 </a-col>
-
             </a-row>
             <a-row :gutter="16">
-
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-input v-model="form.name" placeholder="Nombre" />
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-date-picker placeholder="Fecha Inicio"
+                    <a-date-picker
+                        placeholder="Fecha Inicio"
                         style="width: 100%"
                         v-model="form.startDate"
                     />
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-date-picker placeholder="Fecha Fin"
+                    <a-date-picker
+                        placeholder="Fecha Fin"
                         style="width: 100%"
                         v-model="form.finishDate"
                     />
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-select placeholder="Formato" style="width: 100%"
-                        v-model="form.format"
-                    >
-                        <a-select-option v-for="(item, index) in formats" :key="index"
+                    <a-select placeholder="Formato" style="width: 100%" v-model="form.format">
+                        <a-select-option
+                            v-for="(item, index) in formats"
+                            :key="index"
                             :value="item.id"
                         >
                             {{ item.name }}
@@ -66,10 +63,15 @@
                 </a-col>
 
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Regiones"
+                    <a-select
+                        mode="multiple"
+                        style="width: 100%"
+                        placeholder="Regiones"
                         v-model="form.regs"
                     >
-                        <a-select-option v-for="(item, index) in regions" :key="index"
+                        <a-select-option
+                            v-for="(item, index) in regions"
+                            :key="index"
                             :value="item.id"
                         >
                             {{ item.displayName }}
@@ -77,10 +79,15 @@
                     </a-select>
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Áreas"
+                    <a-select
+                        mode="multiple"
+                        style="width: 100%"
+                        placeholder="Áreas"
                         v-model="form.areas"
                     >
-                        <a-select-option v-for="(item, index) in areas" :key="index"
+                        <a-select-option
+                            v-for="(item, index) in areas"
+                            :key="index"
                             :value="item.id"
                         >
                             {{ item.displayName }}
@@ -88,10 +95,15 @@
                     </a-select>
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
-                    <a-select mode="multiple" style="width: 100%" placeholder="Puestos"
+                    <a-select
+                        mode="multiple"
+                        style="width: 100%"
+                        placeholder="Puestos"
                         v-model="form.employments"
                     >
-                        <a-select-option v-for="(item, index) in employments" :key="index"
+                        <a-select-option
+                            v-for="(item, index) in employments"
+                            :key="index"
                             :value="item"
                         >
                             {{ item }}
@@ -114,8 +126,8 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     data() {
@@ -146,46 +158,50 @@ export default {
         this.getAllAreas();
         this.getAllEmployments();
     },
-    components: {
-
-    },
+    components: {},
     methods: {
         async getAllFormats() {
             this.spin = true;
-            const response = await client3B.format.getAll()
-                .catch(error => errorHandler(this, error));
+            const response = await client3B.format
+                .getAll()
+                .catch((error) => errorHandler(this, error));
             this.formats = response.data.result.items;
         },
         async getAllRegions() {
-            const response = await client3B.organizationUnit.getAllRegions()
-                .catch(error => errorHandler(this, error));
+            const response = await client3B.organizationUnit
+                .getAllRegions()
+                .catch((error) => errorHandler(this, error));
             this.regions = response.data.result;
         },
         async getAllAreas() {
-            const response = await client3B.organizationUnit.getAllAreas()
-                .catch(error => errorHandler(this, error));
+            const response = await client3B.organizationUnit
+                .getAllAreas()
+                .catch((error) => errorHandler(this, error));
             this.areas = response.data.result;
             this.spin = false;
         },
         async getAllEmployments() {
-            const response = await client3B.user.getAllEmployments()
-                .catch(error => errorHandler(this, error));
+            const response = await client3B.user
+                .getAllEmployments()
+                .catch((error) => errorHandler(this, error));
             this.employments = response.data.result;
             this.spin = false;
         },
         async applyEvaluation() {
             this.loading = true;
-            const response = await client3B.evaluation.apply({
-                name: this.form.name,
-                evaluationTemplateId: this.form.format,
-                organizationUnitIds: [...this.form.areas, ...this.form.regs],
-                jobDescriptions: [...this.form.employments],
-                startDate: this.form.startDate,
-                endDate: this.form.finishDate,
-            }).catch(error => errorHandler(this, error));
+            const response = await client3B.evaluation
+                .apply({
+                    name: this.form.name,
+                    evaluationTemplateId: this.form.format,
+                    organizationUnitIds: [...this.form.areas, ...this.form.regs],
+                    jobDescriptions: [...this.form.employments],
+                    startDate: this.form.startDate,
+                    endDate: this.form.finishDate,
+                })
+                .catch((error) => errorHandler(this, error));
             if (response) {
-                this.$message.success('Evaluación aplicada correctamente.');
-                this.$router.push({ name: 'admin-evaluations' });
+                this.$message.success("Evaluación aplicada correctamente.");
+                this.$router.push({ name: "admin-evaluations" });
             }
             this.loading = false;
         },
@@ -193,6 +209,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

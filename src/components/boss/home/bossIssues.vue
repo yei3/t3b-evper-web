@@ -25,14 +25,18 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-col :span="12">
-                <a-badge :count="pendingEvaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge
+                    :count="pendingEvaluations"
+                    :numberStyle="{ backgroundColor: '#f8ac59' }"
+                />
                 <span class="badged-text">
                     Evaluaciones de colaboradores en proceso
                 </span>
             </a-col>
             <a-col :span="12">
-                <a-badge :count="objectivesValidationPending"
-                    :numberStyle= "{backgroundColor: '#f8ac59'}"
+                <a-badge
+                    :count="objectivesValidationPending"
+                    :numberStyle="{ backgroundColor: '#f8ac59' }"
                 />
                 <span class="badged-text">
                     Validación de objetivos de colaboradores en proceso
@@ -43,8 +47,8 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     data() {
@@ -65,16 +69,10 @@ export default {
             try {
                 response = await client3B.dashboard.getSupervisor();
 
-                this.pendingEvaluations = response
-                    .data
-                    .result
-                    .supervisorToDoes
-                    .collaboratorsPendingEvaluations;
-                this.objectivesValidationPending = response
-                    .data
-                    .result
-                    .supervisorToDoes
-                    .collaboratorsObjectivesValidationPending;
+                this.pendingEvaluations =
+                    response.data.result.supervisorToDoes.collaboratorsPendingEvaluations;
+                this.objectivesValidationPending =
+                    response.data.result.supervisorToDoes.collaboratorsObjectivesValidationPending;
             } catch (error) {
                 errorHandler(this, error);
             }

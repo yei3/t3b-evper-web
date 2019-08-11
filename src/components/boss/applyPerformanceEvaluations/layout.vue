@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import layout from '@/components/collaborator/applyPerformanceEvaluations/layout.vue';
+import layout from "@/components/collaborator/applyPerformanceEvaluations/layout.vue";
 
 export default {
     components: {
@@ -12,6 +12,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

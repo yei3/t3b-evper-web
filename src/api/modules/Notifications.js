@@ -1,4 +1,4 @@
-import Http from './Http';
+import Http from "./Http";
 
 /**
  * Class to make operations to the Notifications entity
@@ -6,7 +6,7 @@ import Http from './Http';
 class Dashboard extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Notifications';
+        this.entityPath = "/api/services/app/Notifications";
     }
 
     /**

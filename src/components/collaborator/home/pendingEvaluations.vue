@@ -106,7 +106,7 @@ export default {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
-                        endDate: new Date(items[index].endDateTime + "Z").toLocaleDateString(),
+                        endDate: new Date(`${items[index].endDateTime}Z`).toLocaleDateString(),
                     });
                 }
                 // console.log(this.data);
@@ -129,34 +129,34 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Finalizado":
-                    return "ant-tag-green";
-                case "Pte. revisión":
-                    return "ant-tag-blue";
-                case "Cerrada":
-                    return "ant-tag-gray";
-                default:
-                    return "ant-tag-gray";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Finalizado":
+                return "ant-tag-green";
+            case "Pte. revisión":
+                return "ant-tag-blue";
+            case "Cerrada":
+                return "ant-tag-gray";
+            default:
+                return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "En proceso";
-                case 2:
-                    return "Finalizado";
-                case 3:
-                    return "Pte. revisión";
-                case 4:
-                    return "Cerrada";
-                default:
-                    return "No iniciado";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "En proceso";
+            case 2:
+                return "Finalizado";
+            case 3:
+                return "Pte. revisión";
+            case 4:
+                return "Cerrada";
+            default:
+                return "No iniciado";
             }
         },
     },

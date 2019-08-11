@@ -96,12 +96,12 @@
 
 <script>
 import questionOpen from "@/components/collaborator/applyPerformanceEvaluations/questionOpen.vue";
-import questionAction from "@/components/collaborator/applyPerformanceEvaluations/questionAction.vue";
-import questionRemark from "@/components/collaborator/applyPerformanceEvaluations/questionRemark.vue";
-import questionBoolean from "@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue";
-import questionOneSelect from "@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue";
-import questionObjective from "@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue";
-import questionOpenMultiple from "@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue";
+import questionAction from "@/components/collaborator/applyPerformanceEvaluations/questionAction.vue"; // eslint-disable-line
+import questionRemark from "@/components/collaborator/applyPerformanceEvaluations/questionRemark.vue"; // eslint-disable-line
+import questionBoolean from "@/components/collaborator/applyPerformanceEvaluations/questionBoolean.vue"; // eslint-disable-line
+import questionOneSelect from "@/components/collaborator/applyPerformanceEvaluations/questionOneSelect.vue"; // eslint-disable-line
+import questionObjective from "@/components/collaborator/applyPerformanceEvaluations/questionObjective.vue"; // eslint-disable-line
+import questionOpenMultiple from "@/components/collaborator/applyPerformanceEvaluations/questionOpenMultiple.vue"; // eslint-disable-line
 
 export default {
     props: {

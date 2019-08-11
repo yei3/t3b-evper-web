@@ -7,9 +7,9 @@ export default {
         format: {},
     },
     getters: {
-        currentStep: state => state.view.currentStep,
-        lastStep: state => state.view.lastStep,
-        format: state => state.format,
+        currentStep: (state) => state.view.currentStep,
+        lastStep: (state) => state.view.lastStep,
+        format: (state) => state.format,
     },
     mutations: {
         nextStep: (_state) => {
@@ -45,22 +45,22 @@ export default {
     },
     actions: {
         nextStep: (context) => {
-            context.commit('nextStep');
+            context.commit("nextStep");
         },
         previousStep: (context) => {
-            context.commit('previousStep');
+            context.commit("previousStep");
         },
         setStep: (context, step) => {
-            context.commit('setStep', step);
+            context.commit("setStep", step);
         },
         setLastStep: (context, step) => {
-            context.commit('setLastStep', step);
+            context.commit("setLastStep", step);
         },
         updateFormatForm: (context, data) => {
-            context.commit('updateFormatForm', data);
+            context.commit("updateFormatForm", data);
         },
         clearFormatForm: (context) => {
-            context.commit('clearFormatForm');
+            context.commit("clearFormatForm");
         },
     },
 };

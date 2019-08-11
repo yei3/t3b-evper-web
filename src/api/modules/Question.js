@@ -1,5 +1,4 @@
-import Http from './Http';
-
+import Http from "./Http";
 
 /**
  * Class to make operations to the Question entity
@@ -8,9 +7,9 @@ class Question extends Http {
     constructor() {
         super();
         this.entityPath = {
-            default: '/api/services/app/Question',
-            objective: '/api/services/app/Objective',
-            goal: '/api/services/app/NotEvaluableQuestion',
+            default: "/api/services/app/Question",
+            objective: "/api/services/app/Objective",
+            goal: "/api/services/app/NotEvaluableQuestion",
         };
     }
 

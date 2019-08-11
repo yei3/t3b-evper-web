@@ -112,7 +112,7 @@ class Evaluation extends Http {
      * @param {Object} data   Data to create a evaluation
      *
      * @return {Promise}        Http Response
-     **/
+     * */
     update(data) {
         const path = `${this.entityPath}/Update`;
         return this.request(path, this.methods.put, data);
@@ -145,7 +145,7 @@ class Evaluation extends Http {
      * @param {Object} data   Data to delete a format
      *
      * @return {Promise}        Http Response
-     **/
+     * */
     closeComment(data) {
         const path = `${this.entityPath}/ClosingComment`;
         return this.request(path, this.methods.post, data);

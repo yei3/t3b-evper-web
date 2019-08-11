@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse" style="margin-bottom: 35px;" >
+    <div class="collapse" style="margin-bottom: 35px;">
         <a-row class="collapse-title background--title">
             <a-col :span="23" style="text-align: center;">
                 Acciones por finalizar
@@ -25,15 +25,15 @@
         </a-row>
         <a-row class="collapse-content" v-show="!collapsed">
             <a-col :span="8" style="padding-right: 6px;">
-                <a-badge :count="autoEvaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge :count="autoEvaluations" :numberStyle="{ backgroundColor: '#f8ac59' }" />
                 <span class="badged-text">Auto-evaluaciones en proceso</span>
             </a-col>
             <a-col :span="8" style="padding: 0px 3px 0px 3px;">
-                <a-badge :count="evaluations" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge :count="evaluations" :numberStyle="{ backgroundColor: '#f8ac59' }" />
                 <span class="badged-text">Cierre de mis evaluaciones en proceso</span>
             </a-col>
             <a-col :span="8" style="padding-left: 6px;">
-                <a-badge :count="objectives" :numberStyle= "{backgroundColor: '#f8ac59'}"/>
+                <a-badge :count="objectives" :numberStyle="{ backgroundColor: '#f8ac59' }" />
                 <span class="badged-text">Objetivos en proceso</span>
             </a-col>
         </a-row>
@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import client3B from '@/api/client3B';
-import errorHandler from '@/views/errorHandler';
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
 
 export default {
     data() {

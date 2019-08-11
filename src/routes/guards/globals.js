@@ -1,4 +1,4 @@
-import authService from '@/services/auth';
+import authService from "@/services/auth";
 
 /**
  * Validate that the current user can access to the route
@@ -11,12 +11,12 @@ function beforeEnter(role) {
         if (!authService.validateAccessToken()) {
             authService.removeAuthData();
             authService.removeUserData();
-            return next({ name: 'login' });
+            return next({ name: "login" });
         }
         // Validate that the current role can access to the route
         const currentRole = authService.getCurrentRole();
         if (currentRole !== role) {
-            return next({ name: 'home' });
+            return next({ name: "home" });
         }
         // Otherwise continue with the normal navigation
         return next();

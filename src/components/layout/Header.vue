@@ -109,7 +109,7 @@ export default {
                         },
                         collaborator: items[index].userId,
                         endDate: new Date(
-                            items[index].notification.creationTime + "Z",
+                            `${items[index].notification.creationTime}Z`,
                         ).toLocaleDateString(),
                     });
                 }

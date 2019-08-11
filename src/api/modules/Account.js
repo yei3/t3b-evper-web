@@ -1,4 +1,4 @@
-import Http from './Http';
+import Http from "./Http";
 
 /**
  * Class to make operations to the Account entity
@@ -6,7 +6,7 @@ import Http from './Http';
 class Account extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/services/app/Account';
+        this.entityPath = "/api/services/app/Account";
     }
 
     /**

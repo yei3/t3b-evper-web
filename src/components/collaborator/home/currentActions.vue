@@ -96,7 +96,7 @@ export default {
                         action: items[index].description,
                         responsible: items[index].responsible,
                         deliveryDate: new Date(
-                            items[index].deliveryDate + "Z",
+                            `${items[index].deliveryDate}Z`,
                         ).toLocaleDateString(),
                     });
                 }

@@ -1,4 +1,4 @@
-import Http from './Http';
+import Http from "./Http";
 
 /**
  * Class to make Auth operations
@@ -6,7 +6,7 @@ import Http from './Http';
 class Auth extends Http {
     constructor() {
         super();
-        this.entityPath = '/api/TokenAuth';
+        this.entityPath = "/api/TokenAuth";
     }
 
     /**

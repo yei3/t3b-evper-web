@@ -581,8 +581,18 @@ export default {
         getCapabilitiesReport(side) {
             const startTime = side.start;
             const endTime = side.end;
-            startTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-            endTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+            startTime.set({
+                hour: 0,
+                minute: 0,
+                second: 0,
+                millisecond: 0,
+            });
+            endTime.set({
+                hour: 23,
+                minute: 59,
+                second: 59,
+                millisecond: 999,
+            });
             const dataReport = {
                 RegionId: side.region,
                 StarTime: startTime.toISOString(),
@@ -668,8 +678,18 @@ export default {
         getEvaluationEmployeeData(side) {
             const startTime = side.start;
             const endTime = side.end;
-            startTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-            endTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+            startTime.set({
+                hour: 0,
+                minute: 0,
+                second: 0,
+                millisecond: 0,
+            });
+            endTime.set({
+                hour: 23,
+                minute: 59,
+                second: 59,
+                millisecond: 999,
+            });
             const dataReport = {
                 RegionId: side.region,
                 StarTime: startTime.toISOString(),
@@ -691,7 +711,7 @@ export default {
             const secondPeriodStart = firstPeriodEndClone.endOf("month").add(1, "day");
             const secondPeriodEnd = moment().endOf("year");
 
-            if (currentDate.year() != dateStart.year()) {
+            if (currentDate.year() !== dateStart.year()) {
                 return false;
             }
 

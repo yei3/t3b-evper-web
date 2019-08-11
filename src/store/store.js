@@ -14,16 +14,17 @@ export default new Vuex.Store({
         evaluation,
     },
     state: {
-        userProfile:
-            authService.getCurrentRole() === authService.ROLES.ADMINISTRATOR
-                ? "Administrador"
-                : authService.getCurrentRole() === authService.ROLES.SUPERVISOR
-                ? "Evaluador"
-                : "Evaluado",
+        userProfile() {
+            if (authService.getCurrentRole() === authService.ROLES.ADMINISTRATOR) {
+                return "Administrador";
+            }
+            if (authService.getCurrentRole() === authService.ROLES.SUPERVISOR) {
+                return "Evaluador";
+            }
+            return "Evaluado";
+        },
     },
     getters: {
-        userProfile: (state) => {
-            return state.userProfile;
-        },
+        userProfile: (state) => state.userProfile(),
     },
 });

@@ -333,7 +333,7 @@ export default {
             this.$message.success("Se ha enviado el correo de recuperación");
         },
         validatePass(password) {
-            var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\d]).{5,}$/;
+            const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\d]).{5,}$/;
             return regex.test(password);
         },
         handleError(error) {

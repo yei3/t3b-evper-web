@@ -1,18 +1,17 @@
-import Auth from './modules/Auth';
-import User from './modules/User';
-import Account from './modules/Account';
-import Binnacle from './modules/Binnacle';
-import Session from './modules/Session';
-import Evaluation from './modules/Evaluation';
-import Dashboard from './modules/Dashboard';
-import Format from './modules/EvaluationTemplate';
-import Section from './modules/Section';
-import Question from './modules/Question';
-import Reports from './modules/Reports';
-import OrganizationUnit from './modules/OrganizationUnit';
-import Notifications from './modules/Notifications';
-import Objective from './modules/Objective';
-
+import Auth from "./modules/Auth";
+import User from "./modules/User";
+import Account from "./modules/Account";
+import Binnacle from "./modules/Binnacle";
+import Session from "./modules/Session";
+import Evaluation from "./modules/Evaluation";
+import Dashboard from "./modules/Dashboard";
+import Format from "./modules/EvaluationTemplate";
+import Section from "./modules/Section";
+import Question from "./modules/Question";
+import Reports from "./modules/Reports";
+import OrganizationUnit from "./modules/OrganizationUnit";
+import Notifications from "./modules/Notifications";
+import Objective from "./modules/Objective";
 
 /**
  * Expose all the resources calls in a single client

@@ -340,7 +340,7 @@ export default {
                     this.binnacle.push({
                         message: items[i].text,
                         username: items[i].userName,
-                        created: new Date(items[i].creationTime + "Z").toLocaleDateString(),
+                        created: new Date(`${items[i].creationTime}Z`).toLocaleDateString(),
                     });
                 }
                 // this.loaded = true;
@@ -386,7 +386,7 @@ export default {
                         },
                         isNextObjective: items[index].isNextObjective,
                         evaluable: items[index].isNotEvaluable,
-                        endDate: new Date(items[index].deliveryDate + "Z").toLocaleDateString(),
+                        endDate: new Date(`${items[index].deliveryDate}Z`).toLocaleDateString(),
                     });
                     if (items[index].isNotEvaluable === false) {
                         this.hideSection = true;
@@ -405,7 +405,7 @@ export default {
             } else {
                 this.recordProgressModal.loading = true;
 
-                let response = await client3B.binnacle
+                const response = await client3B.binnacle
                     .createMessage({
                         evaluationQuestionId: this.recordProgressModal.objectiveId,
                         text: this.recordProgressModal.message,
@@ -421,7 +421,7 @@ export default {
                     id: response.data.result.id,
                     evaluationQuestionId: response.data.result.evaluationQuestionId,
                     text: response.data.result.text,
-                    created: new Date(response.data.result.creationTime + "Z").toLocaleDateString(),
+                    created: new Date(`${response.data.result.creationTime}Z`).toLocaleDateString(),
                     userName: authService.getUserData().name,
                 });
 
@@ -461,9 +461,8 @@ export default {
                     `Objetivo completado: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
 
-                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
-                    errorHandler(this, error),
-                );
+                await this.completeObjective(this.finishObjectiveModal.objectiveId)
+                    .catch((error) => errorHandler(this, error));
 
                 const obj = this.data.find(
                     (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
@@ -503,32 +502,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Completado":
-                    return "ant-tag-green";
-                case "Validado":
-                    return "ant-tag-blue";
-                default:
-                    return "ant-tag-gray";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Completado":
+                return "ant-tag-green";
+            case "Validado":
+                return "ant-tag-blue";
+            default:
+                return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "No iniciado";
-                case 2:
-                    return "En proceso";
-                case 3:
-                    return "Completado";
-                case 4:
-                    return "Validado";
-                default:
-                    return "error";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "No iniciado";
+            case 2:
+                return "En proceso";
+            case 3:
+                return "Completado";
+            case 4:
+                return "Validado";
+            default:
+                return "error";
             }
         },
     },

@@ -1,15 +1,13 @@
 <template>
     <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :span="24">
                 <h1 class="breadcrumb-header">Administración de Formatos de Evaluaciones</h1>
             </a-col>
             <a-col :span="20">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'admin-home' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'admin-home' }" class="breadcrumb-path">
                             Formatos
                         </router-link>
                     </a-breadcrumb-item>
@@ -30,8 +28,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import searchFormats from '@/components/admin/search/formats.vue';
+import { mapActions } from "vuex";
+import searchFormats from "@/components/admin/search/formats.vue";
 
 export default {
     components: {
@@ -39,16 +37,14 @@ export default {
     },
     methods: {
         ...mapActions({
-            clearFormatForm: 'clearFormatForm',
+            clearFormatForm: "clearFormatForm",
         }),
         initNewFormatForm() {
             this.clearFormatForm();
-            this.$router.push({ name: 'create-format' });
+            this.$router.push({ name: "create-format" });
         },
     },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

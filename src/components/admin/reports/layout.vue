@@ -486,8 +486,18 @@ export default {
         getAdminSideReport(RegionId, AreaId, side) {
             const startTime = side.start;
             const endTime = side.end;
-            startTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-            endTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+            startTime.set({
+                hour: 0,
+                minute: 0,
+                second: 0,
+                millisecond: 0,
+            });
+            endTime.set({
+                hour: 23,
+                minute: 59,
+                second: 59,
+                millisecond: 999,
+            });
 
             return Promise.all([
                 client3B.report.getAdminObjectivesReport({

@@ -155,10 +155,10 @@
 <script>
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
-import formIntroduction from "@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue";
+import formIntroduction from "@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue"; // eslint-disable-line
 import evaluationSection from "@/components/collaborator/applyPerformanceEvaluations/section.vue";
-import evaluationSectionNextObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue";
-import evaluationSectionObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue";
+import evaluationSectionNextObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue"; // eslint-disable-line
+import evaluationSectionObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue"; // eslint-disable-line
 import { mapGetters } from "vuex";
 import authService from "@/services/auth";
 
@@ -221,7 +221,7 @@ export default {
             if (this.evaluation == null) {
                 this.isAutoEvaluation = false;
             } else {
-                if (this.evaluation.status == 4) {
+                if (this.evaluation.status === 4) {
                     this.isClosed = true;
                     this.closingComment = this.evaluation.closingComment;
                 }
@@ -232,18 +232,16 @@ export default {
             }
 
             // Sort sections
-            const sectNextObj = this.evaluation.template.sections.find((sect) =>
-                this.isSectionNextObjetives(sect),
-            );
+            const sectNextObj = this.evaluation.template.sections
+                .find((sect) => this.isSectionNextObjetives(sect));
             this.evaluation.template.sections = this.evaluation.template.sections.filter(
-                (sect) => !this.isSectionNextObjetives(sect),
+                (sect) => !this.isSectionNextObjetives(sect)
             );
 
-            const sectObj = this.evaluation.template.sections.find((sect) =>
-                this.isSectionObjetives(sect),
-            );
+            const sectObj = this.evaluation.template.sections
+                .find((sect) => this.isSectionObjetives(sect));
             this.evaluation.template.sections = this.evaluation.template.sections.filter(
-                (sect) => !this.isSectionObjetives(sect),
+                (sect) => !this.isSectionObjetives(sect)
             );
 
             if (sectObj) {

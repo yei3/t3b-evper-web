@@ -173,7 +173,7 @@ export default {
                             title: items[index].name,
                             subtitle: items[index].description,
                         },
-                        endDate: new Date(items[index].endDateTime + "Z").toLocaleDateString(),
+                        endDate: new Date(`${items[index].endDateTime}Z`).toLocaleDateString(),
                     });
                 }
             } catch (error) {
@@ -183,17 +183,17 @@ export default {
         },
         getStatus(status) {
             switch (status) {
-                case 0:
-                    return "No iniciado";
-                case 1:
-                    return "En proceso";
-                case 2:
-                    return "Finalizado";
-                case 3:
-                    return "Validado";
+            case 0:
+                return "No iniciado";
+            case 1:
+                return "En proceso";
+            case 2:
+                return "Finalizado";
+            case 3:
+                return "Validado";
 
-                default:
-                    break;
+            default:
+                break;
             }
 
             return "No iniciado";
@@ -206,17 +206,17 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-                case "No iniciado":
-                    return "ant-tag-red";
-                case "En proceso":
-                    return "ant-tag-yellow";
-                case "Finalizado":
-                    return "ant-tag-green";
-                case "Validado":
-                    return "ant-tag-blue";
+            case "No iniciado":
+                return "ant-tag-red";
+            case "En proceso":
+                return "ant-tag-yellow";
+            case "Finalizado":
+                return "ant-tag-green";
+            case "Validado":
+                return "ant-tag-blue";
 
-                default:
-                    return "ant-tag-gray";
+            default:
+                return "ant-tag-gray";
             }
         },
     },

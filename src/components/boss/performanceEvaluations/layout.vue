@@ -1,15 +1,13 @@
 <template>
     <div>
-        <a-row :gutter="32"  class="breadcrumb-wrapper">
+        <a-row :gutter="32" class="breadcrumb-wrapper">
             <a-col :span="24">
                 <h1 class="breadcrumb-header">Evaluaciones de Desempeño</h1>
             </a-col>
             <a-col :span="24">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
-                        <router-link :to="{ name: 'collaborator-home' }"
-                            class="breadcrumb-path"
-                        >
+                        <router-link :to="{ name: 'collaborator-home' }" class="breadcrumb-path">
                             Home Evaluador
                         </router-link>
                     </a-breadcrumb-item>
@@ -28,7 +26,7 @@
 </template>
 
 <script>
-import evaluationsHistory from '@/components/collaborator/performanceEvaluations/evaluationsHistory.vue';
+import evaluationsHistory from "@/components/collaborator/performanceEvaluations/evaluationsHistory.vue"; // eslint-disable-line
 
 export default {
     components: {
@@ -37,6 +35,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
