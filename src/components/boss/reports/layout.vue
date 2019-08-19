@@ -45,7 +45,12 @@
                     <h4 style="color: red;">Evaluado B</h4>
                 </a-col>
             </a-row>
-            <a-row :gutter="16">
+            <a-row v-show="loadingFilterData">
+                <div style="text-align: center; margin-top: 20px;">
+                    <a-spin tip="Cargando filtros de consulta..." />
+                </div>
+            </a-row>
+            <a-row :gutter="16" v-show="!loadingFilterData">
                 <a-col :sm="24" :md="12">
                     <a-col :sm="24" :md="24" :lg="24" :xl="12">
                         <h5>Región:</h5>
@@ -322,6 +327,7 @@ export default {
         jobs: [],
         users: [],
         loading: false,
+        loadingFilterData: false,
         bannerError: null,
         objetiveSpin: true,
         leftObjectivesData: null,
@@ -478,6 +484,7 @@ export default {
             this.$printHtml("printReport");
         },
         async init() {
+            this.loadingFilterData = true;
             const [
                 {
                     data: { result: regions },
@@ -502,6 +509,7 @@ export default {
             this.areas = areas;
             this.jobs = jobs;
             this.users = users;
+            this.loadingFilterData = false;
         },
         filterOption(input, option) {
             return (
