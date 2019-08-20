@@ -29,209 +29,8 @@
                 </a-col>
             </a-row>
         </a-row>
-        <div
-            class="collapse-content"
-            style="background-color: white;
-            margin: 30px 30px; padding-top: 20px;:"
-        >
-            <a-row>
-                <a-col :md="11" style="text-align:center;">
-                    <h4 style="color: red;">Evaluado A</h4>
-                </a-col>
-                <a-col :md="2" style="text-align:center;">
-                    <h4 style="color: red;">vs</h4>
-                </a-col>
-                <a-col :md="11" style="text-align:center;">
-                    <h4 style="color: red;">Evaluado B</h4>
-                </a-col>
-            </a-row>
-            <a-row v-show="loadingFilterData">
-                <div style="text-align: center; margin-top: 20px;">
-                    <a-spin tip="Cargando filtros de consulta..." />
-                </div>
-            </a-row>
-            <a-row :gutter="16" v-show="!loadingFilterData">
-                <a-col :sm="24" :md="12">
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Región:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="left.region"
-                            @change="left.area = left.job = left.person = none"
-                        >
-                            <a-select-option :value="none" :key="none"
-                                >Selecciona una región</a-select-option
-                            >
-                            <a-select-option
-                                v-for="region in regions"
-                                :key="region.id"
-                                :value="region.id"
-                                >{{ region.displayName }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Área:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="left.area"
-                            @change="left.job = left.person = none"
-                            :disabled="left.region === none"
-                        >
-                            <a-select-option :value="none" :key="none">Todos</a-select-option>
-                            <a-select-option
-                                v-for="area in leftAreas"
-                                :key="area.id"
-                                :value="area.id"
-                                >{{ area.displayName }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Puesto:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="left.job"
-                            @change="left.person = none"
-                            :disabled="left.area === none"
-                        >
-                            <a-select-option :value="none" :key="none">Todos</a-select-option>
-                            <a-select-option
-                                v-for="job in leftJobs"
-                                :key="job.id"
-                                :value="job.jobDescription"
-                                >{{ job.jobDescription }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Evaluado:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="left.person"
-                            showSearch
-                            :filterOption="filterOption"
-                            :disabled="left.job === none"
-                        >
-                            <a-select-option :value="none" :key="none">Todos</a-select-option>
-                            <a-select-option
-                                v-for="person in leftPeople"
-                                :key="person.id"
-                                :value="person.id"
-                                >{{ person.fullName }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Fecha Inicio:</h5>
-                        <a-date-picker placeholder="Fecha Inicio" v-model="left.start" />
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Fecha Fin:</h5>
-                        <a-date-picker placeholder="Fecha Fin" v-model="left.end" />
-                    </a-col>
-                </a-col>
-                <a-col :sm="24" :md="12">
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Región:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="right.region"
-                            @change="right.area = right.job = right.person = none"
-                        >
-                            <a-select-option :value="none" :key="none"
-                                >Selecciona una región</a-select-option
-                            >
-                            <a-select-option
-                                v-for="region in regions"
-                                :key="region.id"
-                                :value="region.id"
-                                >{{ region.displayName }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Área:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="right.area"
-                            @change="right.job = right.person = none"
-                            :disabled="right.region === none"
-                        >
-                            <a-select-option :value="none" :key="none">Todos</a-select-option>
-                            <a-select-option
-                                v-for="area in rightAreas"
-                                :key="area.id"
-                                :value="area.id"
-                                >{{ area.displayName }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Puesto:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="right.job"
-                            @change="right.person = none"
-                            :disabled="right.area === none"
-                        >
-                            <a-select-option :value="none" :key="none">Todos</a-select-option>
-                            <a-select-option
-                                v-for="job in rightJobs"
-                                :key="job.id"
-                                :value="job.jobDescription"
-                                >{{ job.jobDescription }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Evaluado:</h5>
-                        <a-select
-                            style="width: 100%"
-                            :defaultValue="none"
-                            v-model="right.person"
-                            showSearch
-                            :filterOption="filterOption"
-                            :disabled="right.job === none"
-                        >
-                            <a-select-option :value="none" :key="none">Todos</a-select-option>
-                            <a-select-option
-                                v-for="person in rightPeople"
-                                :key="person.id"
-                                :value="person.id"
-                                >{{ person.fullName }}</a-select-option
-                            >
-                        </a-select>
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Fecha Inicio:</h5>
-                        <a-date-picker placeholder="Fecha Inicio" v-model="right.start" />
-                    </a-col>
-                    <a-col :sm="24" :md="24" :lg="24" :xl="12">
-                        <h5>Fecha Fin:</h5>
-                        <a-date-picker placeholder="Fecha Fin" v-model="right.end" />
-                    </a-col>
-                </a-col>
-                <a-col :md="24" style="text-align: center; padding-top: 20px;">
-                    <a-alert v-show="bannerError" banner closable :message="bannerError" />
-                    <br />
-                    <a-button
-                        type="primary"
-                        @click="getReport"
-                        :loading="loading"
-                        :disabled="loading"
-                        >Comparar</a-button
-                    >
-                </a-col>
-            </a-row>
-        </div>
+        {{ filterFormData }}
+        <filter-form v-model="filterFormData"/>
         <div
             class="collapse-content"
             v-if="evaluationEmployeeData.left.results.data.seniorityAverage"
@@ -307,6 +106,7 @@ import moment from "moment";
 import client3B from "@/api/client3B";
 import print from "@/modules/mixin/print";
 import errorHandler from "@/views/errorHandler";
+import filterForm from "@/components/boss/reports/reportsFilterForm.vue";
 import BarChart from "@/components/charts/horizontalBar.vue";
 import DoughnutChart from "@/components/charts/doughnut.vue";
 import ResultsInfo from "@/components/boss/resultsInfo/resultsInfo.vue";
@@ -316,19 +116,14 @@ const NONE = "NONE";
 export default {
     mixins: [print],
     components: {
+        filterForm,
         BarChart,
         DoughnutChart,
         ResultsInfo,
     },
     data: () => ({
-        none: NONE,
-        areas: [],
-        regions: [],
-        jobs: [],
-        users: [],
         loading: false,
-        loadingFilterData: false,
-        bannerError: null,
+        filterFormData: {},
         objetiveSpin: true,
         leftObjectivesData: null,
         leftObjectivesOptions: {
@@ -390,22 +185,6 @@ export default {
                     },
                 },
             },
-        },
-        left: {
-            region: NONE,
-            area: NONE,
-            job: NONE,
-            person: NONE,
-            start: undefined,
-            end: undefined,
-        },
-        right: {
-            region: NONE,
-            area: NONE,
-            job: NONE,
-            person: NONE,
-            start: undefined,
-            end: undefined,
         },
         leftChartData: null,
         rightChartData: null,
@@ -476,115 +255,65 @@ export default {
         },
     }),
     created() {
-        this.init();
     },
     methods: {
         print() {
             // Pass the element id here
             this.$printHtml("printReport");
         },
-        async init() {
-            this.loadingFilterData = true;
-            const [
-                {
-                    data: { result: regions },
-                },
-                {
-                    data: { result: areas },
-                },
-                {
-                    data: { result: jobs },
-                },
-                {
-                    data: { result: users },
-                },
-            ] = await Promise.all([
-                client3B.organizationUnit.getRegionsTree(),
-                client3B.organizationUnit.getAreasTree(),
-                client3B.organizationUnit.getJobsTree(),
-                client3B.organizationUnit.getUserTree(),
-            ]).catch((error) => errorHandler(this, error));
 
-            this.regions = regions;
-            this.areas = areas;
-            this.jobs = jobs;
-            this.users = users;
-            this.loadingFilterData = false;
-        },
-        filterOption(input, option) {
-            return (
-                option.componentOptions.children[0].text
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-            );
-        },
         async getReport() {
-            this.loading = true;
-            this.bannerError = null;
-            if (this.left.region === NONE || this.right.region === NONE) {
-                this.bannerError = "Al menos una región debe ser seleccionada";
-                this.loading = false;
-                return;
-            }
-            if (
-                this.left.start === undefined ||
-                this.right.start === undefined ||
-                this.left.end === undefined ||
-                this.right.end === undefined
-            ) {
-                this.bannerError = "Selecciona un rango de fechas correcto";
-                this.loading = false;
-                return;
-            }
+            this.filterFormData.loading = true;
+            this.filterFormData.loading = true;
 
-            try {
-                // Employees Data - Capabilities Left-Report
-                this.evaluationEmployeeData.left.results.showAll = this.isInCurrentPeriod(
-                    this.left.start,
-                    this.left.end,
-                );
-                this.evaluationEmployeeData.right.results.showAll = this.isInCurrentPeriod(
-                    this.right.start,
-                    this.right.end,
-                );
+            // try {
+            //     // Employees Data - Capabilities Left-Report
+            //     this.evaluationEmployeeData.left.results.showAll = this.isInCurrentPeriod(
+            //         this.filterFormData.left.start,
+            //         this.filterFormData.left.end,
+            //     );
+            //     this.evaluationEmployeeData.right.results.showAll = this.isInCurrentPeriod(
+            //         this.filterFormData.right.start,
+            //         this.filterFormData.right.end,
+            //     );
 
-                const [leftEmployee, rightEmployee] = await Promise.all([
-                    this.getEvaluationEmployeeData(this.left),
-                    this.getEvaluationEmployeeData(this.right),
-                ]);
-                this.evaluationEmployeeData.left.results.data = leftEmployee.data.result;
-                this.evaluationEmployeeData.right.results.data = rightEmployee.data.result;
+            //     const [leftEmployee, rightEmployee] = await Promise.all([
+            //         this.getEvaluationEmployeeData(this.filterFormData.left),
+            //         this.getEvaluationEmployeeData(this.filterFormData.right),
+            //     ]);
+            //     this.evaluationEmployeeData.left.results.data = leftEmployee.data.result;
+            //     this.evaluationEmployeeData.right.results.data = rightEmployee.data.result;
 
-                // Objectives - Capabilities Left-Report
-                const [
-                    {
-                        data: { result: leftReport },
-                    },
-                    {
-                        data: { result: leftObjectives },
-                    },
-                ] = await this.getCapabilitiesReport(this.left);
+            //     // Objectives - Capabilities Left-Report
+            //     const [
+            //         {
+            //             data: { result: leftReport },
+            //         },
+            //         {
+            //             data: { result: leftObjectives },
+            //         },
+            //     ] = await this.getCapabilitiesReport(this.filterFormData.left);
 
-                this.populateLeftHorizontalChart(leftReport);
-                this.populateLeftObjectivesChart(leftObjectives);
+            //     this.populateLeftHorizontalChart(leftReport);
+            //     this.populateLeftObjectivesChart(leftObjectives);
 
-                // Objectives - Capabilities Right-Report
-                const [
-                    {
-                        data: { result: rightReport },
-                    },
-                    {
-                        data: { result: rightObjectives },
-                    },
-                ] = await this.getCapabilitiesReport(this.right);
+            //     // Objectives - Capabilities Right-Report
+            //     const [
+            //         {
+            //             data: { result: rightReport },
+            //         },
+            //         {
+            //             data: { result: rightObjectives },
+            //         },
+            //     ] = await this.getCapabilitiesReport(this.filterFormData.right);
 
-                this.populateRightObjectivesChart(rightObjectives);
-                this.populateRightHorizontalChart(rightReport);
-            } catch (error) {
-                errorHandler(this, error);
-            } finally {
-                this.loading = false;
-            }
+            //     this.populateRightObjectivesChart(rightObjectives);
+            //     this.populateRightHorizontalChart(rightReport);
+            // } catch (error) {
+            //     errorHandler(this, error);
+            // } finally {
+            //     this.filterFormData.loading = false;
+            // }
         },
         getCapabilitiesReport(side) {
             const startTime = side.start;
@@ -616,7 +345,7 @@ export default {
             ]);
         },
         populateLeftHorizontalChart(leftReport) {
-            this.leftChartData = {
+            this.filterFormData.leftChartData = {
                 labels: leftReport.map((item) => item.name),
                 datasets: [
                     {
@@ -638,7 +367,7 @@ export default {
             };
         },
         populateRightHorizontalChart(rightReport) {
-            this.rightChartData = {
+            this.filterFormData.rightChartData = {
                 labels: rightReport.map((item) => item.name),
                 datasets: [
                     {
@@ -661,7 +390,7 @@ export default {
         },
         populateLeftObjectivesChart(leftObjectives) {
             const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
-            this.leftObjectivesData = {
+            this.filterFormData.leftObjectivesData = {
                 datasets: [
                     {
                         data: [leftObjectives.validatedObjectives, leftU],
@@ -673,7 +402,7 @@ export default {
         },
         populateRightObjectivesChart(rightObjectives) {
             const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
-            this.rightObjectivesData = {
+            this.filterFormData.rightObjectivesData = {
                 datasets: [
                     {
                         data: [rightObjectives.validatedObjectives, rightU],
@@ -742,33 +471,13 @@ export default {
             return false;
         },
     },
-    computed: {
-        leftAreas() {
-            if (this.left.region === NONE) return [];
-            return this.areas.filter((area) => area.parentId === this.left.region);
-        },
-        rightAreas() {
-            if (this.right.region === NONE) return [];
-            return this.areas.filter((area) => area.parentId === this.right.region);
-        },
-        leftJobs() {
-            if (this.left.area === NONE) return [];
-            return this.jobs.filter((job) => job.areaIds.includes(this.left.area));
-        },
-        rightJobs() {
-            if (this.right.area === NONE) return [];
-            return this.jobs.filter((job) => job.areaIds.includes(this.right.area));
-        },
-        leftPeople() {
-            if (this.left.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.jobDescription === this.left.job);
-            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
-        },
-        rightPeople() {
-            if (this.right.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.jobDescription === this.right.job);
-            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
-        },
+    watch: {
+        filterFormData: {
+            handler() {
+                this.getReport();
+            },
+            deep: true
+        }
     },
 };
 </script>

@@ -1,0 +1,344 @@
+<template>
+<div
+    class="collapse-content"
+    style="background-color: white;
+    margin: 30px 30px; padding-top: 20px;:"
+>
+    <a-row>
+        <a-col :md="11" style="text-align:center;">
+            <h4 style="color: red;">Evaluado A</h4>
+        </a-col>
+        <a-col :md="2" style="text-align:center;">
+            <h4 style="color: red;">vs</h4>
+        </a-col>
+        <a-col :md="11" style="text-align:center;">
+            <h4 style="color: red;">Evaluado B</h4>
+        </a-col>
+    </a-row>
+    <a-row v-show="loading">
+        <div style="text-align: center; margin-top: 20px;">
+            <a-spin tip="Cargando filtros de consulta..." />
+        </div>
+    </a-row>
+    <a-row :gutter="16" v-show="!loading">
+        <a-col :sm="24" :md="12">
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Región:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.left.region"
+                    @change="form.left.area = form.left.job = form.left.person = none"
+                >
+                    <a-select-option :value="none" :key="none"
+                        >Selecciona una región</a-select-option
+                    >
+                    <a-select-option
+                        v-for="region in regions"
+                        :key="region.id"
+                        :value="region.id"
+                        >{{ region.displayName }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Área:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.left.area"
+                    @change="form.left.job = form.left.person = none"
+                    :disabled="form.left.region === none"
+                >
+                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option
+                        v-for="area in leftAreas"
+                        :key="area.id"
+                        :value="area.id"
+                        >{{ area.displayName }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Puesto:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.left.job"
+                    @change="form.left.person = none"
+                    :disabled="form.left.area === none"
+                >
+                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option
+                        v-for="job in leftJobs"
+                        :key="job.id"
+                        :value="job.jobDescription"
+                        >{{ job.jobDescription }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Evaluado:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.left.person"
+                    showSearch
+                    :filterOption="filterOption"
+                    :disabled="form.left.job === none"
+                >
+                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option
+                        v-for="person in leftPeople"
+                        :key="person.id"
+                        :value="person.id"
+                        >{{ person.fullName }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Fecha Inicio:</h5>
+                <a-date-picker placeholder="Fecha Inicio" v-model="form.left.start" />
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Fecha Fin:</h5>
+                <a-date-picker placeholder="Fecha Fin" v-model="form.left.end" />
+            </a-col>
+        </a-col>
+        <a-col :sm="24" :md="12">
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Región:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.right.region"
+                    @change="form.right.area = form.right.job = form.right.person = none"
+                >
+                    <a-select-option :value="none" :key="none"
+                        >Selecciona una región</a-select-option
+                    >
+                    <a-select-option
+                        v-for="region in regions"
+                        :key="region.id"
+                        :value="region.id"
+                        >{{ region.displayName }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Área:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.right.area"
+                    @change="form.right.job = form.right.person = none"
+                    :disabled="form.right.region === none"
+                >
+                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option
+                        v-for="area in rightAreas"
+                        :key="area.id"
+                        :value="area.id"
+                        >{{ area.displayName }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Puesto:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.right.job"
+                    @change="form.right.person = none"
+                    :disabled="form.right.area === none"
+                >
+                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option
+                        v-for="job in rightJobs"
+                        :key="job.id"
+                        :value="job.jobDescription"
+                        >{{ job.jobDescription }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Evaluado:</h5>
+                <a-select
+                    style="width: 100%"
+                    :defaultValue="none"
+                    v-model="form.right.person"
+                    showSearch
+                    :filterOption="filterOption"
+                    :disabled="form.right.job === none"
+                >
+                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option
+                        v-for="person in rightPeople"
+                        :key="person.id"
+                        :value="person.id"
+                        >{{ person.fullName }}</a-select-option
+                    >
+                </a-select>
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Fecha Inicio:</h5>
+                <a-date-picker placeholder="Fecha Inicio" v-model="form.right.start" />
+            </a-col>
+            <a-col :sm="24" :md="24" :lg="24" :xl="12">
+                <h5>Fecha Fin:</h5>
+                <a-date-picker placeholder="Fecha Fin" v-model="form.right.end" />
+            </a-col>
+        </a-col>
+        <a-col :md="24" style="text-align: center; padding-top: 20px;">
+            <a-alert v-show="bannerError" banner closable :message="bannerError" />
+            <br />
+            <a-button
+                type="primary"
+                :loading="form.loading"
+                :disabled="form.loading"
+                @click="emitForm"
+                >Comparar</a-button
+            >
+        </a-col>
+    </a-row>
+</div>
+</template>
+
+<script lang="ts">
+import client3B from "@/api/client3B";
+import errorHandler from "@/views/errorHandler";
+
+const NONE = "NONE"; // I don't remeber why we use this fix
+
+export default ({
+    props: {
+        data: {
+            type: Object,
+            required: true,
+        },
+    },
+    model: {
+        prop: "data",
+        event: "input",
+    },
+    data: () => ({
+        loading: false,
+        none: NONE,
+        areas: [],
+        regions: [],
+        jobs: [],
+        users: [],
+        bannerError: null,
+        form: {
+            loading: false,
+            left: {
+                region: NONE,
+                area: NONE,
+                job: NONE,
+                person: NONE,
+                start: undefined,
+                end: undefined,
+            },
+            right: {
+                region: NONE,
+                area: NONE,
+                job: NONE,
+                person: NONE,
+                start: undefined,
+                end: undefined,
+            },
+        }
+    }),
+    created() {
+        this.init();
+        // this.$emit("input", this.sectionModal.value);
+    },
+    methods: {
+        async init() {
+            this.loading = true;
+            const [
+                {
+                    data: { result: regions },
+                },
+                {
+                    data: { result: areas },
+                },
+                {
+                    data: { result: jobs },
+                },
+                {
+                    data: { result: users },
+                },
+            ] = await Promise.all([
+                client3B.organizationUnit.getRegionsTree(),
+                client3B.organizationUnit.getAreasTree(),
+                client3B.organizationUnit.getJobsTree(),
+                client3B.organizationUnit.getUserTree(),
+            ]).catch((error) => errorHandler(this, error));
+
+            this.regions = regions;
+            this.areas = areas;
+            this.jobs = jobs;
+            this.users = users;
+            this.loading = false;
+        },
+        filterOption(input, option) {
+            return (
+                option.componentOptions.children[0].text
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+            );
+        },
+        emitForm() {
+            this.bannerError = null;
+            if (this.form.left.region === NONE || this.form.right.region === NONE) {
+                this.bannerError = "Al menos una región debe ser seleccionada";
+                return;
+            }
+            if (
+                this.form.left.start === undefined ||
+                this.form.right.start === undefined ||
+                this.form.left.end === undefined ||
+                this.form.right.end === undefined
+            ) {
+                this.bannerError = "Selecciona un rango de fechas correcto";
+                return;
+            }
+
+            this.$emit("input", this.form);
+        }
+    },
+    computed: {
+        leftAreas() {
+            if (this.form.left.region === NONE) return [];
+            return this.areas.filter((area) => area.parentId === this.form.left.region);
+        },
+        rightAreas() {
+            if (this.form.right.region === NONE) return [];
+            return this.areas.filter((area) => area.parentId === this.form.right.region);
+        },
+        leftJobs() {
+            if (this.form.left.area === NONE) return [];
+            return this.jobs.filter((job) => job.areaIds.includes(this.form.left.area));
+        },
+        rightJobs() {
+            if (this.form.right.area === NONE) return [];
+            return this.jobs.filter((job) => job.areaIds.includes(this.form.right.area));
+        },
+        leftPeople() {
+            if (this.form.left.job === NONE) return [];
+            const currentJob = this.jobs.find((job) => job.jobDescription === this.form.left.job);
+            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
+        },
+        rightPeople() {
+            if (this.form.right.job === NONE) return [];
+            const currentJob = this.jobs.find((job) => job.jobDescription === this.form.right.job);
+            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
+        },
+    },
+});
+</script>
+
+<style lang="stylus" scoped>
+
+</style>
