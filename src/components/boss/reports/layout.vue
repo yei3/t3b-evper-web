@@ -105,7 +105,7 @@
 import moment from "moment";
 import client3B from "@/api/client3B";
 import print from "@/modules/mixin/print";
-import errorHandler from "@/views/errorHandler";
+// import errorHandler from "@/views/errorHandler";
 import filterForm from "@/components/boss/reports/reportsFilterForm.vue";
 import BarChart from "@/components/charts/horizontalBar.vue";
 import DoughnutChart from "@/components/charts/doughnut.vue";
@@ -476,8 +476,8 @@ export default {
             handler() {
                 this.getReport();
             },
-            deep: true
-        }
+            deep: true,
+        },
     },
 };
 </script>

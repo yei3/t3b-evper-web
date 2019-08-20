@@ -247,7 +247,7 @@ export default ({
                 start: undefined,
                 end: undefined,
             },
-        }
+        },
     }),
     created() {
         this.init();
@@ -306,7 +306,7 @@ export default ({
             }
 
             this.$emit("input", this.form);
-        }
+        },
     },
     computed: {
         leftAreas() {
