@@ -595,7 +595,7 @@ export default {
             });
             const dataReport = {
                 RegionId: side.region,
-                StarTime: startTime.toISOString(),
+                StartTime: startTime.toISOString(),
                 EndDateTime: endTime.toISOString(),
             };
             if (side.area !== NONE) dataReport.AreaId = side.area;
@@ -692,7 +692,7 @@ export default {
             });
             const dataReport = {
                 RegionId: side.region,
-                StarTime: startTime.toISOString(),
+                StartTime: startTime.toISOString(),
                 EndDateTime: endTime.toISOString(),
             };
             if (side.area !== NONE) dataReport.AreaId = side.area;

@@ -117,9 +117,9 @@
 <script>
 import moment from "moment";
 
+import { mapMutations } from "vuex";
 import errorHandler from "@/views/errorHandler";
 import client3B from "@/api/client3B";
-import { mapMutations } from "vuex";
 
 export default {
     props: {

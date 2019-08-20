@@ -37,7 +37,7 @@ export default {
             return `${this.user.name} ${this.user.surname}`;
         },
     },
-    mounted() {
+    beforeCreate() {
         this.IsUserSalesMan();
     },
     methods: {

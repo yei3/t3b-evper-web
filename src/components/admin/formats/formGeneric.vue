@@ -400,10 +400,10 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { setTimeout } from "timers";
 import client3B from "@/api/client3B";
 import { answerTypes } from "@/modules/evaluation";
 import errorHandler from "@/views/errorHandler";
-import { setTimeout } from "timers";
 
 export default {
     props: {
