@@ -111,7 +111,7 @@ export default {
             if (this.queryData.person !== NONE) dataReport.UserId = this.queryData.person;
 
             const response = await client3B.report.GetEvaluatorCapabilitiesReport(dataReport)
-                .catch(error => errorHandler(this, error));
+                .catch((error) => errorHandler(this, error));
 
             const competences = response.data.result;
 
