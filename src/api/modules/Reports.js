@@ -66,8 +66,8 @@ class Reports extends Http {
      *
      * @return {Promise}        Http Response
      */
-    GetCollaboratorObjectivesAccomplishmentReport() {
-        const path = `${this.entityPath}/GetCollaboratorObjectivesAccomplishmentReport`;
+    GetCollaboratorObjectivesSalesReport() {
+        const path = `${this.entityPath}/GetCollaboratorObjectivesSalesReport`;
         return this.request(path, this.methods.get, {});
     }
 
@@ -76,8 +76,8 @@ class Reports extends Http {
      *
      * @return {Promise}        Http Response
      */
-    GetCollaboratorAccomplishmentReport(period) {
-        const path = `${this.entityPath}/GetCollaboratorAccomplishmentReport`;
+    GetCollaboratorCapabilitiesSalesReport(period) {
+        const path = `${this.entityPath}/GetCollaboratorCapabilitiesSalesReport`;
         return this.request(path, this.methods.get, { period });
     }
 
