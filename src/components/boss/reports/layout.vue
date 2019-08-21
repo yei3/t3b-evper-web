@@ -137,7 +137,6 @@ export default {
             this.$printHtml("printReport");
         },
         async getReport(event) {
-            console.log("get report");
             this.filterFormData = event;
             this.filterFormReady = true;
 
