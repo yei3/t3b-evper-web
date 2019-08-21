@@ -29,7 +29,6 @@
                 </a-col>
             </a-row>
         </a-row>
-        {{ filterFormData }}
         <filter-form :loading="!chartComponetsReady" @updatedForm="$event => getReport($event)"/>
         <div
             v-if="filterFormReady"
@@ -115,7 +114,7 @@ export default {
         filterForm,
         EmployeeInformation,
         Objectives,
-        Competences
+        Competences,
     },
     data: () => ({
         loading: false,
