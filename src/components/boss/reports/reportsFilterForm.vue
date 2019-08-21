@@ -15,12 +15,12 @@
             <h4 style="color: red;">Evaluado B</h4>
         </a-col>
     </a-row>
-    <a-row v-show="loading">
+    <a-row v-show="form.loading">
         <div style="text-align: center; margin-top: 20px;">
             <a-spin tip="Cargando filtros de consulta..." />
         </div>
     </a-row>
-    <a-row :gutter="16" v-show="!loading">
+    <a-row :gutter="16" v-show="!form.loading">
         <a-col :sm="24" :md="12">
             <a-col :sm="24" :md="24" :lg="24" :xl="12">
                 <h5>Región:</h5>
@@ -194,8 +194,8 @@
             <br />
             <a-button
                 type="primary"
-                :loading="form.loading"
-                :disabled="form.loading"
+                :loading="loading"
+                :disabled="loading"
                 @click="emitForm"
                 >Comparar</a-button
             >
@@ -207,22 +207,18 @@
 <script lang="ts">
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
+import moment from "moment";
 
 const NONE = "NONE"; // I don't remeber why we use this fix
 
 export default ({
     props: {
-        data: {
-            type: Object,
+        loading: {
+            type: Boolean,
             required: true,
-        },
-    },
-    model: {
-        prop: "data",
-        event: "input",
+        }
     },
     data: () => ({
-        loading: false,
         none: NONE,
         areas: [],
         regions: [],
@@ -255,7 +251,7 @@ export default ({
     },
     methods: {
         async init() {
-            this.loading = true;
+            this.form.loading = true;
             const [
                 {
                     data: { result: regions },
@@ -280,7 +276,7 @@ export default ({
             this.areas = areas;
             this.jobs = jobs;
             this.users = users;
-            this.loading = false;
+            this.form.loading = false;
         },
         filterOption(input, option) {
             return (
@@ -304,8 +300,12 @@ export default ({
                 this.bannerError = "Selecciona un rango de fechas correcto";
                 return;
             }
-
-            this.$emit("input", this.form);
+            const formData = JSON.parse(JSON.stringify(this.form));
+            formData.left.start = moment(formData.left.start);
+            formData.left.end = moment(formData.left.end);
+            formData.right.start = moment(formData.right.start);
+            formData.right.end = moment(formData.right.end);
+            this.$emit("updatedForm", formData);
         },
     },
     computed: {

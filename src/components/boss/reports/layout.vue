@@ -30,24 +30,12 @@
             </a-row>
         </a-row>
         {{ filterFormData }}
-        <filter-form v-model="filterFormData"/>
-        <div
-            class="collapse-content"
-            v-if="evaluationEmployeeData.left.results.data.seniorityAverage"
-            style="background-color: white; margin: 30px 30px;"
-        >
-            <h3 class="breadcrumb-header">Información de evaluados</h3>
-            <a-row>
-                <results-info
-                    :data="evaluationEmployeeData.left.results.data"
-                    :showAll="evaluationEmployeeData.left.results.showAll"
-                />
-                <results-info
-                    :data="evaluationEmployeeData.right.results.data"
-                    :showAll="evaluationEmployeeData.right.results.showAll"
-                />
-            </a-row>
-        </div>
+        <filter-form :loading="!chartComponetsReady" @updatedForm="$event => getReport($event)"/>
+        <employees-information
+            v-if="filterFormReady"
+            :filterForm="filterFormData"
+            @ready="chartComponetsStatus.employeesInformationReady = true"
+        />
         <div
             class="collapse-content"
             v-if="leftObjectivesData"
@@ -107,6 +95,7 @@ import client3B from "@/api/client3B";
 import print from "@/modules/mixin/print";
 // import errorHandler from "@/views/errorHandler";
 import filterForm from "@/components/boss/reports/reportsFilterForm.vue";
+import EmployeesInformation from "@/components/boss/reports/reportsEmployeesInformation.vue";
 import BarChart from "@/components/charts/horizontalBar.vue";
 import DoughnutChart from "@/components/charts/doughnut.vue";
 import ResultsInfo from "@/components/boss/resultsInfo/resultsInfo.vue";
@@ -117,6 +106,7 @@ export default {
     mixins: [print],
     components: {
         filterForm,
+        EmployeesInformation,
         BarChart,
         DoughnutChart,
         ResultsInfo,
@@ -124,6 +114,10 @@ export default {
     data: () => ({
         loading: false,
         filterFormData: {},
+        filterFormReady: false,
+        chartComponetsStatus: {
+            employeesInformationReady: false,
+        },
         objetiveSpin: true,
         leftObjectivesData: null,
         leftObjectivesOptions: {
@@ -231,28 +225,6 @@ export default {
                 },
             },
         },
-        evaluationEmployeeData: {
-            left: {
-                results: {
-                    data: {
-                        seniorityAverage: null,
-                        totalEmployees: null,
-                        evaluatedEmployees: null,
-                    },
-                    showAll: null,
-                },
-            },
-            right: {
-                results: {
-                    data: {
-                        seniorityAverage: null,
-                        totalEmployees: null,
-                        evaluatedEmployees: null,
-                    },
-                    showAll: null,
-                },
-            },
-        },
     }),
     created() {
     },
@@ -261,28 +233,15 @@ export default {
             // Pass the element id here
             this.$printHtml("printReport");
         },
-
-        async getReport() {
-            this.filterFormData.loading = true;
-            this.filterFormData.loading = true;
+        async getReport(event) {
+            console.log("get report");
+            this.filterFormData = event;
+            this.filterFormReady = true;
+            const keys = Object.keys(this.chartComponetsStatus);
+            keys.forEach(key => (this.chartComponetsStatus[key] = false));
 
             // try {
-            //     // Employees Data - Capabilities Left-Report
-            //     this.evaluationEmployeeData.left.results.showAll = this.isInCurrentPeriod(
-            //         this.filterFormData.left.start,
-            //         this.filterFormData.left.end,
-            //     );
-            //     this.evaluationEmployeeData.right.results.showAll = this.isInCurrentPeriod(
-            //         this.filterFormData.right.start,
-            //         this.filterFormData.right.end,
-            //     );
-
-            //     const [leftEmployee, rightEmployee] = await Promise.all([
-            //         this.getEvaluationEmployeeData(this.filterFormData.left),
-            //         this.getEvaluationEmployeeData(this.filterFormData.right),
-            //     ]);
-            //     this.evaluationEmployeeData.left.results.data = leftEmployee.data.result;
-            //     this.evaluationEmployeeData.right.results.data = rightEmployee.data.result;
+            //
 
             //     // Objectives - Capabilities Left-Report
             //     const [
@@ -315,168 +274,119 @@ export default {
             //     this.filterFormData.loading = false;
             // }
         },
-        getCapabilitiesReport(side) {
-            const startTime = side.start;
-            const endTime = side.end;
-            startTime.set({
-                hour: 0,
-                minute: 0,
-                second: 0,
-                millisecond: 0,
-            });
-            endTime.set({
-                hour: 23,
-                minute: 59,
-                second: 59,
-                millisecond: 999,
-            });
-            const dataReport = {
-                RegionId: side.region,
-                StarTime: startTime.toISOString(),
-                EndDateTime: endTime.toISOString(),
-            };
-            if (side.area !== NONE) dataReport.AreaId = side.area;
-            if (side.job !== NONE) dataReport.JobDescription = side.job;
-            if (side.person !== NONE) dataReport.UserId = side.person;
+        // getCapabilitiesReport(side) {
+        //     const startTime = side.start;
+        //     const endTime = side.end;
+        //     startTime.set({
+        //         hour: 0,
+        //         minute: 0,
+        //         second: 0,
+        //         millisecond: 0,
+        //     });
+        //     endTime.set({
+        //         hour: 23,
+        //         minute: 59,
+        //         second: 59,
+        //         millisecond: 999,
+        //     });
+        //     const dataReport = {
+        //         RegionId: side.region,
+        //         StarTime: startTime.toISOString(),
+        //         EndDateTime: endTime.toISOString(),
+        //     };
+        //     if (side.area !== NONE) dataReport.AreaId = side.area;
+        //     if (side.job !== NONE) dataReport.JobDescription = side.job;
+        //     if (side.person !== NONE) dataReport.UserId = side.person;
 
-            return Promise.all([
-                client3B.report.GetEvaluatorCapabilitiesReport(dataReport),
-                client3B.report.GetEvaluatorObjectivesReport(dataReport),
-            ]);
-        },
-        populateLeftHorizontalChart(leftReport) {
-            this.filterFormData.leftChartData = {
-                labels: leftReport.map((item) => item.name),
-                datasets: [
-                    {
-                        label: "Insatisfactorio",
-                        data: leftReport.map((item) => item.unsatisfactory),
-                        backgroundColor: "#e94e6f",
-                    },
-                    {
-                        label: "Cumple Requerimiento",
-                        data: leftReport.map((item) => item.satisfactory),
-                        backgroundColor: "#498bc9",
-                    },
-                    {
-                        label: "Excede Requerimiento",
-                        data: leftReport.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
-                    },
-                ],
-            };
-        },
-        populateRightHorizontalChart(rightReport) {
-            this.filterFormData.rightChartData = {
-                labels: rightReport.map((item) => item.name),
-                datasets: [
-                    {
-                        label: "Insatisfactorio",
-                        data: rightReport.map((item) => item.unsatisfactory),
-                        backgroundColor: "#e94e6f",
-                    },
-                    {
-                        label: "Satisfactorio",
-                        data: rightReport.map((item) => item.satisfactory),
-                        backgroundColor: "#498bc9",
-                    },
-                    {
-                        label: "Excede",
-                        data: rightReport.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
-                    },
-                ],
-            };
-        },
-        populateLeftObjectivesChart(leftObjectives) {
-            const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
-            this.filterFormData.leftObjectivesData = {
-                datasets: [
-                    {
-                        data: [leftObjectives.validatedObjectives, leftU],
-                        backgroundColor: ["#00b880", "#ff3b3b"],
-                    },
-                ],
-                labels: ["Cumplidos", "No cumplidos"],
-            };
-        },
-        populateRightObjectivesChart(rightObjectives) {
-            const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
-            this.filterFormData.rightObjectivesData = {
-                datasets: [
-                    {
-                        data: [rightObjectives.validatedObjectives, rightU],
-                        backgroundColor: ["#00b880", "#ff3b3b"],
-                    },
-                ],
-                labels: ["Cumplidos", "No cumplidos"],
-            };
-        },
-        getEvaluationEmployeeData(side) {
-            const startTime = side.start;
-            const endTime = side.end;
-            startTime.set({
-                hour: 0,
-                minute: 0,
-                second: 0,
-                millisecond: 0,
-            });
-            endTime.set({
-                hour: 23,
-                minute: 59,
-                second: 59,
-                millisecond: 999,
-            });
-            const dataReport = {
-                RegionId: side.region,
-                StarTime: startTime.toISOString(),
-                EndDateTime: endTime.toISOString(),
-            };
-            if (side.area !== NONE) dataReport.AreaId = side.area;
-            if (side.job !== NONE) dataReport.JobDescription = side.job;
-            if (side.person !== NONE) dataReport.UserId = side.person;
+        //     return Promise.all([
+        //         client3B.report.GetEvaluatorCapabilitiesReport(dataReport),
+        //         client3B.report.GetEvaluatorObjectivesReport(dataReport),
+        //     ]);
+        // },
+        // populateLeftHorizontalChart(leftReport) {
+        //     this.filterFormData.leftChartData = {
+        //         labels: leftReport.map((item) => item.name),
+        //         datasets: [
+        //             {
+        //                 label: "Insatisfactorio",
+        //                 data: leftReport.map((item) => item.unsatisfactory),
+        //                 backgroundColor: "#e94e6f",
+        //             },
+        //             {
+        //                 label: "Cumple Requerimiento",
+        //                 data: leftReport.map((item) => item.satisfactory),
+        //                 backgroundColor: "#498bc9",
+        //             },
+        //             {
+        //                 label: "Excede Requerimiento",
+        //                 data: leftReport.map((item) => item.exceeds),
+        //                 backgroundColor: "#2eaa79",
+        //             },
+        //         ],
+        //     };
+        // },
+        // populateRightHorizontalChart(rightReport) {
+        //     this.filterFormData.rightChartData = {
+        //         labels: rightReport.map((item) => item.name),
+        //         datasets: [
+        //             {
+        //                 label: "Insatisfactorio",
+        //                 data: rightReport.map((item) => item.unsatisfactory),
+        //                 backgroundColor: "#e94e6f",
+        //             },
+        //             {
+        //                 label: "Satisfactorio",
+        //                 data: rightReport.map((item) => item.satisfactory),
+        //                 backgroundColor: "#498bc9",
+        //             },
+        //             {
+        //                 label: "Excede",
+        //                 data: rightReport.map((item) => item.exceeds),
+        //                 backgroundColor: "#2eaa79",
+        //             },
+        //         ],
+        //     };
+        // },
+        // populateLeftObjectivesChart(leftObjectives) {
+        //     const leftU = leftObjectives.totalObjectives - leftObjectives.validatedObjectives;
+        //     this.filterFormData.leftObjectivesData = {
+        //         datasets: [
+        //             {
+        //                 data: [leftObjectives.validatedObjectives, leftU],
+        //                 backgroundColor: ["#00b880", "#ff3b3b"],
+        //             },
+        //         ],
+        //         labels: ["Cumplidos", "No cumplidos"],
+        //     };
+        // },
+        // populateRightObjectivesChart(rightObjectives) {
+        //     const rightU = rightObjectives.totalObjectives - rightObjectives.validatedObjectives;
+        //     this.filterFormData.rightObjectivesData = {
+        //         datasets: [
+        //             {
+        //                 data: [rightObjectives.validatedObjectives, rightU],
+        //                 backgroundColor: ["#00b880", "#ff3b3b"],
+        //             },
+        //         ],
+        //         labels: ["Cumplidos", "No cumplidos"],
+        //     };
+        // },
 
-            return client3B.report.GetEvaluationEmployeeData(dataReport);
-        },
-        isInCurrentPeriod(dateStart, dateEnd) {
-            const currentDate = moment();
-            const firstPeriodStart = moment().startOf("year");
-            const firstPeriodStartClone = firstPeriodStart.clone();
-            const firstPeriodEnd = firstPeriodStartClone.add(5, "months");
 
-            const firstPeriodEndClone = firstPeriodEnd.clone();
-            const secondPeriodStart = firstPeriodEndClone.endOf("month").add(1, "day");
-            const secondPeriodEnd = moment().endOf("year");
-
-            if (currentDate.year() !== dateStart.year()) {
-                return false;
-            }
-
-            if (
-                dateStart.isBetween(firstPeriodStart, firstPeriodEnd, "month", "[]") &&
-                dateEnd.isBetween(firstPeriodStart, firstPeriodEnd, "month", "[]")
-            ) {
-                if (currentDate.month() >= 0 && currentDate.month() <= 5) {
-                    return true;
-                }
-            } else if (
-                dateStart.isBetween(secondPeriodStart, secondPeriodEnd, "month", "[]") &&
-                dateEnd.isBetween(secondPeriodStart, secondPeriodEnd, "month", "[]")
-            ) {
-                if (currentDate.month() >= 6 && currentDate.month() <= 11) {
-                    return true;
-                }
-            }
-
-            return false;
-        },
     },
-    watch: {
-        filterFormData: {
-            handler() {
-                this.getReport();
-            },
-            deep: true,
+    computed: {
+        chartComponetsReady() {
+            if (!this.filterFormReady) {
+                return true;
+            }
+
+            const keys = Object.keys(this.chartComponetsStatus);
+            for (let i = 0; i < keys.length; i++) {
+                if(!this.chartComponetsStatus[keys[i]]) {
+                    return false;
+                }
+            }
+            return true;
         },
     },
 };
