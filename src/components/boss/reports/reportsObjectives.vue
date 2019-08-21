@@ -55,7 +55,7 @@ const charOptions = {
 
 export default {
     components: {
-        DoughnutChart
+        DoughnutChart,
     },
     props: {
         title: {
@@ -102,7 +102,7 @@ export default {
             if (this.queryData.person !== NONE) dataReport.UserId = this.queryData.person;
 
             const response = await client3B.report.GetEvaluatorObjectivesReport(dataReport)
-                .catch(error => errorHandler(this, error));
+                .catch((error) => errorHandler(this, error));
 
             const objectives = response.data.result;
 
@@ -111,7 +111,7 @@ export default {
                     {
                         data: [
                             objectives.validatedObjectives,
-                            objectives.totalObjectives - objectives.validatedObjectives
+                            objectives.totalObjectives - objectives.validatedObjectives,
                         ],
                         backgroundColor: ["#00b880", "#ff3b3b"],
                     },
@@ -127,7 +127,7 @@ export default {
         charOptions() {
             charOptions.title.text = this.title;
             return charOptions;
-        }
+        },
     },
     watch: {
         queryData: {
