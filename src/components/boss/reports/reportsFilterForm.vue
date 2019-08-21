@@ -29,6 +29,7 @@
                     :defaultValue="none"
                     v-model="form.left.region"
                     @change="form.left.area = form.left.job = form.left.person = none"
+                    :disabled="loading"
                 >
                     <a-select-option :value="none" :key="none"
                         >Selecciona una región</a-select-option
@@ -48,7 +49,7 @@
                     :defaultValue="none"
                     v-model="form.left.area"
                     @change="form.left.job = form.left.person = none"
-                    :disabled="form.left.region === none"
+                    :disabled="form.left.region === none || loading"
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
@@ -66,7 +67,7 @@
                     :defaultValue="none"
                     v-model="form.left.job"
                     @change="form.left.person = none"
-                    :disabled="form.left.area === none"
+                    :disabled="form.left.area === none || loading"
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
@@ -85,7 +86,7 @@
                     v-model="form.left.person"
                     showSearch
                     :filterOption="filterOption"
-                    :disabled="form.left.job === none"
+                    :disabled="form.left.job === none || loading"
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
@@ -98,11 +99,19 @@
             </a-col>
             <a-col :sm="24" :md="24" :lg="24" :xl="12">
                 <h5>Fecha Inicio:</h5>
-                <a-date-picker placeholder="Fecha Inicio" v-model="form.left.start" />
+                <a-date-picker
+                    v-model="form.left.start"
+                    placeholder="Fecha Inicio"
+                    :disabled="loading"
+                />
             </a-col>
             <a-col :sm="24" :md="24" :lg="24" :xl="12">
                 <h5>Fecha Fin:</h5>
-                <a-date-picker placeholder="Fecha Fin" v-model="form.left.end" />
+                <a-date-picker
+                    v-model="form.left.end"
+                    placeholder="Fecha Fin"
+                    :disabled="loading"
+                />
             </a-col>
         </a-col>
         <a-col :sm="24" :md="12">
@@ -113,6 +122,7 @@
                     :defaultValue="none"
                     v-model="form.right.region"
                     @change="form.right.area = form.right.job = form.right.person = none"
+                    :disabled="loading"
                 >
                     <a-select-option :value="none" :key="none"
                         >Selecciona una región</a-select-option
@@ -132,7 +142,7 @@
                     :defaultValue="none"
                     v-model="form.right.area"
                     @change="form.right.job = form.right.person = none"
-                    :disabled="form.right.region === none"
+                    :disabled="form.right.region === none || loading"
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
@@ -150,7 +160,7 @@
                     :defaultValue="none"
                     v-model="form.right.job"
                     @change="form.right.person = none"
-                    :disabled="form.right.area === none"
+                    :disabled="form.right.area === none || loading"
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
@@ -169,7 +179,7 @@
                     v-model="form.right.person"
                     showSearch
                     :filterOption="filterOption"
-                    :disabled="form.right.job === none"
+                    :disabled="form.right.job === none || loading"
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
@@ -182,11 +192,19 @@
             </a-col>
             <a-col :sm="24" :md="24" :lg="24" :xl="12">
                 <h5>Fecha Inicio:</h5>
-                <a-date-picker placeholder="Fecha Inicio" v-model="form.right.start" />
+                <a-date-picker
+                    v-model="form.right.start"
+                    placeholder="Fecha Inicio"
+                    :disabled="loading"
+                />
             </a-col>
             <a-col :sm="24" :md="24" :lg="24" :xl="12">
                 <h5>Fecha Fin:</h5>
-                <a-date-picker placeholder="Fecha Fin" v-model="form.right.end" />
+                <a-date-picker
+                    v-model="form.right.end"
+                    placeholder="Fecha Fin"
+                    :disabled="loading"
+                />
             </a-col>
         </a-col>
         <a-col :md="24" style="text-align: center; padding-top: 20px;">

@@ -1,5 +1,5 @@
 <template>
-    <a-col class="results-info" :xl="12" :lg="12" :xs="24">
+    <div>
         <a-row v-show="loading">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin tip="Cargando información..." />
@@ -31,7 +31,7 @@
                 </p>
             </a-col>
         </a-row>
-    </a-col>
+    </div>
 </template>
 
 <script>
