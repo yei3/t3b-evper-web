@@ -18,7 +18,9 @@
                     {{ this.evaluatedPercentage }}%
                 </p>
                 <div class="circle">
-                    <span class="text">{{ this.evaluationEmployeeData.data.evaluatedEmployees }}</span>
+                    <span class="text">
+                        {{ this.evaluationEmployeeData.data.evaluatedEmployees }}
+                    </span>
                 </div>
             </a-col>
         </a-row>
@@ -71,10 +73,10 @@ export default {
             );
 
             const response = await this.getEvaluationEmployeeData(this.queryData)
-                .catch(error => errorhandler(this, error));
+                .catch((error) => errorHandler(this, error));
             this.evaluationEmployeeData.data = response.data.result;
             this.loading = false;
-            this.$emit('ready', true);
+            this.$emit("ready", true);
         },
         getEvaluationEmployeeData(data) {
             const startTime = data.start;
@@ -137,11 +139,11 @@ export default {
     },
     computed: {
         evaluatedPercentage() {
-            if (this.evaluationEmployeeData.data.totalEmployees === 0) {
+            const { totalEmployees, evaluatedEmployees } = this.evaluationEmployeeData.data;
+            if (totalEmployees === 0) {
                 return 0;
             }
-            const evaluatedPercent =
-                (this.evaluationEmployeeData.data.evaluatedEmployees / this.evaluationEmployeeData.data.totalEmployees) * 100;
+            const evaluatedPercent = (evaluatedEmployees / totalEmployees) * 100;
             return evaluatedPercent.toFixed(2);
         },
         ageAverage() {

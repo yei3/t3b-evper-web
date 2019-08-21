@@ -216,7 +216,7 @@ export default ({
         loading: {
             type: Boolean,
             required: true,
-        }
+        },
     },
     data: () => ({
         none: NONE,

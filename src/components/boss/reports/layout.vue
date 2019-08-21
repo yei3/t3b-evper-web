@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import moment from "moment";
-import client3B from "@/api/client3B";
+// import moment from "moment";
+// import client3B from "@/api/client3B";
 import print from "@/modules/mixin/print";
 // import errorHandler from "@/views/errorHandler";
 import filterForm from "@/components/boss/reports/reportsFilterForm.vue";
@@ -100,7 +100,7 @@ import BarChart from "@/components/charts/horizontalBar.vue";
 import DoughnutChart from "@/components/charts/doughnut.vue";
 import ResultsInfo from "@/components/boss/resultsInfo/resultsInfo.vue";
 
-const NONE = "NONE";
+// const NONE = "NONE";
 
 export default {
     mixins: [print],
@@ -238,7 +238,9 @@ export default {
             this.filterFormData = event;
             this.filterFormReady = true;
             const keys = Object.keys(this.chartComponetsStatus);
-            keys.forEach(key => (this.chartComponetsStatus[key] = false));
+            keys.forEach((key) => {
+                this.chartComponetsStatus[key] = false;
+            });
 
             // try {
             //
@@ -381,8 +383,8 @@ export default {
             }
 
             const keys = Object.keys(this.chartComponetsStatus);
-            for (let i = 0; i < keys.length; i++) {
-                if(!this.chartComponetsStatus[keys[i]]) {
+            for (let i = 0; i < keys.length; i += 1) {
+                if (!this.chartComponetsStatus[keys[i]]) {
                     return false;
                 }
             }

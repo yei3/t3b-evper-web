@@ -38,7 +38,7 @@ export default {
             deep: true,
         },
         componentsready(value) {
-            if(value == 2) {
+            if (value === 2) {
                 this.$emit("ready", true);
             }
         },
