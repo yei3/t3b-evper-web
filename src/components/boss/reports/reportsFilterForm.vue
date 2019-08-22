@@ -32,8 +32,8 @@
                     :disabled="loading"
                 >
                     <a-select-option :value="none" :key="none"
-                        >Selecciona una región</a-select-option
-                    >
+                        >Selecciona una región
+                    </a-select-option>
                     <a-select-option
                         v-for="region in regions"
                         :key="region.id"
@@ -51,7 +51,9 @@
                     @change="form.left.job = form.left.person = none"
                     :disabled="form.left.region === none || loading"
                 >
-                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option :value="none" :key="none">
+                        Selecciona una área
+                    </a-select-option>
                     <a-select-option
                         v-for="area in leftAreas"
                         :key="area.id"
@@ -124,9 +126,9 @@
                     @change="form.right.area = form.right.job = form.right.person = none"
                     :disabled="loading"
                 >
-                    <a-select-option :value="none" :key="none"
-                        >Selecciona una región</a-select-option
-                    >
+                    <a-select-option :value="none" :key="none">
+                        Selecciona una región
+                    </a-select-option>
                     <a-select-option
                         v-for="region in regions"
                         :key="region.id"
@@ -144,7 +146,9 @@
                     @change="form.right.job = form.right.person = none"
                     :disabled="form.right.region === none || loading"
                 >
-                    <a-select-option :value="none" :key="none">Todos</a-select-option>
+                    <a-select-option :value="none" :key="none">
+                        Selecciona una área
+                    </a-select-option>
                     <a-select-option
                         v-for="area in rightAreas"
                         :key="area.id"
