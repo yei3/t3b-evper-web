@@ -62,16 +62,30 @@
             <a-row>
                 <a-col :span="12" class="text-center">
                     <objectives
+                        v-if="!filterFormData.left.isSalesArea"
                         :queryData="filterFormData.left"
                         title="Reporte de Objetivos A"
                         @ready="chartComponetsStatus.objectivesReadyL = true"
                     />
+                    <sales-objectives
+                        v-else
+                        :queryData="filterFormData.left"
+                        title="Reporte de Objetivos de Venta A"
+                        @ready="chartComponetsStatus.SalesObjectivesReadyL = true"
+                    />
                 </a-col>
                 <a-col :span="12" class="text-center">
                     <objectives
+                        v-if="!filterFormData.right.isSalesArea"
                         :queryData="filterFormData.right"
                         title="Reporte de Objetivos B"
                         @ready="chartComponetsStatus.objectivesReadyR = true"
+                    />
+                    <sales-objectives
+                        v-else
+                        :queryData="filterFormData.right"
+                        title="Reporte de Objetivos de venta B"
+                        @ready="chartComponetsStatus.SalesObjectivesReadyR = true"
                     />
                 </a-col>
             </a-row>
@@ -85,14 +99,30 @@
             <a-row>
                 <a-col :sm="24" :md="12">
                     <competences
+                        v-if="!filterFormData.left.isSalesArea"
                         :queryData="filterFormData.left"
+                        title="Reporte de Capacidades"
                         @ready="chartComponetsStatus.competencesReadyL = true"
+                    />
+                    <sales-competences
+                        v-else
+                        :queryData="filterFormData.left"
+                        title="Reporte de Capacidades de Venta"
+                        @ready="chartComponetsStatus.SalesCompetencesReadyL = true"
                     />
                 </a-col>
                 <a-col :sm="24" :md="12">
                     <competences
+                        v-if="!filterFormData.right.isSalesArea"
                         :queryData="filterFormData.right"
+                        title="Reporte de Capacidades"
                         @ready="chartComponetsStatus.competencesReadyR = true"
+                    />
+                    <sales-competences
+                        v-else
+                        :queryData="filterFormData.right"
+                        title="Reporte de Capacidades de Venta"
+                        @ready="chartComponetsStatus.SalesCompetencesReadyR = true"
                     />
                 </a-col>
             </a-row>
@@ -106,6 +136,8 @@ import filterForm from "@/components/boss/reports/reportsFilterForm.vue";
 import EmployeeInformation from "@/components/boss/reports/reportsEmployeeInformation.vue";
 import Objectives from "@/components/boss/reports/reportsObjectives.vue";
 import Competences from "@/components/boss/reports/reportsCompetences.vue";
+import SalesObjectives from "@/components/boss/reports/reportsSalesObjectives.vue";
+import SalesCompetences from "@/components/boss/reports/reportsSalesCompetences.vue";
 
 
 export default {
@@ -115,6 +147,8 @@ export default {
         EmployeeInformation,
         Objectives,
         Competences,
+        SalesObjectives,
+        SalesCompetences,
     },
     data: () => ({
         loading: false,
@@ -127,6 +161,10 @@ export default {
             objectivesReadyR: false,
             competencesReadyL: false,
             competencesReadyR: false,
+            SalesObjectivesReadyL: false,
+            SalesObjectivesReadyR: false,
+            SalesCompetencesReadyL: false,
+            SalesCompetencesReadyR: false,
         },
     }),
     created() {

@@ -24,7 +24,7 @@ const NONE = "NONE";
 const charOptions = {
     title: {
         display: true,
-        text: "Title",
+        text: "Tittle",
     },
     tooltips: {
         mode: "index",
@@ -113,7 +113,7 @@ export default {
             if (this.queryData.job !== NONE) dataReport.JobDescription = this.queryData.job;
             if (this.queryData.person !== NONE) dataReport.UserId = this.queryData.person;
 
-            const response = await client3B.report.GetEvaluatorCapabilitiesReport(dataReport)
+            const response = await client3B.report.GetEvaluatorCapabilitiesSalesReport(dataReport)
                 .catch((error) => errorHandler(this, error));
 
             const competences = response.data.result;
@@ -127,12 +127,12 @@ export default {
                         backgroundColor: "#e94e6f",
                     },
                     {
-                        label: "Cumple Requerimiento",
+                        label: "Satisfactorio",
                         data: competences.map((item) => item.satisfactory),
                         backgroundColor: "#498bc9",
                     },
                     {
-                        label: "Excede Requerimiento",
+                        label: "Excelente",
                         data: competences.map((item) => item.exceeds),
                         backgroundColor: "#2eaa79",
                     },

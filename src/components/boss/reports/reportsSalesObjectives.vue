@@ -5,8 +5,8 @@
                 <a-spin tip="Cargando información..." />
             </div>
         </a-row>
-        <div v-show="!loading">
-            <bar-chart
+        <div class="small" v-show="!loading">
+            <doughnut-chart
                 :chartData="charData"
                 :options="charOptions"
             />
@@ -16,7 +16,7 @@
 
 <script>
 import client3B from "@/api/client3B";
-import BarChart from "@/components/charts/horizontalBar.vue";
+import DoughnutChart from "@/components/charts/doughnut.vue";
 import errorHandler from "@/views/errorHandler";
 
 const NONE = "NONE";
@@ -26,23 +26,12 @@ const charOptions = {
         display: true,
         text: "Title",
     },
-    tooltips: {
-        mode: "index",
-        intersect: false,
+    display: true,
+    labels: {
+        fontColor: "rgb(255, 99, 132)",
     },
     responsive: true,
-    scales: {
-        xAxes: [
-            {
-                stacked: true,
-            },
-        ],
-        yAxes: [
-            {
-                stacked: true,
-            },
-        ],
-    },
+    maintainAspectRatio: true,
     plugins: {
         datalabels: {
             font: {
@@ -54,10 +43,9 @@ const charOptions = {
                 return value <= 0 ? "transparent" : "white";
             },
             formatter: (value, context) => {
-                const index = context.dataIndex;
                 let total = 0;
-                context.chart.data.datasets.forEach((dataset) => {
-                    total += dataset.data[index];
+                context.dataset.data.forEach((element) => {
+                    total += element;
                 });
                 return `${Math.round((value / total) * 100)}%`;
             },
@@ -67,7 +55,7 @@ const charOptions = {
 
 export default {
     components: {
-        BarChart,
+        DoughnutChart,
     },
     props: {
         title: {
@@ -84,10 +72,10 @@ export default {
         charData: {},
     }),
     created() {
-        this.syncCompetences();
+        this.syncObjectives();
     },
     methods: {
-        async syncCompetences() {
+        async syncObjectives() {
             this.loading = true;
             const startTime = this.queryData.start;
             const endTime = this.queryData.end;
@@ -113,30 +101,22 @@ export default {
             if (this.queryData.job !== NONE) dataReport.JobDescription = this.queryData.job;
             if (this.queryData.person !== NONE) dataReport.UserId = this.queryData.person;
 
-            const response = await client3B.report.GetEvaluatorCapabilitiesReport(dataReport)
+            const response = await client3B.report.GetEvaluatorObjectivesSalesReport(dataReport)
                 .catch((error) => errorHandler(this, error));
 
-            const competences = response.data.result;
+            const objectives = response.data.result;
 
             this.charData = {
-                labels: competences.map((item) => item.name),
                 datasets: [
                     {
-                        label: "Insatisfactorio",
-                        data: competences.map((item) => item.unsatisfactory),
-                        backgroundColor: "#e94e6f",
-                    },
-                    {
-                        label: "Cumple Requerimiento",
-                        data: competences.map((item) => item.satisfactory),
-                        backgroundColor: "#498bc9",
-                    },
-                    {
-                        label: "Excede Requerimiento",
-                        data: competences.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
+                        data: [
+                            objectives.validatedObjectives,
+                            objectives.totalObjectives - objectives.validatedObjectives,
+                        ],
+                        backgroundColor: ["#00b880", "#ff3b3b"],
                     },
                 ],
+                labels: ["Cumplidos", "No cumplidos"],
             };
 
             this.loading = false;
@@ -152,7 +132,7 @@ export default {
     watch: {
         queryData: {
             handler() {
-                this.syncCompetences();
+                this.syncObjectives();
             },
             deep: true,
         },

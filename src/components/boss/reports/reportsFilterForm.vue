@@ -222,14 +222,14 @@
 </div>
 </template>
 
-<script lang="ts">
+<script>
+import moment from "moment";
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
-import moment from "moment";
 
 const NONE = "NONE"; // I don't remeber why we use this fix
 
-export default ({
+export default {
     props: {
         loading: {
             type: Boolean,
@@ -265,7 +265,6 @@ export default ({
     }),
     created() {
         this.init();
-        // this.$emit("input", this.sectionModal.value);
     },
     methods: {
         async init() {
@@ -306,7 +305,11 @@ export default ({
         emitForm() {
             this.bannerError = null;
             if (this.form.left.region === NONE || this.form.right.region === NONE) {
-                this.bannerError = "Al menos una región debe ser seleccionada";
+                this.bannerError = "Debes seleccionar un región para cada lado del formulario";
+                return;
+            }
+            if (this.form.left.area === NONE || this.form.right.area === NONE) {
+                this.bannerError = "Debes seleccionar una área para cada lado del formulario";
                 return;
             }
             if (
@@ -323,7 +326,16 @@ export default ({
             formData.left.end = moment(formData.left.end);
             formData.right.start = moment(formData.right.start);
             formData.right.end = moment(formData.right.end);
+            formData.left.isSalesArea = this.isSalesArea(formData.left.area);
+            formData.right.isSalesArea = this.isSalesArea(formData.right.area);
             this.$emit("updatedForm", formData);
+        },
+        isSalesArea(areaId) {
+            if (areaId === NONE) return false;
+
+            return this.areas
+                .find((area) => area.id === areaId)
+                .isSalesArea;
         },
     },
     computed: {
@@ -354,7 +366,7 @@ export default ({
             return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
         },
     },
-});
+};
 </script>
 
 <style lang="stylus" scoped>
