@@ -12,8 +12,8 @@
                 <p class="results-period">Periodo 2019-1</p>
             </a-col>
         </a-row>
-        <report v-if="!isSalesMan" />
-        <sales-report v-if="isSalesMan" />
+        <report v-if="!objetiveSpin && !isSalesMan" />
+        <sales-report v-if="!objetiveSpin && isSalesMan" />
     </div>
 </template>
 <script>
@@ -25,6 +25,7 @@ import salesReport from "@/components/collaborator/reports/salesReport.vue";
 
 export default {
     data: () => ({
+        objetiveSpin: true,
         user: authService.getUserData(),
         isSalesMan: false,
     }),
@@ -42,12 +43,14 @@ export default {
     },
     methods: {
         async IsUserSalesMan() {
+            this.objetiveSpin = true;
             const response = await client3B.user.IsUserSalesMan().catch((error) => {
-                this.objetiveSpin = false;
+                
                 errorHandler(this, error);
             });
             if (!response) this.isSalesMan = false;
             this.isSalesMan = response.data.result;
+            this.objetiveSpin = false;
         },
     },
 };
