@@ -20,17 +20,20 @@ import BarChart from "@/components/charts/horizontalBar.vue";
 import errorHandler from "@/views/errorHandler";
 
 const NONE = "NONE";
+const SUCCESS = 70;
+const EXCEEDS = 90;
 
 const charOptions = {
     title: {
         display: true,
         text: "Tittle",
     },
+    responsive: true,
+    maintainAspectRatio: false,
     tooltips: {
         mode: "index",
         intersect: false,
     },
-    responsive: true,
     scales: {
         xAxes: [
             {
@@ -53,14 +56,7 @@ const charOptions = {
                 const value = context.dataset.data[index];
                 return value <= 0 ? "transparent" : "white";
             },
-            formatter: (value, context) => {
-                const index = context.dataIndex;
-                let total = 0;
-                context.chart.data.datasets.forEach((dataset) => {
-                    total += dataset.data[index];
-                });
-                return `${Math.round((value / total) * 100)}%`;
-            },
+            formatter: (value) => `${value}%`,
         },
     },
 };
@@ -115,32 +111,76 @@ export default {
 
             const response = await client3B.report.GetEvaluatorCapabilitiesSalesReport(dataReport)
                 .catch((error) => errorHandler(this, error));
+            if (!response) return;
 
             const competences = response.data.result;
 
+            const jobTotal = competences[0].total;
+            const jobSuccess = competences[0].satisfactory;
+            const cultureTotal = competences[1].total;
+            const cultureSuccess = competences[1].satisfactory;
+
+            const data = [
+                {
+                    name: "Competencias del puesto",
+                    total: jobTotal - jobSuccess,
+                    exceeds: this.isExceeds(jobTotal, jobSuccess),
+                    satisfactory: this.isSatisfactory(jobTotal, jobSuccess),
+                    unsatisfactory: this.isUnsatisfactory(jobTotal, jobSuccess),
+                },
+                {
+                    name: "Cultura 3B",
+                    total: cultureTotal - cultureSuccess,
+                    exceeds: this.isExceeds(cultureTotal, cultureSuccess),
+                    satisfactory: this.isSatisfactory(cultureTotal, cultureSuccess),
+                    unsatisfactory: this.isUnsatisfactory(
+                        cultureTotal,
+                        cultureSuccess,
+                    ),
+                },
+            ];
+
             this.charData = {
-                labels: competences.map((item) => item.name),
+                labels: data.map((item) => item.name),
                 datasets: [
                     {
                         label: "Insatisfactorio",
-                        data: competences.map((item) => item.unsatisfactory),
-                        backgroundColor: "#e94e6f",
+                        data: data.map((item) => item.unsatisfactory),
+                        backgroundColor: "#ff3b3b",
                     },
                     {
                         label: "Satisfactorio",
-                        data: competences.map((item) => item.satisfactory),
+                        data: data.map((item) => item.satisfactory),
                         backgroundColor: "#498bc9",
                     },
                     {
                         label: "Excelente",
-                        data: competences.map((item) => item.exceeds),
-                        backgroundColor: "#2eaa79",
+                        data: data.map((item) => item.exceeds),
+                        backgroundColor: "#00b880",
                     },
                 ],
             };
 
             this.loading = false;
             this.$emit("ready", true);
+        },
+        isExceeds(total, value) {
+            if (!total) return 0;
+            const result = Math.round((value / total) * 100);
+            if (result >= EXCEEDS) return result;
+            return 0;
+        },
+        isSatisfactory(total, value) {
+            if (!total) return 0;
+            const result = Math.round((value / total) * 100);
+            if (result >= SUCCESS && result < EXCEEDS) return result;
+            return 0;
+        },
+        isUnsatisfactory(total, value) {
+            if (!total) return 0;
+            const result = Math.round((value / total) * 100);
+            if (result < SUCCESS) return result;
+            return 0;
         },
     },
     computed: {
