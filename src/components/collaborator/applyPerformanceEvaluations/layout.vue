@@ -153,13 +153,13 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 import formIntroduction from "@/components/collaborator/applyPerformanceEvaluations/formIntroduction.vue"; // eslint-disable-line
 import evaluationSection from "@/components/collaborator/applyPerformanceEvaluations/section.vue";
 import evaluationSectionNextObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionNextObjectives.vue"; // eslint-disable-line
 import evaluationSectionObjectives from "@/components/collaborator/applyPerformanceEvaluations/sectionObjectives.vue"; // eslint-disable-line
-import { mapGetters } from "vuex";
 import authService from "@/services/auth";
 
 const SECTION_PROX_OBJETIVES_NAME = "Próximos objetivos";

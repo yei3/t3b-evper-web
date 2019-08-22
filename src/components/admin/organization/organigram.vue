@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import client3B from "@/api/client3B";
 import { GChart } from "vue-google-charts";
+import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 
 export default {

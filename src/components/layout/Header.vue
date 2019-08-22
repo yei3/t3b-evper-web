@@ -58,8 +58,8 @@
     </a-layout-header>
 </template>
 <script>
-import client3B from "@/api/client3B";
 import { mapActions, mapGetters } from "vuex";
+import client3B from "@/api/client3B";
 import authService from "@/services/auth";
 import errorHandler from "@/views/errorHandler";
 
