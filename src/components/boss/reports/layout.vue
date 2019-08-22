@@ -64,28 +64,28 @@
                     <objectives
                         v-if="!filterFormData.left.isSalesArea"
                         :queryData="filterFormData.left"
-                        title="Reporte de Objetivos A"
+                        title="Reporte de Objetivos"
                         @ready="chartComponetsStatus.objectivesReadyL = true"
                     />
                     <sales-objectives
                         v-else
                         :queryData="filterFormData.left"
-                        title="Reporte de Objetivos de Venta A"
-                        @ready="chartComponetsStatus.SalesObjectivesReadyL = true"
+                        title="Reporte de Objetivos de Venta"
+                        @ready="chartComponetsStatus.objectivesReadyL = true"
                     />
                 </a-col>
                 <a-col :span="12" class="text-center">
                     <objectives
                         v-if="!filterFormData.right.isSalesArea"
                         :queryData="filterFormData.right"
-                        title="Reporte de Objetivos B"
+                        title="Reporte de Objetivos"
                         @ready="chartComponetsStatus.objectivesReadyR = true"
                     />
                     <sales-objectives
                         v-else
                         :queryData="filterFormData.right"
-                        title="Reporte de Objetivos de venta B"
-                        @ready="chartComponetsStatus.SalesObjectivesReadyR = true"
+                        title="Reporte de Objetivos de venta"
+                        @ready="chartComponetsStatus.objectivesReadyR = true"
                     />
                 </a-col>
             </a-row>
@@ -108,7 +108,7 @@
                         v-else
                         :queryData="filterFormData.left"
                         title="Reporte de Capacidades de Venta"
-                        @ready="chartComponetsStatus.SalesCompetencesReadyL = true"
+                        @ready="chartComponetsStatus.competencesReadyL = true"
                     />
                 </a-col>
                 <a-col :sm="24" :md="12">
@@ -122,7 +122,7 @@
                         v-else
                         :queryData="filterFormData.right"
                         title="Reporte de Capacidades de Venta"
-                        @ready="chartComponetsStatus.SalesCompetencesReadyR = true"
+                        @ready="chartComponetsStatus.competencesReadyR = true"
                     />
                 </a-col>
             </a-row>
@@ -161,10 +161,6 @@ export default {
             objectivesReadyR: false,
             competencesReadyL: false,
             competencesReadyR: false,
-            SalesObjectivesReadyL: false,
-            SalesObjectivesReadyR: false,
-            SalesCompetencesReadyL: false,
-            SalesCompetencesReadyR: false,
         },
     }),
     created() {
