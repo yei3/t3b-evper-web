@@ -45,7 +45,6 @@ export default {
         async IsUserSalesMan() {
             this.objetiveSpin = true;
             const response = await client3B.user.IsUserSalesMan().catch((error) => {
-                
                 errorHandler(this, error);
             });
             if (!response) this.isSalesMan = false;
