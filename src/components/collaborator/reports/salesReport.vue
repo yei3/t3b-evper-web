@@ -259,7 +259,7 @@ export default {
             this.isObjectivesLoaded = false;
 
             const response = await client3B.report
-                .GetCollaboratorObjectivesAccomplishmentReport()
+                .GetCollaboratorObjectivesSalesReport()
                 .catch((error) => {
                     this.objetiveSpin = false;
                     errorHandler(this, error);
@@ -299,14 +299,14 @@ export default {
             this.isCompentecesLoaded = false;
 
             const current = await client3B.report
-                .GetCollaboratorAccomplishmentReport(0)
+                .GetCollaboratorCapabilitiesSalesReport(0)
                 .catch((error) => {
                     this.competenceSpin = false;
                     errorHandler(this, error);
                 });
 
             const previous = await client3B.report
-                .GetCollaboratorAccomplishmentReport(1)
+                .GetCollaboratorCapabilitiesSalesReport(1)
                 .catch((error) => {
                     this.competenceSpin = false;
                     errorHandler(this, error);
