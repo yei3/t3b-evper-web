@@ -327,16 +327,24 @@ export default {
             }
             const formData = JSON.parse(JSON.stringify(this.form));
             formData.left.start = moment(formData.left.start);
-            formData.left.start.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+            formData.left.start.set({
+                hour: 0, minute: 0, second: 0, millisecond: 0,
+            });
             formData.left.end = moment(formData.left.end);
-            formData.left.end.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+            formData.left.end.set({
+                hour: 23, minute: 59, second: 59, millisecond: 999,
+            });
             formData.right.start = moment(formData.right.start);
-            formData.right.start.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+            formData.right.start.set({
+                hour: 0, minute: 0, second: 0, millisecond: 0,
+            });
             formData.right.end = moment(formData.right.end);
-            formData.right.end.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+            formData.right.end.set({
+                hour: 23, minute: 59, second: 59, millisecond: 999,
+            });
             formData.left.isSalesArea = this.isSalesArea(formData.left.area);
             formData.right.isSalesArea = this.isSalesArea(formData.right.area);
-            // The api calls need the job desccription instead of the job id
+            // The api calls need the job description instead of the job id
             const ljob = this.jobs.find((job) => job.id === formData.left.job);
             formData.left.job = ljob.jobDescription;
             const rjob = this.jobs.find((job) => job.id === formData.right.job);
