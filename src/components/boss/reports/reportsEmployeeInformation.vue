@@ -79,24 +79,10 @@ export default {
             this.$emit("ready", true);
         },
         getEvaluationEmployeeData(data) {
-            const startTime = data.start;
-            const endTime = data.end;
-            startTime.set({
-                hour: 0,
-                minute: 0,
-                second: 0,
-                millisecond: 0,
-            });
-            endTime.set({
-                hour: 23,
-                minute: 59,
-                second: 59,
-                millisecond: 999,
-            });
             const dataReport = {
                 RegionId: data.region,
-                StarTime: startTime.toISOString(),
-                EndDateTime: endTime.toISOString(),
+                StartTime: data.start.toISOString(),
+                EndDateTime: data.end.toISOString(),
             };
             if (data.area !== NONE) dataReport.AreaId = data.area;
             if (data.job !== NONE) dataReport.JobDescription = data.job;

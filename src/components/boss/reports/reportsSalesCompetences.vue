@@ -84,26 +84,10 @@ export default {
     },
     methods: {
         async syncCompetences() {
-            this.loading = true;
-            const startTime = this.queryData.start;
-            const endTime = this.queryData.end;
-            startTime.set({
-                hour: 0,
-                minute: 0,
-                second: 0,
-                millisecond: 0,
-            });
-            endTime.set({
-                hour: 23,
-                minute: 59,
-                second: 59,
-                millisecond: 999,
-            });
-
             const dataReport = {
                 RegionId: this.queryData.region,
-                StarTime: startTime.toISOString(),
-                EndDateTime: endTime.toISOString(),
+                StartTime: this.queryData.start.toISOString(),
+                EndDateTime: this.queryData.end.toISOString(),
             };
             if (this.queryData.area !== NONE) dataReport.AreaId = this.queryData.area;
             if (this.queryData.job !== NONE) dataReport.JobDescription = this.queryData.job;
