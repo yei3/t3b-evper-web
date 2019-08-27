@@ -345,10 +345,14 @@ export default {
             formData.left.isSalesArea = this.isSalesArea(formData.left.area);
             formData.right.isSalesArea = this.isSalesArea(formData.right.area);
             // The api calls need the job description instead of the job id
-            const ljob = this.jobs.find((job) => job.id === formData.left.job);
-            formData.left.job = ljob.jobDescription;
-            const rjob = this.jobs.find((job) => job.id === formData.right.job);
-            formData.right.job = rjob.jobDescription;
+            if (formData.left.job !== NONE) {
+                const ljob = this.jobs.find((job) => job.id === formData.left.job);
+                formData.left.job = ljob.jobDescription;
+            }
+            if (formData.right.job !== NONE) {
+                const rjob = this.jobs.find((job) => job.id === formData.right.job);
+                formData.right.job = rjob.jobDescription;
+            }
             this.$emit("updatedForm", formData);
         },
         isSalesArea(areaId) {
