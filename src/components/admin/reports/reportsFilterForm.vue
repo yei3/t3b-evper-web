@@ -289,7 +289,7 @@ export default {
             ] = await Promise.all([
                 client3B.organizationUnit.getAllRegions(),
                 client3B.organizationUnit.getAllAreas(),
-                client3B.user.getAllEmployments(),
+                client3B.organizationUnit.getAreasJobDescriptions(),
                 client3B.user.getAll(),
             ]).catch((error) => errorHandler(this, error));
 

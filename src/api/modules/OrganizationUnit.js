@@ -40,12 +40,12 @@ class OrganizationUnit extends Http {
     }
 
     /**
-     * Request for the information for AllRegionsOrganizationUnits
+     * Request for the information for GetAreasJobDescriptions
      *
      * @return {Promise}        Http Response
      */
-    getAllJobDescriptions() {
-        const path = `${this.entityPath}/GetAllJobDescriptions`;
+    getAreasJobDescriptions() {
+        const path = `${this.entityPath}/GetAreasJobDescriptions`;
         return this.request(path, this.methods.get, {});
     }
 
