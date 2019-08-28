@@ -4,6 +4,11 @@
     style="background-color: white;
     margin: 30px 30px; padding-top: 20px;:"
 >
+    <a-row >
+        <label v-for="(user, index) in users" :key="index">
+            {{user.roleNames}}
+        </label>
+    </a-row>
     <a-row>
         <a-col :md="11" style="text-align:center;">
             <h4 style="color: red;">Evaluado A</h4>
@@ -73,10 +78,10 @@
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
-                        v-for="job in leftJobs"
-                        :key="job.id"
-                        :value="job.id"
-                        >{{ job.jobDescription }}</a-select-option
+                        v-for="(job, index) in leftJobs"
+                        :key="index"
+                        :value="job"
+                        >{{ job }}</a-select-option
                     >
                 </a-select>
             </a-col>
@@ -168,10 +173,10 @@
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
-                        v-for="job in rightJobs"
-                        :key="job.id"
-                        :value="job.id"
-                        >{{ job.jobDescription }}</a-select-option
+                        v-for="(job, index) in rightJobs"
+                        :key="index"
+                        :value="job"
+                        >{{ job }}</a-select-option
                     >
                 </a-select>
             </a-col>
@@ -284,12 +289,12 @@ export default {
                     data: { result: jobs },
                 },
                 {
-                    data: { result: users },
+                    data: { result: { items: users } },
                 },
             ] = await Promise.all([
                 client3B.organizationUnit.getAllRegions(),
                 client3B.organizationUnit.getAllAreas(),
-                client3B.user.getAllEmployments(),
+                client3B.organizationUnit.getAreasJobDescription(),
                 client3B.user.getAll(),
             ]).catch((error) => errorHandler(this, error));
 
@@ -375,21 +380,22 @@ export default {
         },
         leftJobs() {
             if (this.form.left.area === NONE) return [];
-            return this.jobs.filter((job) => job.areaIds.includes(this.form.left.area));
+            return this.jobs.find((job) => job.areaId === this.form.left.area).jobDescriptions;
         },
         rightJobs() {
             if (this.form.right.area === NONE) return [];
-            return this.jobs.filter((job) => job.areaIds.includes(this.form.right.area));
+            return this.jobs.find((job) => job.areaId === this.form.right.area).jobDescriptions;
         },
         leftPeople() {
             if (this.form.left.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.id === this.form.left.job);
-            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
+            return this.users.filter((user) => {
+                console.log(user.roleNames);
+                return user.roleNames.includes(this.form.left.job);
+            });
         },
         rightPeople() {
             if (this.form.right.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.id === this.form.right.job);
-            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
+            return this.users.filter((user) => user.roleNames.includes(this.form.right.job));
         },
     },
 };
