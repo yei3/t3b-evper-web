@@ -287,10 +287,10 @@ export default {
                     data: { result: users },
                 },
             ] = await Promise.all([
-                client3B.organizationUnit.getRegionsTree(),
-                client3B.organizationUnit.getAreasTree(),
-                client3B.organizationUnit.getJobsTree(),
-                client3B.organizationUnit.getUserTree(),
+                client3B.organizationUnit.getAllRegions(),
+                client3B.organizationUnit.getAllAreas(),
+                client3B.organizationUnit.getAllJobDescriptions(),
+                client3B.user.GetAll(),
             ]).catch((error) => errorHandler(this, error));
 
             this.regions = regions;

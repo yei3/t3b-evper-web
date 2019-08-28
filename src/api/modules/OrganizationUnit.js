@@ -44,6 +44,16 @@ class OrganizationUnit extends Http {
      *
      * @return {Promise}        Http Response
      */
+    getAllJobDescriptions() {
+        const path = `${this.entityPath}/GetAllJobDescriptions`;
+        return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Request for the information for AllRegionsOrganizationUnits
+     *
+     * @return {Promise}        Http Response
+     */
     getMyRegion() {
         const path = `${this.entityPath}/GetMyRegionOrganizationUnit`;
         return this.request(path, this.methods.get, {});
