@@ -35,6 +35,29 @@
             class="collapse-content"
             style="background-color: white; margin: 30px 30px;"
         >
+            <h3 class="breadcrumb-header">Información de evaluados</h3>
+            <a-row>
+                <a-col class="results-info" :xl="12" :lg="12" :xs="24">
+                    <employee-information
+                        v-if="filterFormReady"
+                        :queryData="filterFormData.left"
+                        @ready="chartComponetsStatus.employeeInformationReadyL = true"
+                    />
+                </a-col>
+                <a-col class="results-info" :xl="12" :lg="12" :xs="24">
+                    <employee-information
+                        v-if="filterFormReady"
+                        :queryData="filterFormData.right"
+                        @ready="chartComponetsStatus.employeeInformationReadyR = true"
+                    />
+                </a-col>
+            </a-row>
+        </div>
+        <div
+            v-if="filterFormReady"
+            class="collapse-content"
+            style="background-color: white; margin: 30px 30px;"
+        >
             <h3 class="breadcrumb-header">Objetivos Evaluados</h3>
             <a-row>
                 <a-col :span="12" class="text-center">
@@ -110,6 +133,7 @@
 <script>
 import print from "@/modules/mixin/print";
 import filterForm from "@/components/admin/reports/reportsFilterForm.vue";
+import EmployeeInformation from "@/components/admin/reports/reportsEmployeeInformation.vue";
 import Objectives from "@/components/admin/reports/reportsObjectives.vue";
 import Competences from "@/components/admin/reports/reportsCompetences.vue";
 import SalesObjectives from "@/components/admin/reports/reportsSalesObjectives.vue";
@@ -120,6 +144,7 @@ export default {
     mixins: [print],
     components: {
         filterForm,
+        EmployeeInformation,
         Objectives,
         Competences,
         SalesObjectives,
@@ -130,6 +155,8 @@ export default {
         filterFormData: {},
         filterFormReady: false,
         chartComponetsStatus: {
+            employeeInformationReadyL: false,
+            employeeInformationReadyR: false,
             objectivesReadyL: false,
             objectivesReadyR: false,
             competencesReadyL: false,
