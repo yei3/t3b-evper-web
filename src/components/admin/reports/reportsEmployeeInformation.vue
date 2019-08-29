@@ -72,7 +72,7 @@ export default {
                 this.queryData.end,
             );
 
-            const response = await this.GetEvaluationEmployeeData(this.queryData)
+            const response = await this.getEvaluationEmployeeData(this.queryData)
                 .catch((error) => errorHandler(this, error));
             this.evaluationEmployeeData.data = response.data.result;
             this.loading = false;
@@ -88,7 +88,7 @@ export default {
             if (data.job !== NONE) dataReport.JobDescription = data.job;
             if (data.person !== NONE) dataReport.UserId = data.person;
 
-            return client3B.report.GetEvaluationEmployeeData(dataReport);
+            return client3B.report.getAdministratorEvaluationEmployeeData(dataReport);
         },
         isInCurrentPeriod(dateStart, dateEnd) {
             const currentDate = moment();
