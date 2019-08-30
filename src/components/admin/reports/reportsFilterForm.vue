@@ -4,11 +4,6 @@
     style="background-color: white;
     margin: 30px 30px; padding-top: 20px;:"
 >
-    <a-row >
-        <label v-for="(user, index) in users" :key="index">
-            {{user.roleNames}}
-        </label>
-    </a-row>
     <a-row>
         <a-col :md="11" style="text-align:center;">
             <h4 style="color: red;">Evaluado A</h4>
@@ -53,7 +48,7 @@
                     style="width: 100%"
                     :defaultValue="none"
                     v-model="form.left.area"
-                    @change="form.left.job = form.left.person = none"
+                    @change="form.left.job = form.left.person = none; getUsersLeft()"
                     :disabled="form.left.region === none || loading"
                 >
                     <a-select-option :value="none" :key="none">
@@ -148,7 +143,7 @@
                     style="width: 100%"
                     :defaultValue="none"
                     v-model="form.right.area"
-                    @change="form.right.job = form.right.person = none"
+                    @change="form.right.job = form.right.person = none; getUsersRight()"
                     :disabled="form.right.region === none || loading"
                 >
                     <a-select-option :value="none" :key="none">
@@ -250,7 +245,8 @@ export default {
         areas: [],
         regions: [],
         jobs: [],
-        users: [],
+        usersLeft: [],
+        usersRight: [],
         bannerError: null,
         form: {
             loading: false,
@@ -288,20 +284,15 @@ export default {
                 {
                     data: { result: jobs },
                 },
-                {
-                    data: { result: { items: users } },
-                },
             ] = await Promise.all([
                 client3B.organizationUnit.getAllRegions(),
                 client3B.organizationUnit.getAllAreas(),
                 client3B.organizationUnit.getAreasJobDescription(),
-                client3B.user.getAll(),
             ]).catch((error) => errorHandler(this, error));
 
             this.regions = regions;
             this.areas = areas;
             this.jobs = jobs;
-            this.users = users;
             this.form.loading = false;
         },
         filterOption(input, option) {
@@ -349,15 +340,6 @@ export default {
             });
             formData.left.isSalesArea = this.isSalesArea(formData.left.area);
             formData.right.isSalesArea = this.isSalesArea(formData.right.area);
-            // The api calls need the job description instead of the job id
-            if (formData.left.job !== NONE) {
-                const ljob = this.jobs.find((job) => job.id === formData.left.job);
-                formData.left.job = ljob.jobDescription;
-            }
-            if (formData.right.job !== NONE) {
-                const rjob = this.jobs.find((job) => job.id === formData.right.job);
-                formData.right.job = rjob.jobDescription;
-            }
 
             this.$emit("updatedForm", formData);
         },
@@ -367,6 +349,17 @@ export default {
             return this.areas
                 .find((area) => area.id === areaId)
                 .isSalesArea;
+        },
+        async getUsers(areaId) {
+            const response = await client3B.user.getUsersByArea({ areaId })
+                .catch((error) => this.errorHandler(this, error));
+            return response.data.result;
+        },
+        async getUsersLeft() {
+            this.usersLeft = await this.getUsers(this.form.left.area);
+        },
+        async getUsersRight() {
+            this.usersRight = await this.getUsers(this.form.right.area);
         },
     },
     computed: {
@@ -386,16 +379,15 @@ export default {
             if (this.form.right.area === NONE) return [];
             return this.jobs.find((job) => job.areaId === this.form.right.area).jobDescriptions;
         },
-        leftPeople() {
-            if (this.form.left.job === NONE) return [];
-            return this.users.filter((user) => {
-                console.log(user.roleNames);
-                return user.roleNames.includes(this.form.left.job);
-            });
-        },
         rightPeople() {
-            if (this.form.right.job === NONE) return [];
-            return this.users.filter((user) => user.roleNames.includes(this.form.right.job));
+            const { job } = this.form.right;
+            if (job === NONE) return [];
+            return this.usersRight.filter((user) => user.jobDescription === job);
+        },
+        leftPeople() {
+            const { job } = this.form.left;
+            if (job === NONE) return [];
+            return this.usersLeft.filter((user) => user.jobDescription === job);
         },
     },
 };

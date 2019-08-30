@@ -76,6 +76,16 @@ class User extends Http {
         const path = `${this.entityPath}/IsUserSalesMan`;
         return this.request(path, this.methods.post, {});
     }
+
+    /**
+     * Request for the check if is User Sales
+     *
+     * @return {Promise}        Http Response
+     */
+    getUsersByArea(data) {
+        const path = `${this.entityPath}/GetUsersByArea`;
+        return this.request(path, this.methods.get, data);
+    }
 }
 
 export default User;
