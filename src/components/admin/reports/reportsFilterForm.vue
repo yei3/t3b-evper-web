@@ -48,7 +48,7 @@
                     style="width: 100%"
                     :defaultValue="none"
                     v-model="form.left.area"
-                    @change="form.left.job = form.left.person = none"
+                    @change="form.left.job = form.left.person = none; getUsersLeft()"
                     :disabled="form.left.region === none || loading"
                 >
                     <a-select-option :value="none" :key="none">
@@ -73,10 +73,10 @@
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
-                        v-for="job in leftJobs"
-                        :key="job.id"
-                        :value="job.id"
-                        >{{ job.jobDescription }}</a-select-option
+                        v-for="(job, index) in leftJobs"
+                        :key="index"
+                        :value="job"
+                        >{{ job }}</a-select-option
                     >
                 </a-select>
             </a-col>
@@ -143,7 +143,7 @@
                     style="width: 100%"
                     :defaultValue="none"
                     v-model="form.right.area"
-                    @change="form.right.job = form.right.person = none"
+                    @change="form.right.job = form.right.person = none; getUsersRight()"
                     :disabled="form.right.region === none || loading"
                 >
                     <a-select-option :value="none" :key="none">
@@ -168,10 +168,10 @@
                 >
                     <a-select-option :value="none" :key="none">Todos</a-select-option>
                     <a-select-option
-                        v-for="job in rightJobs"
-                        :key="job.id"
-                        :value="job.id"
-                        >{{ job.jobDescription }}</a-select-option
+                        v-for="(job, index) in rightJobs"
+                        :key="index"
+                        :value="job"
+                        >{{ job }}</a-select-option
                     >
                 </a-select>
             </a-col>
@@ -245,7 +245,8 @@ export default {
         areas: [],
         regions: [],
         jobs: [],
-        users: [],
+        usersLeft: [],
+        usersRight: [],
         bannerError: null,
         form: {
             loading: false,
@@ -283,20 +284,15 @@ export default {
                 {
                     data: { result: jobs },
                 },
-                {
-                    data: { result: users },
-                },
             ] = await Promise.all([
-                client3B.organizationUnit.getRegionsTree(),
-                client3B.organizationUnit.getAreasTree(),
-                client3B.organizationUnit.getJobsTree(),
-                client3B.organizationUnit.getUserTree(),
+                client3B.organizationUnit.getAllRegions(),
+                client3B.organizationUnit.getAllAreas(),
+                client3B.organizationUnit.getAreasJobDescription(),
             ]).catch((error) => errorHandler(this, error));
 
             this.regions = regions;
             this.areas = areas;
             this.jobs = jobs;
-            this.users = users;
             this.form.loading = false;
         },
         filterOption(input, option) {
@@ -344,15 +340,6 @@ export default {
             });
             formData.left.isSalesArea = this.isSalesArea(formData.left.area);
             formData.right.isSalesArea = this.isSalesArea(formData.right.area);
-            // The api calls need the job description instead of the job id
-            if (formData.left.job !== NONE) {
-                const ljob = this.jobs.find((job) => job.id === formData.left.job);
-                formData.left.job = ljob.jobDescription;
-            }
-            if (formData.right.job !== NONE) {
-                const rjob = this.jobs.find((job) => job.id === formData.right.job);
-                formData.right.job = rjob.jobDescription;
-            }
 
             this.$emit("updatedForm", formData);
         },
@@ -362,6 +349,17 @@ export default {
             return this.areas
                 .find((area) => area.id === areaId)
                 .isSalesArea;
+        },
+        async getUsers(areaId) {
+            const response = await client3B.user.getUsersByArea({ areaId })
+                .catch((error) => this.errorHandler(this, error));
+            return response.data.result;
+        },
+        async getUsersLeft() {
+            this.usersLeft = await this.getUsers(this.form.left.area);
+        },
+        async getUsersRight() {
+            this.usersRight = await this.getUsers(this.form.right.area);
         },
     },
     computed: {
@@ -375,21 +373,21 @@ export default {
         },
         leftJobs() {
             if (this.form.left.area === NONE) return [];
-            return this.jobs.filter((job) => job.areaIds.includes(this.form.left.area));
+            return this.jobs.find((job) => job.areaId === this.form.left.area).jobDescriptions;
         },
         rightJobs() {
             if (this.form.right.area === NONE) return [];
-            return this.jobs.filter((job) => job.areaIds.includes(this.form.right.area));
-        },
-        leftPeople() {
-            if (this.form.left.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.id === this.form.left.job);
-            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
+            return this.jobs.find((job) => job.areaId === this.form.right.area).jobDescriptions;
         },
         rightPeople() {
-            if (this.form.right.job === NONE) return [];
-            const currentJob = this.jobs.find((job) => job.id === this.form.right.job);
-            return this.users.filter((user) => user.jobDescription === currentJob.jobDescription);
+            const { job } = this.form.right;
+            if (job === NONE) return [];
+            return this.usersRight.filter((user) => user.jobDescription === job);
+        },
+        leftPeople() {
+            const { job } = this.form.left;
+            if (job === NONE) return [];
+            return this.usersLeft.filter((user) => user.jobDescription === job);
         },
     },
 };

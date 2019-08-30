@@ -68,7 +68,7 @@
                         @ready="chartComponetsStatus.objectivesReadyL = true"
                     />
                     <sales-objectives
-
+                        v-else
                         :queryData="filterFormData.left"
                         title="Reporte de Objetivos de Venta"
                         @ready="chartComponetsStatus.objectivesReadyL = true"
@@ -82,7 +82,7 @@
                         @ready="chartComponetsStatus.objectivesReadyR = true"
                     />
                     <sales-objectives
-
+                        v-else
                         :queryData="filterFormData.right"
                         title="Reporte de Objetivos de venta"
                         @ready="chartComponetsStatus.objectivesReadyR = true"
@@ -105,7 +105,7 @@
                         @ready="chartComponetsStatus.competencesReadyL = true"
                     />
                     <sales-competences
-
+                        v-else
                         :queryData="filterFormData.left"
                         title="Reporte de Capacidades de Venta"
                         @ready="chartComponetsStatus.competencesReadyL = true"
@@ -119,7 +119,7 @@
                         @ready="chartComponetsStatus.competencesReadyR = true"
                     />
                     <sales-competences
-
+                        v-else
                         :queryData="filterFormData.right"
                         title="Reporte de Capacidades de Venta"
                         @ready="chartComponetsStatus.competencesReadyR = true"
