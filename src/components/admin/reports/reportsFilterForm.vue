@@ -212,7 +212,7 @@
             </a-col>
         </a-col>
         <a-col :md="24" style="text-align: center; padding-top: 20px;">
-            <a-alert v-show="bannerError" banner closable :message="bannerError" />
+            <a-alert v-if="bannerError" type="warning" :message="bannerError" />
             <br />
             <a-button
                 type="primary"
@@ -351,6 +351,7 @@ export default {
                 .isSalesArea;
         },
         async getUsers(areaId) {
+            if (areaId === NONE) return [];
             const response = await client3B.user.getUsersByArea({ areaId })
                 .catch((error) => this.errorHandler(this, error));
             return response.data.result;
