@@ -5,8 +5,8 @@
                 <a-spin tip="Cargando información..." />
             </div>
         </a-row>
-        <a-row class="custom-row" type="flex" justify="center" v-show="!loading">
-            <a-col v-if="evaluationEmployeeData.showAll" class="custom-col" :xl="4">
+        <a-row class="custom-row" type="flex" justify="center" v-if="!loading">
+            <a-col class="custom-col" :xl="4">
                 <p class="custom-col__text custom-col__text--title">Plantilla</p>
                 <div class="circle">
                     <span class="text">{{ this.evaluationEmployeeData.data.totalEmployees }}</span>
@@ -24,7 +24,7 @@
                 </div>
             </a-col>
         </a-row>
-        <a-row v-if="!loading && evaluationEmployeeData.showAll" type="flex" justify="center">
+        <a-row v-if="!loading" type="flex" justify="center">
             <a-col :xl="6">
                 <p class="custom-col__text custom-col__text--average">
                     Promedio de antiguedad: {{ this.ageAverage }} años
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 
@@ -56,7 +55,6 @@ export default {
                 totalEmployees: 0,
                 evaluatedEmployees: 0,
             },
-            showAll: null,
         },
         evaluatedAverage: 0,
     }),
@@ -67,11 +65,6 @@ export default {
         async getEmployeeData() {
             // Employees Data - Capabilities Left-Report
             this.loading = true;
-            this.evaluationEmployeeData.showAll = this.isInCurrentPeriod(
-                this.queryData.start,
-                this.queryData.end,
-            );
-
             const response = await this.getEvaluationEmployeeData(this.queryData)
                 .catch((error) => errorHandler(this, error));
             this.evaluationEmployeeData.data = response.data.result;
@@ -89,38 +82,6 @@ export default {
             if (data.person !== NONE) dataReport.UserId = data.person;
 
             return client3B.report.GetEvaluationEmployeeData(dataReport);
-        },
-        isInCurrentPeriod(dateStart, dateEnd) {
-            const currentDate = moment();
-            const firstPeriodStart = moment().startOf("year");
-            const firstPeriodStartClone = firstPeriodStart.clone();
-            const firstPeriodEnd = firstPeriodStartClone.add(5, "months");
-
-            const firstPeriodEndClone = firstPeriodEnd.clone();
-            const secondPeriodStart = firstPeriodEndClone.endOf("month").add(1, "day");
-            const secondPeriodEnd = moment().endOf("year");
-
-            if (currentDate.year() !== dateStart.year()) {
-                return false;
-            }
-
-            if (
-                dateStart.isBetween(firstPeriodStart, firstPeriodEnd, "month", "[]") &&
-                dateEnd.isBetween(firstPeriodStart, firstPeriodEnd, "month", "[]")
-            ) {
-                if (currentDate.month() >= 0 && currentDate.month() <= 5) {
-                    return true;
-                }
-            } else if (
-                dateStart.isBetween(secondPeriodStart, secondPeriodEnd, "month", "[]") &&
-                dateEnd.isBetween(secondPeriodStart, secondPeriodEnd, "month", "[]")
-            ) {
-                if (currentDate.month() >= 6 && currentDate.month() <= 11) {
-                    return true;
-                }
-            }
-
-            return false;
         },
     },
     computed: {

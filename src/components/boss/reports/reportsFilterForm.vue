@@ -212,7 +212,7 @@
             </a-col>
         </a-col>
         <a-col :md="24" style="text-align: center; padding-top: 20px;">
-            <a-alert v-show="bannerError" banner closable :message="bannerError" />
+            <a-alert v-show="bannerError" type="warning" :message="bannerError" />
             <br />
             <a-button
                 type="primary"
