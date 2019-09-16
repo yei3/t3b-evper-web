@@ -112,7 +112,6 @@ import client3B from "@/api/client3B";
 import { mapActions, mapGetters } from "vuex";
 import Footer from "@/components/layout/Footer.vue";
 import errorHandler from "@/views/errorHandler";
-import successHandler from "@/views/successHandler";
 
 export default {
     components: {
