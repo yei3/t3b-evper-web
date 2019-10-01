@@ -405,7 +405,7 @@ export default {
             if (!Number.isNaN(Number(expected))) {
                 expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected || expected;
                 if (answer.measuredAnswer.evaluationMeasuredQuestion.expected === 0) {
-                    ({ expected } = answer.measuredAnswer.evaluationMeasuredQuestion.expected);
+                    expected = answer.measuredAnswer.evaluationMeasuredQuestion.expected;
                 }
             } else {
                 expected =
@@ -413,18 +413,18 @@ export default {
             }
 
             switch (question.relation) {
-            case 1:
-                return answer.measuredAnswer.real < expected;
-            case 2:
-                return answer.measuredAnswer.real <= expected;
-            case 3:
-                return answer.measuredAnswer.text === expected;
-            case 4:
-                return answer.measuredAnswer.real > expected;
-            case 5:
-                return answer.measuredAnswer.real >= expected;
-            default:
-                return answer.isActive === false;
+                case 1:
+                    return answer.measuredAnswer.real < expected;
+                case 2:
+                    return answer.measuredAnswer.real <= expected;
+                case 3:
+                    return answer.measuredAnswer.text === expected;
+                case 4:
+                    return answer.measuredAnswer.real > expected;
+                case 5:
+                    return answer.measuredAnswer.real >= expected;
+                default:
+                    return answer.isActive === false;
             }
         },
         getGlobalResult() {
@@ -523,7 +523,8 @@ export default {
                 if (
                     answer.unmeasuredAnswer != null &&
                     responses.includes(answer.unmeasuredAnswer.text)
-                ) total += 1;
+                )
+                    total += 1;
             });
             this.answers.forEach((answer) => {
                 if (answer.unmeasuredAnswer != null && answer.unmeasuredAnswer.text === level) {
