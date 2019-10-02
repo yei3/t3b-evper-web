@@ -17,26 +17,29 @@
             <a-col :span="1"></a-col>
             <a-col :span="10">
                 <h1>{{ evaluation.name }}</h1>
-                <b>Región:</b>
+                <b>Nombre del Evaluador: </b>
+                <span style="font-weight: normal">{{ supervisor }}</span>
+                <br />
+                <b>Región: </b>
                 <span style="font-weight: normal">{{ region }}</span>
                 <br />
-                <b>Área:</b>
+                <b>Área: </b>
                 <span style="font-weight: normal">{{ area }}</span>
                 <br />
-                <b>Puesto:</b>
+                <b>Puesto: </b>
                 <span style="font-weight: normal">{{ jobDescription }}</span>
                 <br />
-                <b>Tiempo en el puesto:</b>
+                <b>Tiempo en el puesto: </b>
                 <span style="font-weight: normal">{{
                     getDiffDates(entryDate, reassignDate, reviewDate)
                 }}</span>
                 <br />
-                <b>Fecha de ingreso:</b>
+                <b>Fecha de ingreso: </b>
                 <span style="font-weight: normal">{{
                     new Date(entryDate + "Z").toLocaleDateString()
                 }}</span>
                 <br />
-                <b>Fecha de revisión:</b>
+                <b>Fecha de revisión: </b>
                 <span style="font-weight: normal">{{
                     new Date(reviewDate + "Z").toLocaleDateString()
                 }}</span>
@@ -269,6 +272,7 @@ export default {
             spin: false,
             loading: false,
             collapsed: false,
+            supervisor: "",
             region: "",
             area: "",
             jobDescription: "",
@@ -579,6 +583,7 @@ export default {
             this.evaluationLoaded = true;
             this.evaluation = response.data.result;
             this.answers = this.evaluation.questions;
+            this.supervisor = this.evaluation.evaluatorFullName;
             this.region = this.evaluation.user.region;
             this.area = this.evaluation.user.area;
             this.jobDescription = this.evaluation.user.jobDescription;
