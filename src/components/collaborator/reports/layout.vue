@@ -9,7 +9,7 @@
             </a-col>
             <a-col :span="8">
                 <p class="results-subtitle">Informe de Evaluación de desempeño</p>
-                <p class="results-period">Periodo 2019-1</p>
+                <p class="results-period">Periodo {{data.year}} - {{data.period}}</p>
             </a-col>
         </a-row>
         <report v-if="!objetiveSpin && !isSalesMan" />
@@ -28,6 +28,10 @@ export default {
         objetiveSpin: true,
         user: authService.getUserData(),
         isSalesMan: false,
+        data: {
+            year: new Date().getFullYear(),
+            period: (new Date().getMonth() > 1 && new Date().getMonth() < 8) ? 1 : 2
+        }
     }),
     components: {
         report,
