@@ -29,8 +29,8 @@ export default {
         user: authService.getUserData(),
         isSalesMan: false,
         data: {
-            year: new Date().getFullYear(),
-            period: (new Date().getMonth() > 1 && new Date().getMonth() < 8) ? 1 : 2
+            year: new Date().getFullYear() - ((new Date().getMonth() > 1 && new Date().getMonth() < 8) ? -1 : 0),
+            period: (new Date().getMonth() > 1 && new Date().getMonth() < 8) ? 2 : 1
         }
     }),
     components: {
