@@ -15,7 +15,8 @@ import moment from "moment";
 
 export default {
     beforeCreate() {
-        this.value = (new Date().getMonth() > 1 && new Date().getMonth() < 8) ? true : false;
+        // Range of period
+        this.isFirstPeriod = (new Date().getMonth() > 1 && new Date().getMonth() < 8) ? true : false;
     },
     data: () => ({
         value: false,
@@ -27,10 +28,10 @@ export default {
     methods: {
         moment,
         startDate() {
-            return this.value ? ("01-02-"+this.year) : ("01-08-"+this.year);
+            return this.isFirstPeriod ? ("01-01-"+this.year) : ("01-07-"+this.year);
         },
         endDate() {
-            return this.value ? ("30-07-"+this.year) : ("30-01-"+(parseInt(new Date().getFullYear())+1));
+            return this.isFirstPeriod ? ("30-06-"+this.year) : ("31-12-"+this.year);
         },
         disabledDate() {
             // Can not select days before today and today
