@@ -42,17 +42,14 @@
                 <span slot="status" slot-scope="status">
                     <a-tag :class="selectTagColor(status)">{{ status }}</a-tag>
                 </span>
-                <span slot="objective" slot-scope="objective">
-                    <p style="font-size: 13px">
-                        <!-- <a
-                        class="table-link"
-                        @click="toggleViewProgressModal"
-                    > -->
+                <div class="objective-row" slot="objective" slot-scope="objective">
+                    <a-tooltip>
+                        <template slot="title">
+                            {{ objective.title }}
+                        </template>
                         {{ objective.title }}
-                        <!-- </a> -->
-                    </p>
-                    <!-- <p><small>{{objective.subtitle}}</small></p> -->
-                </span>
+                    </a-tooltip>
+                </div>
                 <span slot="evaluable" slot-scope="evaluable" class="text-center">
                     <a-icon type="check" v-if="!evaluable" />
                     <a-icon type="minus" v-if="evaluable" />
@@ -263,6 +260,7 @@ const columns = [
         dataIndex: "objective",
         key: "objective",
         scopedSlots: { customRender: "objective" },
+        width: "700px",
     },
     {
         title: "Próximo Objetivo",
@@ -279,7 +277,6 @@ const columns = [
         title: "",
         key: "action",
         scopedSlots: { customRender: "action" },
-        align: "right",
     },
 ];
 
@@ -461,8 +458,9 @@ export default {
                     `Objetivo completado: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
 
-                await this.completeObjective(this.finishObjectiveModal.objectiveId)
-                    .catch((error) => errorHandler(this, error));
+                await this.completeObjective(this.finishObjectiveModal.objectiveId).catch((error) =>
+                    errorHandler(this, error),
+                );
 
                 const obj = this.data.find(
                     (tmp) => tmp.id === this.finishObjectiveModal.objectiveId,
@@ -502,32 +500,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-            case "No iniciado":
-                return "ant-tag-red";
-            case "En proceso":
-                return "ant-tag-yellow";
-            case "Completado":
-                return "ant-tag-green";
-            case "Validado":
-                return "ant-tag-blue";
-            default:
-                return "ant-tag-gray";
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Completado":
+                    return "ant-tag-green";
+                case "Validado":
+                    return "ant-tag-blue";
+                default:
+                    return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-            case 0:
-                return "No iniciado";
-            case 1:
-                return "No iniciado";
-            case 2:
-                return "En proceso";
-            case 3:
-                return "Completado";
-            case 4:
-                return "Validado";
-            default:
-                return "error";
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "No iniciado";
+                case 2:
+                    return "En proceso";
+                case 3:
+                    return "Completado";
+                case 4:
+                    return "Validado";
+                default:
+                    return "error";
             }
         },
     },
@@ -535,6 +533,16 @@ export default {
 </script>
 
 <style scoped>
+.ant-table td {
+    white-space: pre-line;
+}
+
+.objective-row {
+    width: 700px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media only screen and (max-width: 660px) {
     .text-padding {
         text-align: center;
