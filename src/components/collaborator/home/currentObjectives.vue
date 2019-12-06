@@ -44,9 +44,7 @@
                 </span>
                 <div class="objective-row" slot="objective" slot-scope="objective">
                     <a-tooltip>
-                        <template slot="title">
-                            {{ objective.title }}
-                        </template>
+                        <template slot="title"> </template>
                         {{ objective.title }}
                     </a-tooltip>
                 </div>
@@ -263,7 +261,7 @@ const columns = [
         width: "700px",
     },
     {
-        title: "Próximo Objetivo",
+        title: "Prx.Obj.",
         dataIndex: "isNextObjective",
         key: "isNextObjective",
         scopedSlots: { customRender: "isNextObjective" },
