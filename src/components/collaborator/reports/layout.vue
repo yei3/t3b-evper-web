@@ -9,7 +9,7 @@
             </a-col>
             <a-col :span="8">
                 <p class="results-subtitle">Informe de Evaluación de desempeño</p>
-                <p class="results-period">Periodo {{data.year}} - {{data.period}}</p>
+                <p class="results-period">Periodo {{ data.year }} - {{ value ? 1 : 2 }}</p>
             </a-col>
         </a-row>
         <report v-if="!objetiveSpin && !isSalesMan" />
@@ -24,14 +24,19 @@ import report from "@/components/collaborator/reports/report.vue";
 import salesReport from "@/components/collaborator/reports/salesReport.vue";
 
 export default {
+    beforeCreate() {
+        // Range of period
+        this.isFirstPeriod = new Date().getMonth() > 1 && new Date().getMonth() < 8 ? true : false;
+    },
     data: () => ({
         objetiveSpin: true,
         user: authService.getUserData(),
         isSalesMan: false,
+        value: false,
         data: {
-            year: new Date().getFullYear() - ((new Date().getMonth() > 1 && new Date().getMonth() < 8) ? -1 : 0),
-            period: (new Date().getMonth() > 1 && new Date().getMonth() < 8) ? 2 : 1
-        }
+            format: "DD-MM-YYYY",
+            year: new Date().getFullYear(),
+        },
     }),
     components: {
         report,
@@ -44,6 +49,7 @@ export default {
     },
     mounted() {
         this.IsUserSalesMan();
+        // this.fetchEvaluations();
     },
     methods: {
         async IsUserSalesMan() {
@@ -54,6 +60,15 @@ export default {
             if (!response) this.isSalesMan = false;
             this.isSalesMan = response.data.result;
             this.objetiveSpin = false;
+        },
+        async fetchEvaluations() {
+            // this.spin = true;
+            // const response = await client3B.evaluation.getAll().catch((error) => {
+            // this.spin = false;
+            //     errorHandler(this, error);
+            // });
+            // const items = response.data.result;
+            // this.spin = false;
         },
     },
 };
