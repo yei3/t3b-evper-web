@@ -4,7 +4,7 @@
             <a-col :span="24">
                 <h1 class="breadcrumb-header">Administración de Formatos de Evaluaciones</h1>
             </a-col>
-            <a-col :span="20">
+            <a-col :span="12">
                 <a-breadcrumb>
                     <a-breadcrumb-item>
                         <router-link :to="{ name: 'admin-home' }" class="breadcrumb-path">
@@ -13,9 +13,22 @@
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </a-col>
-            <a-col :span="4">
-                <a-button type="primary" ghost @click="initNewFormatForm">
+            <a-col class="buttons-container" :span="12">
+                <a-button
+                    class="button-container__button"
+                    type="primary"
+                    ghost
+                    @click="initNewFormatForm"
+                >
                     Crear formato <a-icon type="plus" />
+                </a-button>
+                <a-button
+                    class="button-container__button"
+                    type="primary"
+                    ghost
+                    @click="uploadObjectives"
+                >
+                    Cargar objetivos <a-icon type="upload" />
                 </a-button>
             </a-col>
         </a-row>
@@ -43,8 +56,21 @@ export default {
             this.clearFormatForm();
             this.$router.push({ name: "create-format" });
         },
+        uploadObjectives() {
+            this.clearFormatForm();
+            this.$router.push({ name: "upload-objectives" });
+        },
     },
 };
 </script>
 
-<style></style>
+<style scoped>
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-container__button {
+    margin: 0 0.5rem;
+}
+</style>
