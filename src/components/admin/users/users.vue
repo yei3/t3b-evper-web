@@ -100,7 +100,7 @@
                 </a-tab-pane>
                 <a-tab-pane key="2">
                     <div slot="tab"><a-icon type="upload" />Carga masiva</div>
-                    <upload-users />
+                    <upload-component url="api/ImportUsers" />
                 </a-tab-pane>
             </a-tabs>
         </div>
@@ -116,7 +116,7 @@ import errorHandler from "@/views/errorHandler";
 export default {
     components: {
         Footer,
-        "upload-users": () => import("../../shared/uploadUsers"),
+        "upload-component": () => import("../../shared/uploadComponent"),
     },
     beforeCreate() {
         this.form = this.$form.createForm(this);
