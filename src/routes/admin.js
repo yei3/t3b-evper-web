@@ -10,6 +10,7 @@ import Organigram from "@/components/admin/organization/organigram.vue";
 import Notifications from "@/components/admin/notifications/notifications.vue";
 import EvaluationsHistory from "@/components/admin/evaluationsHistory/evaluationsHistory.vue";
 import Reports from "@/components/admin/reports/layout.vue";
+import UploadObjectives from "@/components/admin/formats/uploadObjectives.vue";
 
 export default [
     {
@@ -22,6 +23,12 @@ export default [
         path: "admin/formats/create",
         name: "create-format",
         component: CreateFormat,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: "admin/formats/upload",
+        name: "upload-objectives",
+        component: UploadObjectives,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
     {
