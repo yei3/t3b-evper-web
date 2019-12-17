@@ -1,5 +1,5 @@
 <template>
-    <div class="upload-users">
+    <div class="upload-component">
         <a-spin :spinning="spinning" size="large" tip="Espere un momento, por favor">
             <a-upload-dragger
                 class="uploader--custom"
@@ -15,8 +15,10 @@
                         <a-icon type="cloud-upload" />
                     </p>
                     <p class="ant-upload-text">
-                        Haga click o arrastre el archivo de
-                        <b>Excel</b> para importar los usuarios.
+                        <slot name="info-message">
+                            Haga click o arrastre el archivo de
+                            <b>Excel</b> para importar los usuarios.
+                        </slot>
                     </p>
                 </div>
                 <div v-else-if="uploadState === 'success'">
@@ -48,7 +50,12 @@ import errorHandler from "@/views/errorHandler";
 import successHandler from "@/views/successHandler";
 
 export default {
-    name: "UploadUsers",
+    props: {
+        url: {
+            type: String,
+            required: true,
+        },
+    },
     data() {
         return {
             spinning: false,
@@ -77,7 +84,7 @@ export default {
     },
     computed: {
         getActionURL() {
-            return `${process.env.VUE_APP_API_URL}/api/ImportUser`;
+            return `${process.env.VUE_APP_API_URL}/${this.url}`;
         },
         isUploadDisabled() {
             return this.uploadState === "success" || this.uploadState === "error";
