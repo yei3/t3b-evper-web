@@ -70,27 +70,13 @@ export default {
     data() {
         return {
             spin: false,
-            users: [],
         };
     },
     created() {
         // fetch the data when the view is created and the data is
         // already being observed
-        this.getAllUsers();
     },
-    methods: {
-        async getAllUsers() {
-            this.spin = true;
-            let response = null;
-            try {
-                response = await client3B.user.getAll();
-                this.users = response.data.result.items;
-            } catch (error) {
-                errorHandler(this, error);
-            }
-            this.spin = false;
-        },
-    },
+    methods: {},
 };
 </script>
 
