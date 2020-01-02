@@ -9,7 +9,7 @@
             </a-col>
             <a-col :span="8">
                 <p class="results-subtitle">Informe de Evaluación de desempeño</p>
-                <p class="results-period">Periodo {{ data.year }} - {{ value ? 1 : 2 }}</p>
+                <p class="results-period">Periodo {{ year }} - {{ value ? 1 : 2 }}</p>
             </a-col>
         </a-row>
         <report v-if="!objetiveSpin && !isSalesMan" />
@@ -26,7 +26,11 @@ import salesReport from "@/components/collaborator/reports/salesReport.vue";
 export default {
     beforeCreate() {
         // Range of period
-        this.isFirstPeriod = new Date().getMonth() > 1 && new Date().getMonth() < 8 ? true : false;
+        this.isFirstPeriod = new Date().getMonth() > 1 && new Date().getMonth() < 8;
+        this.year =
+            new Date().getMonth() > 1 && new Date().getMonth() < 8
+                ? new Date().getFullYear()
+                : new Date().getFullYear() - 1;
     },
     data: () => ({
         objetiveSpin: true,
@@ -35,7 +39,6 @@ export default {
         value: false,
         data: {
             format: "DD-MM-YYYY",
-            year: new Date().getFullYear(),
         },
     }),
     components: {
