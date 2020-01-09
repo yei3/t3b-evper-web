@@ -8,6 +8,8 @@
                 :action="getActionURL"
                 :multiple="false"
                 :showUploadList="false"
+                :withCredentials="true"
+                :headers="generateRequestHeaders"
                 @change="handleChange"
             >
                 <div v-if="uploadState === 'initial'">
@@ -88,6 +90,12 @@ export default {
         },
         isUploadDisabled() {
             return this.uploadState === "success" || this.uploadState === "error";
+        },
+        generateRequestHeaders() {
+            const authToken = JSON.parse(localStorage.getItem("auth")).accessToken;
+            return {
+                Authorization: `Bearer ${authToken}`,
+            };
         },
     },
 };
