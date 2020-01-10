@@ -31,7 +31,7 @@
                     style="width: 200px;"
                     @keyup="edited = true"
                     @keypress.enter.prevent="save"
-                    :disabled="onlyLecture"
+                    :disabled="true"
                 >
                     <a-icon class="input-save" @click="save" slot="addonAfter" type="save" />
                 </a-input>
@@ -56,7 +56,7 @@
                     style="width: 200px;"
                     @keyup="edited = true"
                     @keypress.enter.prevent="save"
-                    :disabled="onlyLecture"
+                    :disabled="true"
                 >
                     <a-icon class="input-save" @click="save" slot="addonAfter" type="save" />
                 </a-input>
