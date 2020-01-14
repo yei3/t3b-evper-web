@@ -114,26 +114,24 @@ class Evaluation extends Http {
     /**
      * Request to reopen an evaluation
      *
-     * @param {String} ID Evaluation ID
+     * @param {Object} data Evaluation Data
      *
      * @return {Promise} Http Response
      */
-    reopen(id) {
+    reopen(data) {
         const path = `${this.entityPath}/ReopenEvaluation`;
-        const data = { id };
         return this.request(path, this.methods.post, data);
     }
 
     /**
      * Request to finalize an evaluation
      *
-     * @param {String} ID Evaluation ID
+     * @param {Object} data Evaluation Data
      *
      * @return {Promise} Http Response
      */
-    finalize(id) {
+    finalize(data) {
         const path = `${this.entityPath}/FinalizeEvaluation`;
-        const data = { id };
         return this.request(path, this.methods.post, data);
     }
 
