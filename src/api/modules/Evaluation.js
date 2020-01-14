@@ -105,10 +105,36 @@ class Evaluation extends Http {
      *
      * @return {Promise}        Http Response
      */
-    getEvaluationsStatus(startDate, endDate) {
+    getEvaluationsStatus(startDate, endDate, pagination = { SkipCount: 0 }) {
         const path = `${this.entityPath}/GetEvaluationsStatus`;
-        const params = { StartDateTime: startDate, EndDateTime: endDate };
+        const params = { StartDateTime: startDate, EndDateTime: endDate, ...pagination };
         return this.request(path, this.methods.get, params);
+    }
+
+    /**
+     * Request to reopen an evaluation
+     *
+     * @param {String} ID Evaluation ID
+     *
+     * @return {Promise} Http Response
+     */
+    reopen(id) {
+        const path = `${this.entityPath}/ReopenEvaluation`;
+        const data = { id };
+        return this.request(path, this.methods.post, data);
+    }
+
+    /**
+     * Request to finalize an evaluation
+     *
+     * @param {String} ID Evaluation ID
+     *
+     * @return {Promise} Http Response
+     */
+    finalize(id) {
+        const path = `${this.entityPath}/FinalizeEvaluation`;
+        const data = { id };
+        return this.request(path, this.methods.post, data);
     }
 
     /**
