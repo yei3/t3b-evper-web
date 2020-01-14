@@ -95,16 +95,7 @@
                         </a-menu-item>
                     </a-sub-menu>
 
-                    <a-menu-item
-                        v-for="(item, index) in sidebarItems"
-                        :key="String(index)"
-                        v-show="role == item.role"
-                    >
-                        <router-link :to="{ name: item.to }">
-                            <a-icon :type="item.icon" />
-                            <span>{{ item.text }}</span>
-                        </router-link>
-                    </a-menu-item>
+                    <sidebar-menu :menuElements="sidebarVisibleItems" />
                 </a-menu>
             </a-col>
         </a-row>
@@ -113,9 +104,13 @@
 
 <script>
 import authService from "@/services/auth";
+import SidebarMenu from "./SidebarMenu.vue";
 
 export default {
     name: "Sidebar",
+    components: {
+        "sidebar-menu": SidebarMenu,
+    },
     data() {
         return {
             useDefaultAvatar: false,
@@ -173,9 +168,22 @@ export default {
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
-                    to: "admin-evaluations",
                     icon: "form",
                     text: "Evaluaciones",
+                    subItems: [
+                        {
+                            role: authService.ROLES.ADMINISTRATOR,
+                            to: "admin-evaluations",
+                            icon: "form",
+                            text: "Listado de Evaluaciones",
+                        },
+                        {
+                            role: authService.ROLES.ADMINISTRATOR,
+                            to: "admin-evaluations-report",
+                            icon: "file-text",
+                            text: "Reporte de Evaluaciones",
+                        },
+                    ],
                 },
                 {
                     role: authService.ROLES.ADMINISTRATOR,
@@ -278,6 +286,11 @@ export default {
         roleEs() {
             const role = this.userCurrentRole;
             return this.roleToEs(role);
+        },
+        sidebarVisibleItems() {
+            const filteredItems = this.sidebarItems.filter((item) => item.role === this.role);
+
+            return filteredItems;
         },
     },
 };
