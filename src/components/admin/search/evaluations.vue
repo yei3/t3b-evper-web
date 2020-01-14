@@ -1,48 +1,5 @@
 <template>
     <div>
-        <!-- <a-row :gutter="16">
-            <a-col :span="5">
-                <a-input placeholder="Formatos" />
-            </a-col>
-            <a-col :span="5">
-                <a-input placeholder="Región" />
-            </a-col>
-            <a-col :span="5">
-                <a-input placeholder="Areas" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Inicio" />
-            </a-col>
-            <a-col :span="4">
-                <a-date-picker placeholder="Fecha Fin" />
-            </a-col>
-            <a-col :span="1">
-                <a-button shape="circle" icon="search" @click="search" />
-            </a-col>
-        </a-row> -->
-        <!-- <a-row class="collapse-title" style="margin-top: 16px;">
-            <a-col :span="12">
-                Evaluaciones
-            </a-col>
-            <a-col :span="12" style="text-align: right;">
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="down"
-                        @click="collapsed = !collapsed"
-                        v-show="!collapsed"
-                    />
-                </a>
-                <a>
-                    <a-icon
-                        class="dropdown-icon"
-                        type="up"
-                        @click="collapsed = !collapsed"
-                        v-show="collapsed"
-                    />
-                </a>
-            </a-col>
-        </a-row> -->
         <a-row v-show="spin">
             <div style="text-align: center; margin-top: 20px;">
                 <a-spin tip="Cargando..." size="large" />
@@ -63,34 +20,7 @@
                         <small>{{ evaluation.subtitle }}</small>
                     </p>
                 </span>
-
-                <span slot="action" slot-scope="text, record">
-                    <!-- <a-dropdown>
-                        <a-menu slot="overlay">
-                            <a-menu-item>
-                                <router-link disabled
-                                    :to="{ name: 'update-evaluation', params: { id: record.id}}">
-                                    Editar
-                                </router-link>
-                            </a-menu-item>
-                            <a-menu-item>
-                                <a-popconfirm
-                                    title="¿Está seguro de eliminar la Evaluación?"
-                                    @confirm="deleteEvaluation(record.id)"
-                                    okText="SI"
-                                    cancelText="No"
-                                    class="pop-confirm"
-                                >
-                                    <a-icon type="delete" />
-                                    Eliminar
-                                </a-popconfirm>
-                            </a-menu-item>
-                        </a-menu>
-                        <a-button class="ant-btn-small">
-                            ...
-                        </a-button>
-                    </a-dropdown> -->
-                </span>
+                <span slot="action" slot-scope="text, record"></span>
             </a-table>
         </a-row>
     </div>
@@ -183,17 +113,17 @@ export default {
         },
         getStatus(status) {
             switch (status) {
-            case 0:
-                return "No iniciado";
-            case 1:
-                return "En proceso";
-            case 2:
-                return "Finalizado";
-            case 3:
-                return "Validado";
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "En proceso";
+                case 2:
+                    return "Finalizado";
+                case 3:
+                    return "Validado";
 
-            default:
-                break;
+                default:
+                    break;
             }
 
             return "No iniciado";
@@ -206,17 +136,17 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-            case "No iniciado":
-                return "ant-tag-red";
-            case "En proceso":
-                return "ant-tag-yellow";
-            case "Finalizado":
-                return "ant-tag-green";
-            case "Validado":
-                return "ant-tag-blue";
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Finalizado":
+                    return "ant-tag-green";
+                case "Validado":
+                    return "ant-tag-blue";
 
-            default:
-                return "ant-tag-gray";
+                default:
+                    return "ant-tag-gray";
             }
         },
     },
