@@ -7,7 +7,7 @@
                 <a-range-picker @change="onRangePickerChange" />
             </a-col>
             <a-col>
-                <a-button @click="filterReports" :loading="loading">
+                <a-button @click="filterReports">
                     <a-icon type="search" />
                     <span>Filtrar reportes</span>
                 </a-button>
@@ -15,7 +15,12 @@
         </a-row>
         <a-row class="main-content" style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
-                <a-table :dataSource="data" :columns="columns" :pagination="false">
+                <a-table
+                    :dataSource="data"
+                    :columns="columns"
+                    :pagination="pagination"
+                    :loading="loading"
+                >
                     <span slot="status" slot-scope="status">
                         <a-tag :class="selectTagColor(status)">{{ getStatusType(status) }}</a-tag>
                     </span>
@@ -34,21 +39,42 @@
                         </p>
                         <div class="evaluation__secondary-info">
                             {{ getEvaluationType(record.isAutoevaluation) }} /
-                            {{ record.includePastObjectives }}
+                            {{ generateHumanAnswer(record.includePastObjectives) }}
                         </div>
                     </div>
                     <div slot="actions" slot-scope="text, record">
                         <a-dropdown>
                             <a-menu slot="overlay">
-                                <a-menu-item key="1" @click="endEvaluationReport(record.id)"
-                                    ><a-icon type="close" />Finalizar</a-menu-item
+                                <a-popconfirm
+                                    title="Confirma la finalizaci'on de esta evaluaci'on?"
+                                    @confirm="handleAsynchronousAction('finalize', record.id)"
+                                    okText="Si"
+                                    cancelText="No"
                                 >
-                                <a-menu-item key="2" @click="reopenEvaluationReport(record.id)"
-                                    ><a-icon type="retweet" />Reabrir</a-menu-item
+                                    <a-menu-item class="ant-dropdown-menu-item" key="1"
+                                        ><a-icon type="close" />Finalizar</a-menu-item
+                                    >
+                                </a-popconfirm>
+                                <a-popconfirm
+                                    title="Confirma la reapertura de esta evaluaci'on"
+                                    @confirm="handleAsynchronousAction('reopen', record.id)"
+                                    okText="Si"
+                                    cancelText="No"
                                 >
-                                <a-menu-item key="3" @click="removeEvaluationReport(record.id)"
-                                    ><a-icon type="delete" />Eliminar</a-menu-item
+                                    <a-menu-item class="ant-dropdown-menu-item" key="2"
+                                        ><a-icon type="retweet" />Reabrir</a-menu-item
+                                    >
+                                </a-popconfirm>
+                                <a-popconfirm
+                                    title="Confirma la eliminaci'on de esta evaluaci'on"
+                                    @confirm="handleAsynchronousAction('delete', record.id)"
+                                    okText="Si"
+                                    cancelText="No"
                                 >
+                                    <a-menu-item class="ant-dropdown-menu-item" key="3"
+                                        ><a-icon type="delete" />Eliminar</a-menu-item
+                                    >
+                                </a-popconfirm>
                             </a-menu>
                             <a-button>
                                 <a-icon type="setting" />
@@ -64,24 +90,26 @@
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 
-import { evaluationsReportColumns, data } from "./constants";
+import { evaluationsReportColumns } from "./constants";
 
 export default {
     name: "evaluation-report",
     data() {
         return {
-            data,
+            data: [],
             filters: {
                 initDate: "",
                 endDate: "",
             },
+            pagination: {
+                total: 0,
+                onChange: this.handlePaginationChange,
+            },
             loading: false,
-            searchText: "",
-            searchInput: null,
             columns: evaluationsReportColumns,
         };
     },
-    created() {
+    mounted() {
         this.getEvaluationsList();
     },
     methods: {
@@ -99,7 +127,7 @@ export default {
                 case 4:
                     return "Pendiente revision";
                 default:
-                    return "";
+                    return "No iniciada";
             }
         },
         selectTagColor(status) {
@@ -116,17 +144,22 @@ export default {
                     return "ant-tag-red";
             }
         },
+        generateHumanAnswer(value) {
+            return value ? "Si" : "No";
+        },
         filterReports() {
             this.getEvaluationWithFilter(this.initDate, this.endDate);
         },
         async getEvaluationsList() {
             try {
-                /*
-                 *const { data } = await client3B.evaluation.getEvaluationsStatus();
-                 *this.data = data.result;
-                 */
+                this.loading = true;
+                const { data } = await client3B.evaluation.getEvaluationsStatus();
+                const { result } = data;
+                const { items, totalCount } = result;
+                this.data = items;
+                this.pagination.total = totalCount;
             } catch (error) {
-                errorHandler(error.message);
+                errorHandler(this, error);
             } finally {
                 this.loading = false;
             }
@@ -134,14 +167,13 @@ export default {
         async getEvaluationWithFilter(initDate, endDate) {
             try {
                 this.loading = true;
-                const { data: results } = await client3B.evaluation.getEvaluationsStatus(
-                    initDate,
-                    endDate,
-                );
-
-                this.data = results.result;
+                const { data } = await client3B.evaluation.getEvaluationsStatus(initDate, endDate);
+                const { result } = data;
+                const { items, totalCount } = result;
+                this.data = items;
+                this.pagination.total = totalCount;
             } catch (error) {
-                errorHandler(error.message);
+                errorHandler(this, error);
             } finally {
                 this.loading = false;
             }
@@ -151,11 +183,57 @@ export default {
             this.initDate = initDate;
             this.endDate = endDate;
         },
-        removeEvaluationReport(reportId) {
-            console.log(reportId);
+        async handlePaginationChange(page, pageSize) {
+            const skipCount = (page - 1) * pageSize;
+            const pagination = { SkipCount: skipCount };
+            try {
+                const { data } = await client3B.evaluation.getEvaluationsStatus(
+                    this.startDate,
+                    this.endDate,
+                    pagination,
+                );
+                const { result } = data;
+                const { items } = result;
+                this.data = items;
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.loading = false;
+            }
         },
-        reopenEvaluationReport(reportId) {},
-        endEvaluationReport(reportId) {},
+        async handleAsynchronousAction(actionType, reportId) {
+            try {
+                this.loading = true;
+                await client3B.evaluation[actionType]({ id: reportId });
+                this.getEvaluationsList();
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        async reopenEvaluationReport(reportId) {
+            try {
+                this.loading = true;
+                await client3B.evaluation.reopen(reportId);
+                this.getEvaluationsList();
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        async endEvaluationReport(reportId) {
+            try {
+                this.loading = true;
+                await client3B.evaluation.finalize(reportId);
+                this.getEvaluationsList();
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.loading = false;
+            }
+        },
     },
 };
 </script>
