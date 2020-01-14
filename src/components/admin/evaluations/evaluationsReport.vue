@@ -17,11 +17,26 @@
             <a-col :span="24" style="padding-bottom: 30px;">
                 <a-table :dataSource="data" :columns="columns" :pagination="false">
                     <span slot="status" slot-scope="status">
-                        {{ getStatusType(status) }}
+                        <a-tag :class="selectTagColor(status)">{{ getStatusType(status) }}</a-tag>
                     </span>
-                    <span slot="evaluationType" slot-scope="evaluationType">
-                        {{ getEvaluationType(evaluationType) }}
-                    </span>
+                    <div class="collaborator" slot="collaborator" slot-scope="text, record">
+                        <p class="collaborator__main-info">
+                            {{ record.employeeNumber }} - {{ record.employeeName }}
+                            {{ record.employeeSurname }}
+                        </p>
+                        <div class="collaborator__secondary-info">
+                            <span> {{ record.region }} </span> / <span> {{ record.area }} </span>
+                        </div>
+                    </div>
+                    <div slot="evaluation" slot-scope="text, record">
+                        <p class="evaluation__main-info">
+                            {{ record.evaluationName }}
+                        </p>
+                        <div class="evaluation__secondary-info">
+                            {{ getEvaluationType(record.isAutoevaluation) }} /
+                            {{ record.includePastObjectives }}
+                        </div>
+                    </div>
                     <div slot="actions" slot-scope="text, record">
                         <a-dropdown>
                             <a-menu slot="overlay">
@@ -87,6 +102,20 @@ export default {
                     return "";
             }
         },
+        selectTagColor(status) {
+            switch (status) {
+                case 1:
+                    return "ant-tag-yellow";
+                case 2:
+                    return "ant-tag-green";
+                case 3:
+                    return "ant-tag-blue";
+                case 4:
+                    return "ant-tag-gray";
+                default:
+                    return "ant-tag-red";
+            }
+        },
         filterReports() {
             this.getEvaluationWithFilter(this.initDate, this.endDate);
         },
@@ -130,3 +159,29 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.collaborator {
+    display: flex;
+    flex-direction: column;
+}
+
+.collaborator__secondary-info {
+    font-size: 0.6rem;
+}
+.collaborator__secondary-info span {
+    font-size: 0.6rem;
+}
+
+.evaluation {
+    display: flex;
+    flex-direction: column;
+}
+
+.evaluation__secondary-info {
+    font-size: 0.6rem;
+}
+.evaluation__secondary-info span {
+    font-size: 0.6rem;
+}
+</style>
