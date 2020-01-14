@@ -97,6 +97,21 @@ class Evaluation extends Http {
     }
 
     /**
+     * Request for the information for the Admin Evaluation summary
+     *
+     * @param {Date} StartDate Start Date range
+     *
+     * @param {Date} EndDate   End Date range
+     *
+     * @return {Promise}        Http Response
+     */
+    getEvaluationsStatus(startDate, endDate) {
+        const path = `${this.entityPath}/GetEvaluationsStatus`;
+        const params = { StartDateTime: startDate, EndDateTime: endDate };
+        return this.request(path, this.methods.get, params);
+    }
+
+    /**
      * Create a new evaluation
      * @param {Object} data   Data to create a evaluation
      *
