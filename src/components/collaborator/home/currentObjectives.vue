@@ -153,7 +153,7 @@
                         <br />
                     </a-col>
                     <a-col :span="24" class="modal-content" style="text-align: center;">
-                        <small>{{ recordProgressModal.deliverable }}</small>
+                        <small>{{ viewProgressModal.deliverable }}</small>
                     </a-col>
                 </a-row>
             </template>
