@@ -98,6 +98,10 @@
                     <a-col :span="24" class="modal-header">
                         <h1>Registrar avance</h1>
                         <small>{{ recordProgressModal.objectiveName }}</small>
+                        <br />
+                    </a-col>
+                    <a-col :span="24" class="modal-content" style="text-align: center;">
+                        <small>{{ recordProgressModal.deliverable }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -146,6 +150,10 @@
                     <a-col :span="24" class="modal-header" style="margin-top: 25px;">
                         <h1>Ver avances</h1>
                         <small>{{ viewProgressModal.objectiveName }}</small>
+                        <br />
+                    </a-col>
+                    <a-col :span="24" class="modal-content" style="text-align: center;">
+                        <small>{{ recordProgressModal.deliverable }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -195,6 +203,10 @@
                     <a-col :span="24" class="modal-header">
                         <h1>Completar Objetivo</h1>
                         <small>{{ finishObjectiveModal.objectiveName }}</small>
+                        <br />
+                    </a-col>
+                    <a-col :span="24" class="modal-content" style="text-align: center;">
+                        <small>{{ recordProgressModal.deliverable }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -295,6 +307,7 @@ export default {
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: "",
+                deliverable: "",
                 message: "",
             },
             viewProgressModal: {
@@ -303,6 +316,7 @@ export default {
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: "",
+                deliverable: "",
             },
             finishObjectiveModal: {
                 loading: false,
@@ -310,6 +324,7 @@ export default {
                 enableButton: true,
                 objectiveId: 0,
                 objectiveName: "",
+                deliverable: "",
                 message: "",
             },
         };
@@ -378,6 +393,7 @@ export default {
                         objective: {
                             title: items[index].name,
                             subtitle: "sin descripción",
+                            deliverable: items[index].deliverable,
                         },
                         isNextObjective: items[index].isNextObjective,
                         evaluable: items[index].isNotEvaluable,
@@ -396,6 +412,7 @@ export default {
             if (!this.recordProgressModal.show) {
                 this.recordProgressModal.objectiveId = objective.id;
                 this.recordProgressModal.objectiveName = objective.objective.title;
+                this.recordProgressModal.deliverable = objective.objective.deliverable;
                 this.recordProgressModal.show = !this.recordProgressModal.show;
             } else {
                 this.recordProgressModal.loading = true;
@@ -437,6 +454,7 @@ export default {
         async toggleViewProgressModal(objective) {
             if (!this.viewProgressModal.show) {
                 this.viewProgressModal.objectiveName = objective.objective.title;
+                this.viewProgressModal.deliverable = objective.objective.deliverable;
                 await this.getBinnacle(objective.id);
                 this.viewProgressModal.show = !this.viewProgressModal.show;
             } else {
@@ -447,6 +465,7 @@ export default {
             if (!this.finishObjectiveModal.show) {
                 this.finishObjectiveModal.objectiveId = objective.id;
                 this.finishObjectiveModal.objectiveName = objective.objective.title;
+                this.finishObjectiveModal.deliverable = objective.objective.deliverable;
                 this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
             } else {
                 this.finishObjectiveModal.show = true;

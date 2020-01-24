@@ -122,9 +122,12 @@
                     <a-col :span="24" class="modal-header">
                         <h1>Ver avances</h1>
                         <small
-                            >{{ viewProgressModal.objectiveName }} -
-                            {{ viewProgressModal.evaluatedName }}</small
+                            >{{ viewProgressModal.evaluatedName }} -
+                            {{ viewProgressModal.objectiveName }}</small
                         >
+                    </a-col>
+                    <a-col :span="24" class="modal-content" style="text-align: center;">
+                        <small>{{ viewProgressModal.deliverable }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -179,9 +182,12 @@
                     <a-col :span="24" class="modal-header">
                         <h1>Validar o Reabrir Objetivo</h1>
                         <small>
-                            {{ finishObjectiveModal.objectiveName }} -
-                            {{ finishObjectiveModal.evaluatedName }}
+                            {{ finishObjectiveModal.evaluatedName }} -
+                            {{ finishObjectiveModal.objectiveName }}
                         </small>
+                    </a-col>
+                    <a-col :span="24" class="modal-content" style="text-align: center;">
+                        <small>{{ finishObjectiveModal.deliverable }}</small>
                     </a-col>
                 </a-row>
             </template>
@@ -270,6 +276,7 @@ export default {
                 enableButton: true,
                 objectiveName: "",
                 evaluatedName: "",
+                deliverable: "",
                 binnacle: [],
             },
             finishObjectiveModal: {
@@ -278,6 +285,7 @@ export default {
                 objectiveId: 0,
                 objectiveName: "",
                 evaluatedName: "",
+                deliverable: "",
                 message: "",
             },
             data: [],
@@ -338,6 +346,7 @@ export default {
                             evaluable: objectivesAux[jndex].isNotEvaluable,
                             objective: {
                                 title: objectivesAux[jndex].name,
+                                deliverable: objectivesAux[jndex].deliverable,
                                 binnacle,
                             },
                             endDate: new Date(
@@ -368,12 +377,14 @@ export default {
             this.viewProgressModal.evaluatedName = input.name;
             this.viewProgressModal.binnacle = input.objective.binnacle;
             this.viewProgressModal.objectiveName = input.objective.title;
+            this.viewProgressModal.deliverable = input.objective.deliverable;
             this.viewProgressModal.show = !this.viewProgressModal.show;
         },
         async toggleFinishObjectiveModal(input) {
             this.finishObjectiveModal.evaluatedName = input.name;
             this.finishObjectiveModal.objectiveId = input.id;
             this.finishObjectiveModal.objectiveName = input.objective.title;
+            this.finishObjectiveModal.deliverable = input.objective.deliverable;
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
         },
         async toggleOpenOrValidateObjective(input) {
@@ -425,32 +436,32 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-            case "No iniciado":
-                return "ant-tag-red";
-            case "En proceso":
-                return "ant-tag-yellow";
-            case "Completado":
-                return "ant-tag-green";
-            case "Validado":
-                return "ant-tag-blue";
-            default:
-                return "ant-tag-gray";
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Completado":
+                    return "ant-tag-green";
+                case "Validado":
+                    return "ant-tag-blue";
+                default:
+                    return "ant-tag-gray";
             }
         },
         selectStatusName(status) {
             switch (status) {
-            case 0:
-                return "No iniciado";
-            case 1:
-                return "No iniciado";
-            case 2:
-                return "En proceso";
-            case 3:
-                return "Completado";
-            case 4:
-                return "Validado";
-            default:
-                return "No iniciado";
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "No iniciado";
+                case 2:
+                    return "En proceso";
+                case 3:
+                    return "Completado";
+                case 4:
+                    return "Validado";
+                default:
+                    return "No iniciado";
             }
         },
         transformStatus(status) {
