@@ -93,6 +93,17 @@ class Dashboard extends Http {
         const path = `${this.entityPath}/Publish_SentGeneralMessageToAdminMail`;
         return this.request(path, this.methods.post, data);
     }
+
+    /**
+     * Request for send notifications to user when a boss has reopnened an objective
+     * @param {Object} data
+     *
+     * @return {Promise}        Http Response
+     */
+    sendReopenedNotification(data) {
+        const path = `${this.entityPath}/Publish_SentReopenedUserNotification`;
+        return this.request(path, this.methods.post, data);
+    }
 }
 
 export default Dashboard;

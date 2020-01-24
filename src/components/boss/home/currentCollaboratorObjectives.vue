@@ -287,6 +287,7 @@ export default {
                 evaluatedName: "",
                 deliverable: "",
                 message: "",
+                userId: 0,
             },
             data: [],
         };
@@ -295,7 +296,7 @@ export default {
         this.getCollaboratorsObjectives();
     },
     methods: {
-        async openOrValidateObjective(objectiveId, status) {
+        async openOrValidateObjective(objectiveId, status, userId, objectiveName) {
             await client3B.objective
                 .updateStatus({
                     id: objectiveId,
@@ -304,6 +305,9 @@ export default {
                 .catch((error) => errorHandler(this, error));
             const action = status === 2 ? "reabierto" : "validado";
             this.$message.success(`El objetivo se ha ${action} correctamente`);
+            if (status === 2) {
+                this.sendReopenedNotification(userId, objectiveName);
+            }
         },
         async addObjetiveMessage(objectiveId, message) {
             await client3B.binnacle
@@ -342,6 +346,7 @@ export default {
                             key: jndex + 1,
                             id: objectivesAux[jndex].id,
                             name: items[index].collaboratorFullName,
+                            userId: objectivesAux[jndex].userId,
                             status: this.selectStatusName(objectivesAux[jndex].status),
                             evaluable: objectivesAux[jndex].isNotEvaluable,
                             objective: {
@@ -385,6 +390,7 @@ export default {
             this.finishObjectiveModal.objectiveId = input.id;
             this.finishObjectiveModal.objectiveName = input.objective.title;
             this.finishObjectiveModal.deliverable = input.objective.deliverable;
+            this.finishObjectiveModal.userId = input.userId;
             this.finishObjectiveModal.show = !this.finishObjectiveModal.show;
         },
         async toggleOpenOrValidateObjective(input) {
@@ -393,9 +399,12 @@ export default {
                     this.finishObjectiveModal.objectiveId,
                     `Objetivo validado: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
-                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 4).catch(
-                    (error) => errorHandler(this, error),
-                );
+                await this.openOrValidateObjective(
+                    this.finishObjectiveModal.objectiveId,
+                    4,
+                    this.finishObjectiveModal.userId,
+                    this.finishObjectiveModal.objectiveName,
+                ).catch((error) => errorHandler(this, error));
                 let obj = null;
                 for (let i = 0; i < this.data.length; i += 1) {
                     if (
@@ -414,9 +423,12 @@ export default {
                     this.finishObjectiveModal.objectiveId,
                     `Objetivo Reabierto: ${this.finishObjectiveModal.message}`,
                 ).catch((error) => errorHandler(this, error));
-                await this.openOrValidateObjective(this.finishObjectiveModal.objectiveId, 2).catch(
-                    (error) => errorHandler(this, error),
-                );
+                await this.openOrValidateObjective(
+                    this.finishObjectiveModal.objectiveId,
+                    2,
+                    this.finishObjectiveModal.userId,
+                    this.finishObjectiveModal.objectiveName,
+                ).catch((error) => errorHandler(this, error));
                 let obj = null;
                 for (let i = 0; i < this.data.length; i += 1) {
                     if (
@@ -433,6 +445,14 @@ export default {
             }
             this.finishObjectiveModal.show = false;
             this.finishObjectiveModal.message = "";
+        },
+        async sendReopenedNotification(userId, objectiveName) {
+            await client3B.notifications
+                .sendReopenedNotification({
+                    userId,
+                    objectiveName,
+                })
+                .catch((error) => errorHandler(this, error));
         },
         selectTagColor(status) {
             switch (status) {
