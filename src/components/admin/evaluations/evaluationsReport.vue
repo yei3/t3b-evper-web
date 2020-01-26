@@ -7,7 +7,7 @@
                 <a-range-picker @change="onRangePickerChange" />
             </a-col>
             <a-col>
-                <a-button @click="filterReports">
+                <a-button @click="filterReports" :disabled="isButtonDisabled()">
                     <a-icon type="search" />
                     <span>Filtrar reportes</span>
                 </a-button>
@@ -148,7 +148,7 @@ export default {
             return value ? "Si" : "No";
         },
         filterReports() {
-            this.getEvaluationWithFilter(this.initDate, this.endDate);
+            this.getEvaluationWithFilter(this.filters.initDate, this.filters.endDate);
         },
         async getEvaluationsList() {
             try {
@@ -180,8 +180,14 @@ export default {
         },
         onRangePickerChange(date, dateString) {
             const [initDate, endDate] = dateString;
-            this.initDate = initDate;
-            this.endDate = endDate;
+            if (initDate === "" && endDate === "") {
+                this.filters.initDate = initDate;
+                this.filters.endDate = endDate;
+                this.getEvaluationsList();
+            } else {
+                this.filters.initDate = initDate;
+                this.filters.endDate = endDate;
+            }
         },
         async handlePaginationChange(page, pageSize) {
             const skipCount = (page - 1) * pageSize;
@@ -233,6 +239,9 @@ export default {
             } finally {
                 this.loading = false;
             }
+        },
+        isButtonDisabled() {
+            return this.filters.initDate === "" && this.filters.endDate === "";
         },
     },
 };
