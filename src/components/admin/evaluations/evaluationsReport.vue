@@ -7,11 +7,24 @@
                 <a-range-picker @change="onRangePickerChange" />
             </a-col>
             <a-col>
-                <a-button @click="filterReports" :disabled="isButtonDisabled()">
-                    <a-icon type="search" />
-                    <span>Filtrar reportes</span>
+                <a-button
+                    class="ml-2"
+                    @click="generateFile"
+                    v-show="!isButtonDisabled()"
+                    :loading="isGeneratingFile"
+                >
+                    <a-icon v-show="!isGeneratingFile" type="file" />
+                    <span>Generar Excel con reportes</span>
                 </a-button>
             </a-col>
+            <a-button
+                class="ml-2"
+                type="primary"
+                v-show="generatedURL !== ''"
+                icon="download"
+                :href="generatedURL"
+                >Descargar Excel</a-button
+            >
         </a-row>
         <a-row class="main-content" style="margin-top: 30px;">
             <a-col :span="24" style="padding-bottom: 30px;">
@@ -89,6 +102,7 @@
 <script>
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
+import successHandler from "@/views/successHandler";
 
 import { evaluationsReportColumns } from "./constants";
 
@@ -106,7 +120,9 @@ export default {
                 onChange: this.handlePaginationChange,
             },
             loading: false,
+            isGeneratingFile: false,
             columns: evaluationsReportColumns,
+            generatedURL: "",
         };
     },
     mounted() {
@@ -147,9 +163,6 @@ export default {
         generateHumanAnswer(value) {
             return value ? "Si" : "No";
         },
-        filterReports() {
-            this.getEvaluationWithFilter(this.filters.initDate, this.filters.endDate);
-        },
         async getEvaluationsList() {
             try {
                 this.loading = true;
@@ -164,10 +177,13 @@ export default {
                 this.loading = false;
             }
         },
-        async getEvaluationWithFilter(initDate, endDate) {
+        async getEvaluationWithFilter() {
             try {
                 this.loading = true;
-                const { data } = await client3B.evaluation.getEvaluationsStatus(initDate, endDate);
+                const { data } = await client3B.evaluation.getEvaluationsStatus(
+                    this.filters.initDate,
+                    this.filters.endDate,
+                );
                 const { result } = data;
                 const { items, totalCount } = result;
                 this.data = items;
@@ -183,10 +199,12 @@ export default {
             if (initDate === "" && endDate === "") {
                 this.filters.initDate = initDate;
                 this.filters.endDate = endDate;
+                this.generatedURL = "";
                 this.getEvaluationsList();
             } else {
                 this.filters.initDate = initDate;
                 this.filters.endDate = endDate;
+                this.getEvaluationWithFilter();
             }
         },
         async handlePaginationChange(page, pageSize) {
@@ -218,26 +236,21 @@ export default {
                 this.loading = false;
             }
         },
-        async reopenEvaluationReport(reportId) {
+        async generateFile() {
             try {
-                this.loading = true;
-                await client3B.evaluation.reopen(reportId);
-                this.getEvaluationsList();
+                this.isGeneratingFile = true;
+                const { data } = await client3B.evaluation.generateFile({
+                    StartDateTime: this.filters.initDate,
+                    EndDateTime: this.filters.endDate,
+                });
+                const { result } = data;
+                const { fileName, fileType, fileToken } = result;
+                this.generatedURL = `${process.env.VUE_APP_API_URL}/api/File/DownloadTempFile?fileName=${fileName}&fileType=${fileType}&fileToken=${fileToken}`;
+                successHandler(this, "Archivo generado correctamente");
             } catch (error) {
                 errorHandler(this, error);
             } finally {
-                this.loading = false;
-            }
-        },
-        async endEvaluationReport(reportId) {
-            try {
-                this.loading = true;
-                await client3B.evaluation.finalize(reportId);
-                this.getEvaluationsList();
-            } catch (error) {
-                errorHandler(this, error);
-            } finally {
-                this.loading = false;
+                this.isGeneratingFile = false;
             }
         },
         isButtonDisabled() {
@@ -270,5 +283,8 @@ export default {
 }
 .evaluation__secondary-info span {
     font-size: 0.6rem;
+}
+.ml-2 {
+    margin-left: 0.5rem;
 }
 </style>
