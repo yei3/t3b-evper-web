@@ -189,6 +189,17 @@ class Evaluation extends Http {
         const path = `${this.entityPath}/ClosingComment`;
         return this.request(path, this.methods.post, data);
     }
+
+    /**
+     * Generate link to generated XLSX file
+     * @param {Object} data     Object containing StartDateTime and EndDateTime props
+     *
+     * @return {Promise}        Http Response
+     * */
+    generateFile(data) {
+        const path = `${this.entityPath}/GetEvaluationsStatusSheet`;
+        return this.request(path, this.methods.get, data);
+    }
 }
 
 export default Evaluation;
