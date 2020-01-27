@@ -67,12 +67,14 @@ export default {
     methods: {
         handleChange({ file }) {
             const { status } = file;
+            const { response } = file;
+
             if (status === "done") {
-                successHandler(this, "El fichero se subió correctamente", 10);
+                successHandler(this, "Proceso de carga ejecutado correctamente", 10);
                 this.spinning = false;
                 this.uploadState = "success";
             } else if (status === "error") {
-                errorHandler(this, "Ocurrió un error al subir el fichero", 15);
+                errorHandler(this, response.error.message, 15);
                 this.spinning = false;
                 this.uploadState = "error";
             } else {
