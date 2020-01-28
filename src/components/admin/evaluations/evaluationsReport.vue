@@ -4,7 +4,7 @@
         <a-divider />
         <a-row type="flex" justify="center" :gutter="8">
             <a-col :span="8">
-                <a-range-picker @change="onRangePickerChange" />
+                <a-range-picker :placeholder="pickerPlaceholders" @change="onRangePickerChange" />
             </a-col>
             <a-col>
                 <a-button
@@ -123,6 +123,7 @@ export default {
             isGeneratingFile: false,
             columns: evaluationsReportColumns,
             generatedURL: "",
+            pickerPlaceholders: ["Fecha inicial", "Fecha final"],
         };
     },
     mounted() {
