@@ -379,7 +379,34 @@ export default {
     border-left: 2px solid #1890ff;
 }
 
-.ant-dropdown-menu-item >>> a:hover {
+.ant-dropdown-menu-item > a:hover {
     color: #333;
+}
+
+.ant-menu .ant-menu-submenu-title {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 600;
+}
+
+.ant-menu .ant-menu-vertical .ant-menu-submenu-title {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 400;
+}
+
+.ant-menu.ant-menu-vertical.ant-menu-submenu-content li.ant-menu-item a {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+}
+
+.ant-menu.ant-menu-vertical.ant-menu-submenu-content li.ant-menu-item {
+    background-color: #333;
+}
+
+.ant-menu.ant-menu-vertical.ant-menu-submenu-content li.ant-menu-item:hover {
+    background-color: #000;
+}
+
+.ant-menu.ant-menu-vertical.ant-menu-submenu-content li.ant-menu-item:hover a {
+    color: #fff;
 }
 </style>
