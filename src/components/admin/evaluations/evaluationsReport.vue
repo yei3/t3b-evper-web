@@ -239,7 +239,11 @@ export default {
             try {
                 this.loading = true;
                 await client3B.evaluation[actionType]({ id: reportId });
-                this.getEvaluationsList();
+                if (this.filters.initDate === "") {
+                    this.getEvaluationsList();
+                } else {
+                    this.getEvaluationWithFilter();
+                }
             } catch (error) {
                 errorHandler(this, error);
             } finally {
