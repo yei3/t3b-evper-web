@@ -4,7 +4,13 @@
         <a-divider />
         <a-row type="flex" justify="center" :gutter="8">
             <a-col :span="8">
-                <a-range-picker :placeholder="pickerPlaceholders" @change="onRangePickerChange" />
+                <a-range-picker
+                    :showTime="true"
+                    :placeholder="pickerPlaceholders"
+                    format="YYYY-DD-MM, HH:mm:ss"
+                    @change="onRangePickerChange"
+                    @ok="handleOnOK"
+                />
             </a-col>
             <a-col>
                 <a-button
@@ -196,17 +202,20 @@ export default {
             }
         },
         onRangePickerChange(date, dateString) {
-            const [initDate, endDate] = dateString;
-            if (initDate === "" && endDate === "") {
-                this.filters.initDate = initDate;
-                this.filters.endDate = endDate;
+            const [initDate, endDate] = date;
+            const [formattedInitDate, formattedEndDate] = dateString;
+            if (formattedInitDate === "" && formattedEndDate === "") {
+                this.filters.initDate = formattedInitDate;
+                this.filters.endDate = formattedInitDate;
                 this.generatedURL = "";
                 this.getEvaluationsList();
             } else {
-                this.filters.initDate = initDate;
-                this.filters.endDate = endDate;
-                this.getEvaluationWithFilter();
+                this.filters.initDate = new Date(initDate).toISOString();
+                this.filters.endDate = new Date(endDate).toISOString();
             }
+        },
+        handleOnOK() {
+            this.getEvaluationWithFilter();
         },
         async handlePaginationChange(page, pageSize) {
             const skipCount = (page - 1) * pageSize;
