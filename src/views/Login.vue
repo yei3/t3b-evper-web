@@ -112,7 +112,7 @@
                                                 type="password"
                                                 v-model="user.newPasswordConfirmation"
                                                 class="form-input"
-                                                placeholder="Confirma tu nueva Contraseña"
+                                                placeholder="Confirma tu nueva contraseña"
                                             />
                                         </a-form-item>
                                         <a-form-item style="margin-bottom: 0px;">

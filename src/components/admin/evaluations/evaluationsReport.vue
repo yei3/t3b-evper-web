@@ -57,7 +57,7 @@
                             {{ record.evaluationName }}
                         </p>
                         <div class="evaluation__secondary-info">
-                            {{ getEvaluationType(record.isAutoevaluation) }} /
+                            {{ getEvaluationType(record.isAutoEvaluation) }} /
                             {{ generateHumanAnswer(record.includePastObjectives) }}
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         <a-dropdown>
                             <a-menu slot="overlay">
                                 <a-popconfirm
-                                    title="Confirma la finalizaci'on de esta evaluaci'on?"
+                                    title="¿Desea finalizar esta evaluación?"
                                     @confirm="handleAsynchronousAction('finalize', record.id)"
                                     okText="Si"
                                     cancelText="No"
@@ -75,7 +75,7 @@
                                     >
                                 </a-popconfirm>
                                 <a-popconfirm
-                                    title="Confirma la reapertura de esta evaluaci'on"
+                                    title="¿Desea reabrir esta evaluación?"
                                     @confirm="handleAsynchronousAction('reopen', record.id)"
                                     okText="Si"
                                     cancelText="No"
@@ -85,7 +85,7 @@
                                     >
                                 </a-popconfirm>
                                 <a-popconfirm
-                                    title="Confirma la eliminaci'on de esta evaluaci'on"
+                                    title="¿Desea eliminar esta evaluación?"
                                     @confirm="handleAsynchronousAction('delete', record.id)"
                                     okText="Si"
                                     cancelText="No"
