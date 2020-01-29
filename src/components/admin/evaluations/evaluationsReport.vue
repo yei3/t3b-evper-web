@@ -137,7 +137,7 @@ export default {
     },
     methods: {
         getEvaluationType(evaluation) {
-            return evaluation ? "Autoevaluación" : "Evaluacion de desempeño";
+            return evaluation ? "AED" : "ED";
         },
         getStatusType(status) {
             switch (status) {
