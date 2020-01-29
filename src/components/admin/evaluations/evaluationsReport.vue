@@ -137,7 +137,7 @@ export default {
     },
     methods: {
         getEvaluationType(evaluation) {
-            return evaluation ? "Autoevaluacion" : "Evaluacion de desempenho";
+            return evaluation ? "Autoevaluación" : "Evaluacion de desempeño";
         },
         getStatusType(status) {
             switch (status) {
@@ -148,7 +148,7 @@ export default {
                 case 3:
                     return "Cerrada";
                 case 4:
-                    return "Pendiente revision";
+                    return "Pte. revisión";
                 default:
                     return "No iniciada";
             }
@@ -168,7 +168,7 @@ export default {
             }
         },
         generateHumanAnswer(value) {
-            return value ? "Si" : "No";
+            return value ? "Sí" : "No";
         },
         async getEvaluationsList() {
             try {
