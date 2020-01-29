@@ -220,12 +220,18 @@ export default {
         async handlePaginationChange(page, pageSize) {
             const skipCount = (page - 1) * pageSize;
             const pagination = { SkipCount: skipCount };
+            let serverResponse;
             try {
-                const { data } = await client3B.evaluation.getEvaluationsStatus(
-                    this.startDate,
-                    this.endDate,
-                    pagination,
-                );
+                if (this.filters.startDate !== "") {
+                    serverResponse = await client3B.evaluation.getEvaluationsStatus(
+                        this.filters.initDate,
+                        this.filters.endDate,
+                        pagination,
+                    );
+                } else {
+                    serverResponse = await client3B.evaluation.getEvaluationsStatus(pagination);
+                }
+                const { data } = serverResponse;
                 const { result } = data;
                 const { items } = result;
                 this.data = items;
