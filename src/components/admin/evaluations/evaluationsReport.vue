@@ -168,7 +168,7 @@ export default {
             }
         },
         generateHumanAnswer(value) {
-            return value ? "Sí" : "No";
+            return value ? "Incluye Objetivos Anteriores" : "Sin Objetivos Anteriores";
         },
         async getEvaluationsList() {
             try {
