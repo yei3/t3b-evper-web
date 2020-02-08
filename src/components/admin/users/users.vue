@@ -14,89 +14,39 @@
 
                     <a-row class="steps">
                         <span class="breadcrumb-header breadcrumb-header--fw-400">Búsqueda</span>
-                        <span style="font-size: 16px;">de usuarios</span>
+                        <span style="font-size: 16px;"> de usuarios</span>
                     </a-row>
                     <a-divider />
                     <a-row :gutter="20">
                         <a-col :span="4">
-                            <a-select style="width: 100%" placeholder="Users">
-                                <a-select-option v-for="item in users" :key="item.id">{{
-                                    item.userName
-                                }}</a-select-option>
+                            <a-select
+                                style="width: 100%"
+                                @change="handleSelectUserChange"
+                                placeholder="Usuarios"
+                            >
+                                <a-select-option
+                                    v-for="item in users"
+                                    :value="item.userName"
+                                    :key="item.id"
+                                    >{{ `${item.userName} - ${item.name}` }}
+                                </a-select-option>
                             </a-select>
                         </a-col>
-                        <a-col :span="8">
-                            <a-select style="width: 100%" placeholder="Users">
-                                <a-select-option v-for="item in users" :key="item.id">{{
-                                    item.fullName
-                                }}</a-select-option>
-                            </a-select>
-                        </a-col>
-                        <a-col :span="8"></a-col>
                         <a-col :span="4">
-                            <a-button type="primary" :ghost="true" @click="editUser()">
-                                Editar Usuario
-                                <a-icon type="edit" />
+                            <a-button
+                                type="primary"
+                                icon="search"
+                                :ghost="true"
+                                :disabled="isButtonDisabled()"
+                                :loading="spin"
+                                @click="fetchUserData()"
+                            >
+                                Buscar Usuario
                             </a-button>
                         </a-col>
                     </a-row>
                     <a-divider />
-                    <a-row class="steps">
-                        <span class="breadcrumb-header breadcrumb-header--fw-400">Editar</span>
-                        <span style="font-size: 16px;">información de usuario</span>
-                    </a-row>
-                    <a-row class>
-                        <a-form
-                            @submit="handleSubmit"
-                            :autoFormCreate="
-                                (form) => {
-                                    this.form = form;
-                                }
-                            "
-                        >
-                            <a-form-item v-bind="formItemLayout" label="E-mail">
-                                <a-input
-                                    v-decorator="[
-                                        'email',
-                                        {
-                                            rules: [
-                                                {
-                                                    type: 'email',
-                                                    message: 'The input is not valid E-mail!',
-                                                },
-                                                {
-                                                    required: true,
-                                                    message: 'Please input your E-mail!',
-                                                },
-                                            ],
-                                        },
-                                    ]"
-                                />
-                            </a-form-item>
-                            <a-form-item v-bind="formItemLayout" label="Escolaridad">
-                                <a-input
-                                    v-decorator="[
-                                        'escolaridad',
-                                        {
-                                            rules: [
-                                                {
-                                                    type: 'text',
-                                                    message: 'The input is not valid!',
-                                                },
-                                                {
-                                                    required: true,
-                                                    message: 'Por favor llena este campo',
-                                                },
-                                            ],
-                                        },
-                                    ]"
-                                />
-                            </a-form-item>
-                            <a-form-item v-bind="tailFormItemLayout">
-                                <a-button type="btn-green" htmlType="submit">Guardar</a-button>
-                            </a-form-item>
-                        </a-form>
-                    </a-row>
+                    <user-form v-if="userData" :userData="userData" />
                 </a-tab-pane>
                 <a-tab-pane key="2">
                     <div slot="tab"><a-icon type="upload" />Carga masiva</div>
@@ -117,19 +67,17 @@ export default {
     components: {
         Footer,
         "upload-component": () => import("../../shared/uploadComponent"),
-    },
-    beforeCreate() {
-        this.form = this.$form.createForm(this);
+        "user-form": () => import("./userForm"),
     },
     data() {
         return {
             spin: false,
             users: [],
+            userData: null,
+            selectedUserName: "",
         };
     },
     created() {
-        // fetch the data when the view is created and the data is
-        // already being observed
         this.getAllUsers();
     },
     methods: {
@@ -144,8 +92,25 @@ export default {
             }
             this.spin = false;
         },
-        editUser() {
-            console.log("OK");
+        async fetchUserData() {
+            try {
+                this.spin = true;
+                const apiResponse = await client3B.user.getUserByUserName(this.selectedUserName);
+                const { data } = apiResponse;
+                const { result } = data;
+
+                this.userData = result;
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.spin = false;
+            }
+        },
+        handleSelectUserChange(value) {
+            this.selectedUserName = value;
+        },
+        isButtonDisabled() {
+            return this.selectedUserName === "";
         },
         update() {
             this.loading = true;
