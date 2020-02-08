@@ -40,6 +40,18 @@ class OrganizationUnit extends Http {
     }
 
     /**
+     * Request for the information for AllAreasOrganizationUnitByRegionCode
+     *
+     * @param  {string} regionCode - Region code
+     *
+     * @return {Promise}        Http Response
+     */
+    getAllAreasByRegionCode(regionCode) {
+        const path = `${this.entityPath}/GetAllAreasOrganizationUnitsByRegionCode`;
+        return this.request(path, this.methods.get, { regionCode });
+    }
+
+    /**
      * Request for the information for GetAreasJobDescriptions
      *
      * @return {Promise}        Http Response
