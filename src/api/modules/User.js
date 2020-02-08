@@ -33,6 +33,21 @@ class User extends Http {
     }
 
     /**
+     * Get User by user name
+     *
+     * @param {string} userName - User Name
+     *
+     * @return {Promise}
+     *
+     */
+    getUserByUserName(userName) {
+        const path = `${this.entityPath}/GetUserByUserName`;
+        return this.request(path, this.methods.get, {
+            userName,
+        });
+    }
+
+    /**
      * Request for update Scholarship and E-mail for the logged Account
      *
      * @return {Promise}        Http Response
