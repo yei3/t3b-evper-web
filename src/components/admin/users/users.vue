@@ -17,20 +17,14 @@
                         <span style="font-size: 16px;"> de usuarios</span>
                     </a-row>
                     <a-divider />
-                    <a-row :gutter="20">
+                    <a-row type="flex" justify="center" :gutter="20">
                         <a-col :span="4">
-                            <a-select
+                            <a-input
                                 style="width: 100%"
-                                @change="handleSelectUserChange"
-                                placeholder="Usuarios"
-                            >
-                                <a-select-option
-                                    v-for="item in users"
-                                    :value="item.userName"
-                                    :key="item.id"
-                                    >{{ `${item.userName} - ${item.name}` }}
-                                </a-select-option>
-                            </a-select>
+                                @change="handleSelectedUserChange"
+                                :value="selectedUserName"
+                                placeholder="ID Usuario"
+                            />
                         </a-col>
                         <a-col :span="4">
                             <a-button
@@ -46,7 +40,8 @@
                         </a-col>
                     </a-row>
                     <a-divider />
-                    <user-form v-if="userData" :userData="userData" />
+                    <user-form v-if="userData" :userData="userData" :isFetchingUser="spin" />
+                    <a-empty v-if="fetchError" description="Usuario no encontrado" />
                 </a-tab-pane>
                 <a-tab-pane key="2">
                     <div slot="tab"><a-icon type="upload" />Carga masiva</div>
@@ -57,9 +52,7 @@
     </div>
 </template>
 <script>
-/* eslint-disable */
 import client3B from "@/api/client3B";
-import { mapActions, mapGetters } from "vuex";
 import Footer from "@/components/layout/Footer.vue";
 import errorHandler from "@/views/errorHandler";
 
@@ -72,41 +65,32 @@ export default {
     data() {
         return {
             spin: false,
-            users: [],
             userData: null,
             selectedUserName: "",
+            fetchError: false,
         };
     },
-    created() {
-        this.getAllUsers();
-    },
     methods: {
-        async getAllUsers() {
-            this.spin = true;
-            let response = null;
-            try {
-                response = await client3B.user.getAll();
-                this.users = response.data.result.items;
-            } catch (error) {
-                errorHandler(this, error);
-            }
-            this.spin = false;
-        },
         async fetchUserData() {
             try {
                 this.spin = true;
+                this.userData = null;
                 const apiResponse = await client3B.user.getUserByUserName(this.selectedUserName);
+
                 const { data } = apiResponse;
                 const { result } = data;
 
+                this.fetchError = false;
                 this.userData = result;
             } catch (error) {
-                errorHandler(this, error);
+                this.fetchError = true;
+                errorHandler(this, error.message);
             } finally {
                 this.spin = false;
             }
         },
-        handleSelectUserChange(value) {
+        handleSelectedUserChange({ target }) {
+            const { value } = target;
             this.selectedUserName = value;
         },
         isButtonDisabled() {
