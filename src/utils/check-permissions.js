@@ -24,7 +24,7 @@ const isAdmin = (permissions) =>
  *
  * @return {bool}
  */
-const isCollaborator = (permissions) =>
-    permissions.filter((permission) => permission === ROLES.COLLABORATOR).length > 0;
+const isSupervisor = (permissions) =>
+    permissions.filter((permission) => permission === ROLES.SUPERVISOR).length > 0;
 
-export { isAdmin, isCollaborator };
+export { isAdmin, isSupervisor };
