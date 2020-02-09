@@ -23,6 +23,19 @@ class User extends Http {
     }
 
     /**
+     * Update user data
+     *
+     * @param {Object} payload - User data to update
+     *
+     * @return {Promise} HTTP Response
+     */
+
+    update(payload) {
+        const path = `${this.entityPath}/Update`;
+        return this.request(path, this.methods.put, payload);
+    }
+
+    /**
      * Request for the information for the logged user
      *
      * @return {Promise}        Http Response
