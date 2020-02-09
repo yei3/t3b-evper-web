@@ -1,7 +1,7 @@
 <template>
     <div class="UserForm">
         <form @submit="handleSubmit">
-            <a-row :gutter="24">
+            <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="name">Nombre</label>
                     <a-input id="name" :value="userFormData.name" @change="handleInputChange" />
@@ -14,13 +14,26 @@
                         @change="handleInputChange"
                     />
                 </a-col>
-                <!-- Probable I must remove this field -->
+            </a-row>
+            <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
-                    <label for="motherSurname">Apellido materno</label>
-                    <a-input id="motherSurname" @change="handleInputChange" />
+                    <label for="jobDescription">Puesto</label>
+                    <a-input
+                        id="jobDescription"
+                        :value="userFormData.jobDescription"
+                        @change="handleInputChange"
+                    />
+                </a-col>
+                <a-col :span="8">
+                    <label for="immediateSupervisor">Jefe inmediato</label>
+                    <a-input
+                        id="immediateSupervisor"
+                        :value="userFormData.immediateSupervisor"
+                        @change="handleInputChange"
+                    />
                 </a-col>
             </a-row>
-            <a-row :gutter="24">
+            <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="emailAddress">Email</label>
                     <a-input
@@ -37,16 +50,8 @@
                         @change="handleInputChange"
                     />
                 </a-col>
-                <a-col :span="8">
-                    <label for="jobDescription">Puesto</label>
-                    <a-input
-                        id="jobDescription"
-                        :value="userFormData.jobDescription"
-                        @change="handleInputChange"
-                    />
-                </a-col>
             </a-row>
-            <a-row :gutter="24">
+            <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="region">Región</label>
                     <a-select
@@ -77,12 +82,8 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="8">
-                    <label for="immediateSupervisor">Jefe inmediato</label>
-                    <a-input id="immediateSupervisor" :value="userFormData.immediateSupervisor" />
-                </a-col>
             </a-row>
-            <a-row :gutter="24">
+            <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="lastReassignDate">Fecha de última reasignación</label>
                     <a-date-picker
@@ -93,32 +94,37 @@
                     />
                 </a-col>
                 <a-col :span="8">
-                    <label for="socialReason">Razón social</label>
-                    <a-input
-                        id="socialReason"
-                        :value="userFormData.socialReason"
-                        @change="handleInputChange"
-                    />
-                </a-col>
-                <a-col :span="8">
                     <a-card size="small">
                         <a-row class="mb-0">
                             <a-col class="switch-container" :span="24">
                                 <span class="switch-container__label">Perfil jefe</span>
-                                <a-switch />
+                                <a-switch
+                                    id="isBoss"
+                                    :checked="isUserBoss"
+                                    @click="handleBossSwitchChange"
+                                />
                             </a-col>
                             <a-col class="switch-container" :span="24">
                                 <span class="switch-container__label">Perfil administrador</span>
-                                <a-switch />
+                                <a-switch
+                                    id="isAdmin"
+                                    :checked="isUserAdmin"
+                                    @click="handleAdminSwitchChange"
+                                />
                             </a-col>
                         </a-row>
                     </a-card>
                 </a-col>
             </a-row>
-            <a-row class="mb-0" type="flex" justify="end" :gutter="24">
-                <a-col class="actions-container" :span="24">
-                    <a-button class="actions-container__button" type="default">Cancelar</a-button>
-                    <a-button class="actions-container__button" type="default" htmlType="submit"
+            <a-row class="mb-0" type="flex" justify="center" :gutter="24">
+                <a-col class="actions-container" :span="16">
+                    <a-button
+                        class="actions-container__button"
+                        icon="save"
+                        type="primary"
+                        htmlType="submit"
+                        :loading="isSavingUserData"
+                        :ghost="true"
                         >Guardar cambios</a-button
                     >
                 </a-col>
@@ -131,11 +137,16 @@
 import moment from "moment";
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
+import successHandler from "@/views/successHandler";
 import searchRegion from "@/utils/filter-region";
-import { isAdmin, isBoss } from "@/utils/check-permissions";
+import { isAdmin, isSupervisor } from "@/utils/check-permissions";
 
 export default {
     beforeMount() {
+        /**
+         * We can't and shouldn't directly modify the props
+         * here we make a copy of the props to modify them later
+         */
         this.userFormData = Object.assign({}, this.$props.userData);
     },
     mounted() {
@@ -143,6 +154,12 @@ export default {
     },
     props: {
         userData: Object,
+        isFetchingUser: Boolean,
+    },
+    watch: {
+        userData(newVal) {
+            this.userFormData = newVal;
+        },
     },
     data() {
         return {
@@ -156,6 +173,7 @@ export default {
                 regionsLoading: false,
             },
             loading: true,
+            isSavingUserData: false,
             areas: [],
             regions: [],
             selectedRegionCode: this.$props.userData.region,
@@ -163,17 +181,53 @@ export default {
     },
     methods: {
         handleSubmit(e) {
+            const {
+                userName,
+                name,
+                surname,
+                emailAddress,
+                scholarship,
+                isActive,
+                lastLoginTime,
+                creationTime,
+                permissions: roleNames,
+                immediateSupervisor,
+                id,
+            } = this.userFormData;
+
+            const data = {
+                userName,
+                name,
+                surname,
+                emailAddress,
+                fullName: `${name} ${surname}`,
+                isActive,
+                lastLoginTime,
+                creationTime,
+                roleNames,
+                scholarship,
+                organizationUnits: [],
+                id,
+            };
+
+            const organizationUnit = this.buildOrganizationUnit(
+                immediateSupervisor,
+                userName,
+                id,
+                data,
+            );
+
+            data.organizationUnits.push(organizationUnit);
+
             e.preventDefault();
-            console.log(this.userFormData);
+            this.updateUser(data);
         },
         handleRegionSelect(value) {
-            console.log(value);
             this.selectedRegionCode = value;
             this.userFormData.region = value;
             this.getAllAreasByRegionCode();
         },
         handleAreaSelect(value) {
-            console.log(value);
             this.userFormData.area = value;
         },
         handleInputChange({ target }) {
@@ -182,10 +236,73 @@ export default {
         },
         handleDatePickerChange(date) {
             if (date) {
-                this.userFormData.reassignDate = date;
+                this.userFormData.reassignDate = new Date(date).toISOString();
             } else {
                 this.userFormData.reassignDate = this.$props.userData.reassignDate;
             }
+        },
+        handleBossSwitchChange(checked) {
+            if (!this.userFormData.permissions && checked) {
+                this.userFormData.permissions = ["SUPERVISOR"];
+            } else if (checked) {
+                this.userFormData.permissions.push("SUPERVISOR");
+            } else {
+                this.removePermission("SUPERVISOR");
+            }
+        },
+        handleAdminSwitchChange(checked) {
+            if (!this.userFormData.permissions && checked) {
+                this.userFormData.permissions = ["ADMINISTRATOR"];
+            } else if (checked) {
+                this.userFormData.permissions.push("ADMINISTRATOR");
+            } else {
+                this.removePermission("ADMINISTRATOR");
+            }
+        },
+        removePermission(permissionName) {
+            const { permissions } = this.userFormData;
+            const permissionIndex = permissions.findIndex(
+                (permission) => permission === permissionName,
+            );
+            permissions.splice(permissionIndex, 1);
+        },
+        getSelectedOrganizationUnit() {
+            const [selectedArea] = this.areas.filter(
+                (area) =>
+                    area.code === this.userFormData.area ||
+                    area.displayName === this.userFormData.area,
+            );
+            return selectedArea;
+        },
+        buildOrganizationUnit(immediateSupervisor, userName, userId, { fullName }) {
+            const organizationUnitUsers = [];
+            const organizationUnitUser = {
+                immediateSupervisor,
+                userName,
+                id: userId,
+                fullName,
+            };
+
+            organizationUnitUsers.push(organizationUnitUser);
+
+            const {
+                displayName,
+                code,
+                parentId,
+                isSalesArea,
+                id,
+            } = this.getSelectedOrganizationUnit();
+
+            const organizationUnit = {
+                displayName,
+                code,
+                parentId,
+                isSalesArea,
+                id,
+                organizationUnitUsers,
+            };
+
+            return organizationUnit;
         },
         async getAllRegions() {
             try {
@@ -220,18 +337,41 @@ export default {
                 this.loadingStates.areasLoading = false;
             }
         },
+        async updateUser(data) {
+            try {
+                this.isSavingUserData = true;
+                await client3B.user.update(data);
+                successHandler(this, "Usuario actualizado correctamente");
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.isSavingUserData = false;
+            }
+        },
     },
     computed: {
         reassignDateFunction() {
             return moment(this.userFormData.reassignDate);
+        },
+        isUserAdmin() {
+            return this.userFormData.permissions ? isAdmin(this.userFormData.permissions) : false;
+        },
+        isUserBoss() {
+            return this.userFormData.permissions
+                ? isSupervisor(this.userFormData.permissions)
+                : false;
         },
     },
 };
 </script>
 
 <style scoped>
-.ant-row {
+.ant-row-flex {
     margin-bottom: 1rem;
+}
+
+.ant-row-flex:last-child {
+    margin-bottom: 0;
 }
 
 .block {
