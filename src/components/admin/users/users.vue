@@ -41,7 +41,10 @@
                     </a-row>
                     <a-divider />
                     <user-form v-if="userData" :userData="userData" :isFetchingUser="spin" />
-                    <a-empty v-if="fetchError" description="Usuario no encontrado" />
+                    <a-empty
+                        v-if="fetchError"
+                        description="Usuario no encontrado, intente con otro ID."
+                    />
                 </a-tab-pane>
                 <a-tab-pane key="2">
                     <div slot="tab"><a-icon type="upload" />Carga masiva</div>
