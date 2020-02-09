@@ -1,9 +1,9 @@
-import { isAdmin, isCollaborator } from "../../../src/utils/check-permissions";
+import { isAdmin, isSupervisor } from "../../../src/utils/check-permissions";
 
 const mockedData = {
     firstUserRoles: ["ADMIN", "SUPERVISOR"],
-    secondUserRoles: ["COLLABORATOR", "ADMINISTRATOR"],
-    thirdUserRoles: ["SUPERVISOR"],
+    secondUserRoles: ["SUPERVISOR", "ADMINISTRATOR"],
+    thirdUserRoles: ["COLLABORATOR"],
 };
 
 test("Should return true if user has the Admin role", () => {
@@ -12,8 +12,8 @@ test("Should return true if user has the Admin role", () => {
     expect(result).toBeTruthy();
 });
 
-test("Should return true if user has the Collaborator role", () => {
-    const result = isCollaborator(mockedData.secondUserRoles);
+test("Should return true if user has the Supervisor role", () => {
+    const result = isSupervisor(mockedData.secondUserRoles);
 
     expect(result).toBeTruthy();
 });
@@ -24,7 +24,7 @@ test("Should return false if user is not Admin", () => {
     expect(result).toBeFalsy();
 });
 
-test("Should return false if user is not Collaborator", () => {
+test("Should return false if user is not Supervisor", () => {
     const result = isAdmin(mockedData.thirdUserRoles);
 
     expect(result).toBeFalsy();
