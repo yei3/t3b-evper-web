@@ -6,10 +6,7 @@
             </div>
         </a-row>
         <div class="small" v-show="!loading">
-            <doughnut-chart
-                :chartData="charData"
-                :options="charOptions"
-            />
+            <doughnut-chart :chartData="charData" :options="charOptions" />
         </div>
     </div>
 </template>
@@ -94,7 +91,7 @@ export default {
 
             const dataReport = {
                 RegionId: this.queryData.region,
-                StarTime: startTime.toISOString(),
+                StartTime: startTime.toISOString(),
                 EndDateTime: endTime.toISOString(),
             };
             if (this.queryData.area !== NONE) dataReport.AreaId = this.queryData.area;
@@ -141,6 +138,4 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-
-</style>
+<style lang="stylus" scoped></style>

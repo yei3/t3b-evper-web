@@ -6,10 +6,7 @@
             </div>
         </a-row>
         <div v-show="!loading">
-            <bar-chart
-                :chartData="charData"
-                :options="charOptions"
-            />
+            <bar-chart :chartData="charData" :options="charOptions" />
         </div>
     </div>
 </template>
@@ -102,7 +99,7 @@ export default {
 
             const dataReport = {
                 RegionId: this.queryData.region,
-                StarTime: startTime.toISOString(),
+                StartTime: startTime.toISOString(),
                 EndDateTime: endTime.toISOString(),
             };
             if (this.queryData.area !== NONE) dataReport.AreaId = this.queryData.area;
@@ -134,10 +131,7 @@ export default {
                     total: cultureTotal - cultureSuccess,
                     exceeds: this.isExceeds(cultureTotal, cultureSuccess),
                     satisfactory: this.isSatisfactory(cultureTotal, cultureSuccess),
-                    unsatisfactory: this.isUnsatisfactory(
-                        cultureTotal,
-                        cultureSuccess,
-                    ),
+                    unsatisfactory: this.isUnsatisfactory(cultureTotal, cultureSuccess),
                 },
             ];
 
@@ -201,6 +195,4 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-
-</style>
+<style lang="stylus" scoped></style>
