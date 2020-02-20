@@ -4,13 +4,18 @@
             <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="name">Nombre</label>
-                    <a-input id="name" :value="userFormData.name" @change="handleInputChange" />
+                    <a-input
+                        id="name"
+                        :value="userFormData.name"
+                        @change="handleInputChange"
+                        required
+                    />
                 </a-col>
                 <a-col :span="8">
                     <label for="surname">Apellidos</label>
                     <a-input
-                        id="surname"
-                        :value="userFormData.surname"
+                        id="firstLastName"
+                        :value="userFormData.firstLastName"
                         @change="handleInputChange"
                     />
                 </a-col>
@@ -56,8 +61,9 @@
                     <label for="region">Región</label>
                     <a-select
                         id="region"
-                        :value="userFormData.region"
+                        :value="selectedRegionCode"
                         :loading="loadingStates.regionsLoading"
+                        :disabled="loadingStates.regionsLoading"
                         @select="handleRegionSelect"
                     >
                         <a-select-option
@@ -73,8 +79,9 @@
                     <label for="area">Área</label>
                     <a-select
                         id="area"
-                        :value="userFormData.area"
+                        :value="selectedAreaCode"
                         :loading="loadingStates.areasLoading"
+                        :disabled="loadingStates.areasLoading"
                         @select="handleAreaSelect"
                     >
                         <a-select-option v-for="area in areas" :value="area.code" :key="area.id">
@@ -141,6 +148,8 @@ import successHandler from "@/views/successHandler";
 import searchRegion from "@/utils/filter-region";
 import { isAdmin, isSupervisor } from "@/utils/check-permissions";
 
+import { DATE_FORMAT, ROLES } from "@/utils/constants";
+
 export default {
     beforeMount() {
         /**
@@ -164,10 +173,6 @@ export default {
     data() {
         return {
             userFormData: null,
-            userPermissions: {
-                isBoss: false,
-                isAdmin: false,
-            },
             loadingStates: {
                 areasLoading: false,
                 regionsLoading: false,
@@ -176,7 +181,8 @@ export default {
             isSavingUserData: false,
             areas: [],
             regions: [],
-            selectedRegionCode: this.$props.userData.region,
+            selectedRegionCode: this.$props.userData.regionCode,
+            selectedAreaCode: this.$props.userData.areaCode,
         };
     },
     methods: {
@@ -184,40 +190,34 @@ export default {
             const {
                 userName,
                 name,
-                surname,
+                firstLastName,
                 emailAddress,
                 scholarship,
-                isActive,
-                lastLoginTime,
-                creationTime,
-                permissions: roleNames,
+                reassignDate,
+                roles,
                 immediateSupervisor,
                 id,
             } = this.userFormData;
 
+            const { displayName: area } = this.getSelectedArea();
+            const { displayName: region } = this.getSelectedRegion();
+
             const data = {
                 userName,
                 name,
-                surname,
+                firstLastName,
                 emailAddress,
-                fullName: `${name} ${surname}`,
-                isActive,
-                lastLoginTime,
-                creationTime,
-                roleNames,
+                fullName: `${name} ${firstLastName}`,
+                roles,
                 scholarship,
-                organizationUnits: [],
+                reassignDate: moment(reassignDate).format(),
+                area,
+                areaCode: this.selectedAreaCode,
+                region,
+                regionCode: this.selectedRegionCode,
+                immediateSupervisor,
                 id,
             };
-
-            const organizationUnit = this.buildOrganizationUnit(
-                immediateSupervisor,
-                userName,
-                id,
-                data,
-            );
-
-            data.organizationUnits.push(organizationUnit);
 
             e.preventDefault();
             this.updateUser(data);
@@ -229,6 +229,7 @@ export default {
         },
         handleAreaSelect(value) {
             this.userFormData.area = value;
+            this.selectedAreaCode = value;
         },
         handleInputChange({ target }) {
             const { id, value } = target;
@@ -236,73 +237,45 @@ export default {
         },
         handleDatePickerChange(date) {
             if (date) {
-                this.userFormData.reassignDate = new Date(date).toISOString();
+                this.userFormData.reassignDate = moment(date);
             } else {
                 this.userFormData.reassignDate = this.$props.userData.reassignDate;
             }
         },
         handleBossSwitchChange(checked) {
-            if (!this.userFormData.permissions && checked) {
-                this.userFormData.permissions = ["SUPERVISOR"];
+            if (!this.userFormData.roles && checked) {
+                this.userFormData.roles = [ROLES.SUPERVISOR];
             } else if (checked) {
-                this.userFormData.permissions.push("SUPERVISOR");
+                this.userFormData.roles.push(ROLES.SUPERVISOR);
             } else {
-                this.removePermission("SUPERVISOR");
+                this.removePermission(ROLES.SUPERVISOR);
             }
         },
         handleAdminSwitchChange(checked) {
-            if (!this.userFormData.permissions && checked) {
-                this.userFormData.permissions = ["ADMINISTRATOR"];
+            if (!this.userFormData.roles && checked) {
+                this.userFormData.roles = [ROLES.ADMINISTRATOR];
             } else if (checked) {
-                this.userFormData.permissions.push("ADMINISTRATOR");
+                this.userFormData.roles.push(ROLES.ADMINISTRATOR);
             } else {
-                this.removePermission("ADMINISTRATOR");
+                this.removePermission(ROLES.ADMINISTRATOR);
             }
         },
         removePermission(permissionName) {
-            const { permissions } = this.userFormData;
-            const permissionIndex = permissions.findIndex(
-                (permission) => permission === permissionName,
-            );
-            permissions.splice(permissionIndex, 1);
+            const { roles } = this.userFormData;
+            const roleIndex = roles.findIndex((role) => role === permissionName);
+            roles.splice(roleIndex, 1);
         },
-        getSelectedOrganizationUnit() {
+        getSelectedArea() {
             const [selectedArea] = this.areas.filter(
-                (area) =>
-                    area.code === this.userFormData.area ||
-                    area.displayName === this.userFormData.area,
+                (area) => area.code === this.userFormData.area,
             );
             return selectedArea;
         },
-        buildOrganizationUnit(immediateSupervisor, userName, userId, { fullName }) {
-            const organizationUnitUsers = [];
-            const organizationUnitUser = {
-                immediateSupervisor,
-                userName,
-                id: userId,
-                fullName,
-            };
-
-            organizationUnitUsers.push(organizationUnitUser);
-
-            const {
-                displayName,
-                code,
-                parentId,
-                isSalesArea,
-                id,
-            } = this.getSelectedOrganizationUnit();
-
-            const organizationUnit = {
-                displayName,
-                code,
-                parentId,
-                isSalesArea,
-                id,
-                organizationUnitUsers,
-            };
-
-            return organizationUnit;
+        getSelectedRegion() {
+            const [selectedRegion] = this.regions.filter(
+                (region) => region.code === this.userFormData.region,
+            );
+            return selectedRegion;
         },
         async getAllRegions() {
             try {
@@ -351,15 +324,13 @@ export default {
     },
     computed: {
         reassignDateFunction() {
-            return moment(this.userFormData.reassignDate);
+            return moment(this.userFormData.reassignDate, DATE_FORMAT);
         },
         isUserAdmin() {
-            return this.userFormData.permissions ? isAdmin(this.userFormData.permissions) : false;
+            return this.userFormData.roles ? isAdmin(this.userFormData.roles) : false;
         },
         isUserBoss() {
-            return this.userFormData.permissions
-                ? isSupervisor(this.userFormData.permissions)
-                : false;
+            return this.userFormData.roles ? isSupervisor(this.userFormData.roles) : false;
         },
     },
 };
