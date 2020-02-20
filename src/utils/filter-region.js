@@ -1,5 +1,5 @@
 const searchRegion = (userRegion, regions) => {
-    const [resultRegion] = regions.filter((region) => region.displayName === userRegion);
+    const [resultRegion] = regions.filter((region) => region.code === userRegion);
 
     return resultRegion.code;
 };

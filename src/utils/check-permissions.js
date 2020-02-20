@@ -1,9 +1,4 @@
-const ROLES = {
-    ADMIN: "ADMIN",
-    ADMINISTRATOR: "ADMINISTRATOR",
-    SUPERVISOR: "SUPERVISOR",
-    COLLABORATOR: "COLLABORATOR",
-};
+import { ROLES } from "./constants";
 
 /**
  * Determines if the user has the `admin` role

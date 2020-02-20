@@ -1,9 +1,9 @@
 import { isAdmin, isSupervisor } from "../../../src/utils/check-permissions";
 
 const mockedData = {
-    firstUserRoles: ["ADMIN", "SUPERVISOR"],
-    secondUserRoles: ["SUPERVISOR", "ADMINISTRATOR"],
-    thirdUserRoles: ["COLLABORATOR"],
+    firstUserRoles: ["Admin", "Supervisor"],
+    secondUserRoles: ["Supervisor", "Administrator"],
+    thirdUserRoles: ["Collaborator"],
 };
 
 test("Should return true if user has the Admin role", () => {
