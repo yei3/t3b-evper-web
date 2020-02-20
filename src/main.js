@@ -8,6 +8,7 @@ import router from "./routes/router";
 import store from "./store/store";
 
 Vue.config.productionTip = false;
+
 Vue.use(Antd);
 
 new Vue({

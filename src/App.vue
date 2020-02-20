@@ -7,7 +7,7 @@
 <script>
 import moment from "moment";
 import "moment/locale/es";
-import es_ES from "ant-design-vue/lib/locale-provider/es_ES"; // eslint-ignore-line
+import es_ES from "ant-design-vue/lib/locale-provider/es_ES"; // eslint-disable-line
 
 moment.locale("es");
 

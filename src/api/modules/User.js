@@ -23,6 +23,35 @@ class User extends Http {
     }
 
     /**
+     * Update user data
+     *
+     * @typedef UserData
+     * @prop userName {string}
+     * @prop name {string}
+     * @prop firstLastName {string}
+     * @prop secondLastName {string}
+     * @prop fullName {string}
+     * @prop emailAddress {string}
+     * @prop area {string}
+     * @prop region {string}
+     * @prop immediateSupervisor {string}
+     * @prop socialReason {string}
+     * @prop reassignDate {string}
+     * @prop scholarship {string}
+     * @prop roles {string[]}
+     * @prop id {number | string}
+     *
+     * @param {UserData} payload - User data to update
+     *
+     * @return {Promise} HTTP Response
+     */
+
+    update(payload) {
+        const path = `${this.entityPath}/UpdateUserExtended`;
+        return this.request(path, this.methods.put, payload);
+    }
+
+    /**
      * Request for the information for the logged user
      *
      * @return {Promise}        Http Response
@@ -30,6 +59,21 @@ class User extends Http {
     getAll() {
         const path = `${this.entityPath}/GetAll`;
         return this.request(path, this.methods.get, {});
+    }
+
+    /**
+     * Get User by user name
+     *
+     * @param {string} userName - User Name
+     *
+     * @return {Promise}
+     *
+     */
+    getUserByUserName(employeeNumber) {
+        const path = `${this.entityPath}/GetUserExtendedByUserName`;
+        return this.request(path, this.methods.get, {
+            employeeNumber,
+        });
     }
 
     /**

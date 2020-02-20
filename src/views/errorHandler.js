@@ -3,9 +3,8 @@
  * @param {Object} vm Vue component instance
  * @param {Error | String} error A Object error or string with the error
  */
-export default ((vm, error) => {
+export default (vm, error) => {
     const time = 10;
-    console.error(error);
     if (error.validationErrors) {
         error.validationErrors.forEach((err) => {
             vm.$message.error(err.message, time);
@@ -17,4 +16,4 @@ export default ((vm, error) => {
     } else {
         vm.$message.error(error, time);
     }
-});
+};

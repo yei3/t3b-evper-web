@@ -31,10 +31,10 @@ export default {
     methods: {
         moment,
         startDate() {
-            return this.isFirstPeriod ? "01-01-" + this.year : "01-07-" + this.year;
+            return this.isFirstPeriod ? `01-01-${this.year}` : `01-07-${this.year}`;
         },
         endDate() {
-            return this.isFirstPeriod ? "30-06-" + this.year : "31-12-" + this.year;
+            return this.isFirstPeriod ? `30-06-${this.year}` : `31-12-${this.year}`;
         },
         disabledDate() {
             // Can not select days before today and today
