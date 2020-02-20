@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Antd from "ant-design-vue";
-import Vuelidate from "vuelidate";
 import "ant-design-vue/dist/antd.css";
 import "@/assets/styles/general.css";
 
@@ -11,7 +10,6 @@ import store from "./store/store";
 Vue.config.productionTip = false;
 
 Vue.use(Antd);
-Vue.use(Vuelidate);
 
 new Vue({
     router,
