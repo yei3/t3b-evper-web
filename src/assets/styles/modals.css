@@ -1,0 +1,66 @@
+.modal-icon-wrapper {
+    text-align: center;
+    padding: 20px 20px;
+}
+
+.modal-icon {
+    font-size: 84px;
+    color: #e2e3e3;
+}
+
+.modal-header {
+    text-align: center;
+}
+
+.modal-header > h1{
+    font-size: 26px;
+    font-weight: 600;
+    color: #676a6c;
+}
+
+.modal-header > small{
+    font-weight: 600;
+    font-size: 11px;
+    color: #676a6c;
+}
+
+.modal-content {
+    font-size: 13px;
+    color: #676a6c;
+}
+
+.ant-modal-body {
+    background: #f8fafb;
+}
+
+.modal-content-seccion {
+    padding-bottom: 20px;
+}
+
+.modal-content-seccion-top {
+    padding-bottom: 20px;
+}
+
+.modal-content-seccion-bottom {
+    padding-top: 20px;
+}
+
+.modal-button-ok {
+    background: #1ab394;
+    border-color: #1ab394;
+}
+
+.modal-button-ok:hover {
+    background: #18a689;
+    border-color: #18a689;
+    color: #fff;
+}
+
+.timeline-item {
+    font-size: 12px;
+    color: #676a6c;
+}
+
+.timeline-item > .ant-timeline-item-head {
+    background-color: #f8fafb;
+}

@@ -1,0 +1,88 @@
+.ant-btn-small {
+    padding: 0 5px;
+    height: auto;
+}
+
+.ant-btn:hover {
+    border: 1px solid #a4a4a4;
+    color: #676a6c;
+}
+
+.ant-btn:active, .ant-btn:focus {
+    color: #676a6c;
+}
+
+.ant-input:focus, .ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
+    border-color: #1ab394;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.ant-input:hover, .ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
+    border-color: #1ab394;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn-green, .btn-green:active, .btn-green:focus {
+    background: #1ab394;
+    border-color: #1ab394;
+    color: #fff;
+}
+
+.btn-green:hover {
+    background: #18a689;
+    border-color: #148b74;
+    color: #fff;
+}
+
+.btn-blue, .btn-blue:active, .btn-blue:focus {
+    background: #1d7a9f;
+    border-color: #1d7a9f;
+    color: #fff;
+}
+
+.btn-blue:hover {
+    background: #0f5672;
+    border-color: #0f5672;
+    color: #fff;
+}
+
+.btn-red, .btn-red:active, .btn-red:focus {
+    background: #d32506;
+    border-color: #d32506;
+    color: #fff;
+}
+
+.btn-red:hover {
+    background: #b92004;
+    border-color: #b92004;
+    color: #fff;
+}
+
+.ant-select-selection:hover, .ant-select-selection:active, .ant-select-selection:focus {
+    border-color: #1ab394;
+    -webkit-box-shadow:none;
+    box-shadow: none;
+}
+
+.ant-select-dropdown-menu-item:hover, .ant-select-dropdown-menu-item-active {
+    background-color: #ececec;
+}
+
+.has-error .ant-input:not([disabled]):hover {
+    border-color: #148b74;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #1ab394;
+    border-color: #1ab394;
+}
+
+.ant-form input[type="checkbox"]:focus {
+    border-color: #1ab394;
+}
+
+.ant-dropdown-menu-item:hover {
+    background-color: #333;
+}

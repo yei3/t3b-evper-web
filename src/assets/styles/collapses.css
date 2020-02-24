@@ -1,0 +1,112 @@
+.collapse {
+    background-color: #fff;
+    border-top: solid 2px #ddd;
+    margin-bottom: 35px;
+}
+
+.collapse-title-boss {
+    background-color: #223a52;
+    font-weight: 600;
+    font-size: 14px;
+    color:white;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title-old {
+    background-color:#f5f5f5;
+    font-weight: 600;
+    font-size: 14px;
+    color:black;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title-old, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
+.collapse-title-old2 {
+    background-color:#cccccc;
+    font-weight: 600;
+    font-size: 14px;
+    color:white;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title-old2, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
+.collapse-title-boss, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
+.collapse-title, .collapse-content {
+    padding: 15px 15px 7px;
+    min-width: 640px;
+}
+
+.collapse-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #676a6c;
+    margin-bottom: 5px;
+    border-bottom: solid 1px #e7eaec;
+    border-bottom-width: 1px;
+    border-bottom-color: #e7eaec;
+}
+
+.collapse-title >>> .dropdown-icon {
+    color: #fff;
+}
+
+.collapse-tittle-link {
+    font-style: normal;
+    color: #7e8082;
+    font-size: 12px;
+    text-decoration: underline;
+    margin-right: 13px;
+}
+
+.dropdown-icon {
+    color: white;
+}
+
+.collapse-single-header {
+    background-color: #f5f5f5;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd
+}
+
+.collapse-single-content {
+    padding: 10px 15px;
+}
+
+.collapse-single-wrapper{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 5px 5px 5px 5px;
+}
+
+.ant-progress-inner {
+    background-color: #ddd;
+}
+
+@media only screen and (max-width: 820px) {
+    .collapse {
+        overflow-x: scroll;
+    }
+}
