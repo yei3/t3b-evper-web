@@ -32,7 +32,7 @@
                                 icon="search"
                                 :ghost="true"
                                 :disabled="isButtonDisabled()"
-                                :loading="spin"
+                                :loading="loading"
                                 @click="fetchUserData()"
                             >
                                 Buscar Usuario
@@ -40,9 +40,9 @@
                         </a-col>
                     </a-row>
                     <a-divider />
-                    <user-form v-if="userData" :userData="userData" :isFetchingUser="spin" />
+                    <user-form v-if="user" />
                     <a-empty
-                        v-if="fetchError"
+                        v-if="errors.length > 0"
                         description="Usuario no encontrado, intente con otro ID."
                     />
                 </a-tab-pane>
@@ -55,7 +55,8 @@
     </div>
 </template>
 <script>
-import client3B from "@/api/client3B";
+import { mapActions, mapGetters } from "vuex";
+
 import Footer from "@/components/layout/Footer.vue";
 import errorHandler from "@/views/errorHandler";
 
@@ -67,30 +68,12 @@ export default {
     },
     data() {
         return {
-            spin: false,
-            userData: null,
             selectedUserName: "",
-            fetchError: false,
         };
     },
     methods: {
-        async fetchUserData() {
-            try {
-                this.spin = true;
-                this.userData = null;
-                const apiResponse = await client3B.user.getUserByUserName(this.selectedUserName);
-
-                const { data } = apiResponse;
-                const { result } = data;
-
-                this.fetchError = false;
-                this.userData = result;
-            } catch (error) {
-                this.fetchError = true;
-                errorHandler(this, error.message);
-            } finally {
-                this.spin = false;
-            }
+        fetchUserData() {
+            this.getUserAsync(this.selectedUserName);
         },
         handleSelectedUserChange({ target }) {
             const { value } = target;
@@ -99,21 +82,10 @@ export default {
         isButtonDisabled() {
             return this.selectedUserName === "";
         },
-        update() {
-            this.loading = true;
-        },
-        onSearch(value) {
-            console.log(value);
-        },
-        handleSubmit(e) {
-            e.preventDefault();
-            this.form.validateFieldsAndScroll((err, values) => {
-                if (!err) {
-                    console.log("Received values of form: ", values);
-                }
-                console.log(values);
-            });
-        },
+        ...mapActions(["getUserAsync"]),
+    },
+    computed: {
+        ...mapGetters(["user", "loading", "errors"]),
     },
 };
 </script>
