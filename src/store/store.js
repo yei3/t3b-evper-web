@@ -3,6 +3,8 @@ import Vuex from "vuex";
 import app from "@/store/modules/app";
 import createFormat from "@/store/modules/createFormat";
 import evaluation from "@/store/modules/evaluation";
+import user from "@/store/modules/user";
+import transient from "@/store/modules/transient";
 import authService from "@/services/auth";
 
 Vue.use(Vuex);
@@ -12,6 +14,8 @@ export default new Vuex.Store({
         app,
         createFormat,
         evaluation,
+        user,
+        transient,
     },
     state: {
         userProfile: ((role) => {
