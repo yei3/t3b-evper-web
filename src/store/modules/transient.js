@@ -1,8 +1,13 @@
+import MUTATIONS from "./mutations";
+import ACTIONS from "./actions";
+
 export default {
     state: {
         loading: false,
         loadingRegions: false,
         loadingAreas: false,
+        regions: [],
+        areas: [],
         errors: [],
     },
     getters: {
@@ -10,35 +15,23 @@ export default {
         errors: (state) => state.errors,
         loadingRegions: ({ loadingRegions }) => loadingRegions,
         loadingAreas: ({ loadingAreas }) => loadingAreas,
+        regions: ({ regions }) => {
+            return regions.reduce((acc, region) => {
+                return [...acc, { value: region.code, label: region.displayName }];
+            }, []);
+        },
+        areas: ({ areas }) => {
+            return areas.reduce((acc, area) => {
+                return [...acc, { value: area.code, label: area.displayName }];
+            }, []);
+        },
+        regionsArray: (state) => state.regions,
+        areasArray: (state) => state.areas,
     },
     mutations: {
-        requestStart: (_state) => {
-            const state = _state;
-            state.loading = true;
-        },
-        requestEnd: (_state) => {
-            const state = _state;
-            state.loading = false;
-        },
-        requestError: (_state, payload) => {
-            const state = _state;
-            state.errors.push(payload.errors);
-        },
-        resetTransients: (state) => {
-            state.loading = false;
-            state.errors = [];
-        },
-        loadingRegionsStart: (state) => {
-            state.loadingRegions = true;
-        },
-        loadingRegionsEnd: (state) => {
-            state.loadingRegions = false;
-        },
-        loadingAreasStart: (state) => {
-            state.loadingAreas = true;
-        },
-        loadingAreasEnd: (state) => {
-            state.loadingAreas = false;
-        },
+        ...MUTATIONS.transientMutations,
+    },
+    actions: {
+        ...ACTIONS.transientActions,
     },
 };
