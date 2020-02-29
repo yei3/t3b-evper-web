@@ -1,0 +1,18 @@
+import client3B from "@/api/client3B";
+
+export default {
+    getUserAsync: async ({ commit }, userId) => {
+        try {
+            commit("requestStart");
+
+            const { data } = await client3B.user.getUserByUserName(userId);
+            const { result } = data;
+
+            commit("setUserData", result);
+        } catch (error) {
+            commit("requestError", { errors: error.message });
+        } finally {
+            commit("requestEnd");
+        }
+    },
+};
