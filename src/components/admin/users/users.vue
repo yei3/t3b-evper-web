@@ -55,10 +55,9 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 import Footer from "@/components/layout/Footer.vue";
-import errorHandler from "@/views/errorHandler";
 
 export default {
     components: {
@@ -73,7 +72,12 @@ export default {
     },
     methods: {
         fetchUserData() {
-            this.getUserAsync(this.selectedUserName);
+            if (!this.user) {
+                this.getUserAsync(this.selectedUserName);
+            } else {
+                this.setUserData(null);
+                this.getUserAsync(this.selectedUserName);
+            }
         },
         handleSelectedUserChange({ target }) {
             const { value } = target;
@@ -83,6 +87,7 @@ export default {
             return this.selectedUserName === "";
         },
         ...mapActions(["getUserAsync"]),
+        ...mapMutations(["setUserData"]),
     },
     computed: {
         ...mapGetters(["user", "loading", "errors"]),
