@@ -1,14 +1,13 @@
 import ACTIONS from "./actions";
 import MUTATIONS from "./mutations";
+import GETTERS from "./getters";
 
 export default {
     state: {
         userData: null,
     },
     getters: {
-        user: ({ userData }) => userData,
-        userRegionCode: ({ userData }) => userData.regionCode,
-        userAreaCode: ({ userData }) => userData.areaCode,
+        ...GETTERS.userGetters,
     },
     mutations: {
         ...MUTATIONS.userMutations,
