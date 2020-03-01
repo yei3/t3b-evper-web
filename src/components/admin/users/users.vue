@@ -22,6 +22,7 @@
                             <a-input
                                 style="width: 100%"
                                 @change="handleSelectedUserChange"
+                                @keyup.enter="fetchUserData"
                                 :value="selectedUserName"
                                 placeholder="ID Usuario"
                             />
