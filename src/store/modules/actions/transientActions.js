@@ -29,4 +29,17 @@ export default {
             commit("loadingAreasEnd");
         }
     },
+    getAllAreas: async ({ commit }) => {
+        try {
+            commit("loadingAreasStart");
+            const { data } = await client3B.organizationUnit.getAllAreas();
+            const { result } = data;
+            commit("setAreas", result);
+            commit("resetTransientErrors");
+        } catch (error) {
+            commit("requestError", { errors: error.message });
+        } finally {
+            commit("loadingAreasEnd");
+        }
+    },
 };
