@@ -60,7 +60,7 @@
                         :loading="loadingRegions"
                         :disabled="loadingRegions"
                         @select="handleRegionSelect"
-                        :options="regions"
+                        :options="userFormRegions"
                         placholder="Seleccione una Región"
                     >
                     </a-select>
@@ -72,7 +72,7 @@
                         :value="userAreaCode"
                         :loading="loadingAreas"
                         :disabled="loadingAreas || loadingRegions"
-                        :options="areas"
+                        :options="userFormAreas"
                         @select="handleAreaSelect"
                     >
                     </a-select>
@@ -165,6 +165,13 @@ export default {
             const { displayName: region } = searchRegion(this.userRegionCode, this.regionsArray);
             const { displayName: area } = searchArea(this.userAreaCode, this.areasArray);
 
+            let reassignDateValue;
+            if (moment(reassignDate).isValid()) {
+                reassignDateValue = reassignDate.format(FORM_DATE_FORMAT);
+            } else {
+                reassignDateValue = moment(reassignDate, FORM_DATE_FORMAT).format(FORM_DATE_FORMAT);
+            }
+
             const userData = {
                 userName,
                 name,
@@ -173,7 +180,7 @@ export default {
                 fullName: `${name} ${firstLastName}`,
                 roles,
                 scholarship,
-                reassignDate: moment(reassignDate).format(FORM_DATE_FORMAT),
+                reassignDate: reassignDateValue,
                 area,
                 areaCode: this.userAreaCode,
                 region,
@@ -205,7 +212,7 @@ export default {
             if (date) {
                 this.user.reassignDate = moment(date);
             } else {
-                this.user.reassignDate = this.$props.userData.reassignDate;
+                this.user.reassignDate = this.user.reassignDate;
             }
         },
         handleBossSwitchChange(checked) {
@@ -273,8 +280,8 @@ export default {
             "userAreaCode",
             "loadingRegions",
             "loadingAreas",
-            "regions",
-            "areas",
+            "userFormRegions",
+            "userFormAreas",
             "regionsArray",
             "areasArray",
         ]),

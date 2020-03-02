@@ -11,6 +11,7 @@ export default {
                     value: region.id,
                     label: region.displayName,
                     title: region.displayName,
+                    key: region.code,
                 },
             ];
         }, []);
@@ -23,6 +24,33 @@ export default {
                     value: area.id,
                     label: area.displayName,
                     title: area.displayName,
+                    key: area.code,
+                },
+            ];
+        }, []);
+    },
+    userFormRegions: ({ regions }) => {
+        return regions.reduce((acc, region) => {
+            return [
+                ...acc,
+                {
+                    value: region.code,
+                    label: region.displayName,
+                    title: region.displayName,
+                    key: region.id,
+                },
+            ];
+        }, []);
+    },
+    userFormAreas: ({ areas }) => {
+        return areas.reduce((acc, area) => {
+            return [
+                ...acc,
+                {
+                    value: area.code,
+                    label: area.displayName,
+                    title: area.displayName,
+                    key: area.id,
                 },
             ];
         }, []);
