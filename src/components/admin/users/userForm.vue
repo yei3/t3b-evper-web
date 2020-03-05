@@ -166,8 +166,11 @@ export default {
             const { displayName: area } = searchArea(this.userAreaCode, this.areasArray);
 
             let reassignDateValue;
+            /*
+             * Validate the date because sometimes it receives extraneous values
+             */
             if (moment(reassignDate).isValid()) {
-                reassignDateValue = reassignDate.format(FORM_DATE_FORMAT);
+                reassignDateValue = moment(reassignDate, FORM_DATE_FORMAT).format(FORM_DATE_FORMAT);
             } else {
                 reassignDateValue = moment(reassignDate, FORM_DATE_FORMAT).format(FORM_DATE_FORMAT);
             }
