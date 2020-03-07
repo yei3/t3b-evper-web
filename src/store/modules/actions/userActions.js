@@ -15,4 +15,15 @@ export default {
             commit("requestEnd");
         }
     },
+    resetUserPassword: async ({ commit }, userData) => {
+        try {
+            commit("requestStart");
+
+            await client3B.account.firstTimeLogin(userData);
+        } catch (error) {
+            commit("requestError", { errors: error.message });
+        } finally {
+            commit("requestEnd");
+        }
+    },
 };
