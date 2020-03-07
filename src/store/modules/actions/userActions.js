@@ -15,4 +15,16 @@ export default {
             commit("requestEnd");
         }
     },
+    deleteUser: async ({ commit }, userId) => {
+        try {
+            commit("requestStart");
+
+            await client3B.user.delete(userId);
+            commit("resetUserData");
+        } catch (error) {
+            commit("requestError", { errors: error.message });
+        } finally {
+            commit("requestEnd");
+        }
+    },
 };
