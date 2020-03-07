@@ -3,6 +3,10 @@ export default {
         const state = _state;
         state.userData = userData;
     },
+    resetUserData: (_state) => {
+        const state = _state;
+        state.userData = null;
+    },
     evaluationSetQuestions: (_state, questions) => {
         const state = _state;
         state.questions = questions;
