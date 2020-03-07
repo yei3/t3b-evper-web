@@ -123,6 +123,16 @@
                         :ghost="true"
                         >Guardar cambios</a-button
                     >
+                    <a-popconfirm title="Desea continuar?" @confirm="resetUserPass">
+                        <a-icon slot="icon" type="question-circle-o" />
+                        <a-button
+                            class="actions-container__button"
+                            icon="undo"
+                            type="danger"
+                            :loading="loading"
+                            >Resetear contraseña</a-button
+                        >
+                    </a-popconfirm>
                 </a-col>
             </a-row>
         </form>
@@ -252,6 +262,18 @@ export default {
                 this.requestEnd();
             }
         },
+        resetUserPass() {
+            const { userName, emailAddress } = this.user;
+
+            const userData = {
+                employeeNumber: userName,
+                email: emailAddress,
+                password: `${userName}_t3B`,
+                confirmPassword: `${userName}_t3B`,
+            };
+
+            this.resetUserPassword(userData);
+        },
         ...mapMutations([
             "updateRegionCode",
             "updateAreaCode",
@@ -263,7 +285,7 @@ export default {
             "loadingAreasStart",
             "loadingAreasEnd",
         ]),
-        ...mapActions(["getRegionsAsync", "getAreasAsync"]),
+        ...mapActions(["getRegionsAsync", "getAreasAsync", "resetUserPassword"]),
     },
     computed: {
         reassignDateFunction() {
