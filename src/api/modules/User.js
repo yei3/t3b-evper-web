@@ -52,6 +52,18 @@ class User extends Http {
     }
 
     /**
+     * Request to delete a user
+     *
+     * @param {String} userId - The user's ID to remove
+     *
+     * @return {Promise}
+     */
+    delete(userId) {
+        const path = `${this.entityPath}/Delete`;
+        return this.request(path, this.methods.delete, { Id: userId });
+    }
+
+    /**
      * Request for the information for the logged user
      *
      * @return {Promise}        Http Response

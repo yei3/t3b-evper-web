@@ -4,18 +4,13 @@
             <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="name">Nombre</label>
-                    <a-input
-                        id="name"
-                        :value="userFormData.name"
-                        @change="handleInputChange"
-                        required
-                    />
+                    <a-input id="name" :value="user.name" @change="handleInputChange" required />
                 </a-col>
                 <a-col :span="8">
                     <label for="surname">Apellidos</label>
                     <a-input
                         id="firstLastName"
-                        :value="userFormData.firstLastName"
+                        :value="user.firstLastName"
                         @change="handleInputChange"
                     />
                 </a-col>
@@ -25,7 +20,7 @@
                     <label for="jobDescription">Puesto</label>
                     <a-input
                         id="jobDescription"
-                        :value="userFormData.jobDescription"
+                        :value="user.jobDescription"
                         @change="handleInputChange"
                     />
                 </a-col>
@@ -33,7 +28,7 @@
                     <label for="immediateSupervisor">Jefe inmediato</label>
                     <a-input
                         id="immediateSupervisor"
-                        :value="userFormData.immediateSupervisor"
+                        :value="user.immediateSupervisor"
                         @change="handleInputChange"
                     />
                 </a-col>
@@ -43,7 +38,7 @@
                     <label for="emailAddress">Email</label>
                     <a-input
                         id="emailAddress"
-                        :value="userFormData.emailAddress"
+                        :value="user.emailAddress"
                         @change="handleInputChange"
                     />
                 </a-col>
@@ -51,7 +46,7 @@
                     <label for="scholarship">Escolaridad</label>
                     <a-input
                         id="scholarship"
-                        :value="userFormData.scholarship"
+                        :value="user.scholarship"
                         @change="handleInputChange"
                     />
                 </a-col>
@@ -61,32 +56,25 @@
                     <label for="region">Región</label>
                     <a-select
                         id="region"
-                        :value="selectedRegionCode"
-                        :loading="loadingStates.regionsLoading"
-                        :disabled="loadingStates.regionsLoading"
+                        :value="userRegionCode"
+                        :loading="loadingRegions"
+                        :disabled="loadingRegions"
                         @select="handleRegionSelect"
+                        :options="userFormRegions"
+                        placholder="Seleccione una Región"
                     >
-                        <a-select-option
-                            v-for="region in regions"
-                            :value="region.code"
-                            :key="region.id"
-                        >
-                            {{ region.displayName }}
-                        </a-select-option>
                     </a-select>
                 </a-col>
                 <a-col :span="8">
                     <label for="area">Área</label>
                     <a-select
                         id="area"
-                        :value="selectedAreaCode"
-                        :loading="loadingStates.areasLoading"
-                        :disabled="loadingStates.areasLoading"
+                        :value="userAreaCode"
+                        :loading="loadingAreas"
+                        :disabled="loadingAreas || loadingRegions"
+                        :options="userFormAreas"
                         @select="handleAreaSelect"
                     >
-                        <a-select-option v-for="area in areas" :value="area.code" :key="area.id">
-                            {{ area.displayName }}
-                        </a-select-option>
                     </a-select>
                 </a-col>
             </a-row>
@@ -97,6 +85,7 @@
                         class="block"
                         id="lastReassignDate"
                         :value="reassignDateFunction"
+                        format="DD/MM/YYYY"
                         @change="handleDatePickerChange"
                     />
                 </a-col>
@@ -130,10 +119,31 @@
                         icon="save"
                         type="primary"
                         htmlType="submit"
-                        :loading="isSavingUserData"
+                        :loading="loading"
                         :ghost="true"
                         >Guardar cambios</a-button
                     >
+                    <a-popconfirm title="Confirmar eliminacion de usuario?" @confirm="removeUser">
+                        <a-icon slot="icon" type="question-circle-o" />
+                        <a-button
+                            class="actions-container__button"
+                            icon="delete"
+                            type="danger"
+                            :loading="loading"
+                            :ghost="true"
+                            >Eliminar usuario</a-button
+                        >
+                    </a-popconfirm>
+                    <a-popconfirm title="Desea continuar?" @confirm="resetUserPass">
+                        <a-icon slot="icon" type="question-circle-o" />
+                        <a-button
+                            class="actions-container__button"
+                            icon="undo"
+                            type="danger"
+                            :loading="loading"
+                            >Resetear contraseña</a-button
+                        >
+                    </a-popconfirm>
                 </a-col>
             </a-row>
         </form>
@@ -141,52 +151,26 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import moment from "moment";
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 import successHandler from "@/views/successHandler";
-import searchRegion from "@/utils/filter-region";
+
 import { isAdmin, isSupervisor } from "@/utils/check-permissions";
 
-import { DATE_FORMAT, ROLES } from "@/utils/constants";
+import searchRegion from "@/utils/filter-region";
+import searchArea from "@/utils/filter-area";
+
+import { FORM_DATE_FORMAT, ROLES } from "@/utils/constants";
 
 export default {
-    beforeMount() {
-        /**
-         * We can't and shouldn't directly modify the props
-         * here we make a copy of the props to modify them later
-         */
-        this.userFormData = Object.assign({}, this.$props.userData);
-    },
     mounted() {
-        this.getAllRegions();
-    },
-    props: {
-        userData: Object,
-        isFetchingUser: Boolean,
-    },
-    watch: {
-        userData(newVal) {
-            this.userFormData = newVal;
-        },
-    },
-    data() {
-        return {
-            userFormData: null,
-            loadingStates: {
-                areasLoading: false,
-                regionsLoading: false,
-            },
-            loading: true,
-            isSavingUserData: false,
-            areas: [],
-            regions: [],
-            selectedRegionCode: this.$props.userData.regionCode,
-            selectedAreaCode: this.$props.userData.areaCode,
-        };
+        Promise.all([this.getRegionsAsync(), this.getAreasAsync(this.userRegionCode)]);
     },
     methods: {
         handleSubmit(e) {
+            e.preventDefault();
             const {
                 userName,
                 name,
@@ -197,12 +181,22 @@ export default {
                 roles,
                 immediateSupervisor,
                 id,
-            } = this.userFormData;
+            } = this.user;
 
-            const { displayName: area } = this.getSelectedArea();
-            const { displayName: region } = this.getSelectedRegion();
+            const { displayName: region } = searchRegion(this.userRegionCode, this.regionsArray);
+            const { displayName: area } = searchArea(this.userAreaCode, this.areasArray);
 
-            const data = {
+            let reassignDateValue;
+            /*
+             * Validate the date because sometimes it receives extraneous values
+             */
+            if (moment(reassignDate).isValid()) {
+                reassignDateValue = moment(reassignDate, FORM_DATE_FORMAT).format(FORM_DATE_FORMAT);
+            } else {
+                reassignDateValue = moment(reassignDate, FORM_DATE_FORMAT).format(FORM_DATE_FORMAT);
+            }
+
+            const userData = {
                 userName,
                 name,
                 firstLastName,
@@ -210,128 +204,126 @@ export default {
                 fullName: `${name} ${firstLastName}`,
                 roles,
                 scholarship,
-                reassignDate: moment(reassignDate).format(),
+                reassignDate: reassignDateValue,
                 area,
-                areaCode: this.selectedAreaCode,
+                areaCode: this.userAreaCode,
                 region,
-                regionCode: this.selectedRegionCode,
+                regionCode: this.userRegionCode,
                 immediateSupervisor,
                 id,
             };
 
-            e.preventDefault();
+            const data = {
+                ...this.user,
+                ...userData,
+                isActive: true,
+            };
+
             this.updateUser(data);
         },
         handleRegionSelect(value) {
-            this.selectedRegionCode = value;
-            this.userFormData.region = value;
-            this.getAllAreasByRegionCode();
+            this.updateRegionCode(value);
+            this.getAreasAsync(this.userRegionCode);
         },
         handleAreaSelect(value) {
-            this.userFormData.area = value;
-            this.selectedAreaCode = value;
+            this.updateAreaCode(value);
         },
         handleInputChange({ target }) {
             const { id, value } = target;
-            this.userFormData[id] = value;
+            this.user[id] = value;
         },
         handleDatePickerChange(date) {
             if (date) {
-                this.userFormData.reassignDate = moment(date);
+                this.user.reassignDate = moment(date);
             } else {
-                this.userFormData.reassignDate = this.$props.userData.reassignDate;
+                this.user.reassignDate = this.user.reassignDate;
             }
         },
         handleBossSwitchChange(checked) {
-            if (!this.userFormData.roles && checked) {
-                this.userFormData.roles = [ROLES.SUPERVISOR];
+            if (!this.user.roles && checked) {
+                this.user.roles = [ROLES.SUPERVISOR];
             } else if (checked) {
-                this.userFormData.roles.push(ROLES.SUPERVISOR);
+                this.user.roles.push(ROLES.SUPERVISOR);
             } else {
                 this.removePermission(ROLES.SUPERVISOR);
             }
         },
         handleAdminSwitchChange(checked) {
-            if (!this.userFormData.roles && checked) {
-                this.userFormData.roles = [ROLES.ADMINISTRATOR];
+            if (!this.user.roles && checked) {
+                this.user.roles = [ROLES.ADMINISTRATOR];
             } else if (checked) {
-                this.userFormData.roles.push(ROLES.ADMINISTRATOR);
+                this.user.roles.push(ROLES.ADMINISTRATOR);
             } else {
                 this.removePermission(ROLES.ADMINISTRATOR);
             }
         },
         removePermission(permissionName) {
-            const { roles } = this.userFormData;
+            const { roles } = this.user;
             const roleIndex = roles.findIndex((role) => role === permissionName);
             roles.splice(roleIndex, 1);
         },
-        getSelectedArea() {
-            const [selectedArea] = this.areas.filter(
-                (area) => area.code === this.userFormData.area,
-            );
-            return selectedArea;
-        },
-        getSelectedRegion() {
-            const [selectedRegion] = this.regions.filter(
-                (region) => region.code === this.userFormData.region,
-            );
-            return selectedRegion;
-        },
-        async getAllRegions() {
-            try {
-                this.loadingStates.regionsLoading = true;
-                const regionsResponse = await client3B.organizationUnit.getAllRegions();
-                const { data } = regionsResponse;
-                const { result } = data;
-                const regionCode = searchRegion(this.selectedRegionCode, result);
-                this.selectedRegionCode = regionCode;
-                this.getAllAreasByRegionCode();
-                this.regions = result;
-            } catch (error) {
-                errorHandler(this, error);
-            } finally {
-                this.loading = false;
-                this.loadingStates.regionsLoading = false;
-            }
-        },
-        async getAllAreasByRegionCode() {
-            try {
-                this.loadingStates.areasLoading = true;
-                const areasResponse = await client3B.organizationUnit.getAllAreasByRegionCode(
-                    this.selectedRegionCode,
-                );
-                const { data } = areasResponse;
-                const { result } = data;
-
-                this.areas = result;
-            } catch (error) {
-                errorHandler(this, error);
-            } finally {
-                this.loadingStates.areasLoading = false;
-            }
-        },
         async updateUser(data) {
             try {
-                this.isSavingUserData = true;
+                this.requestStart();
                 await client3B.user.update(data);
                 successHandler(this, "Usuario actualizado correctamente");
             } catch (error) {
                 errorHandler(this, error);
             } finally {
-                this.isSavingUserData = false;
+                this.requestEnd();
             }
         },
+        removeUser() {
+            this.deleteUser(this.user.id);
+        },
+        resetUserPass() {
+            const { userName, emailAddress } = this.user;
+
+            const userData = {
+                employeeNumber: userName,
+                email: emailAddress,
+                password: `${userName}_t3B`,
+                confirmPassword: `${userName}_t3B`,
+            };
+
+            this.resetUserPassword(userData);
+        },
+        ...mapMutations([
+            "updateRegionCode",
+            "updateAreaCode",
+            "requestStart",
+            "requestEnd",
+            "requestError",
+            "loadingRegionsStart",
+            "loadingRegionsEnd",
+            "loadingAreasStart",
+            "loadingAreasEnd",
+        ]),
+        ...mapActions(["getRegionsAsync", "getAreasAsync", "deleteUser", "resetUserPassword"]),
     },
     computed: {
         reassignDateFunction() {
-            return moment(this.userFormData.reassignDate, DATE_FORMAT);
+            return moment(this.user.reassignDate, FORM_DATE_FORMAT);
         },
         isUserAdmin() {
-            return this.userFormData.roles ? isAdmin(this.userFormData.roles) : false;
+            return this.user.roles ? isAdmin(this.user.roles) : false;
         },
         isUserBoss() {
-            return this.userFormData.roles ? isSupervisor(this.userFormData.roles) : false;
+            return this.user.roles ? isSupervisor(this.user.roles) : false;
         },
+        ...mapGetters([
+            "user",
+            "loading",
+            "errors",
+            "userRegionCode",
+            "userAreaCode",
+            "loadingRegions",
+            "loadingAreas",
+            "userFormRegions",
+            "userFormAreas",
+            "regionsArray",
+            "areasArray",
+        ]),
     },
 };
 </script>
