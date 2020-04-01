@@ -4,15 +4,11 @@
             <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="name">Nombre</label>
-                    <a-input id="name" :value="user.name" @change="handleInputChange" required />
+                    <a-input id="name" :value="user.name" :disabled="true" />
                 </a-col>
                 <a-col :span="8">
                     <label for="surname">Apellidos</label>
-                    <a-input
-                        id="firstLastName"
-                        :value="user.firstLastName"
-                        @change="handleInputChange"
-                    />
+                    <a-input id="firstLastName" :value="user.firstLastName" :disabled="true" />
                 </a-col>
             </a-row>
             <a-row type="flex" justify="center" :gutter="24">
