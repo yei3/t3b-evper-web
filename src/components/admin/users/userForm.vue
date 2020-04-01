@@ -4,7 +4,7 @@
             <a-row type="flex" justify="center" :gutter="24">
                 <a-col :span="8">
                     <label for="name">Nombre</label>
-                    <a-input id="name" :value="user.name" :disabled="true" required />
+                    <a-input id="name" :value="user.name" :disabled="true" />
                 </a-col>
                 <a-col :span="8">
                     <label for="surname">Apellidos</label>
