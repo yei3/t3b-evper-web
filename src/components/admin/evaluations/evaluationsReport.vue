@@ -41,7 +41,7 @@
                     :loading="loading"
                 >
                     <span slot="status" slot-scope="status">
-                        <a-tag :class="selectTagColor(status)">{{ getStatusType(status) }}</a-tag>
+                        <a-tag :class="getTagColor(status)">{{ getStatusType(status) }}</a-tag>
                     </span>
                     <div class="collaborator" slot="collaborator" slot-scope="text, record">
                         <p class="collaborator__main-info">
@@ -110,6 +110,9 @@ import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 import successHandler from "@/views/successHandler";
 
+import getTagColor from "@/utils/get-tag-color";
+import getStatusType from "@/utils/get-status-type";
+
 import { evaluationsReportColumns } from "./constants";
 
 export default {
@@ -136,36 +139,10 @@ export default {
         this.getEvaluationsList();
     },
     methods: {
+        getTagColor,
+        getStatusType,
         getEvaluationType(evaluation) {
             return evaluation ? "AED" : "ED";
-        },
-        getStatusType(status) {
-            switch (status) {
-                case 1:
-                    return "En proceso";
-                case 2:
-                    return "Finalizada";
-                case 3:
-                    return "Cerrada";
-                case 4:
-                    return "Pte. revisión";
-                default:
-                    return "No iniciada";
-            }
-        },
-        selectTagColor(status) {
-            switch (status) {
-                case 1:
-                    return "ant-tag-yellow";
-                case 2:
-                    return "ant-tag-green";
-                case 3:
-                    return "ant-tag-blue";
-                case 4:
-                    return "ant-tag-gray";
-                default:
-                    return "ant-tag-red";
-            }
         },
         generateHumanAnswer(value) {
             return value ? "Incluye Objetivos Anteriores" : "Sin Objetivos Anteriores";
