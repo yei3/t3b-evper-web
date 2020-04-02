@@ -219,6 +219,28 @@ export default {
             }
             this.subsectionId = this.section.childSections[0].id;
         },
+        validateAnswer(_question) {
+            this.questions$.forEach((q) => {
+                if (_question.deriverable === q.deriverable) {
+                    if (_question.id !== q.id) {
+                        this.$message.error("Uno o más entregables son iguales. Favor de revisar.");
+                        return false;
+                    }
+                }
+            });
+            return true;
+        },
+        validateQuestion(_question) {
+            this.questions$.forEach((q) => {
+                if (_question.text === q.text) {
+                    if (_question.id !== q.id) {
+                        this.$message.error("Uno o más objetivos son iguales. Favor de revisar.");
+                        return false;
+                    }
+                }
+            });
+            return true;
+        },
         capitalize(str) {
             return str.replace(/^\w/, (c) => c.toUpperCase());
         },
@@ -238,6 +260,7 @@ export default {
         },
         async save(_question) {
             const question = _question;
+
             let validForm = true;
             question.loading = true;
             question.form.validateFields((error) => {
@@ -246,14 +269,37 @@ export default {
                     validForm = false;
                 }
             });
-
             if (!validForm) return;
 
             let response = null;
-            if (question.id) {
-                response = await this.updateQuestion(question);
-            } else {
-                response = await this.createQuestion(question);
+            let isValidAnswer = true;
+            let isValidQuestion = true;
+
+            //* Validations for repeated objectives
+            this.questions$.forEach((q) => {
+                if (_question.text === q.text) {
+                    if (_question.id !== q.id) {
+                        this.$message.error("Uno o más objetivos son iguales. Favor de revisar.");
+                        isValidQuestion = false;
+                    }
+                }
+            });
+
+            this.questions$.forEach((q) => {
+                if (_question.deriverable === q.deriverable) {
+                    if (_question.id !== q.id) {
+                        this.$message.error("Uno o más entregables son iguales. Favor de revisar.");
+                        isValidAnswer = false;
+                    }
+                }
+            });
+
+            if (isValidQuestion && isValidAnswer) {
+                if (question.id) {
+                    response = await this.updateQuestion(question);
+                } else {
+                    response = await this.createQuestion(question);
+                }
             }
 
             if (response) {
@@ -340,7 +386,6 @@ export default {
                     { goal: true },
                 )
                 .catch((error) => errorHandler(this, error));
-
             return response;
         },
     },
