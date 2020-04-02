@@ -220,6 +220,17 @@ class Evaluation extends Http {
         const path = `${this.entityPath}/GetEvaluationsStatusSheet`;
         return this.request(path, this.methods.get, data);
     }
+
+    /**
+     * Generate link to generated XLSX file
+     * @param {Object} data     Object containing StartDateTime and EndDateTime props
+     *
+     * @return {Promise}        Http Response
+     * */
+    generateEvaluationsResultFile(data) {
+        const path = `${this.entityPath}/GetEvaluationsResultSheet`;
+        return this.request(path, this.methods.get, data);
+    }
 }
 
 export default Evaluation;
