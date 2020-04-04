@@ -219,28 +219,6 @@ export default {
             }
             this.subsectionId = this.section.childSections[0].id;
         },
-        validateAnswer(_question) {
-            this.questions$.forEach((q) => {
-                if (_question.deriverable === q.deriverable) {
-                    if (_question.id !== q.id) {
-                        this.$message.error("Uno o más entregables son iguales. Favor de revisar.");
-                        return false;
-                    }
-                }
-            });
-            return true;
-        },
-        validateQuestion(_question) {
-            this.questions$.forEach((q) => {
-                if (_question.text === q.text) {
-                    if (_question.id !== q.id) {
-                        this.$message.error("Uno o más objetivos son iguales. Favor de revisar.");
-                        return false;
-                    }
-                }
-            });
-            return true;
-        },
         capitalize(str) {
             return str.replace(/^\w/, (c) => c.toUpperCase());
         },
