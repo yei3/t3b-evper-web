@@ -1,7 +1,7 @@
 # Build a Vue.js using yarn and deploy .
 
 trigger:
-    - master
+    - develop
 
 pool:
     name: Hosted Windows 2019 with VS2019
@@ -29,5 +29,5 @@ steps:
           SourcePath: dist
           azureSubscription: "T3B-EvPer"
           Destination: AzureBlob
-          storage: t3bevper
+          storage: t3bevperqa
           ContainerName: "$web"
