@@ -4,8 +4,9 @@ trigger:
     - master
 
 pool:
-    name: Hosted Windows 2019 with VS2019
+    name: Azure Pipelines
     demands: azureps
+    vmImage: windows-latest
 
 steps:
     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
@@ -29,5 +30,5 @@ steps:
           SourcePath: dist
           azureSubscription: "T3B-EvPer"
           Destination: AzureBlob
-          storage: t3bevper
+          storage: t3bevperqa
           ContainerName: "$web"
