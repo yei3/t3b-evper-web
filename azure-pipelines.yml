@@ -30,5 +30,5 @@ steps:
           SourcePath: dist
           azureSubscription: "T3B-EvPer"
           Destination: AzureBlob
-          storage: t3bevperqa
+          storage: t3bevper
           ContainerName: "$web"
