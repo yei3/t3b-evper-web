@@ -631,6 +631,6 @@ export default {
     margin: 0 0 0 30px;
 }
 .pre-formatted {
-    white-space: pre;
+    white-space: pre-line;
 }
 </style>
