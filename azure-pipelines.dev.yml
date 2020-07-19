@@ -1,11 +1,7 @@
 # Build a Vue.js using yarn and deploy .
 
 trigger:
-<<<<<<< HEAD
     - 1146
-=======
-    - BUG-1143
->>>>>>> master
 
 pool:
     name: Azure Pipelines
