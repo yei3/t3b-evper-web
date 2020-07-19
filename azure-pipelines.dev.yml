@@ -1,7 +1,11 @@
 # Build a Vue.js using yarn and deploy .
 
 trigger:
+<<<<<<< HEAD
     - 1146
+=======
+    - BUG-1143
+>>>>>>> master
 
 pool:
     name: Azure Pipelines
@@ -19,7 +23,7 @@ steps:
     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@3
       displayName: "Yarn Build"
       inputs:
-          arguments: "build --fix"
+          arguments: "build"
 
     - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
       displayName: "PowerShell Script"

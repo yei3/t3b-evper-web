@@ -1,45 +1,46 @@
 <template>
-    <a-col :span="24" style="padding: 5px 15px 0px 15px; margin-bottom: 0px;" :class="answerStatus">
-        <a-form
-            @submit="handleForm"
-            :autoFormCreate="
-                (form) => {
-                    this.form = form;
-                }
-            "
-        >
-            <a-form-item
-                fieldDecoratorId="q1"
-                style="text-align: left; margin-bottom: 0px;"
-                :label="`${index}. ${questionText}`"
-                :labelCol="{ xxl: 18, xl: 12, lg: 14, md: 24, sm: 24 }"
-                :wrapperCol="{ xxl: 6, xl: 10, lg: 10, md: 24, sm: 24 }"
-                :fieldDecoratorOptions="{
-                    initialValue: value,
-                    rules: [
-                        {
-                            required: true,
-                            message: 'Selecciona una respuesta',
-                        },
-                    ],
-                }"
+    <a-col :span="24" :class="answerStatus">
+        <a-col class="pre-formatted" :sm="24" :md="16" :lg="18">
+            {{ `${index}. ${questionText}` }}
+        </a-col>
+        <a-col :sm="24" :md="8" :lg="6">
+            <a-form
+                @submit="handleForm"
+                :autoFormCreate="
+                    (form) => {
+                        this.form = form;
+                    }
+                "
             >
-                <a-select
-                    placeholder="Selecciona una respuesta"
-                    v-model="value"
-                    @select="save"
-                    :disabled="onlyLecture"
+                <a-form-item
+                    fieldDecoratorId="q1"
+                    :fieldDecoratorOptions="{
+                        initialValue: value,
+                        rules: [
+                            {
+                                required: true,
+                                message: 'Selecciona una respuesta',
+                            },
+                        ],
+                    }"
                 >
-                    <a-select-option
-                        v-for="(option, index) in selectOptions"
-                        :key="index"
-                        :value="option.value"
+                    <a-select
+                        placeholder="Selecciona una respuesta"
+                        v-model="value"
+                        @select="save"
+                        :disabled="onlyLecture"
                     >
-                        {{ option.label }}
-                    </a-select-option>
-                </a-select>
-            </a-form-item>
-        </a-form>
+                        <a-select-option
+                            v-for="(option, index) in selectOptions"
+                            :key="index"
+                            :value="option.value"
+                        >
+                            {{ option.label }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+            </a-form>
+        </a-col>
         <a-col :sm="24" :md="24" style="text-align: center; margin-top: 5px;">
             <a-icon
                 v-show="loading"
@@ -171,6 +172,9 @@ export default {
 
 <style src="@/assets/styles/evaluationForm.css" scoped></style>
 <style scoped>
+.pre-formatted {
+    white-space: pre-line;
+}
 div >>> .ant-form-item-label {
     text-align: left;
 }
