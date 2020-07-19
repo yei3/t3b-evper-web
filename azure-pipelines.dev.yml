@@ -1,7 +1,7 @@
 # Build a Vue.js using yarn and deploy .
 
 trigger:
-    - develop
+    - 1146
 
 pool:
     name: Azure Pipelines
