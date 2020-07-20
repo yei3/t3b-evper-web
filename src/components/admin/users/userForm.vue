@@ -8,7 +8,7 @@
                 </a-col>
                 <a-col :span="8">
                     <label for="surname">Apellidos</label>
-                    <a-input id="firstLastName" :value="user.firstLastName" :disabled="true" />
+                    <a-input id="lastName" :value="user.lastName" :disabled="true" />
                 </a-col>
             </a-row>
             <a-row type="flex" justify="center" :gutter="24">
@@ -170,7 +170,7 @@ export default {
             const {
                 userName,
                 name,
-                firstLastName,
+                lastName,
                 emailAddress,
                 scholarship,
                 reassignDate,
@@ -195,9 +195,9 @@ export default {
             const userData = {
                 userName,
                 name,
-                firstLastName,
+                lastName,
                 emailAddress,
-                fullName: `${name} ${firstLastName}`,
+                fullName: `${name} ${lastName}`,
                 roles,
                 scholarship,
                 reassignDate: reassignDateValue,
