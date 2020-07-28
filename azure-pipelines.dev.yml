@@ -19,10 +19,11 @@ steps:
     - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
       displayName: "PowerShell Script"
 
-    - task: AzureFileCopy@4
+    - task: AzureFileCopy@3
+      displayName: "AzureBlob File Copy"
       inputs:
-          SourcePath: "dist"
+          SourcePath: dist
           azureSubscription: "T3B-EvPer"
-          Destination: "AzureBlob"
-          storage: "t3bevperqa"
+          Destination: AzureBlob
+          storage: t3bevperqa
           ContainerName: "$web"
