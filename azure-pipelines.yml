@@ -9,17 +9,12 @@ pool:
     vmImage: windows-latest
 
 steps:
-    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
-      displayName: "Use Yarn"
+    - task: Yarn@3
       inputs:
-          checkLatest: true
-    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@3
-      displayName: "Yarn Install"
-
-    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@3
-      displayName: "Yarn Build"
+          arguments: "install"
+    - task: Yarn@3
       inputs:
-          arguments: "build --fix"
+          arguments: "build"
 
     - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
       displayName: "PowerShell Script"
