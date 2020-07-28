@@ -82,7 +82,7 @@
                         objetivo indicado.
                     </span>
                 </a-col>
-                <a-col :span="24" modal-content-seccion-bottom>
+                <a-col :span="24" class="modal-content-seccion-bottom">
                     <a-textarea
                         placeholder="Avance del objetivo..."
                         :rows="6"
