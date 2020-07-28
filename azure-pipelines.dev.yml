@@ -1,7 +1,7 @@
 # Build a Vue.js using yarn and deploy .
 
 trigger:
-    - 1149
+    - develop
 
 pool:
     name: Azure Pipelines
@@ -9,10 +9,6 @@ pool:
     vmImage: windows-latest
 
 steps:
-    - task: YarnInstaller@3
-      inputs:
-          versionSpec: "1.x"
-          checkLatest: true
     - task: Yarn@3
       inputs:
           arguments: "install"
@@ -23,11 +19,10 @@ steps:
     - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
       displayName: "PowerShell Script"
 
-    - task: AzureFileCopy@3
-      displayName: "AzureBlob File Copy"
+    - task: AzureFileCopy@4
       inputs:
-          SourcePath: dist
+          SourcePath: "dist"
           azureSubscription: "T3B-EvPer"
-          Destination: AzureBlob
-          storage: t3bevperqa
+          Destination: "AzureBlob"
+          storage: "t3bevperqa"
           ContainerName: "$web"
