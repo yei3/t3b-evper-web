@@ -15,10 +15,10 @@ steps:
           checkLatest: true
     - task: Yarn@3
       inputs:
-          arguments: "Build"
+          arguments: "install"
     - task: Yarn@3
       inputs:
-          arguments: "Build"
+          arguments: "build"
 
     - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
       displayName: "PowerShell Script"
