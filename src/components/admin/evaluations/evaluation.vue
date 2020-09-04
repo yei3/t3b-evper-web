@@ -64,35 +64,27 @@
 
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-select
+                        :options="regions"
+                        :loading="loadingRegions"
+                        :disabled="loadingRegions"
                         mode="multiple"
                         style="width: 100%"
                         placeholder="Regiones"
                         v-model="form.regs"
-                    >
-                        <a-select-option
-                            v-for="(item, index) in regions"
-                            :key="index"
-                            :value="item.id"
-                        >
-                            {{ item.displayName }}
-                        </a-select-option>
-                    </a-select>
+                        optionFilterProp="title"
+                    />
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-select
+                        :options="areas"
+                        :loading="loadingAreas"
+                        :disabled="loadingAreas"
                         mode="multiple"
                         style="width: 100%"
                         placeholder="Áreas"
                         v-model="form.areas"
-                    >
-                        <a-select-option
-                            v-for="(item, index) in areas"
-                            :key="index"
-                            :value="item.id"
-                        >
-                            {{ item.displayName }}
-                        </a-select-option>
-                    </a-select>
+                        optionFilterProp="title"
+                    />
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
                     <a-select
@@ -116,28 +108,20 @@
                     Programar
                 </a-button>
             </a-row>
-            <a-row v-show="spin">
-                <div style="text-align: center; margin-top: 20px;">
-                    <a-spin tip="Cargando..." />
-                </div>
-            </a-row>
         </div>
     </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import client3B from "@/api/client3B";
 import errorHandler from "@/views/errorHandler";
 
 export default {
     data() {
         return {
-            loading: false,
-            spin: false,
             data: [],
             formats: [],
-            regions: [],
-            areas: [],
             employments: [],
             form: {
                 name: null,
@@ -150,45 +134,44 @@ export default {
             },
         };
     },
-    created() {
-        // fetch the data when the view is created and the data is
-        // already being observed
+    mounted() {
         this.getAllFormats();
-        this.getAllRegions();
-        this.getAllAreas();
+        this.getRegions();
+        this.getAreas();
         this.getAllEmployments();
     },
-    components: {},
     methods: {
         async getAllFormats() {
-            this.spin = true;
-            const response = await client3B.format
-                .getAll()
-                .catch((error) => errorHandler(this, error));
-            this.formats = response.data.result.items;
+            try {
+                this.requestStart();
+                const response = await client3B.format.getAll();
+                this.formats = response.data.result.items;
+            } catch (error) {
+                this.requestError({ errors: error.message });
+                errorHandler(this, error);
+            } finally {
+                this.requestEnd();
+            }
         },
-        async getAllRegions() {
-            const response = await client3B.organizationUnit
-                .getAllRegions()
-                .catch((error) => errorHandler(this, error));
-            this.regions = response.data.result;
+        getRegions() {
+            this.getRegionsAsync();
         },
-        async getAllAreas() {
-            const response = await client3B.organizationUnit
-                .getAllAreas()
-                .catch((error) => errorHandler(this, error));
-            this.areas = response.data.result;
-            this.spin = false;
+        getAreas() {
+            this.getAllAreas();
         },
         async getAllEmployments() {
-            const response = await client3B.user
-                .getAllEmployments()
-                .catch((error) => errorHandler(this, error));
-            this.employments = response.data.result;
-            this.spin = false;
+            try {
+                this.requestStart();
+                const response = await client3B.user.getAllEmployments();
+                this.employments = response.data.result;
+            } catch (error) {
+                this.requestError({ errors: error.message });
+                errorHandler(this, error);
+            } finally {
+                this.requestEnd();
+            }
         },
         async applyEvaluation() {
-            this.loading = true;
             const response = await client3B.evaluation
                 .apply({
                     name: this.form.name,
@@ -203,8 +186,13 @@ export default {
                 this.$message.success("Evaluación aplicada correctamente.");
                 this.$router.push({ name: "admin-evaluations" });
             }
-            this.loading = false;
         },
+        //* TODO: Rename `getRegionsAsync` method
+        ...mapActions(["getAllAreas", "getRegionsAsync"]),
+        ...mapMutations(["requestStart", "requestEnd", "requestError"]),
+    },
+    computed: {
+        ...mapGetters(["areas", "regions", "loadingRegions", "loadingAreas", "loading"]),
     },
 };
 </script>

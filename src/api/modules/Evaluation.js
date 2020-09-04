@@ -112,6 +112,26 @@ class Evaluation extends Http {
     }
 
     /**
+     * Request for the information for the Admin Evaluation's results
+     *
+     * @param {Date} StartDate - Start Date range
+     *
+     * @param {Date} EndDate   - End Date range
+     *
+     * @return {Promise}
+     */
+    getEvaluationsResult(startDate, endDate, pagination = { SkipCount: 0, MaxResultCount: 10 }) {
+        const path = `${this.entityPath}/GetEvaluationsResult`;
+        const params = {
+            StartDateTime: startDate,
+            EndDateTime: endDate,
+            ApplyPagination: true,
+            ...pagination,
+        };
+        return this.request(path, this.methods.get, params);
+    }
+
+    /**
      * Request to reopen an evaluation
      *
      * @param {Object} data Evaluation Data
@@ -198,6 +218,17 @@ class Evaluation extends Http {
      * */
     generateFile(data) {
         const path = `${this.entityPath}/GetEvaluationsStatusSheet`;
+        return this.request(path, this.methods.get, data);
+    }
+
+    /**
+     * Generate link to generated XLSX file
+     * @param {Object} data     Object containing StartDateTime and EndDateTime props
+     *
+     * @return {Promise}        Http Response
+     * */
+    generateEvaluationsResultFile(data) {
+        const path = `${this.entityPath}/GetEvaluationsResultSheet`;
         return this.request(path, this.methods.get, data);
     }
 }

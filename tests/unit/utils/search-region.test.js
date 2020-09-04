@@ -27,11 +27,11 @@ const mockedData = {
             id: 13,
         },
     ],
-    userRegion: "PUEBLA",
+    userRegionCode: "00003",
 };
 
-test("Should return the region code", () => {
-    const regionCode = searchRegion(mockedData.userRegion, mockedData.regions);
+test("Should return the user's region", () => {
+    const region = searchRegion(mockedData.userRegionCode, mockedData.regions);
 
-    expect(regionCode).toBe("00002");
+    expect(region).toEqual(mockedData.regions[2]);
 });

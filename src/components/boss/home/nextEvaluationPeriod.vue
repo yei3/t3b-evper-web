@@ -1,7 +1,7 @@
 <template>
     <a-collapse defaultActiveKey="1" :bordered="false" class="collapse-mod">
         <a-collapse-panel header="Periodo" key="1" class="text-center">
-            <h3 class="tittle-collapse">Periodo {{ year }} - {{ value ? 1 : 2 }}</h3>
+            <h3 class="tittle-collapse">Periodo {{ year }} - {{ isFirstPeriod ? 1 : 2 }}</h3>
             <a-range-picker
                 disabled
                 :defaultValue="[moment(startDate(), data.format), moment(endDate(), data.format)]"
@@ -23,7 +23,6 @@ export default {
                 : new Date().getFullYear() - 1;
     },
     data: () => ({
-        value: false,
         data: {
             format: "DD-MM-YYYY",
         },

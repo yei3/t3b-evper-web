@@ -1,33 +1,29 @@
 # Build a Vue.js using yarn and deploy .
 
 trigger:
-    - develop
+    - main
 
 pool:
-  name: Hosted Windows 2019 with VS2019
-  demands: azureps
+    name: Azure Pipelines
+    demands: azureps
+    vmImage: windows-latest
 
 steps:
-- task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
-  displayName: 'Use Yarn'
-  inputs:
-    checkLatest: true
-- task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@3
-  displayName: 'Yarn Install'
+    - task: Yarn@3
+      inputs:
+          arguments: "install"
+    - task: Yarn@3
+      inputs:
+          arguments: "build"
 
-- task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@3
-  displayName: 'Yarn Build'
-  inputs:
-    arguments: 'build --fix'
+    - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
+      displayName: "PowerShell Script"
 
-- powershell: 'Install-Module -Name AzureRM -AllowClobber -Force'
-  displayName: 'PowerShell Script'
-
-- task: AzureFileCopy@3
-  displayName: 'AzureBlob File Copy'
-  inputs:
-    SourcePath: dist
-    azureSubscription: 'T3B-EvPer'
-    Destination: AzureBlob
-    storage: t3bevperqa
-    ContainerName: '$web'
+    - task: AzureFileCopy@3
+      displayName: "AzureBlob File Copy"
+      inputs:
+          SourcePath: dist
+          azureSubscription: "T3B-EvPer"
+          Destination: AzureBlob
+          storage: t3bevper
+          ContainerName: "$web"

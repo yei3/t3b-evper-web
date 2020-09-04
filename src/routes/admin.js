@@ -6,6 +6,7 @@ import CreateFormat from "@/components/admin/formats/layout.vue";
 import Evaluation from "@/components/admin/evaluations/layout.vue";
 import CreateEvaluation from "@/components/admin/evaluations/evaluation.vue";
 import EvaluationsReport from "@/components/admin/evaluations/evaluationsReport.vue";
+import EvaluationsResultsReport from "@/components/admin/evaluations/evaluationsResultsReport.vue";
 import Users from "@/components/admin/users/users.vue";
 import Organigram from "@/components/admin/organization/organigram.vue";
 import Notifications from "@/components/admin/notifications/notifications.vue";
@@ -54,6 +55,12 @@ export default [
         path: "admin/evaluations/report",
         name: "admin-evaluations-report",
         component: EvaluationsReport,
+        beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
+    },
+    {
+        path: "admin/evaluations/results-report",
+        name: "admin-evaluations-results-report",
+        component: EvaluationsResultsReport,
         beforeEnter: beforeEnter(authService.ROLES.ADMINISTRATOR),
     },
     {

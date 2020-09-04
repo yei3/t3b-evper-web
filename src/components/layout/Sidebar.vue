@@ -183,6 +183,12 @@ export default {
                             icon: "file-text",
                             text: "Reporte de Evaluaciones",
                         },
+                        // { temp
+                        //     role: authService.ROLES.ADMINISTRATOR,
+                        //     to: "admin-evaluations-results-report",
+                        //     icon: "line-chart",
+                        //     text: "Reporte de Resultados",
+                        // },
                     ],
                 },
                 {

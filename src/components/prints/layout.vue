@@ -122,7 +122,7 @@
                     <span :key="h" v-for="(question, h) in subsection.unmeasuredQuestions">
                         <p class="question__border">
                             <b>{{ h + 1 }}.-</b>
-                            <strong>{{ question.text }}</strong>
+                            <strong class="pre-formatted">{{ question.text }}</strong>
                         </p>
                         <p class="question__border">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -317,6 +317,7 @@ export default {
                     label: "Excede requerimiento (100%)",
                 },
             ],
+            testText: "Hello Vue.\nThis is a line of text.\nAnother line of text.\n",
         };
     },
     async created() {
@@ -628,5 +629,8 @@ export default {
 }
 .question__border {
     margin: 0 0 0 30px;
+}
+.pre-formatted {
+    white-space: pre-line;
 }
 </style>

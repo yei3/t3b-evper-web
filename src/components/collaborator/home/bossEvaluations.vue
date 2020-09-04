@@ -86,16 +86,14 @@
                         v-model="CBEModal.evaluationCloseMsg"
                     />
                 </a-col>
-                <a-col class="modal-content-seccion">
-                    <a-checkbox
-                        :checked="CBEModal.enableButton"
-                        @change="CBEModal.enableButton = !CBEModal.enableButton"
-                    >
-                        <strong style="font-size: 13px;">
-                            ¿Estás seguro que deseas cerrar tu evaluación?
-                        </strong>
-                    </a-checkbox>
-                </a-col>
+                <a-checkbox
+                    :checked="CBEModal.enableButton"
+                    @change="CBEModal.enableButton = !CBEModal.enableButton"
+                >
+                    <strong style="font-size: 13px;">
+                        ¿Estás seguro que deseas cerrar tu evaluación?
+                    </strong>
+                </a-checkbox>
             </a-row>
 
             <template slot="footer">
@@ -215,6 +213,7 @@ export default {
                 .catch((error) => errorHandler(this, error));
         },
         async toggleCBEModal(input) {
+            console.log(input);
             if (!this.CBEModal.show) {
                 this.CBEModal.enableButton = false;
                 this.CBEModal.evaluationId = input.id;
@@ -238,34 +237,34 @@ export default {
         },
         selectTagColor(status) {
             switch (status) {
-            case "No iniciado":
-                return "ant-tag-red";
-            case "En proceso":
-                return "ant-tag-yellow";
-            case "Finalizado":
-                return "ant-tag-green";
-            case "Pte. revisión":
-                return "ant-tag-gray";
-            case "Validado":
-                return "ant-tag-blue";
-            default:
-                return "ant-tag-white";
+                case "No iniciado":
+                    return "ant-tag-red";
+                case "En proceso":
+                    return "ant-tag-yellow";
+                case "Finalizado":
+                    return "ant-tag-green";
+                case "Pte. revisión":
+                    return "ant-tag-gray";
+                case "Validado":
+                    return "ant-tag-blue";
+                default:
+                    return "ant-tag-white";
             }
         },
         selectStatusName(status) {
             switch (status) {
-            case 0:
-                return "No iniciado";
-            case 1:
-                return "En proceso";
-            case 2:
-                return "Finalizado";
-            case 4:
-                return "Pte. revisión";
-            case 3:
-                return "Validado";
-            default:
-                return "No iniciado";
+                case 0:
+                    return "No iniciado";
+                case 1:
+                    return "En proceso";
+                case 2:
+                    return "Finalizado";
+                case 4:
+                    return "Pte. revisión";
+                case 3:
+                    return "Validado";
+                default:
+                    return "No iniciado";
             }
         },
     },
