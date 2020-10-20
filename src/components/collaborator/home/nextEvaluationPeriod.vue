@@ -16,11 +16,9 @@ import moment from "moment";
 export default {
     beforeCreate() {
         // Range of period
+        this.FullYear = new Date().getFullYear();
+        this.year = new Date().getMonth() !== 1 ? this.FullYear : this.FullYear - 1;
         this.isFirstPeriod = new Date().getMonth() > 1 && new Date().getMonth() < 8;
-        this.year =
-            new Date().getMonth() > 1 && new Date().getMonth() < 8
-                ? new Date().getFullYear()
-                : new Date().getFullYear() - 1;
     },
     data: () => ({
         data: {
