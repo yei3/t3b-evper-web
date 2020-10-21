@@ -1,10 +1,8 @@
 <template>
     <div class="collapse" v-show="data.length > 0">
         <a-row class="collapse-title background--title">
-            <a-col :span="23" style="text-align: center;">
-                Cierre de Evaluaciones
-            </a-col>
-            <a-col :span="1" style="text-align: right;">
+            <a-col :span="23" style="text-align: center"> Cierre de Evaluaciones </a-col>
+            <a-col :span="1" style="text-align: right">
                 <a>
                     <a-icon
                         class="dropdown-icon"
@@ -24,7 +22,7 @@
             </a-col>
         </a-row>
         <a-row v-show="spin">
-            <div style="text-align: center; margin-top: 20px;">
+            <div style="text-align: center; margin-top: 20px">
                 <a-spin tip="Cargando..." size="small" />
             </div>
         </a-row>
@@ -90,7 +88,7 @@
                     :checked="CBEModal.enableButton"
                     @change="CBEModal.enableButton = !CBEModal.enableButton"
                 >
-                    <strong style="font-size: 13px;">
+                    <strong style="font-size: 13px">
                         ¿Estás seguro que deseas cerrar tu evaluación?
                     </strong>
                 </a-checkbox>
@@ -224,9 +222,15 @@ export default {
                     this.CBEModal.evaluationId,
                     this.CBEModal.evaluationCloseMsg,
                 );
-                this.sendBossCloseEvaluationNotification();
+                await this.sendBossCloseEvaluationNotification();
                 this.CBEModal.show = !this.CBEModal.show;
-                // this.data.splice( this.data.indexOf(this.CBEModal.evaluationId), 1);
+                this.$message.success(
+                    `El proceso de cierre de evaluación se ejecutó correctamente.
+                    El botón <Cerrar> estará activo por si tu Evaluador solicita algún cambio 
+                    en los objetivos, y es necesario volver a ejecutar el proceso posteriormente. 
+                    Este dejará de mostrarse cuando tu Evaluador valide tu evaluación.`,
+                    20,
+                );
             }
         },
         disableButton(status) {

@@ -22,35 +22,31 @@
                 </a-breadcrumb>
             </a-col>
         </a-row>
-        <div
-            class="collapse-content"
-            style="background-color: white;
-            margin: 30px 30px;"
-        >
-            <a-row class="collapse-title" style="margin: 16px 0;">
+        <div class="collapse-content" style="background-color: white; margin: 30px 30px">
+            <a-row class="collapse-title" style="margin: 16px 0">
                 <a-col :span="24">
                     <h2>Programar nueva Evaluación</h2>
                 </a-col>
             </a-row>
             <a-row :gutter="16">
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-input v-model="form.name" placeholder="Nombre" />
                 </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-date-picker
                         placeholder="Fecha Inicio"
                         style="width: 100%"
                         v-model="form.startDate"
                     />
                 </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-date-picker
                         placeholder="Fecha Fin"
                         style="width: 100%"
                         v-model="form.finishDate"
                     />
                 </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-select placeholder="Formato" style="width: 100%" v-model="form.format">
                         <a-select-option
                             v-for="(item, index) in formats"
@@ -62,7 +58,7 @@
                     </a-select>
                 </a-col>
 
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-select
                         :options="regions"
                         :loading="loadingRegions"
@@ -74,7 +70,7 @@
                         optionFilterProp="title"
                     />
                 </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-select
                         :options="areas"
                         :loading="loadingAreas"
@@ -86,7 +82,7 @@
                         optionFilterProp="title"
                     />
                 </a-col>
-                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px;">
+                <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" style="padding-bottom: 15px">
                     <a-select
                         mode="multiple"
                         style="width: 100%"
@@ -103,10 +99,18 @@
                     </a-select>
                 </a-col>
             </a-row>
-            <a-row class="text-right" style="padding: 16px 0;">
-                <a-button class="btn-green" @click="applyEvaluation()" :loading="loading">
-                    Programar
-                </a-button>
+            <a-row class="text-right" style="padding: 16px 0">
+                <a-popconfirm
+                    title="Recordatorio: Recuerda programar la autoevaluación de desempeño antes que la evaluación de desempeño para la correcta creación de los objetivos."
+                    @confirm="applyEvaluation()"
+                    okText="Confirmar"
+                    cancelText="Cancelar"
+                >
+                    <a-button class="btn-green" :loading="isProcessing" :disabled="isProcessing">
+                        <span>Programar</span>
+                        <a-icon v-show="!isProcessing" type="schedule" />
+                    </a-button>
+                </a-popconfirm>
             </a-row>
         </div>
     </div>
@@ -132,6 +136,7 @@ export default {
                 startDate: null,
                 finishDate: null,
             },
+            isProcessing: false,
         };
     },
     mounted() {
@@ -172,16 +177,22 @@ export default {
             }
         },
         async applyEvaluation() {
-            const response = await client3B.evaluation
-                .apply({
+            this.isProcessing = true;
+            try {
+                const response = await client3B.evaluation.apply({
                     name: this.form.name,
                     evaluationTemplateId: this.form.format,
                     organizationUnitIds: [...this.form.areas, ...this.form.regs],
                     jobDescriptions: [...this.form.employments],
                     startDate: this.form.startDate,
                     endDate: this.form.finishDate,
-                })
-                .catch((error) => errorHandler(this, error));
+                });
+            } catch (error) {
+                errorHandler(this, error);
+            } finally {
+                this.isProcessing = false;
+            }
+
             if (response) {
                 this.$message.success("Evaluación aplicada correctamente.");
                 this.$router.push({ name: "admin-evaluations" });
@@ -190,6 +201,9 @@ export default {
         //* TODO: Rename `getRegionsAsync` method
         ...mapActions(["getAllAreas", "getRegionsAsync"]),
         ...mapMutations(["requestStart", "requestEnd", "requestError"]),
+        isButtonDisabled() {
+            return true;
+        },
     },
     computed: {
         ...mapGetters(["areas", "regions", "loadingRegions", "loadingAreas", "loading"]),
