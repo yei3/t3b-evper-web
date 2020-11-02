@@ -64,6 +64,18 @@ class User extends Http {
     }
 
     /**
+     * Request to inactivate an user
+     *
+     * @param {String} userId - The user's ID to inactivate
+     *
+     * @return {Promise}
+     */
+    inactivate(userId) {
+        const path = `${this.entityPath}/Inactivate`;
+        return this.request(path, this.methods.post, { Id: userId });
+    }
+
+    /**
      * Request for the information for the logged user
      *
      * @return {Promise}        Http Response
