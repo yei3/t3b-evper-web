@@ -119,7 +119,7 @@
                         :ghost="true"
                         >Guardar cambios</a-button
                     >
-                    <a-popconfirm title="Confirmar eliminacion de usuario?" @confirm="removeUser">
+                    <a-popconfirm title="¿Confirmas inactivación de usuario?" @confirm="removeUser">
                         <a-icon slot="icon" type="question-circle-o" />
                         <a-button
                             class="actions-container__button"
@@ -127,7 +127,7 @@
                             type="danger"
                             :loading="loading"
                             :ghost="true"
-                            >Eliminar usuario</a-button
+                            >Inactivar usuario</a-button
                         >
                     </a-popconfirm>
                     <a-popconfirm title="Desea continuar?" @confirm="resetUserPass">
@@ -270,7 +270,7 @@ export default {
             }
         },
         removeUser() {
-            this.deleteUser(this.user.id);
+            this.inactivateUser(this.user.id);
         },
         resetUserPass() {
             const { userName, emailAddress } = this.user;
@@ -295,7 +295,7 @@ export default {
             "loadingAreasStart",
             "loadingAreasEnd",
         ]),
-        ...mapActions(["getRegionsAsync", "getAreasAsync", "deleteUser", "resetUserPassword"]),
+        ...mapActions(["getRegionsAsync", "getAreasAsync", "inactivateUser", "resetUserPassword"]),
     },
     computed: {
         reassignDateFunction() {

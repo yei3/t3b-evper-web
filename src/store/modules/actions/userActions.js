@@ -27,6 +27,18 @@ export default {
             commit("requestEnd");
         }
     },
+    inactivateUser: async ({ commit }, userId) => {
+        try {
+            commit("requestStart");
+
+            await client3B.user.inactivate(userId);
+            commit("resetUserData");
+        } catch (error) {
+            commit("requestError", { errors: error.message });
+        } finally {
+            commit("requestEnd");
+        }
+    },
     resetUserPassword: async ({ commit }, userData) => {
         try {
             commit("requestStart");
