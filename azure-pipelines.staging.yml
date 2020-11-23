@@ -19,7 +19,7 @@ steps:
   - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
     displayName: "PowerShell Script"
 
-  - task: AzureFileCopy@3
+  - task: AzureFileCopy@4
     displayName: "AzureBlob File Copy"
     inputs:
         SourcePath: dist
