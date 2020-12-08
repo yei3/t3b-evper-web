@@ -16,6 +16,9 @@ steps:
     inputs:
         arguments: "build --mode staging"
 
+  - powershell: "Install-Module -Name AzureRM -AllowClobber -Force"
+    displayName: "PowerShell Script"
+
   - task: AzureFileCopy@3
     displayName: "AzureBlob File Copy"
     inputs:
@@ -23,4 +26,4 @@ steps:
         azureSubscription: "T3B-EvPer"
         Destination: AzureBlob
         storage: t3bevperqa
-        ContainerName: "$web"
+        ContainerName: "$web" 
