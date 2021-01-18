@@ -17,8 +17,8 @@ export default {
     beforeCreate() {
         // Range of period
         this.FullYear = new Date().getFullYear();
-        this.year = new Date().getMonth() !== 1 ? this.FullYear : this.FullYear - 1;
-        this.isFirstPeriod = new Date().getMonth() > 1 && new Date().getMonth() < 8;
+        this.year = new Date().getMonth() !== 0 ? this.FullYear : this.FullYear - 1;
+        this.isFirstPeriod = new Date().getMonth() > 0 && new Date().getMonth() < 7;
     },
     data: () => ({
         data: {

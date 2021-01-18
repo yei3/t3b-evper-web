@@ -8,22 +8,22 @@
                             <img
                                 alt="image"
                                 src="@/assets/img/login-imagen2.png"
-                                style="max-width: 80%; height: auto;"
+                                style="max-width: 80%; height: auto"
                             />
                         </a-col>
                         <a-col :md="{ span: 12 }" :lg="{ span: 9 }" class="login-form">
                             <a-row>
-                                <a-col :span="24" style="text-aling: center;">
+                                <a-col :span="24" style="text-aling: center">
                                     <img
                                         alt="image"
                                         src="@/assets/img/logo-tipografia.png"
-                                        style="max-width: 30%; height: auto; padding-top: 80px;"
+                                        style="max-width: 30%; height: auto; padding-top: 80px"
                                     />
                                 </a-col>
                             </a-row>
                             <a-row>
-                                <a-col style="text-align: center;">
-                                    <label style="font-size: 30px; font-weight: 900; color: black;"
+                                <a-col style="text-align: center">
+                                    <label style="font-size: 30px; font-weight: 900; color: black"
                                         >Evaluación de desempeño</label
                                     >
                                     <a-divider />
@@ -75,9 +75,9 @@
                                     v-if="showFormConfirmPassword && !showRecovPass"
                                 >
                                     <a-form>
-                                        <a-form-item style="margin: 0px;">
+                                        <a-form-item style="margin: 0px">
                                             <label for>
-                                                <h4 style="color: red; margin: 0px;">
+                                                <h4 style="color: red; margin: 0px">
                                                     Para continuar actualiza tus datos
                                                 </h4>
                                             </label>
@@ -115,7 +115,7 @@
                                                 placeholder="Confirma tu nueva contraseña"
                                             />
                                         </a-form-item>
-                                        <a-form-item style="margin-bottom: 0px;">
+                                        <a-form-item style="margin-bottom: 0px">
                                             <a-button
                                                 block
                                                 htmlType="submit"
@@ -127,7 +127,7 @@
                                         </a-form-item>
                                         <a-form-item>
                                             <a
-                                                style="color: #666; text-decoration: underline;"
+                                                style="color: #666; text-decoration: underline"
                                                 @click="redirectToHome"
                                                 >Cancelar</a
                                             >
@@ -174,7 +174,7 @@
                                 <a-col>
                                     <a
                                         @click="showRecovPass = true"
-                                        style="color: #666; text-decoration: underline;"
+                                        style="color: #666; text-decoration: underline"
                                         >¿Olvidó su contraseña?</a
                                     >
                                 </a-col>
@@ -183,7 +183,7 @@
                                 <a-col>
                                     <a
                                         @click="showRecovPass = false"
-                                        style="color: #666; text-decoration: underline;"
+                                        style="color: #666; text-decoration: underline"
                                         >Iniciar Sesión</a
                                     >
                                 </a-col>
@@ -193,10 +193,10 @@
                     <a-divider />
                     <a-row type="flex" justify="center" align="middle">
                         <a-col :span="17">
-                            <small>Tiendas 3B © 2019</small>
+                            <small>Tiendas 3B © {{ new Date().getFullYear() }}</small>
                         </a-col>
-                        <a-col style="text-align: rigth;">
-                            <a href style="color: #666;">
+                        <a-col style="text-align: rigth">
+                            <a href style="color: #666">
                                 <small>
                                     Yei
                                     <b>3</b> Software
